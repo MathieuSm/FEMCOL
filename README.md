@@ -6,7 +6,7 @@ A conda virtual environment is used to allow every user to get identical results
 First, install Anaconda using the instructions of:\
 https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html
 
-Once done, you can go in the directory where the file "FEMCOL.yml" is stored and create a new virtual environment using:\
+Once done, you can go in the directory "03_Scripts" (where the file "FEMCOL.yml" is stored) and create a new virtual environment using:\
 conda env create -f FEMCOL.yml
 
 After the installation, the virtual environment can be activated using:\
