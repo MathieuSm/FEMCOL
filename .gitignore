@@ -1,0 +1,8 @@
+# Ignore the administrative folder
+/00_Admin/
+
+# Ignore different scans format
+*.ISQ*
+*.AIM*
+*.mhd
+*.raw
