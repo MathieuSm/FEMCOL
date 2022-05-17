@@ -75,75 +75,77 @@ print(Data)
 
 # Select sample to analyze (numbering starting from 0)
 SampleNumber = 0
-File = Data.loc[SampleNumber,'uCT File']
+for SampleNumber in range(0,6):
 
-# Read ISQ file
-ISQArguments.File = str(DataDirectory / File) + '.ISQ'
-FileData = ISQReader.Main(ISQArguments)
+    File = Data.loc[SampleNumber,'uCT File']
 
-# Compute scan mid-planes positions
-Scan = FileData[0]
-ZMid, Ymid, XMid = np.round(np.array(Scan.shape) / 2).astype('int')
+    # Read ISQ file
+    ISQArguments.File = str(DataDirectory / File) + '.ISQ'
+    FileData = ISQReader.Main(ISQArguments)
 
-# Plot XY mid-plane
-Size = np.array(Scan.shape[1:]) / 100
-Figure, Axis = plt.subplots(1,1, figsize=(Size[1], Size[0]))
-Axis.imshow(Scan[ZMid, :, :], cmap='bone')
-plt.show()
+    # Compute scan mid-planes positions
+    Scan = FileData[0]
+    ZMid, Ymid, XMid = np.round(np.array(Scan.shape) / 2).astype('int')
 
-# Crop image to desired size
-Cropped = Scan[:,875:1275,800:1200]
-Size = np.array(Cropped.shape[1:]) / 100
-Figure, Axis = plt.subplots(1,1, figsize=(Size[1], Size[0]))
-Axis.imshow(Cropped[ZMid, :, :], cmap='bone')
-Axis.axis('off')
-plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
-plt.show()
+    # Plot XY mid-plane
+    Size = np.array(Scan.shape[1:]) / 100
+    Figure, Axis = plt.subplots(1,1, figsize=(Size[1], Size[0]))
+    Axis.imshow(Scan[ZMid, :, :], cmap='bone')
+    plt.show()
 
-# Segment scan using Otsu's threshold
-Threshold = filters.threshold_otsu(Cropped)
-BinaryScan = np.zeros(Cropped.shape)
-BinaryScan[Cropped > Threshold] = 1
+    # Crop image to desired size
+    Cropped = Scan[:,875:1275,800:1200]
+    Size = np.array(Cropped.shape[1:]) / 100
+    Figure, Axis = plt.subplots(1,1, figsize=(Size[1], Size[0]))
+    Axis.imshow(Cropped[ZMid, :, :], cmap='bone')
+    Axis.axis('off')
+    plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
+    plt.show()
 
-# Plot segmented image
-Figure, Axis = plt.subplots(1,1, figsize=(Size[1], Size[0]))
-Axis.imshow(BinaryScan[ZMid, :, :], cmap='bone')
-Axis.axis('off')
-plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
-plt.show()
+    # Segment scan using Otsu's threshold
+    Threshold = filters.threshold_otsu(Cropped)
+    BinaryScan = np.zeros(Cropped.shape)
+    BinaryScan[Cropped > Threshold] = 1
 
-# Open QC scan and plot it
-ISQArguments.File = str(DataDirectory / 'QC.ISQ')
-QCData = ISQReader.Main(ISQArguments)
-QCScan = QCData[0]
+    # Plot segmented image
+    Figure, Axis = plt.subplots(1,1, figsize=(Size[1], Size[0]))
+    Axis.imshow(BinaryScan[ZMid, :, :], cmap='bone')
+    Axis.axis('off')
+    plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
+    plt.show()
 
-Size = np.array(QCScan.shape[1:]) / 100
-Figure, Axis = plt.subplots(1,1, figsize=(Size[1], Size[0]))
-Axis.imshow(QCScan[0, :, :], cmap='bone')
-plt.show()
+    # Open QC scan and plot it
+    ISQArguments.File = str(DataDirectory / 'QC.ISQ')
+    QCData = ISQReader.Main(ISQArguments)
+    QCScan = QCData[0]
 
-# Extract gray values of the 4 rods
-R1 = QCScan[:,370:470,225:325]
-R2 = QCScan[:,650:750,300:400]
-R3 = QCScan[:,650:750,600:700]
-R4 = QCScan[:,370:470,700:800]
+    Size = np.array(QCScan.shape[1:]) / 100
+    Figure, Axis = plt.subplots(1,1, figsize=(Size[1], Size[0]))
+    Axis.imshow(QCScan[0, :, :], cmap='bone')
+    plt.show()
 
-# Built data frame with mean values and corresponding mineral densities (see pdf)
-Data2Fit = pd.DataFrame({'GV': [R1.mean(), R2.mean(), R3.mean(), R4.mean()],
-                         'MD': [783.9946, 410.7507, 211.7785, 100.3067]},
-                        index=['R1','R2','R3','R4'])
+    # Extract gray values of the 4 rods
+    R1 = QCScan[:,370:470,225:325]
+    R2 = QCScan[:,650:750,300:400]
+    R3 = QCScan[:,650:750,600:700]
+    R4 = QCScan[:,370:470,700:800]
 
-FitResults = smf.ols('MD ~ 1 + GV', data=Data2Fit).fit()
-PlotRegressionResults(FitResults)
+    # Built data frame with mean values and corresponding mineral densities (see pdf)
+    Data2Fit = pd.DataFrame({'GV': [R1.mean(), R2.mean(), R3.mean(), R4.mean()],
+                             'MD': [783.9946, 410.7507, 211.7785, 100.3067]},
+                            index=['R1','R2','R3','R4'])
+
+    FitResults = smf.ols('MD ~ 1 + GV', data=Data2Fit).fit()
+    PlotRegressionResults(FitResults)
 
 
-# Compute bone mineral density and bone mineral content
-BMDs = FitResults.params['Intercept'] + (Cropped * BinaryScan) * FitResults.params['GV']
-print('Mean bone mineral density: ' + str(round(BMDs.mean(),3)) + ' mg HA / cm3')
+    # Compute bone mineral density and bone mineral content
+    BMDs = FitResults.params['Intercept'] + (Cropped * BinaryScan) * FitResults.params['GV']
+    print('Mean bone mineral density: ' + str(round(BMDs.mean(),3)) + ' mg HA / cm3')
 
-Voxel_Dimensions = np.array(FileData[1]['ElementSpacing']) * 10**-3
-Voxel_Volume = Voxel_Dimensions[0] * Voxel_Dimensions[1] * Voxel_Dimensions[2]
-VoxelNumber = BinaryScan.sum()
+    Voxel_Dimensions = np.array(FileData[1]['ElementSpacing']) * 10**-3
+    Voxel_Volume = Voxel_Dimensions[0] * Voxel_Dimensions[1] * Voxel_Dimensions[2]
+    VoxelNumber = BinaryScan.sum()
 
-BMC = BMDs.sum() * VoxelNumber * Voxel_Volume
-print('Bone mineral content: ' + str(round(BMC,3)) + ' mg HA')
+    BMC = BMDs.sum() * VoxelNumber * Voxel_Volume
+    print('Bone mineral content: ' + str(round(BMC,3)) + ' mg HA')
