@@ -139,11 +139,11 @@ PlotRegressionResults(FitResults)
 
 # Compute bone mineral density and bone mineral content
 BMDs = FitResults.params['Intercept'] + (Cropped * BinaryScan) * FitResults.params['GV']
-print('Mean bone mineral density: ' + str(round(BMDs.mean(),3)) + 'mg HA / cm3')
+print('Mean bone mineral density: ' + str(round(BMDs.mean(),3)) + ' mg HA / cm3')
 
 Voxel_Dimensions = np.array(FileData[1]['ElementSpacing']) * 10**-3
 Voxel_Volume = Voxel_Dimensions[0] * Voxel_Dimensions[1] * Voxel_Dimensions[2]
 VoxelNumber = BinaryScan.sum()
 
 BMC = BMDs.sum() * VoxelNumber * Voxel_Volume
-print('Bone mineral content: ' + str(round(BMC,3)) + 'mg HA')
+print('Bone mineral content: ' + str(round(BMC,3)) + ' mg HA')
