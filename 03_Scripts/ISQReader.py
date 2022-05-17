@@ -176,11 +176,11 @@ def Main(Arguments):
                   'pixel resolution Y in mu:   %.2f' % Res_Y,
                   'pixel resolution Z in mu:   %.2f' % Res_Z]
     #    np.savetxt(inFileName.split('.')[0]+'.txt', Header_Txt)
-
-    Write_File = open(File.split('.')[0] + '_info.txt', 'w')
-    for Item in Header_Txt:
-        Write_File.write("%s\n" % Item)
-    Write_File.close()
+    #
+    # Write_File = open(File.split('.')[0] + '_info.txt', 'w')
+    # for Item in Header_Txt:
+    #     Write_File.write("%s\n" % Item)
+    # Write_File.close()
 
     f.seek(44)
     Header = np.zeros(6)
