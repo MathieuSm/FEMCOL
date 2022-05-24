@@ -1,7 +1,13 @@
-Test,Sample,uCT Folder,uCT File,Remark
-1,418_L,00002913,C0002685,Final shape
-2,418_L,00002914,C0002686,Final shape
-3,418_L,00002915,C0002687,Final shape
-4,418_L,00002916,C0002688,Final shape
-5,418_L,00002917,C0002689,Final shape
-6,418_L,00002918,C0002690,Final shape
+Test,Sample,uCT Folder,uCT File,Demineralization [days],Remark
+1,418_L,2913,C0002685,0,Final shape
+2,418_L,2914,C0002686,0,Final shape
+3,418_L,2915,C0002687,0,Final shape
+4,418_L,2916,C0002688,0,Final shape
+5,418_L,2917,C0002689,0,Final shape
+6,418_L,2918,C0002690,0,Final shape
+1,418_L,2922,C0002694,7,Final shape
+2,418_L,2923,C0002695,7,Final shape
+3,418_L,2924,C0002696,7,Final shape
+4,418_L,2925,C0002697,7,Final shape
+5,418_L,2926,C0002698,7,Final shape
+6,418_L,2927,C0002699,7,Final shape
