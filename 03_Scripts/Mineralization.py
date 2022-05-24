@@ -74,8 +74,8 @@ Data = pd.read_csv(str(DataDirectory / 'List.csv'))
 print(Data)
 
 # Select sample to analyze (numbering starting from 0)
-LineNumber = 6
-File = Data.loc[LineNumber,'uCT File']
+SampleNumber = 0
+File = Data.loc[SampleNumber,'uCT File']
 
 # Read ISQ file
 ISQArguments.File = str(DataDirectory / File) + '.ISQ'
@@ -113,8 +113,7 @@ plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
 plt.show()
 
 # Open QC scan and plot it
-Days = Data.loc[LineNumber,'Demineralization [days]']
-ISQArguments.File = str(DataDirectory / str('QC' + str(Days) + '.ISQ'))
+ISQArguments.File = str(DataDirectory / 'QC.ISQ')
 QCData = ISQReader.Main(ISQArguments)
 QCScan = QCData[0]
 
@@ -130,14 +129,9 @@ R3 = QCScan[:,650:750,600:700]
 R4 = QCScan[:,370:470,700:800]
 
 # Built data frame with mean values and corresponding mineral densities (see pdf)
-if Days == 0:
-    Data2Fit = pd.DataFrame({'GV': [R1.mean(), R2.mean(), R3.mean(), R4.mean()],
-                             'MD': [783.9946, 410.7507, 211.7785, 100.3067]},
-                            index=['R1','R2','R3','R4'])
-elif Days == 7:
-    Data2Fit = pd.DataFrame({'GV': [R1.mean(), R2.mean(), R3.mean(), R4.mean()],
-                             'MD': [788.2784, 412.5736, 212.8722, 101.0358]},
-                            index=['R1','R2','R3','R4'])
+Data2Fit = pd.DataFrame({'GV': [R1.mean(), R2.mean(), R3.mean(), R4.mean()],
+                         'MD': [783.9946, 410.7507, 211.7785, 100.3067]},
+                        index=['R1','R2','R3','R4'])
 
 FitResults = smf.ols('MD ~ 1 + GV', data=Data2Fit).fit()
 PlotRegressionResults(FitResults)
@@ -145,7 +139,7 @@ PlotRegressionResults(FitResults)
 
 # Compute bone mineral density and bone mineral content
 BMDs = FitResults.params['Intercept'] + (Cropped * BinaryScan) * FitResults.params['GV']
-print('Mean bone mineral density: ' + str(round(BMDs[BMDs != 0].mean(),3)) + ' mg HA / cm3')
+print('Mean bone mineral density: ' + str(round(BMDs.mean(),3)) + ' mg HA / cm3')
 
 Voxel_Dimensions = np.array(FileData[1]['ElementSpacing']) * 10**-3
 Voxel_Volume = Voxel_Dimensions[0] * Voxel_Dimensions[1] * Voxel_Dimensions[2]
