@@ -16,13 +16,14 @@ def butter_lowpass_filter(data, cutoff, order=9):
 
 
 parent_dir = '/home/stefan/Documents/PythonScripts/02_Data/02_MTS/Elastic_testing_mineralized/'
-filename_list = os.listdir(parent_dir)
+filename_list = [File for File in os.listdir(parent_dir) if File.endswith('.csv')]
+filename_list.sort()
 
 result_dir = {}
 for filename in filename_list:
     sample_ID = filename.split('/')[-1].split('_')[1]
     # load csv:
-    df = pd.read_csv(filename, skiprows=2)
+    df = pd.read_csv(parent_dir + filename, skiprows=2)
     df.rename(columns={'sec': 'time', 'N': 'force_MTS', 'N.1': 'force_lc', 'mm': 'disp_MTS', 'mm.1': 'disp_ext'},
               inplace=True)
 
@@ -30,8 +31,13 @@ for filename in filename_list:
     peaks_index, _ = find_peaks(df['force_MTS'], width=50)
 
     # linear regression:
-    slope, intercept, r_value, p_value, std_err = stats.linregress(df['disp_ext'][peaks_index[-1]:], df['force_MTS'][peaks_index[-1]:])
-    x_last_cycle = np.array([df.iloc[-1]['disp_ext'], df['disp_ext'][peaks_index[-1]]])
+    Indices = np.arange(peaks_index[-1], df.index[-1])
+    Data = df.iloc[Indices[:int(len(Indices) / 3)]]
+
+    # slope, intercept, r_value, p_value, std_err = stats.linregress(df['disp_ext'][peaks_index[-1]:], df['force_MTS'][peaks_index[-1]:])
+    slope, intercept, r_value, p_value, std_err = stats.linregress(Data['disp_ext'], Data['force_MTS'])
+    # x_last_cycle = np.array([df.iloc[-1]['disp_ext'], df['disp_ext'][peaks_index[-1]]])
+    x_last_cycle = np.array([Data.iloc[0]['disp_ext'], Data.iloc[-1]['disp_ext']])
 
 
     plt.figure(figsize=(6, 4))
