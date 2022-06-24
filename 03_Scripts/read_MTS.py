@@ -6,7 +6,16 @@ import os
 from scipy.signal import butter,filtfilt
 from scipy.signal import find_peaks
 from scipy import stats
+from pathlib import Path
 
+Cwd = Path.cwd()
+DataPath = Cwd / '../02_Data/02_MTS/Elastic_testing_mineralized/'
+# Data = pd.read_csv(str(DataPath / 'pilot_polymer_failure.csv'),header=2)
+# Data.columns = ['Time [s]', 'Axial Force [N]',
+#                 'Load cell [N]', 'Axial Displacement [mm]',
+#                 'MTS Displacement [mm]', 'Axial Count [cycles]']
+
+# definition of lowpass filter
 def butter_lowpass_filter(data, cutoff, order=9):
     normal_cutoff = cutoff / nyq
     # Get the filter coefficients
@@ -27,17 +36,33 @@ for filename in filename_list:
     df.rename(columns={'sec': 'time', 'N': 'force_MTS', 'N.1': 'force_lc', 'mm': 'disp_MTS', 'mm.1': 'disp_ext'},
               inplace=True)
 
+    # filter signals:
+    fs = 102.4       # sample rate, Hz
+    cutoff = 10
+    nyq = 0.5 * fs
+    df['force_MTS_filtered'] = butter_lowpass_filter(df['force_MTS'], cutoff)
+
+    # plot filtered signals (displacement extensometer vs. force MTS)
+    plt.figure()
+    plt.title(sample_ID)
+    plt.plot(df['disp_ext'], df['force_MTS'], label='MTS raw')
+    plt.plot(df['disp_ext'], df['force_MTS_filtered'], label='MTS filtered')
+    plt.ylabel('force MTS / N')
+    plt.xlabel('disp ext / mm')
+    plt.legend()
+    plt.show()
+
     # peak detection:
     peaks_index, _ = find_peaks(df['force_MTS'], width=50)
 
     # linear regression:
     Indices = np.arange(peaks_index[-1], df.index[-1])
-    Data = df.iloc[Indices[:int(len(Indices) / 3)]]
+    Data_reg = df.iloc[Indices[0:int(len(Indices) / 3)]]
 
     # slope, intercept, r_value, p_value, std_err = stats.linregress(df['disp_ext'][peaks_index[-1]:], df['force_MTS'][peaks_index[-1]:])
-    slope, intercept, r_value, p_value, std_err = stats.linregress(Data['disp_ext'], Data['force_MTS'])
+    slope, intercept, r_value, p_value, std_err = stats.linregress(Data_reg['disp_ext'], Data_reg['force_MTS'])
     # x_last_cycle = np.array([df.iloc[-1]['disp_ext'], df['disp_ext'][peaks_index[-1]]])
-    x_last_cycle = np.array([Data.iloc[0]['disp_ext'], Data.iloc[-1]['disp_ext']])
+    x_last_cycle = np.array([Data_reg.iloc[0]['disp_ext'], Data_reg.iloc[-1]['disp_ext']])
 
 
     plt.figure(figsize=(6, 4))
@@ -45,30 +70,15 @@ for filename in filename_list:
     plt.plot(df['disp_ext'], df['force_MTS'], label='MTS')
     plt.plot(df['disp_ext'][peaks_index[-1]:], df['force_MTS'][peaks_index[-1]:])
     plt.plot(x_last_cycle, slope * x_last_cycle + intercept, 'k')
-    plt.plot([], ' ', label=f'stiffness = {slope:.1f} N/mm')
-    plt.ylabel('force / N')
-    plt.xlabel('disp / mm')
+    plt.plot([], ' ', label=f'stiffness = {slope:.0f} N/mm')
+    plt.ylabel('force MTS / N')
+    plt.xlabel('disp ext / mm')
     plt.legend()
     plt.show()
     # plt.savefig('', dpi=300)
 
-
-    plt.plot(df['time'][peaks_index], df['force_MTS'][peaks_index], 'o')
-    plt.show()
-
-    # filter signals:
-    fs = 102.4       # sample rate, Hz
-    cutoff = 10
-    nyq = 0.5 * fs
-    df['force_lc_filtered'] = butter_lowpass_filter(df['force_lc'], cutoff)
-
-    plt.figure()
-    plt.plot(df['disp_ext'], df['force_lc'], label='MTS')
-    plt.plot(df['disp_ext'], df['force_lc_filtered'], label='MTS')
-    plt.ylabel('force / N')
-    plt.xlabel('displacement ext / mm')
-    plt.legend()
-    plt.show()
-
+    # plt.plot(df['time'][peaks_index], df['force_MTS'][peaks_index], 'o')
+    # plt.show()
 
     result_dir[sample_ID]['stiffness'] = slope
+
