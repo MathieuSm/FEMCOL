@@ -23,12 +23,10 @@ def butter_lowpass_filter(data, cutoff, order=9):
     y = filtfilt(b, a, data)
     return y
 
-
 parent_dir = '/home/stefan/Documents/PythonScripts/02_Data/02_MTS/Elastic_testing_mineralized/'
 filename_list = [File for File in os.listdir(parent_dir) if File.endswith('.csv')]
 filename_list.sort()
 
-result_dir = {}
 for filename in filename_list:
     sample_ID = filename.split('/')[-1].split('_')[1]
     # load csv:
@@ -64,7 +62,6 @@ for filename in filename_list:
     # x_last_cycle = np.array([df.iloc[-1]['disp_ext'], df['disp_ext'][peaks_index[-1]]])
     x_last_cycle = np.array([Data_reg.iloc[0]['disp_ext'], Data_reg.iloc[-1]['disp_ext']])
 
-
     plt.figure(figsize=(6, 4))
     plt.title(sample_ID)
     plt.plot(df['disp_ext'], df['force_MTS'], label='MTS')
@@ -80,5 +77,8 @@ for filename in filename_list:
     # plt.plot(df['time'][peaks_index], df['force_MTS'][peaks_index], 'o')
     # plt.show()
 
-    result_dir[sample_ID]['stiffness'] = slope
+    # result_dir[sample_ID] = slope
+    result = [sample_ID, slope]
+    # result_dir = pd.DataFrame(result, columns=['SampleID', 'Stiffness N/mm'])
+    # print(result_dir)
 

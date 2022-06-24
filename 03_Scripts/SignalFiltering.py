@@ -6,7 +6,7 @@ import scipy.signal as sig
 
 # Load data and plot force displacement curve
 Cwd = Path.cwd()
-DataPath = Cwd / '02_Data/00_Tests'
+DataPath = Cwd / '../02_Data/00_Tests'
 Data = pd.read_csv(str(DataPath / 'pilot_polymer_failure.csv'),header=2)
 Data.columns = ['Time [s]', 'Axial Force [N]',
                 'Load cell [N]', 'Axial Displacement [mm]',
