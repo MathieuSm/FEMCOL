@@ -7,7 +7,7 @@ import scipy.signal as sig
 
 # Load data and plot normalized force and displacement curves
 Cwd = Path.cwd()
-DataPath = Cwd / '../02_Data/00_Tests'
+DataPath = Cwd / '02_Data/00_Tests'
 FilteredData = [File for File in os.listdir(str(DataPath)) if File.startswith('Filtered')]
 
 Data = pd.read_csv(str(DataPath / FilteredData[0]))
