@@ -22,20 +22,23 @@ def butter_lowpass_filter(data, cutoff, order=9):
     y = filtfilt(b, a, data)
     return y
 
-
 Cwd = Path.cwd()
-DataPath = Cwd / '../02_Data/02_MTS/Elastic_testing_mineralized/'
-# parent_dir = '/home/stefan/Documents/PythonScripts/02_Data/02_MTS/Elastic_testing_mineralized/'
+DataPath = Cwd / '02_Data/02_MTS/Elastic_testing_mineralized/'
+parent_dir = '/home/stefan/Documents/PythonScripts/02_Data/02_MTS/Elastic_testing_mineralized/'
 # filename_list = [File for File in os.listdir(parent_dir) if File.endswith('.csv')]
 filename_list = [File for File in os.listdir(DataPath) if File.endswith('.csv')]
 filename_list.sort()
 
+result = list()
+i = 0
+
 for filename in filename_list:
     sample_ID = filename.split('/')[-1].split('_')[1]
     # load csv:
-    df = pd.read_csv(parent_dir + filename, skiprows=2)
+    df = pd.read_csv(str(DataPath / filename_list[i]), skiprows = 2)
     df.rename(columns={'sec': 'time', 'N': 'force_MTS', 'N.1': 'force_lc', 'mm': 'disp_MTS', 'mm.1': 'disp_ext'},
-              inplace=True)
+    inplace = True)
+    i = i + 1
 
     # filter signals:
     fs = 102.4       # sample rate, Hz
@@ -81,13 +84,17 @@ for filename in filename_list:
     # plt.show()
 
     # result_dir[sample_ID] = slope
-    result = [sample_ID, slope]
-    # result_dir = pd.DataFrame(result, columns=['Sample ID', 'Stiffness N/mm'])
+    values = [sample_ID, slope]
+    result.append(values)
+
+    result_dir = pd.DataFrame(result, columns=['Sample ID', 'Stiffness N/mm'])
     # result_length = len(result)
     # result_dir.loc[result_length] = result
-    # print(result_dir)
+
+print(result_dir)
 
 # lst = ['this', 'is', 'a', 'test']
 # print(lst)
 # check = pd.DataFrame(lst)
 # check
+
