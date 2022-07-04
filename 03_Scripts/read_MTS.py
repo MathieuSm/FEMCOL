@@ -8,8 +8,7 @@ from scipy.signal import find_peaks
 from scipy import stats
 from pathlib import Path
 
-Cwd = Path.cwd()
-DataPath = Cwd / '../02_Data/02_MTS/Elastic_testing_mineralized/'
+
 # Data = pd.read_csv(str(DataPath / 'pilot_polymer_failure.csv'),header=2)
 # Data.columns = ['Time [s]', 'Axial Force [N]',
 #                 'Load cell [N]', 'Axial Displacement [mm]',
@@ -23,8 +22,12 @@ def butter_lowpass_filter(data, cutoff, order=9):
     y = filtfilt(b, a, data)
     return y
 
-parent_dir = '/home/stefan/Documents/PythonScripts/02_Data/02_MTS/Elastic_testing_mineralized/'
-filename_list = [File for File in os.listdir(parent_dir) if File.endswith('.csv')]
+
+Cwd = Path.cwd()
+DataPath = Cwd / '../02_Data/02_MTS/Elastic_testing_mineralized/'
+# parent_dir = '/home/stefan/Documents/PythonScripts/02_Data/02_MTS/Elastic_testing_mineralized/'
+# filename_list = [File for File in os.listdir(parent_dir) if File.endswith('.csv')]
+filename_list = [File for File in os.listdir(DataPath) if File.endswith('.csv')]
 filename_list.sort()
 
 for filename in filename_list:
@@ -79,6 +82,12 @@ for filename in filename_list:
 
     # result_dir[sample_ID] = slope
     result = [sample_ID, slope]
-    # result_dir = pd.DataFrame(result, columns=['SampleID', 'Stiffness N/mm'])
+    # result_dir = pd.DataFrame(result, columns=['Sample ID', 'Stiffness N/mm'])
+    # result_length = len(result)
+    # result_dir.loc[result_length] = result
     # print(result_dir)
 
+# lst = ['this', 'is', 'a', 'test']
+# print(lst)
+# check = pd.DataFrame(lst)
+# check
