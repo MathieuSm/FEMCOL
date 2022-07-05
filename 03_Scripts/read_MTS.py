@@ -8,12 +8,6 @@ from scipy.signal import find_peaks
 from scipy import stats
 from pathlib import Path
 
-
-# Data = pd.read_csv(str(DataPath / 'pilot_polymer_failure.csv'),header=2)
-# Data.columns = ['Time [s]', 'Axial Force [N]',
-#                 'Load cell [N]', 'Axial Displacement [mm]',
-#                 'MTS Displacement [mm]', 'Axial Count [cycles]']
-
 # definition of lowpass filter
 def butter_lowpass_filter(data, cutoff, order=9):
     normal_cutoff = cutoff / nyq
@@ -24,8 +18,6 @@ def butter_lowpass_filter(data, cutoff, order=9):
 
 Cwd = Path.cwd()
 DataPath = Cwd / '02_Data/02_MTS/Elastic_testing_mineralized/'
-parent_dir = '/home/stefan/Documents/PythonScripts/02_Data/02_MTS/Elastic_testing_mineralized/'
-# filename_list = [File for File in os.listdir(parent_dir) if File.endswith('.csv')]
 filename_list = [File for File in os.listdir(DataPath) if File.endswith('.csv')]
 filename_list.sort()
 
@@ -95,3 +87,7 @@ print(result_dir)
 # safe dataframe to csv
 result_dir.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/02_Data/02_MTS/', 'ResultsElasticTesting.csv'), index=False)
 
+
+df = pd.read_csv(str(DataPath / filename_list[i]), skiprows = 2)
+    df.rename(columns={'sec': 'time', 'N': 'force_MTS', 'N.1': 'force_lc', 'mm': 'disp_MTS', 'mm.1': 'disp_ext'},
+    inplace = True)
