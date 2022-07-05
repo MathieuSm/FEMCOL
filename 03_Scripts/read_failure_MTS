@@ -46,6 +46,7 @@ for filename in filename_list:
     plt.xlabel('disp ext / mm')
     plt.legend()
     # plt.show()
-    plt.savefig('failure' + sample_ID + '.png', dpi=300)
+    savepath = Cwd / '02_Data/02_MTS/'
+    plt.savefig(os.path.join(savepath, 'failure' + sample_ID + '.png'), dpi=300)
 
 
