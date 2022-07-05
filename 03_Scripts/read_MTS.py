@@ -68,6 +68,7 @@ for filename in filename_list:
     # x_last_cycle = np.array([df.iloc[-1]['disp_ext'], df['disp_ext'][peaks_index[-1]]])
     x_last_cycle = np.array([Data_reg.iloc[0]['disp_ext'], Data_reg.iloc[-1]['disp_ext']])
 
+    # generate plot
     plt.figure(figsize=(6, 4))
     plt.title(sample_ID)
     plt.plot(df['disp_ext'], df['force_MTS'], label='MTS')
@@ -83,18 +84,14 @@ for filename in filename_list:
     # plt.plot(df['time'][peaks_index], df['force_MTS'][peaks_index], 'o')
     # plt.show()
 
-    # result_dir[sample_ID] = slope
-    values = [sample_ID, slope]
+    # create list with current values which are sample_ID & slope & add them to result list which is then converted
+    # to dataframe
+    values = [sample_ID, round(slope)]
     result.append(values)
-
     result_dir = pd.DataFrame(result, columns=['Sample ID', 'Stiffness N/mm'])
-    # result_length = len(result)
-    # result_dir.loc[result_length] = result
 
 print(result_dir)
 
-# lst = ['this', 'is', 'a', 'test']
-# print(lst)
-# check = pd.DataFrame(lst)
-# check
+# safe dataframe to csv
+result_dir.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/02_Data/02_MTS/', 'ResultsElasticTesting.csv'), index=False)
 
