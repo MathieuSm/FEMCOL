@@ -89,5 +89,5 @@ result_dir.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/02_Data/02_
 
 
 df = pd.read_csv(str(DataPath / filename_list[i]), skiprows = 2)
-    df.rename(columns={'sec': 'time', 'N': 'force_MTS', 'N.1': 'force_lc', 'mm': 'disp_MTS', 'mm.1': 'disp_ext'},
+df.rename(columns={'sec': 'time', 'N': 'force_MTS', 'N.1': 'force_lc', 'mm': 'disp_MTS', 'mm.1': 'disp_ext'},
     inplace = True)
