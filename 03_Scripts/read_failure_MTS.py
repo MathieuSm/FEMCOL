@@ -39,14 +39,16 @@ for filename in filename_list:
     df['force_lc_filtered'] = butter_lowpass_filter(df['force_lc'], cutoff)
 
     # plot filtered and raw signal both at a time & save with respective sample_ID as name
-    # plt.figure()
-    # plt.title(sample_ID)
-    # plt.plot(df['disp_ext'], df['force_lc'], label='raw')
-    # plt.plot(df['disp_ext'], df['force_lc_filtered'], label='filtered')
-    # plt.ylabel('force lc / N')
-    # plt.xlabel('disp ext / mm')
-    # plt.legend()
-    # plt.close()
+    plt.figure()
+    plt.title(sample_ID)
+    plt.plot(df['disp_ext'], df['force_lc'], label='raw')
+    plt.plot(df['disp_ext'], df['force_lc_filtered'], label='filtered')
+    plt.ylabel('force lc / N')
+    plt.xlabel('disp ext / mm')
+    plt.legend()
+    savepath = Cwd / '04_Results/01_Demineralized/00_force_disp/'
+    plt.savefig(os.path.join(savepath, 'force_disp_' + sample_ID + '.png'), dpi=300)
+    plt.close()
 
     # calculate stress and strain, filter & put into dataframe
     Pi = 3.1415
@@ -58,7 +60,7 @@ for filename in filename_list:
     df['strain_ext'] = strain
     df['stress_lc_filtered'] = butter_lowpass_filter(df['stress_lc'], cutoff)
 
-    # plot stress vs strain raw/filtered
+    # plot stress vs strain raw/filtered & save
     plt.figure()
     plt.title(sample_ID)
     plt.plot(df['strain_ext'], df['stress_lc'], label='raw')
@@ -66,10 +68,10 @@ for filename in filename_list:
     plt.ylabel('stress / MPa')
     plt.xlabel('strain / -')
     plt.legend()
-    savepath = Cwd / '02_Data/02_MTS/'
-    plt.savefig(os.path.join(savepath, 'failure_' + sample_ID + '.png'), dpi=300)
+    savepath = Cwd / '04_Results/01_Demineralized/01_stress_strain/'
+    plt.savefig(os.path.join(savepath, 'stress_strain_' + sample_ID + '.png'), dpi=300)
 
-    # find max value of stress_MTS column
+    # find max value of stress_lc column
     column = df['stress_lc']
     max_stress_raw = column.max()
 
@@ -87,8 +89,23 @@ for filename in filename_list:
     row_max_strain = df.iloc[max_stress_index]
     ultimate_strain = np.round(row_max_strain['strain_ext'].values, 4)
 
-    values = [sample_ID, ultimate_stress_filtered, ultimate_strain]
+    # find max value of force_lc column
+    column_force = df['force_lc']
+    max_force_raw = column_force.max()
+
+    # search for ultimate force (raw)
+    row_max_force = df.loc[df['force_lc'] == max_force_raw]
+    max_force_index = row_max_force.index
+
+    # search for ultimate force (filtered)
+    row_max_force_filtered = df.iloc[max_force_index]
+    ultimate_force_filtered = np.round(row_max_force_filtered['force_lc_filtered'].values, 2)
+
+    values = [sample_ID, ultimate_stress_filtered, ultimate_strain, ultimate_force_filtered]
     result.append(values)
-    result_dir = pd.DataFrame(result, columns=['Sample ID', 'Ultimate stress MPa', 'Ultimate strain -'])
+    result_dir = pd.DataFrame(result, columns=['Sample ID', 'Ultimate stress / MPa', 'Ultimate strain / -', 'Ultimate '
+                                                                                                            'Force / '
+                                                                                                            'N'])
+result_dir.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/01_Demineralized/', 'ResultsFailureTesting.csv'), index=False)
 
 print(result_dir)
