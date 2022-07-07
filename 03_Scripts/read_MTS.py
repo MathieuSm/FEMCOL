@@ -7,7 +7,7 @@ from scipy.signal import butter, filtfilt
 from scipy.signal import find_peaks
 from scipy import stats
 from pathlib import Path
-
+from statsmodels.regression.rolling import RollingOLS
 
 # definition of lowpass filter
 def butter_lowpass_filter(data, cutoff, order=9):
@@ -48,7 +48,8 @@ for filename in filename_list:
     plt.ylabel('force lc / N')
     plt.xlabel('disp ext / mm')
     plt.legend()
-    plt.show()
+    # plt.show()
+    plt.close()
 
     # peak detection:
     peaks_index, _ = find_peaks(df['force_lc'], width=50)
@@ -74,7 +75,8 @@ for filename in filename_list:
     plt.legend()
     savepath = Cwd / '04_Results/00_Mineralized/00_force_disp/'
     plt.savefig(os.path.join(savepath, 'force_disp_' + sample_ID + '.png'), dpi=300)
-    plt.show()
+    # plt.show()
+    plt.close()
 
     # calculate stress/strain
     Pi = 3.1415
@@ -96,10 +98,13 @@ for filename in filename_list:
     plt.legend()
     savepath = Cwd / '04_Results/00_Mineralized/01_stress_strain/'
     plt.savefig(os.path.join(savepath, 'stress_strain_' + sample_ID + '.png'), dpi=300)
+    plt.close()
 
     # calculate values for last cycle of stress/strain curve only
     last_cycle_stress = df['stress_lc_filtered'][peaks_index[-1]:]
     last_cycle_strain = df['strain_ext'][peaks_index[-1]:]
+    last_cycle_strain = last_cycle_strain.dropna().reset_index(drop=True)
+    last_cycle_stress = last_cycle_stress.dropna().reset_index(drop=True)
 
     # plot last cycle of stress/strain curve
     plt.figure()
@@ -113,8 +118,46 @@ for filename in filename_list:
     slope, intercept, r_value, p_value, std_err = stats.linregress(last_cycle_strain, last_cycle_stress)
     youngs_modulus = round(slope,1)
 
-    # same but using rolling regression
-    roll_reg = RollingOLS.
+    # same but using rolling regression: index 15939=0.0005 strain, index 15154=0.0025 strain --> window=785
+
+    upper_strain = 0.00250
+    lower_strain = 0.00100
+
+    last_cycle = pd.DataFrame()
+    last_cycle['last_cycle_strain'] = round(last_cycle_strain,5)
+    last_cycle['last_cycle_stress'] = round(last_cycle_stress,5)
+
+    upper_cond = last_cycle.loc[last_cycle['last_cycle_strain'] == upper_strain]
+    lower_cond = last_cycle.loc[last_cycle['last_cycle_strain'] == lower_strain]
+    max_strain_ind = min(upper_cond.index)
+    min_strain_ind = min(lower_cond.index)
+
+    last_cycle = last_cycle[max_strain_ind:min_strain_ind]
+    window_width = 358
+    
+    slope, intercept, r_value, p_value, std_err = stats.linregress(last_cycle_strain, last_cycle_stress)
+
+
+    ## compute different slopes
+    # slope, intercept, r_value, p_value, std_err = stats.linregress(last_cycle_strain, last_cycle_stress)
+    # slope_0005, intercept_0005, r_value, p_value, std_err = stats.linregress(last_cycle_strain_00005, last_cycle_stress_00025)
+    # roll_reg = list()
+    # for x in range(15154,15939):
+    #     slope_final, intercept, r_value, p_value, std_err = stats.linregress(last_cycle_strain_00005, last_cycle_stress_00025)
+    # roll_reg.append(slope_final)
+    # print(roll_reg)
+
+    ## plot of different slopes
+    # plt.plot(last_cycle_strain,last_cycle_stress)
+    # plt.plot(last_cycle_strain, slope * last_cycle_strain + intercept, 'k')
+    # plt.plot(last_cycle_strain_00005, slope_0005 * last_cycle_strain_00005 + intercept_0005, 'g')
+    # plt.show()
+    # window_width = index_00005_strain - index_00025_strain
+    # roll_reg = RollingOLS(last_cycle_strain, last_cycle_stress, window=window_width)
+    # reg = roll_reg.fit()
+    # params = reg.params.copy()
+    # params.index = np.arange(1, params.shape[0] + 1)
+    # params.head()
 
     # create list with current values which are sample_ID & slope & add them to result list which is then converted
     # to dataframe
@@ -128,3 +171,4 @@ print(result_dir)
 result_dir.to_csv(
     os.path.join('/home/stefan/Documents/PythonScripts/04_Results/00_Mineralized/', 'ResultsElasticTesting.csv'),
     index=False)
+
