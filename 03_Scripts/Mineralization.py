@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt         # Used to perform plots
 from skimage import filters             # Used to perform filtering image operations (e.g. Otsu)
 import statsmodels.formula.api as smf   # Used for statistical analysis (ols here)
 from scipy.stats.distributions import t # Used to compute confidence intervals
+from skimage import morphology, measure # Used to fill pores and circle fitting
+
 
 
 # Set directories
@@ -147,3 +149,36 @@ VoxelNumber = BinaryScan.sum()
 
 BMC = BMDs.sum() * VoxelNumber * Voxel_Volume
 print('Bone mineral content: ' + str(round(BMC,3)) + ' mg HA')
+
+# Fill pore to esimate surface and compute BV/TV
+Disk = morphology.disk(50)
+Dilated = morphology.binary_dilation(BinaryScan[ZMid,:,:],Disk)
+Eroded = morphology.binary_erosion(Dilated,Disk)
+
+RegionProperties = measure.regionprops(Eroded*1)[0]
+
+# Check that properties are correctly measured
+Y0, X0 = RegionProperties.centroid
+R1 = RegionProperties.major_axis_length * 0.5
+R2 = RegionProperties.minor_axis_length * 0.5
+OrientationAngle = RegionProperties.orientation
+
+Radians = np.linspace(0, 2 * np.pi, 100)
+Ellipse = np.array([R1 * np.cos(Radians), R2 * np.sin(Radians)])
+R = np.array([[np.cos(OrientationAngle), -np.sin(OrientationAngle)],
+              [np.sin(OrientationAngle), np.cos(OrientationAngle)]])
+RotatedEllipse = np.dot(R,Ellipse)
+
+# Plot segmented image
+Figure, Axis = plt.subplots(1,1, figsize=(Size[1], Size[0]))
+Axis.imshow(Eroded, cmap='bone')
+Axis.plot(X0, Y0, marker='x', color=(0, 0, 1), linestyle='none', markersize=10, mew=2, label='Centroid')
+Axis.plot(X0 + RotatedEllipse[0, :], Y0 - RotatedEllipse[1, :], color=(0, 1, 0), label='Fitted ellipse')
+Axis.axis('off')
+plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
+plt.show()
+
+
+# Compute BV/TV
+BVTV = VoxelNumber / (RegionProperties.area * Scan.shape[0])
+print('Bone volume fraction: ' + str(round(BVTV,3)))
