@@ -114,8 +114,55 @@ Axis.axis('off')
 plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
 plt.show()
 
+# Fill pore to esimate surface and compute BV/TV
+Disk = morphology.disk(50)
+Dilated = morphology.binary_dilation(BinaryScan[ZMid,:,:],Disk)
+Eroded = morphology.binary_erosion(Dilated,Disk)
+
+RegionProperties = measure.regionprops(Eroded*1)[0]
+
+# Check that properties are correctly measured
+Y0, X0 = RegionProperties.centroid
+R1 = RegionProperties.major_axis_length * 0.5
+R2 = RegionProperties.minor_axis_length * 0.5
+OrientationAngle = RegionProperties.orientation
+
+Radians = np.linspace(0, 2 * np.pi, 100)
+Ellipse = np.array([R1 * np.cos(Radians), R2 * np.sin(Radians)])
+R = np.array([[np.cos(OrientationAngle), -np.sin(OrientationAngle)],
+              [np.sin(OrientationAngle), np.cos(OrientationAngle)]])
+RotatedEllipse = np.dot(R,Ellipse)
+
+# Plot filled image
+Figure, Axis = plt.subplots(1,1, figsize=(Size[1], Size[0]))
+Axis.imshow(Eroded, cmap='bone')
+Axis.plot(X0, Y0, marker='x', color=(0, 0, 1), linestyle='none', markersize=10, mew=2, label='Centroid')
+Axis.plot(X0 + RotatedEllipse[0, :], Y0 - RotatedEllipse[1, :], color=(0, 1, 0), label='Fitted ellipse')
+Axis.axis('off')
+plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
+plt.show()
+
+# Build full cylinder representing the sample
+Disk = morphology.disk(int(round(RegionProperties.equivalent_diameter/2)))
+Ceil = np.ceil((np.array(Cropped.shape[1:]) - np.array(Disk.shape)) / 2).astype('int')
+Floor = np.floor((np.array(Cropped.shape[1:]) - np.array(Disk.shape)) / 2).astype('int')
+Padded = np.pad(Disk,((Floor[1]-1,Ceil[1]+1),(Floor[0]+5,Ceil[0]-5)))
+Cylinder = np.repeat(Padded,Cropped.shape[0]).reshape(Cropped.shape,order='F')
+
+Figure, Axis = plt.subplots(1,1, figsize=(Size[1], Size[0]))
+Axis.imshow(Cylinder[ZMid,:,:], cmap='bone')
+Axis.plot(X0, Y0, marker='x', color=(0, 0, 1), linestyle='none', markersize=10, mew=2, label='Centroid')
+Axis.plot(X0 + RotatedEllipse[0, :], Y0 - RotatedEllipse[1, :], color=(0, 1, 0), label='Fitted ellipse')
+Axis.axis('off')
+plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
+plt.show()
+
+# Compute BV/TV
+BVTV = BinaryScan.sum() / Cylinder.sum()
+print('Bone volume fraction: ' + str(round(BVTV,3)))
+
 # Open QC scan and plot it
-ISQArguments.File = str(DataDirectory / 'QC.ISQ')
+ISQArguments.File = str(DataDirectory / 'QC0.ISQ')
 QCData = ISQReader.Main(ISQArguments)
 QCScan = QCData[0]
 
@@ -140,45 +187,23 @@ PlotRegressionResults(FitResults)
 
 
 # Compute bone mineral density and bone mineral content
-BMDs = FitResults.params['Intercept'] + (Cropped * BinaryScan) * FitResults.params['GV']
-print('Mean bone mineral density: ' + str(round(BMDs.mean(),3)) + ' mg HA / cm3')
+Sample = Cropped * Cylinder
+Tissue = Cropped * BinaryScan
 
-Voxel_Dimensions = np.array(FileData[1]['ElementSpacing']) * 10**-3
-Voxel_Volume = Voxel_Dimensions[0] * Voxel_Dimensions[1] * Voxel_Dimensions[2]
-VoxelNumber = BinaryScan.sum()
-
-BMC = BMDs.sum() * VoxelNumber * Voxel_Volume
-print('Bone mineral content: ' + str(round(BMC,3)) + ' mg HA')
-
-# Fill pore to esimate surface and compute BV/TV
-Disk = morphology.disk(50)
-Dilated = morphology.binary_dilation(BinaryScan[ZMid,:,:],Disk)
-Eroded = morphology.binary_erosion(Dilated,Disk)
-
-RegionProperties = measure.regionprops(Eroded*1)[0]
-
-# Check that properties are correctly measured
-Y0, X0 = RegionProperties.centroid
-R1 = RegionProperties.major_axis_length * 0.5
-R2 = RegionProperties.minor_axis_length * 0.5
-OrientationAngle = RegionProperties.orientation
-
-Radians = np.linspace(0, 2 * np.pi, 100)
-Ellipse = np.array([R1 * np.cos(Radians), R2 * np.sin(Radians)])
-R = np.array([[np.cos(OrientationAngle), -np.sin(OrientationAngle)],
-              [np.sin(OrientationAngle), np.cos(OrientationAngle)]])
-RotatedEllipse = np.dot(R,Ellipse)
-
-# Plot segmented image
 Figure, Axis = plt.subplots(1,1, figsize=(Size[1], Size[0]))
-Axis.imshow(Eroded, cmap='bone')
-Axis.plot(X0, Y0, marker='x', color=(0, 0, 1), linestyle='none', markersize=10, mew=2, label='Centroid')
-Axis.plot(X0 + RotatedEllipse[0, :], Y0 - RotatedEllipse[1, :], color=(0, 1, 0), label='Fitted ellipse')
+Axis.imshow(Tissue[ZMid,:,:], cmap='bone')
 Axis.axis('off')
 plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
 plt.show()
 
+BMDs = FitResults.params['Intercept'] + Sample * FitResults.params['GV']
+print('Mean bone mineral density: ' + str(round(BMDs.sum() / Cylinder.sum(),3)) + ' mg HA / cm3')
 
-# Compute BV/TV
-BVTV = VoxelNumber / (RegionProperties.area * Scan.shape[0])
-print('Bone volume fraction: ' + str(round(BVTV,3)))
+TMDs = FitResults.params['Intercept'] + Tissue * FitResults.params['GV']
+print('Mean tissue bone mineral density: ' + str(round(TMDs.sum() / BinaryScan.sum(),3)) + ' mg HA / cm3')
+
+Voxel_Dimensions = np.array(FileData[1]['ElementSpacing']) * 10**-3
+Voxel_Volume = Voxel_Dimensions[0] * Voxel_Dimensions[1] * Voxel_Dimensions[2]
+
+BMC = Tissue.sum() * BinaryScan.sum() * Voxel_Volume
+print('Bone mineral content: ' + str(round(BMC,3)) + ' mg HA')
