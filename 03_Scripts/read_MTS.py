@@ -58,9 +58,7 @@ for filename in filename_list:
     Indices = np.arange(peaks_index[-1], df.index[-1])
     Data_reg = df.iloc[Indices[0:int(len(Indices) / 3)]]
 
-    # slope, intercept, r_value, p_value, std_err = stats.linregress(df['disp_ext'][peaks_index[-1]:], df['force_MTS'][peaks_index[-1]:])
     slope, intercept, r_value, p_value, std_err = stats.linregress(Data_reg['disp_ext'], Data_reg['force_lc'])
-    # x_last_cycle = np.array([df.iloc[-1]['disp_ext'], df['disp_ext'][peaks_index[-1]]])
     x_last_cycle = np.array([Data_reg.iloc[0]['disp_ext'], Data_reg.iloc[-1]['disp_ext']])
 
     # generate plot
@@ -118,52 +116,40 @@ for filename in filename_list:
     slope, intercept, r_value, p_value, std_err = stats.linregress(last_cycle_strain, last_cycle_stress)
     youngs_modulus = round(slope,1)
 
-    # same but using rolling regression: index 15939=0.0005 strain, index 15154=0.0025 strain --> window=785
-
+    ## calculate apparent modulus by using rolling regression
+    # definition of strain region where regression should be carried out
     upper_strain = 0.00250
     lower_strain = 0.00100
 
+    # isolate stress/strain values of defined strain region
     last_cycle = pd.DataFrame()
     last_cycle['last_cycle_strain'] = round(last_cycle_strain,5)
     last_cycle['last_cycle_stress'] = round(last_cycle_stress,5)
 
+    # identify index range of defined region
     upper_cond = last_cycle.loc[last_cycle['last_cycle_strain'] == upper_strain]
     lower_cond = last_cycle.loc[last_cycle['last_cycle_strain'] == lower_strain]
     max_strain_ind = min(upper_cond.index)
     min_strain_ind = min(lower_cond.index)
-
     last_cycle = last_cycle[max_strain_ind:min_strain_ind]
-    window_width = 358
-    
-    slope, intercept, r_value, p_value, std_err = stats.linregress(last_cycle_strain, last_cycle_stress)
 
+    window_width = 358      # calculated by: index(lower_strain)-index(upper_strain)
+    slope_values = list()
 
-    ## compute different slopes
-    # slope, intercept, r_value, p_value, std_err = stats.linregress(last_cycle_strain, last_cycle_stress)
-    # slope_0005, intercept_0005, r_value, p_value, std_err = stats.linregress(last_cycle_strain_00005, last_cycle_stress_00025)
-    # roll_reg = list()
-    # for x in range(15154,15939):
-    #     slope_final, intercept, r_value, p_value, std_err = stats.linregress(last_cycle_strain_00005, last_cycle_stress_00025)
-    # roll_reg.append(slope_final)
-    # print(roll_reg)
+    # rolling linear regression
+    for x in range(max_strain_ind, min_strain_ind - window_width + 1, 1):
+        last_cycle_mod = last_cycle[x:x+window_width]
+        slope, intercept, r_value, p_value, std_err = stats.linregress(last_cycle_mod['last_cycle_strain'],
+                                                                       last_cycle_mod['last_cycle_stress'])
+        slope_value = slope
+        slope_values.append(slope_value)
+    apparent_modulus = max(slope_values)
 
-    ## plot of different slopes
-    # plt.plot(last_cycle_strain,last_cycle_stress)
-    # plt.plot(last_cycle_strain, slope * last_cycle_strain + intercept, 'k')
-    # plt.plot(last_cycle_strain_00005, slope_0005 * last_cycle_strain_00005 + intercept_0005, 'g')
-    # plt.show()
-    # window_width = index_00005_strain - index_00025_strain
-    # roll_reg = RollingOLS(last_cycle_strain, last_cycle_stress, window=window_width)
-    # reg = roll_reg.fit()
-    # params = reg.params.copy()
-    # params.index = np.arange(1, params.shape[0] + 1)
-    # params.head()
-
-    # create list with current values which are sample_ID & slope & add them to result list which is then converted
-    # to dataframe
-    values = [sample_ID, round(slope)]
+    # create list with current values which are sample_ID, slope & apparent modulus & add them to result list which
+    # is then converted to dataframe
+    values = [sample_ID, round(slope), round(apparent_modulus)]
     result.append(values)
-    result_dir = pd.DataFrame(result, columns=['Sample ID', 'Stiffness N/mm'])
+    result_dir = pd.DataFrame(result, columns=['Sample ID', 'Stiffness N/mm', 'Apparent modulus MPa'])
 
 print(result_dir)
 
