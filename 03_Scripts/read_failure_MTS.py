@@ -136,8 +136,11 @@ for filename in filename_list:
     plt.scatter(df['strain_ext'][peaks_index], df['stress_lc_filtered'][peaks_index], marker='o', color='red',
                 label='peaks')
     plt.title(sample_ID)
+    plt.ylabel('stress / MPa')
+    plt.xlabel('strain / -')
     plt.legend()
-    plt.show()
+    # plt.show()
+    plt.close()
 
     ## calculate apparent modulus by using rolling regression
     # definition of strain region where regression should be carried out
@@ -173,38 +176,39 @@ for filename in filename_list:
     plt.scatter(df['disp_ext'][peaks_index], df['force_lc_filtered'][peaks_index], marker='o', color='red',
                 label='peaks')
     plt.title(sample_ID + '_stiffness')
+    plt.ylabel('force / N')
+    plt.xlabel('disp / mm')
     plt.legend()
-    plt.show()
+    # plt.show()
+    plt.close()
 
     ## calculate stiffness by using rolling regression
     # definition of disp region where regression should be carried out
     upper_disp = max(last_cycle_fd['last_cycle_disp'])
     lower_disp = last_cycle_fd['last_cycle_disp'].iloc[0]
 
-    # rolling linear regression
-    for x in range(0, len(last_cycle) - 1 - window_width + 1, 1):
-        last_cycle_mod = last_cycle_fd[x:x + window_width]
-        slope, intercept, r_value, p_value, std_err = stats.linregress(last_cycle_mod['last_cycle_disp'],
-                                                                       last_cycle_mod['last_cycle_force'])
-        slope_value = slope
-        slope_values.append(slope_value)
-    stiffness = max(slope_values)
+    slope_values_stiff = list()
 
-    values = [sample_ID, ultimate_stress_filtered, ultimate_strain, ultimate_force_filtered, apparent_modulus, stiffness]
+    # rolling linear regression
+    for j in range(0, len(last_cycle_fd) - 1 - window_width + 1, 1):
+        last_cycle_mod = last_cycle_fd[j:j + window_width]
+        stiff, intercept, r_value, p_value, std_err = stats.linregress(last_cycle_mod['last_cycle_disp'],
+                                                                       last_cycle_mod['last_cycle_force'])
+        slope_value_stiff = stiff
+        slope_values_stiff.append(slope_value_stiff)
+    stiffness = max(slope_values_stiff)
+
+    # values = [sample_ID, ultimate_stress_filtered, ultimate_strain, ultimate_force_filtered, apparent_modulus, stiffness]
+    values = [sample_ID, ultimate_stress_filtered, ultimate_strain, ultimate_force_filtered, stiffness]
+
     result.append(values)
+    # result_dir = pd.DataFrame(result, columns=['Sample ID', 'Ultimate stress / MPa', 'Ultimate strain / -',
+    #                                            'Ultimate Force / N', 'Apparent modulus / MPa', 'Stiffness / N/mm'])
     result_dir = pd.DataFrame(result, columns=['Sample ID', 'Ultimate stress / MPa', 'Ultimate strain / -',
-                                               'Ultimate Force / N', 'Apparent modulus / MPa', 'Stiffness / N/mm'])
+                                               'Ultimate Force / N', 'Stiffness / N/mm'])
 
 result_dir.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/01_Demineralized/',
                                'ResultsFailureTesting.csv'), index=False)
 
 print(result_dir)
-
-plt.plot(df['disp_ext'], df['force_lc_filtered'], label='force/disp filtered')
-plt.legend()
-plt.show()
-
-plt.plot(df['strain_ext'], df['stress_lc_filtered'], label='stress/strain filtered')
-plt.legend()
-plt.show()
 
