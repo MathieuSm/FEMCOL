@@ -21,13 +21,13 @@ H20_density = 0.99754
 
 # calculate density with density=wet weight*density of H2O/(wet weight-H2O weight)
 for row in range(len(df)):
-    density = df['wet weight'] * H20_density / (df['wet weight'] - df['H2O weight'])
-    w_organic = df['dry weight'] - df['ash weight']
-    w_mineral = df['ash weight']
-    w_water = df['wet weight'] - df['dry weight']
-    wf_mineral = df['ash weight'] / df['wet weight']
-    wf_organic = w_organic / df['wet weight']
-    wf_water = 1 - wf_organic - wf_mineral
+    density = round(df['wet weight'] * H20_density / (df['wet weight'] - df['H2O weight']), 3)
+    w_organic = round(df['dry weight'] - df['ash weight'], 3)
+    w_mineral = round(df['ash weight'], 3)
+    w_water = round(df['wet weight'] - df['dry weight'], 3)
+    wf_mineral = round(df['ash weight'] / df['wet weight'], 3)
+    wf_organic = round(w_organic / df['wet weight'], 3)
+    wf_water = round(1 - wf_organic - wf_mineral, 3)
 
 #
 result_dir = pd.DataFrame()
