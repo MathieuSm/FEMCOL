@@ -7,7 +7,6 @@ from scipy.signal import butter, filtfilt
 from scipy.signal import find_peaks
 from scipy import stats
 from pathlib import Path
-from statsmodels.regression.rolling import RollingOLS
 
 # definition of lowpass filter
 def butter_lowpass_filter(data, cutoff, order=9):
