@@ -135,14 +135,45 @@ for filename in filename_list:
     last_cycle['last_cycle_strain'] = round(last_cycle_strain, 5)
     last_cycle['last_cycle_stress'] = round(last_cycle_stress, 5)
 
+    # # find start value for calculation with unloading cycle
+    # define range between last peak and second last peak to subsequently search for stress minimum as start point
+    start_range_strain_unload = df['strain_ext'][peaks_index[6]:peaks_index[7]]
+    start_range_stress_unload = df['stress_lc_filtered'][peaks_index[6]:peaks_index[7]]
+    start_range_unload = pd.DataFrame()
+    start_range_unload['strain_ext'] = start_range_strain_unload
+    start_range_unload['stress_lc_filtered'] = start_range_stress_unload
+
+    # find smallest stress value & corresponding index as starting point
+    start_value_unload = min(start_range_unload['stress_lc_filtered'])
+    start_ind_unload = start_range_unload.loc[start_range_unload['stress_lc_filtered'] == start_value_unload]
+    start_index_unload = start_ind_unload.index
+
+    # create dataframe using unloading part of last cycle
+    last_cycle_unloading = pd.DataFrame()
+    last_cycle_unloading['last_cycle_strain'] = df['strain_ext'].iloc[start_index_unload[0]:peaks_index[7]]
+    last_cycle_unloading['last_cycle_stress'] = df['stress_lc_filtered'].iloc[start_index_unload[0]:peaks_index[7]]
+
     plt.plot(df['strain_ext'], df['stress_lc_filtered'], label='filtered')
     plt.plot(last_cycle['last_cycle_strain'], last_cycle['last_cycle_stress'], color='green', label='last cycle')
     plt.scatter(df['strain_ext'][peaks_index], df['stress_lc_filtered'][peaks_index], marker='o', color='red',
                 label='peaks')
+    plt.plot(last_cycle_unloading['last_cycle_strain'], last_cycle_unloading['last_cycle_stress'], label='unloading',
+             color='red')
     plt.title(sample_ID)
     plt.ylabel('stress / MPa')
     plt.xlabel('strain / -')
     plt.legend()
+    # plt.show()
+    plt.close()
+
+    # testing plotting
+    strain_test = df['strain_ext'].iloc[0:peaks_index[7]]
+    stress_test = df['stress_lc_filtered'].iloc[0:peaks_index[7]]
+    plt.plot(strain_test, stress_test, label='test', color='black')
+    plt.plot(last_cycle_unloading['last_cycle_strain'], last_cycle_unloading['last_cycle_stress'], label='unloading',
+             color='red')
+    plt.scatter(df['strain_ext'][peaks_index], df['stress_lc_filtered'][peaks_index], marker='o', color='red',
+                label='peaks')
     # plt.show()
     plt.close()
 
@@ -153,6 +184,7 @@ for filename in filename_list:
 
     # window width approx. 1/3 of curve length
     window_width = round(1/3*(end_index[0] - start_index[0]))
+    window_width_unload = round(1 / 3 * (peaks_index[7] - start_index_unload[0]))
     slope_values = list()
 
     # rolling linear regression
@@ -186,6 +218,29 @@ for filename in filename_list:
     # plt.show()
     plt.close()
 
+    # calculate stiffness using last unloading cycle
+    # create dataframe of final unloading cycle using start/end index
+    last_cycle_force_unload = df['force_lc_filtered'].iloc[start_index_unload[0]:peaks_index[7]]
+    last_cycle_disp_unload = df['disp_ext'].iloc[start_index_unload[0]:peaks_index[7]]
+    last_cycle_disp_unload = last_cycle_disp_unload.dropna().reset_index(drop=True)
+    last_cycle_force_unload = last_cycle_force_unload.dropna().reset_index(drop=True)
+
+    last_cycle_fd_unload = pd.DataFrame()
+    last_cycle_fd_unload['last_cycle_disp_unload'] = round(last_cycle_disp_unload, 5)
+    last_cycle_fd_unload['last_cycle_force_unload'] = round(last_cycle_force_unload, 5)
+
+    plt.plot(df['disp_ext'], df['force_lc_filtered'], label='filtered')
+    plt.plot(last_cycle_fd_unload['last_cycle_disp_unload'], last_cycle_fd_unload['last_cycle_force_unload'],
+             color='green', label='last cycle unload')
+    plt.scatter(df['disp_ext'][peaks_index], df['force_lc_filtered'][peaks_index], marker='o', color='red',
+                label='peaks')
+    plt.title(sample_ID + '_stiffness')
+    plt.ylabel('force / N')
+    plt.xlabel('disp / mm')
+    plt.legend()
+    # plt.show()
+    plt.close()
+
     ## calculate stiffness by using rolling regression
     # definition of disp region where regression should be carried out
     upper_disp = max(last_cycle_fd['last_cycle_disp'])
@@ -202,17 +257,37 @@ for filename in filename_list:
         slope_values_stiff.append(slope_value_stiff)
     stiffness = round(max(slope_values_stiff),2)
 
-    values = [sample_ID, ultimate_stress_filtered, ultimate_strain, ultimate_force_filtered, apparent_modulus, stiffness]
+    ## calculate stiffness of last unloading cycle by using rolling regression
+    # definition of disp region where regression should be carried out
+    upper_disp = max(last_cycle_fd_unload['last_cycle_disp_unload'])
+    lower_disp = last_cycle_fd_unload['last_cycle_disp_unload'].iloc[0]
+
+    slope_values_stiff_unload = list()
+
+    # rolling linear regression
+    for k in range(0, len(last_cycle_fd_unload) - 1 - window_width_unload + 1, 1):
+        last_cycle_mod_unload = last_cycle_fd_unload[k:k + window_width_unload]
+        stiff_unload, intercept, r_value, p_value, std_err = stats.linregress(last_cycle_mod_unload['last_cycle_disp_unload'],
+                                                                       last_cycle_mod_unload['last_cycle_force_unload'])
+        slope_value_stiff_unload = stiff_unload
+        slope_values_stiff_unload.append(slope_value_stiff_unload)
+    stiffness_unload = round(max(slope_values_stiff_unload), 2)
+
+    values = [sample_ID, ultimate_stress_filtered, ultimate_strain, ultimate_force_filtered, apparent_modulus, stiffness,
+              stiffness_unload]
 
     result.append(values)
     result_dir = pd.DataFrame(result, columns=['Sample ID', 'Ultimate stress / MPa', 'Ultimate strain / -',
-                                               'Ultimate Force / N', 'Apparent modulus / MPa', 'Stiffness / N/mm'])
+                                               'Ultimate Force / N', 'Apparent modulus / MPa', 'Stiffness / N/mm',
+                                               'Stiffness unloading / N/mm'])
 
 df1 = pd.read_csv(str('/home/stefan/Documents/PythonScripts/04_Results/01_Demineralized/ResultsFailureTesting395L.csv'),
                   skiprows=0)
+result_dir_new = pd.DataFrame()
+result_dir_new['Stiffness unloading / N/mm'] = result_dir['Stiffness unloading / N/mm']
 result_dir.loc[12] = df1.loc[0]
+result_dir['Stiffness unloading / N/mm'] = result_dir_new['Stiffness unloading / N/mm']
+
 result_dir.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/01_Demineralized/',
                                'ResultsFailureTesting.csv'), index=False)
-
-print(result_dir)
 
