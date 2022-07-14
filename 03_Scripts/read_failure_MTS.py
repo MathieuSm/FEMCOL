@@ -153,6 +153,7 @@ for filename in filename_list:
     last_cycle_unloading['last_cycle_strain'] = df['strain_ext'].iloc[start_index_unload[0]:peaks_index[7]]
     last_cycle_unloading['last_cycle_stress'] = df['stress_lc_filtered'].iloc[start_index_unload[0]:peaks_index[7]]
 
+    # plot overview
     plt.plot(df['strain_ext'], df['stress_lc_filtered'], label='filtered')
     plt.plot(last_cycle['last_cycle_strain'], last_cycle['last_cycle_stress'], color='green', label='last cycle')
     plt.scatter(df['strain_ext'][peaks_index], df['stress_lc_filtered'][peaks_index], marker='o', color='red',
@@ -177,7 +178,7 @@ for filename in filename_list:
     # plt.show()
     plt.close()
 
-    ## calculate apparent modulus by using rolling regression
+    ## calculate apparent modulus of monotonic loading cycle by using rolling regression
     # definition of strain region where regression should be carried out
     upper_strain = max(last_cycle['last_cycle_strain'])
     lower_strain = last_cycle['last_cycle_strain'].iloc[0]
@@ -257,7 +258,7 @@ for filename in filename_list:
         slope_values_stiff.append(slope_value_stiff)
     stiffness = round(max(slope_values_stiff),2)
 
-    ## calculate stiffness of last unloading cycle by using rolling regression
+    ## calculate stiffness of last unloading cycle (preconditioning) by using rolling regression
     # definition of disp region where regression should be carried out
     upper_disp = max(last_cycle_fd_unload['last_cycle_disp_unload'])
     lower_disp = last_cycle_fd_unload['last_cycle_disp_unload'].iloc[0]
@@ -273,19 +274,29 @@ for filename in filename_list:
         slope_values_stiff_unload.append(slope_value_stiff_unload)
     stiffness_unload = round(max(slope_values_stiff_unload), 2)
 
+    # collect all data in list
     values = [sample_ID, ultimate_stress_filtered, ultimate_strain, ultimate_force_filtered, apparent_modulus, stiffness,
               stiffness_unload]
 
+    # update list with each iteration's data & generate dataframe
     result.append(values)
     result_dir = pd.DataFrame(result, columns=['Sample ID', 'Ultimate stress / MPa', 'Ultimate strain / -',
                                                'Ultimate Force / N', 'Apparent modulus / MPa', 'Stiffness / N/mm',
                                                'Stiffness unloading / N/mm'])
 
+# load manually adjusted curve from sample 395L (dataframe)
 df1 = pd.read_csv(str('/home/stefan/Documents/PythonScripts/04_Results/01_Demineralized/ResultsFailureTesting395L.csv'),
                   skiprows=0)
+# initialize new dataframe
 result_dir_new = pd.DataFrame()
+
+# copy last column of existing dataframe into new dataframe as "clipboard"
 result_dir_new['Stiffness unloading / N/mm'] = result_dir['Stiffness unloading / N/mm']
+
+# replace data of existing dataframe by manually adjusted data
 result_dir.loc[12] = df1.loc[0]
+
+# paste last column from "clipboard" into existing dataframe
 result_dir['Stiffness unloading / N/mm'] = result_dir_new['Stiffness unloading / N/mm']
 
 result_dir.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/01_Demineralized/',
