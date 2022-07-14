@@ -16,6 +16,7 @@ def butter_lowpass_filter(data, cutoff, order=9):
     y = filtfilt(b, a, data)
     return y
 
+# definition of path
 Cwd = Path.cwd()
 DataPath = Cwd / '02_Data/02_MTS/Failure_testing_demineralized/'
 filename_list = [File for File in os.listdir(DataPath) if File.endswith('.csv')]
@@ -27,7 +28,7 @@ result = list()
 for filename in filename_list:
     sample_ID = filename.split('/')[-1].split('_')[1]
     # load csv:
-    df = pd.read_csv(str(DataPath / filename_list[i]), skiprows = 2)
+    df = pd.read_csv(str(DataPath / filename_list[i]), skiprows=2)
     df.rename(columns={'sec': 'time', 'N': 'force_MTS', 'N.1': 'force_lc', 'mm': 'disp_MTS', 'mm.1': 'disp_ext'},
     inplace = True)
     i = i + 1
@@ -83,10 +84,12 @@ for filename in filename_list:
     # search for ultimate stress (filtered)
     row_max_stress_filtered = df.iloc[max_stress_index]
     ultimate_stress_filtered = np.round(row_max_stress_filtered['stress_lc_filtered'].values, 2)
+    ultimate_stress_filtered = ultimate_stress_filtered[0]
 
     # search for ultimate strain
     row_max_strain = df.iloc[max_stress_index]
     ultimate_strain = np.round(row_max_strain['strain_ext'].values, 4)
+    ultimate_strain = ultimate_strain[0]
 
     # find max value of force_lc column
     column_force = df['force_lc']
@@ -99,6 +102,7 @@ for filename in filename_list:
     # search for ultimate force (filtered)
     row_max_force_filtered = df.iloc[max_force_index]
     ultimate_force_filtered = np.round(row_max_force_filtered['force_lc_filtered'].values, 2)
+    ultimate_force_filtered = ultimate_force_filtered[0]
 
     ## calculate values for last cycle of stress/strain curve only
     # find peaks
@@ -158,7 +162,7 @@ for filename in filename_list:
                                                                        last_cycle_mod['last_cycle_stress'])
         slope_value = slope
         slope_values.append(slope_value)
-    apparent_modulus = max(slope_values)
+    apparent_modulus = round(max(slope_values),2)
 
     # calculate stiffness
     # create dataframe of final cycle using start/end index
@@ -196,17 +200,17 @@ for filename in filename_list:
                                                                        last_cycle_mod['last_cycle_force'])
         slope_value_stiff = stiff
         slope_values_stiff.append(slope_value_stiff)
-    stiffness = max(slope_values_stiff)
+    stiffness = round(max(slope_values_stiff),2)
 
-    # values = [sample_ID, ultimate_stress_filtered, ultimate_strain, ultimate_force_filtered, apparent_modulus, stiffness]
-    values = [sample_ID, ultimate_stress_filtered, ultimate_strain, ultimate_force_filtered, stiffness]
+    values = [sample_ID, ultimate_stress_filtered, ultimate_strain, ultimate_force_filtered, apparent_modulus, stiffness]
 
     result.append(values)
-    # result_dir = pd.DataFrame(result, columns=['Sample ID', 'Ultimate stress / MPa', 'Ultimate strain / -',
-    #                                            'Ultimate Force / N', 'Apparent modulus / MPa', 'Stiffness / N/mm'])
     result_dir = pd.DataFrame(result, columns=['Sample ID', 'Ultimate stress / MPa', 'Ultimate strain / -',
-                                               'Ultimate Force / N', 'Stiffness / N/mm'])
+                                               'Ultimate Force / N', 'Apparent modulus / MPa', 'Stiffness / N/mm'])
 
+df1 = pd.read_csv(str('/home/stefan/Documents/PythonScripts/04_Results/01_Demineralized/ResultsFailureTesting395L.csv'),
+                  skiprows=0)
+result_dir.loc[12] = df1.loc[0]
 result_dir.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/01_Demineralized/',
                                'ResultsFailureTesting.csv'), index=False)
 
