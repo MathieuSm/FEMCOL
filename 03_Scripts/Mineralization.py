@@ -12,11 +12,10 @@ from skimage import morphology, measure # Used to fill pores and circle fitting
 # Set directories
 CurrentDirectory = Path.cwd()
 ScriptsDirectory = CurrentDirectory / '03_Scripts'
-DataDirectory = CurrentDirectory / '02_Data/00_Tests'
-
+DataDirectory = CurrentDirectory / '02_Data/01_uCT'
 
 # Read data list and print it into console
-Data = pd.read_csv(str(DataDirectory / 'List.csv'))
+Data = pd.read_csv(str(DataDirectory / 'SampleList.csv'))
 print(Data)
 
 # Select sample to analyze (numbering starting from 0)
@@ -38,8 +37,8 @@ Axis.axis('off')
 plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
 plt.show()
 
-# Segment scan using Otsu's threshold
-Threshold = filters.threshold_otsu(Scan)
+# Segment scan using Otsu's threshold: mean threshold calculated with MeanOtsu.py --> 562.586
+Threshold = 562.586
 BinaryScan = np.zeros(Scan.shape)
 BinaryScan[Scan > Threshold] = 1
 
@@ -50,10 +49,10 @@ Axis.axis('off')
 plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
 plt.show()
 
-# Fill pore to esimate surface and compute BV/TV
+# Fill pore to estimate surface and compute BV/TV
 Disk = morphology.disk(50)
-Dilated = morphology.binary_dilation(BinaryScan[ZMid,:,:],Disk)
-Eroded = morphology.binary_erosion(Dilated,Disk)
+Dilated = morphology.binary_dilation(BinaryScan[ZMid, :, :], Disk)
+Eroded = morphology.binary_erosion(Dilated, Disk)
 
 RegionProperties = measure.regionprops(Eroded*1)[0]
 
@@ -67,10 +66,10 @@ Radians = np.linspace(0, 2 * np.pi, 100)
 Ellipse = np.array([R1 * np.cos(Radians), R2 * np.sin(Radians)])
 R = np.array([[np.cos(OrientationAngle), -np.sin(OrientationAngle)],
               [np.sin(OrientationAngle), np.cos(OrientationAngle)]])
-RotatedEllipse = np.dot(R,Ellipse)
+RotatedEllipse = np.dot(R, Ellipse)
 
 # Plot filled image
-Figure, Axis = plt.subplots(1,1, figsize=(Size[1], Size[0]))
+Figure, Axis = plt.subplots(1, 1, figsize=(Size[1], Size[0]))
 Axis.imshow(Eroded, cmap='bone')
 Axis.plot(X0, Y0, marker='x', color=(0, 0, 1), linestyle='none', markersize=10, mew=2, label='Centroid')
 Axis.plot(X0 + RotatedEllipse[0, :], Y0 - RotatedEllipse[1, :], color=(0, 1, 0), label='Fitted ellipse')
@@ -82,7 +81,8 @@ plt.show()
 Disk = morphology.disk(int(round(RegionProperties.equivalent_diameter/2)))
 Ceil = np.ceil((np.array(Scan.shape[1:]) - np.array(Disk.shape)) / 2).astype('int')
 Floor = np.floor((np.array(Scan.shape[1:]) - np.array(Disk.shape)) / 2).astype('int')
-Padded = np.pad(Disk,((Floor[1]-1,Ceil[1]+1),(Floor[0]+5,Ceil[0]-5)))
+# Padded = np.pad(Disk,((Floor[1]-1,Ceil[1]+1),(Floor[0]+5,Ceil[0]-5)))
+Padded = np.pad(Disk, ((Floor[1]-5, Ceil[1]+5), (Floor[0]-5, Ceil[0]+5)))
 Cylinder = np.repeat(Padded,Scan.shape[0]).reshape(Scan.shape,order='F')
 
 Figure, Axis = plt.subplots(1,1, figsize=(Size[1], Size[0]))
@@ -109,7 +109,7 @@ plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
 plt.show()
 
 print('Mean bone mineral density: ' + str(round(Sample.sum() / Cylinder.sum(),3)) + ' mg HA / cm3')
-print('Mean tissue bone mineral density: ' + str(round(Tissue.sum() / BinaryScan.sum(),3)) + ' mg HA / cm3')
+print('Mean tissue mineral density: ' + str(round(Tissue.sum() / BinaryScan.sum(),3)) + ' mg HA / cm3')
 
 Voxel_Dimensions = np.array(Image.GetSpacing()) * 10**-3
 Voxel_Volume = Voxel_Dimensions[0] * Voxel_Dimensions[1] * Voxel_Dimensions[2]
