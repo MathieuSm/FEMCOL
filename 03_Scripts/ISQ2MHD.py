@@ -11,7 +11,7 @@ from scipy.stats.distributions import t # Used to compute confidence intervals
 # Set directories
 CurrentDirectory = Path.cwd()
 ScriptsDirectory = CurrentDirectory / '03_Scripts'
-DataDirectory = CurrentDirectory / '02_Data/00_Tests'
+DataDirectory = CurrentDirectory / '02_Data/01_uCT'
 
 # Import self-written script
 import sys
@@ -95,12 +95,12 @@ PlotRegressionResults(FitResults)
 
 
 # Read data list and print it into console
-Data = pd.read_csv(str(DataDirectory / 'List.csv'))
+Data = pd.read_csv(str(DataDirectory / 'SampleList.csv'))
 print(Data)
 
 # Select sample to analyze (numbering starting from 0)
-SampleNumber = 0
-File = Data.loc[SampleNumber,'uCT File']
+SampleNumber = 7
+File = Data.loc[SampleNumber, 'uCT File']
 
 # Read ISQ file
 ISQArguments.File = str(DataDirectory / File) + '.ISQ'
@@ -117,7 +117,7 @@ Axis.imshow(Scan[ZMid, :, :], cmap='bone')
 plt.show()
 
 # Crop image to desired size
-Cropped = Scan[:,875:1275,800:1200]
+Cropped = Scan[:,875:1175,875:1175]
 Size = np.array(Cropped.shape[1:]) / 100
 Figure, Axis = plt.subplots(1,1, figsize=(Size[1], Size[0]))
 Axis.imshow(Cropped[ZMid, :, :], cmap='bone')
