@@ -299,6 +299,11 @@ result_dir.loc[12] = df1.loc[0]
 # paste last column from "clipboard" into existing dataframe
 result_dir['Stiffness unloading / N/mm'] = result_dir_new['Stiffness unloading / N/mm']
 
-result_dir.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/01_Demineralized/',
+missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '400R', '402L', '403R', '433L']})
+# missing_IDs = pd.DataFrame(missing_sample_IDs, columns=['Sample ID'])
+result_dir = pd.concat([result_dir, missing_sample_IDs])
+result_dir_sorted = result_dir.sort_values(by=['Sample ID'], ascending=True)
+
+result_dir_sorted.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/01_Demineralized/',
                                'ResultsFailureTesting.csv'), index=False)
 
