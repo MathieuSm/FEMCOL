@@ -21,7 +21,7 @@ print(Data)
 
 results = list()
 # Select sample to analyze (numbering starting from 0)
-for x in range(0, len(Data)-1, 1):
+for x in range(0, len(Data), 1):
     SampleNumber = x
     File = Data.loc[SampleNumber,'uCT File']
 
@@ -38,7 +38,8 @@ for x in range(0, len(Data)-1, 1):
     Axis.imshow(Scan[ZMid, :, :], cmap='bone')
     Axis.axis('off')
     plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
-    plt.show()
+    # plt.show()
+    plt.close()
 
     # Segment scan using Otsu's threshold: mean threshold calculated with MeanOtsu.py --> 562.586
     Threshold = 562.586
@@ -50,7 +51,8 @@ for x in range(0, len(Data)-1, 1):
     Axis.imshow(BinaryScan[ZMid, :, :], cmap='bone')
     Axis.axis('off')
     plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
-    plt.show()
+    # plt.show()
+    plt.close()
 
     # Pad image to avoid artefacts
     Radius = 50
@@ -83,7 +85,8 @@ for x in range(0, len(Data)-1, 1):
     Axis.plot(X0 + RotatedEllipse[0, :], Y0 - RotatedEllipse[1, :], color=(0, 1, 0), label='Fitted ellipse')
     Axis.axis('off')
     plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
-    plt.show()
+    # plt.show()
+    plt.close()
 
     # Build full cylinder representing the sample
     Disk = morphology.disk(int(round(RegionProperties.equivalent_diameter/2)))
@@ -91,7 +94,8 @@ for x in range(0, len(Data)-1, 1):
     Floor = np.floor((np.array(Scan.shape[1:]) - np.array(Disk.shape)) / 2).astype('int')
     Shift = np.array(Scan.shape[1:])/2 - np.array([Y0, X0])
 
-    Padded = np.pad(Disk, ((Floor[1]-int(Shift[1]), Ceil[1]+int(Shift[1])), (Floor[0]-int(Shift[0]), Ceil[0]+int(Shift[0]))))
+    Padded = np.pad(Disk, ((Floor[1]-int(Shift[1]), Ceil[1]+int(Shift[1])), (Floor[0]-int(Shift[0]),
+                                                                             Ceil[0]+int(Shift[0]))))
     Cylinder = np.repeat(Padded, Scan.shape[0]).reshape(Scan.shape, order='F')
 
     Figure, Axis = plt.subplots(1, 1, figsize=(Size[1], Size[0]))
@@ -100,7 +104,8 @@ for x in range(0, len(Data)-1, 1):
     Axis.plot(X0 + RotatedEllipse[0, :], Y0 - RotatedEllipse[1, :], color=(0, 1, 0), label='Fitted ellipse')
     Axis.axis('off')
     plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
-    plt.show()
+    # plt.show()
+    plt.close()
 
     # Compute BV/TV
     BVTV = round(BinaryScan.sum() / Cylinder.sum(), 3)
@@ -114,7 +119,8 @@ for x in range(0, len(Data)-1, 1):
     Axis.imshow(Sample[ZMid, :, :], cmap='bone')
     Axis.axis('off')
     plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
-    plt.show()
+    # plt.show()
+    plt.close()
 
     BMD = round(Sample.sum() / Cylinder.sum(), 3)
     TMD = round(Tissue.sum() / BinaryScan.sum(), 3)
@@ -133,8 +139,16 @@ for x in range(0, len(Data)-1, 1):
     values = [SampleID, BVTV, BMD, TMD, BMC]
     results.append(values)
 
+    print(x)
+
 # convert list to dataframe & save it as csv file
 result_dir = pd.DataFrame(results, columns=['Sample ID', 'Bone Volume Fraction -', 'Bone Mineral Density mg HA / cm3',
                                             'Tissue Mineral Density mg HA / cm3', 'Bone Mineral Content mg HA'])
-result_dir.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/03_uCT/', 'ResultsUCT.csv'), index=False)
-print(result_dir)
+
+missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '402L']})
+result_dir = pd.concat([result_dir, missing_sample_IDs])
+result_dir_sorted = result_dir.sort_values(by=['Sample ID'], ascending=True)
+
+result_dir_sorted.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/03_uCT/', 'ResultsUCT.csv'),
+                         index=False)
+print(result_dir_sorted)
