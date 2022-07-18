@@ -91,7 +91,6 @@ for x in range(0, len(Data)-1, 1):
     Floor = np.floor((np.array(Scan.shape[1:]) - np.array(Disk.shape)) / 2).astype('int')
     Shift = np.array(Scan.shape[1:])/2 - np.array([Y0, X0])
 
-    # Padded = np.pad(Disk,((Floor[1]-1,Ceil[1]+1),(Floor[0]+5,Ceil[0]-5)))
     Padded = np.pad(Disk, ((Floor[1]-int(Shift[1]), Ceil[1]+int(Shift[1])), (Floor[0]-int(Shift[0]), Ceil[0]+int(Shift[0]))))
     Cylinder = np.repeat(Padded, Scan.shape[0]).reshape(Scan.shape, order='F')
 
@@ -126,13 +125,15 @@ for x in range(0, len(Data)-1, 1):
     Voxel_Dimensions = np.array(Image.GetSpacing()) * 10**-3
     Voxel_Volume = Voxel_Dimensions[0] * Voxel_Dimensions[1] * Voxel_Dimensions[2]
 
-    BMC = Tissue.sum() * BinaryScan.sum() * Voxel_Volume
+    BMC = round(Tissue.sum() * BinaryScan.sum() * Voxel_Volume, 3)
     # print('Bone mineral content: ' + str(round(BMC, 3)) + ' mg HA')
 
+    # Collect data into filling list
     SampleID = Data.loc[SampleNumber, 'Sample']
     values = [SampleID, BVTV, BMD, TMD, BMC]
     results.append(values)
 
+# convert list to dataframe & save it as csv file
 result_dir = pd.DataFrame(results, columns=['Sample ID', 'Bone Volume Fraction -', 'Bone Mineral Density mg HA / cm3',
                                             'Tissue Mineral Density mg HA / cm3', 'Bone Mineral Content mg HA'])
 result_dir.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/03_uCT/', 'ResultsUCT.csv'), index=False)
