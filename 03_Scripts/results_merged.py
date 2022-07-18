@@ -14,6 +14,7 @@ results_demineralized = pd.read_csv(str('/home/stefan/Documents/PythonScripts/04
                   skiprows=0)
 results_gravimetry = pd.read_csv(str('/home/stefan/Documents/PythonScripts/04_Results/02_Gravimetry/ResultsGravimetry.csv'),
                   skiprows=0)
+results_uCT = pd.read_csv(str('/home/stefan/Documents/PythonScripts/04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
 
 results_merged = pd.DataFrame()
 results_merged['Sample ID'] = results_mineralized['Sample ID']
@@ -32,6 +33,10 @@ results_merged['Water Weight g'] = results_gravimetry['water weight / g']
 results_merged['Mineral weight fraction -'] = results_gravimetry['weight fraction of mineral phase / -']
 results_merged['Organic weight fraction -'] = results_gravimetry['weight fraction of organic phase / -']
 results_merged['Water weight fraction -'] = results_gravimetry['weight fraction of water phase / -']
+results_merged['Bone Volume Fraction -'] = results_uCT['Bone Volume Fraction -']
+results_merged['Bone Mineral Density mg HA / cm^3'] = results_uCT['Bone Mineral Density mg HA / cm3']
+results_merged['Tissue Mineral Density mg HA / cm^3'] = results_uCT['Tissue Mineral Density mg HA / cm3']
+results_merged['Bone Mineral Content mg HA'] = results_uCT['Bone Mineral Content mg HA']
 
 results_merged.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/', 'ResultsOverview.csv'),
                       index=False)
