@@ -150,12 +150,12 @@ for filename in filename_list:
     result.append(values)
     result_dir = pd.DataFrame(result, columns=['Sample ID', 'Stiffness N/mm', 'Apparent modulus MPa'])
 
-print(result_dir)
-
 missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '400R', '402L', '433L']})
 # missing_IDs = pd.DataFrame(missing_sample_IDs, columns=['Sample ID'])
 result_dir = pd.concat([result_dir, missing_sample_IDs])
 result_dir_sorted = result_dir.sort_values(by=['Sample ID'], ascending=True)
+
+print(result_dir_sorted)
 
 # safe dataframe to csv
 result_dir_sorted.to_csv(
