@@ -152,8 +152,13 @@ for filename in filename_list:
 
 print(result_dir)
 
+missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '400R', '402L', '433L']})
+# missing_IDs = pd.DataFrame(missing_sample_IDs, columns=['Sample ID'])
+result_dir = pd.concat([result_dir, missing_sample_IDs])
+result_dir_sorted = result_dir.sort_values(by=['Sample ID'], ascending=True)
+
 # safe dataframe to csv
-result_dir.to_csv(
+result_dir_sorted.to_csv(
     os.path.join('/home/stefan/Documents/PythonScripts/04_Results/00_Mineralized/', 'ResultsElasticTesting.csv'),
     index=False)
 
