@@ -275,14 +275,13 @@ for filename in filename_list:
     stiffness_unload = round(max(slope_values_stiff_unload), 2)
 
     # collect all data in list
-    values = [sample_ID, ultimate_stress_filtered, ultimate_strain, ultimate_force_filtered, apparent_modulus, stiffness,
+    values = [sample_ID, ultimate_stress_filtered, ultimate_strain, ultimate_force_filtered, apparent_modulus,
               stiffness_unload]
 
     # update list with each iteration's data & generate dataframe
     result.append(values)
     result_dir = pd.DataFrame(result, columns=['Sample ID', 'Ultimate stress / MPa', 'Ultimate strain / -',
-                                               'Ultimate Force / N', 'Apparent modulus / MPa', 'Stiffness / N/mm',
-                                               'Stiffness unloading / N/mm'])
+                                               'Ultimate Force / N', 'Apparent modulus / MPa', 'Stiffness / N/mm'])
 
 # load manually adjusted curve from sample 395L (dataframe)
 df1 = pd.read_csv(str('/home/stefan/Documents/PythonScripts/04_Results/01_Demineralized/ResultsFailureTesting395L.csv'),
@@ -291,13 +290,13 @@ df1 = pd.read_csv(str('/home/stefan/Documents/PythonScripts/04_Results/01_Demine
 result_dir_new = pd.DataFrame()
 
 # copy last column of existing dataframe into new dataframe as "clipboard"
-result_dir_new['Stiffness unloading / N/mm'] = result_dir['Stiffness unloading / N/mm']
+result_dir_new['Stiffness / N/mm'] = result_dir['Stiffness / N/mm']
 
 # replace data of existing dataframe by manually adjusted data
 result_dir.loc[12] = df1.loc[0]
 
 # paste last column from "clipboard" into existing dataframe
-result_dir['Stiffness unloading / N/mm'] = result_dir_new['Stiffness unloading / N/mm']
+result_dir['Stiffness / N/mm'] = result_dir_new['Stiffness / N/mm']
 
 missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '400R', '402L', '403R', '433L']})
 # missing_IDs = pd.DataFrame(missing_sample_IDs, columns=['Sample ID'])
