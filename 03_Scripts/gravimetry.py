@@ -29,7 +29,7 @@ for row in range(len(df)):
     wf_organic = round(w_organic / df['wet weight'], 3)
     wf_water = round(1 - wf_organic - wf_mineral, 3)
 
-#
+# add results to dataframe
 result_dir = pd.DataFrame()
 result_dir['Sample ID'] = df['Sample ID']
 result_dir['density / g/cm^3'] = density
@@ -40,9 +40,7 @@ result_dir['weight fraction of mineral phase / -'] = wf_mineral
 result_dir['weight fraction of organic phase / -'] = wf_organic
 result_dir['weight fraction of water phase / -'] = wf_water
 
-# results = [Sample_ID, density]
-# result_dir = pd.DataFrame(results, columns=['Sample ID','density g/cm^3'])
-
+# save dataframe to csv
 result_dir.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/02_Gravimetry/', 'ResultsGravimetry.csv'), index=False)
 
 print(result_dir)
