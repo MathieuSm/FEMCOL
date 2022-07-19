@@ -24,8 +24,9 @@ class ISQArguments:
     BMD = False
     File = None
 
+
 # Define some functions
-def PlotRegressionResults(Model,Alpha=0.95):
+def PlotRegressionResults(Model, Alpha=0.95):
 
     print(Model.summary())
 
