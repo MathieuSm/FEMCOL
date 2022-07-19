@@ -68,7 +68,7 @@ x_axis = 'Age'
 y_axis = 'Stiffness Mineralized N/mm'
 x_axis_abbrev = 'Age'
 y_axis_abbrev = 'SM'
-Data = df.filter(['Sample ID', x_axis, y_axis]).dropna()
+Data = df.filter(['Sample ID', x_axis, y_axis, 'Gender']).dropna()
 Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
 Data2Fit = Data2Fit.set_index('SID')
