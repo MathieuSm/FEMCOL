@@ -50,30 +50,46 @@ for filename in filename_list:
     # plt.show()
     plt.close()
 
-    # peak detection:
+    # peak detection
     peaks_index, _ = find_peaks(df['force_lc'], width=50)
 
-    # linear regression:
-    Indices = np.arange(peaks_index[-1], df.index[-1])
-    Data_reg = df.iloc[Indices[0:int(len(Indices) / 3)]]
+    window_width = round(1 / 3 * (df.index[-1] - peaks_index[-1]))
 
-    slope, intercept, r_value, p_value, std_err = stats.linregress(Data_reg['disp_ext'], Data_reg['force_lc'])
-    x_last_cycle = np.array([Data_reg.iloc[0]['disp_ext'], Data_reg.iloc[-1]['disp_ext']])
+    # calculate values for last cycle of force/disp curve only
+    last_cycle_force = df['force_lc_filtered'][peaks_index[-1]:]
+    last_cycle_disp = df['disp_ext'][peaks_index[-1]:]
+    last_cycle_disp = last_cycle_disp.dropna().reset_index(drop=True)
+    last_cycle_force = last_cycle_force.dropna().reset_index(drop=True)
 
-    # generate plot
-    plt.figure(figsize=(6, 4))
-    plt.title(sample_ID)
-    plt.plot(df['disp_ext'], df['force_lc'], label='lc')
-    plt.plot(df['disp_ext'][peaks_index[-1]:], df['force_lc'][peaks_index[-1]:])
-    plt.plot(x_last_cycle, slope * x_last_cycle + intercept, 'k')
-    plt.plot([], ' ', label=f'stiffness = {slope:.0f} N/mm')
-    plt.ylabel('force lc / N')
-    plt.xlabel('disp ext / mm')
-    plt.legend()
-    savepath = Cwd / '04_Results/00_Mineralized/00_force_disp/'
-    plt.savefig(os.path.join(savepath, 'force_disp_' + sample_ID + '.png'), dpi=300)
+    # isolate stress/strain values
+    last_cycle = pd.DataFrame()
+    last_cycle['last_cycle_force'] = round(last_cycle_force, 5)
+    last_cycle['last_cycle_disp'] = round(last_cycle_disp, 5)
+
+    # rolling linear regression
+    slope_values_stiff = list()
+    for x in range(0, len(last_cycle) - 1 - window_width + 1, 1):
+        last_cycle_mod = last_cycle[x:x + window_width]
+        slope_stiff, intercept, r_value, p_value, std_err = stats.linregress(last_cycle_mod['last_cycle_disp'],
+                                                                       last_cycle_mod['last_cycle_force'])
+        slope_value = slope_stiff
+        slope_values_stiff.append(slope_value)
+    stiffness = max(slope_values_stiff)
+
+    ## generate plot
+    # plt.figure(figsize=(6, 4))
+    # plt.title(sample_ID)
+    # plt.plot(df['disp_ext'], df['force_lc'], label='lc')
+    # plt.plot(df['disp_ext'][peaks_index[-1]:], df['force_lc'][peaks_index[-1]:])
+    # plt.plot(x_last_cycle, slope_stiff * x_last_cycle + intercept, 'k')
+    # plt.plot([], ' ', label=f'stiffness = {slope:.0f} N/mm')
+    # plt.ylabel('force lc / N')
+    # plt.xlabel('disp ext / mm')
+    # plt.legend()
+    # savepath = Cwd / '04_Results/00_Mineralized/00_force_disp/'
+    # plt.savefig(os.path.join(savepath, 'force_disp_' + sample_ID + '.png'), dpi=300)
     # plt.show()
-    plt.close()
+    # plt.close()
 
     # calculate stress/strain
     Pi = 3.1415
@@ -133,20 +149,20 @@ for filename in filename_list:
     last_cycle = last_cycle[max_strain_ind:min_strain_ind]
 
     window_width = 358      # calculated by: index(lower_strain)-index(upper_strain)
-    slope_values = list()
+    slope_values_app = list()
 
     # rolling linear regression
     for x in range(max_strain_ind, min_strain_ind - window_width + 1, 1):
         last_cycle_mod = last_cycle[x:x+window_width]
-        slope, intercept, r_value, p_value, std_err = stats.linregress(last_cycle_mod['last_cycle_strain'],
+        slope_app, intercept, r_value, p_value, std_err = stats.linregress(last_cycle_mod['last_cycle_strain'],
                                                                        last_cycle_mod['last_cycle_stress'])
-        slope_value = slope
-        slope_values.append(slope_value)
-    apparent_modulus = max(slope_values)
+        slope_value = slope_app
+        slope_values_app.append(slope_value)
+    apparent_modulus = max(slope_values_app)
 
     # create list with current values which are sample_ID, slope & apparent modulus & add them to result list which
     # is then converted to dataframe
-    values = [sample_ID, round(slope), round(apparent_modulus)]
+    values = [sample_ID, round(stiffness), round(apparent_modulus)]
     result.append(values)
     result_dir = pd.DataFrame(result, columns=['Sample ID', 'Stiffness N/mm', 'Apparent modulus MPa'])
 
