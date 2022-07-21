@@ -1,11 +1,11 @@
 # Import standard packages
-from pathlib import Path                # Used to manage path variables in windows or linux
-import numpy as np                      # Used to do arrays (matrices) computations namely
-import pandas as pd                     # Used to manage data frames
-import matplotlib.pyplot as plt         # Used to perform plots
-import statsmodels.formula.api as smf   # Used for statistical analysis (ols here)
+from pathlib import Path                 # Used to manage path variables in windows or linux
+import numpy as np                       # Used to do arrays (matrices) computations namely
+import pandas as pd                      # Used to manage data frames
+import matplotlib.pyplot as plt          # Used to perform plots
+import statsmodels.formula.api as smf    # Used for statistical analysis (ols here)
 import os
-from scipy.stats.distributions import t # Used to compute confidence intervals
+from scipy.stats.distributions import t  # Used to compute confidence intervals
 
 
 # Set directories
