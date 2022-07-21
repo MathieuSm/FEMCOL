@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import glob
 import os
-from scipy.signal import butter,filtfilt
+from scipy.signal import butter, filtfilt
 from scipy.signal import find_peaks
 from scipy import stats
 from pathlib import Path
@@ -179,46 +179,24 @@ for filename in filename_list:
     # plt.show()
     plt.close()
 
-    ## calculate apparent modulus of monotonic loading cycle by using rolling regression
-    # definition of strain region where regression should be carried out
-    upper_strain = max(last_cycle['last_cycle_strain'])
-    lower_strain = last_cycle['last_cycle_strain'].iloc[0]
-
-    # window width approx. 1/3 of curve length
-    window_width = round(1/3*(end_index[0] - start_index[0]))
+    # ## calculate apparent modulus of monotonic loading cycle by using rolling regression
+    # # definition of strain region where regression should be carried out
+    # upper_strain = max(last_cycle['last_cycle_strain'])
+    # lower_strain = last_cycle['last_cycle_strain'].iloc[0]
+    #
+    # # window width approx. 1/3 of curve length
+    # window_width = round(1/3*(end_index[0] - start_index[0]))
     window_width_unload = round(1 / 3 * (peaks_index[7] - start_index_unload[0]))
-    slope_values = list()
-
-    # rolling linear regression apparent modulus
-    for x in range(0, len(last_cycle) - 1 - window_width + 1, 1):
-        last_cycle_mod = last_cycle[x:x + window_width]
-        slope, intercept, r_value, p_value, std_err = stats.linregress(last_cycle_mod['last_cycle_strain'],
-                                                                       last_cycle_mod['last_cycle_stress'])
-        slope_value = slope
-        slope_values.append(slope_value)
-    apparent_modulus = round(max(slope_values), 2)
-
-    # ## calculate stiffness of monotonic loading cycle
-    # # create dataframe of final cycle using start/end index
-    # last_cycle_force = df['force_lc_filtered'].iloc[start_index[0]:end_index[0]]
-    # last_cycle_disp = df['disp_ext'].iloc[start_index[0]:end_index[0]]
-    # last_cycle_disp = last_cycle_disp.dropna().reset_index(drop=True)
-    # last_cycle_force = last_cycle_force.dropna().reset_index(drop=True)
+    # slope_values = list()
     #
-    # last_cycle_fd = pd.DataFrame()
-    # last_cycle_fd['last_cycle_disp'] = round(last_cycle_disp, 5)
-    # last_cycle_fd['last_cycle_force'] = round(last_cycle_force, 5)
-    #
-    # plt.plot(df['disp_ext'], df['force_lc_filtered'], label='filtered')
-    # plt.plot(last_cycle_fd['last_cycle_disp'], last_cycle_fd['last_cycle_force'], color='green', label='last cycle')
-    # plt.scatter(df['disp_ext'][peaks_index], df['force_lc_filtered'][peaks_index], marker='o', color='red',
-    #             label='peaks')
-    # plt.title(sample_ID + '_stiffness')
-    # plt.ylabel('force / N')
-    # plt.xlabel('disp / mm')
-    # plt.legend()
-    # # plt.show()
-    # plt.close()
+    # # rolling linear regression apparent modulus
+    # for x in range(0, len(last_cycle) - 1 - window_width + 1, 1):
+    #     last_cycle_mod = last_cycle[x:x + window_width]
+    #     slope, intercept, r_value, p_value, std_err = stats.linregress(last_cycle_mod['last_cycle_strain'],
+    #                                                                    last_cycle_mod['last_cycle_stress'])
+    #     slope_value = slope
+    #     slope_values.append(slope_value)
+    # apparent_modulus = round(max(slope_values), 2)
 
     ## calculate stiffness using last unloading cycle
     # create dataframe of final unloading cycle using start/end index
@@ -245,22 +223,6 @@ for filename in filename_list:
     plt.show()
     # plt.close()
 
-    # # calculate stiffness by using rolling regression
-    # # definition of disp region where regression should be carried out
-    # upper_disp = max(last_cycle_fd['last_cycle_disp'])
-    # lower_disp = last_cycle_fd['last_cycle_disp'].iloc[0]
-    #
-    # slope_values_stiff = list()
-    #
-    # # rolling linear regression
-    # for j in range(0, len(last_cycle_fd) - 1 - window_width + 1, 1):
-    #     last_cycle_mod = last_cycle_fd[j:j + window_width]
-    #     stiff, intercept, r_value, p_value, std_err = stats.linregress(last_cycle_mod['last_cycle_disp'],
-    #                                                                    last_cycle_mod['last_cycle_force'])
-    #     slope_value_stiff = stiff
-    #     slope_values_stiff.append(slope_value_stiff)
-    # stiffness = round(max(slope_values_stiff), 2)
-
     ## calculate stiffness of last unloading cycle (preconditioning) by using rolling regression
     # definition of disp region where regression should be carried out
     upper_disp = max(last_cycle_fd_unload['last_cycle_disp_unload'])
@@ -275,11 +237,37 @@ for filename in filename_list:
                                                                        last_cycle_mod_unload['last_cycle_force_unload'])
         slope_value_stiff_unload = stiff_unload
         slope_values_stiff_unload.append(slope_value_stiff_unload)
-    stiffness_unload = round(max(slope_values_stiff_unload), 2)
+    stiffness = round(max(slope_values_stiff_unload), 2)
+
+    ## calculate apparent modulus using last unloading cycle
+    # create dataframe of final unloading cycle using start/end index
+    last_cycle_stress_unload = df['stress_lc_filtered'].iloc[start_index_unload[0]:peaks_index[7]]
+    last_cycle_strain_unload = df['strain_ext'].iloc[start_index_unload[0]:peaks_index[7]]
+    last_cycle_strain_unload = last_cycle_strain_unload.dropna().reset_index(drop=True)
+    last_cycle_stress_unload = last_cycle_stress_unload.dropna().reset_index(drop=True)
+
+    last_cycle_ss_unload = pd.DataFrame()
+    last_cycle_ss_unload['last_cycle_strain_unload'] = round(last_cycle_strain_unload, 5)
+    last_cycle_ss_unload['last_cycle_stress_unload'] = round(last_cycle_stress_unload, 5)
+
+    upper_strain = max(last_cycle_ss_unload['last_cycle_strain_unload'])
+    lower_strain = last_cycle_ss_unload['last_cycle_strain_unload'].iloc[0]
+    window_width_unload = round(1 / 3 * len(last_cycle_ss_unload))
+    slope_values_app_unload = list()
+
+    # rolling linear regression
+    for k in range(0, len(last_cycle_ss_unload) - 1 - window_width_unload + 1, 1):
+        last_cycle_mod_unload = last_cycle_ss_unload[k:k + window_width_unload]
+        slope_unload_app, intercept_unload_app, r_value, p_value, std_err = stats.linregress(
+            last_cycle_mod_unload['last_cycle_strain_unload'],
+            last_cycle_mod_unload['last_cycle_stress_unload'])
+        slope_value_app_unload = slope_unload_app
+        slope_values_app_unload.append(slope_value_app_unload)
+    apparent_modulus = round(max(slope_values_app_unload), 2)
 
     # collect all data in list
     values = [sample_ID, ultimate_stress_filtered, ultimate_strain, ultimate_force_filtered, apparent_modulus,
-              stiffness_unload]
+              stiffness]
 
     # update list with each iteration's data & generate dataframe
     result.append(values)
