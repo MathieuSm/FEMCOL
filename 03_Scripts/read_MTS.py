@@ -66,30 +66,41 @@ for filename in filename_list:
     last_cycle['last_cycle_force'] = round(last_cycle_force, 5)
     last_cycle['last_cycle_disp'] = round(last_cycle_disp, 5)
 
+    upper_disp = max(last_cycle['last_cycle_disp'])
+    lower_disp = 0.005
+
+    # problem here
+    # identify index range of defined region
+    upper_cond_disp = last_cycle.loc[last_cycle['last_cycle_disp'] == upper_disp]
+    lower_cond_disp = last_cycle.loc[last_cycle['last_cycle_disp'] >= lower_disp]
+    max_disp_ind = min(upper_cond_disp.index)
+    min_disp_ind = max(lower_cond_disp.index)
+    last_cycle = last_cycle[max_disp_ind:min_disp_ind]
+
     # rolling linear regression
     slope_values_stiff = list()
     for x in range(0, len(last_cycle) - 1 - window_width + 1, 1):
         last_cycle_mod = last_cycle[x:x + window_width]
-        slope_stiff, intercept, r_value, p_value, std_err = stats.linregress(last_cycle_mod['last_cycle_disp'],
+        slope_stiff, intercept_stiff, r_value, p_value, std_err = stats.linregress(last_cycle_mod['last_cycle_disp'],
                                                                        last_cycle_mod['last_cycle_force'])
         slope_value = slope_stiff
         slope_values_stiff.append(slope_value)
     stiffness = max(slope_values_stiff)
 
-    ## generate plot
-    # plt.figure(figsize=(6, 4))
-    # plt.title(sample_ID)
-    # plt.plot(df['disp_ext'], df['force_lc'], label='lc')
-    # plt.plot(df['disp_ext'][peaks_index[-1]:], df['force_lc'][peaks_index[-1]:])
-    # plt.plot(x_last_cycle, slope_stiff * x_last_cycle + intercept, 'k')
-    # plt.plot([], ' ', label=f'stiffness = {slope:.0f} N/mm')
-    # plt.ylabel('force lc / N')
-    # plt.xlabel('disp ext / mm')
-    # plt.legend()
-    # savepath = Cwd / '04_Results/00_Mineralized/00_force_disp/'
-    # plt.savefig(os.path.join(savepath, 'force_disp_' + sample_ID + '.png'), dpi=300)
-    # plt.show()
-    # plt.close()
+    # generate plot
+    plt.figure(figsize=(6, 4))
+    plt.title(sample_ID)
+    plt.plot(df['disp_ext'], df['force_lc'], label='lc')
+    plt.plot(df['disp_ext'][peaks_index[-1]:], df['force_lc'][peaks_index[-1]:])
+    plt.plot(last_cycle_disp, stiffness * last_cycle_disp + intercept_stiff, 'k')
+    plt.plot([], ' ', label=f'stiffness = {stiffness:.0f} N/mm')
+    plt.ylabel('force lc / N')
+    plt.xlabel('disp ext / mm')
+    plt.legend()
+    savepath = Cwd / '04_Results/00_Mineralized/00_force_disp/'
+    plt.savefig(os.path.join(savepath, 'force_disp_' + sample_ID + '.png'), dpi=300)
+    plt.show()
+    plt.close()
 
     # calculate stress/strain
     Pi = 3.1415
@@ -153,9 +164,9 @@ for filename in filename_list:
 
     # rolling linear regression
     for x in range(max_strain_ind, min_strain_ind - window_width + 1, 1):
-        last_cycle_mod = last_cycle[x:x+window_width]
-        slope_app, intercept, r_value, p_value, std_err = stats.linregress(last_cycle_mod['last_cycle_strain'],
-                                                                       last_cycle_mod['last_cycle_stress'])
+        last_cycle_mod_app = last_cycle[x:x+window_width]
+        slope_app, intercept, r_value, p_value, std_err = stats.linregress(last_cycle_mod_app['last_cycle_strain'],
+                                                                       last_cycle_mod_app['last_cycle_stress'])
         slope_value = slope_app
         slope_values_app.append(slope_value)
     apparent_modulus = max(slope_values_app)
