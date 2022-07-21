@@ -130,6 +130,8 @@ plt.plot(df['strain_ext'], df['stress_lc_filtered'], label='filtered')
 plt.plot(last_cycle['last_cycle_strain'], last_cycle['last_cycle_stress'], color='green', label='last cycle')
 plt.scatter(df['strain_ext'][peaks_index], df['stress_lc_filtered'][peaks_index], marker='o', color='red',
             label='peaks')
+plt.scatter(last_cycle['last_cycle_strain'][len(last_cycle)-1], last_cycle['last_cycle_stress'][len(last_cycle)-1],
+            marker='o', color='black', label='ultimate point')
 plt.title(sample_ID)
 plt.ylabel('stress / MPa')
 plt.xlabel('strain / -')
@@ -170,6 +172,8 @@ plt.plot(df['disp_ext'], df['force_lc_filtered'], label='filtered')
 plt.plot(last_cycle_fd['last_cycle_disp'], last_cycle_fd['last_cycle_force'], color='green', label='last cycle')
 plt.scatter(df['disp_ext'][peaks_index], df['force_lc_filtered'][peaks_index], marker='o', color='red',
             label='peaks')
+plt.scatter(last_cycle_fd['last_cycle_disp'][len(last_cycle_fd)-1], last_cycle_fd['last_cycle_force'][len(
+    last_cycle_fd)-1], marker='o', color='black', label='ultimate point')
 plt.title(sample_ID + '_stiffness')
 plt.ylabel('force / N')
 plt.xlabel('disp / mm')
