@@ -49,9 +49,13 @@ def PlotRegressionResults(Model, Data, Alpha=0.95):
     # Axes.fill_between(X_Obs, np.sort(CI_Line_o), np.sort(CI_Line_u), color=(0, 0, 0), alpha=0.1, label=str(int(
     #     Alpha*100)) + '% CI')
     Axes.plot(X[:, 1], Y_Obs, linestyle='none', marker='o', color=(0, 0, 0), fillstyle='none')
-    Axes.annotate(r'$N$  : ' + str(N), xy=(0.05, 0.25), xycoords='axes fraction')
-    Axes.annotate(r'$R^2$ : ' + format(round(R2, 2), '.2f'), xy=(0.05, 0.175), xycoords='axes fraction')
-    Axes.annotate(r'$SE$ : ' + format(round(SE, 2), '.2f'), xy=(0.05, 0.1), xycoords='axes fraction')
+    Axes.annotate(r'$N$  : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
+    Axes.annotate(r'$R^2$ : ' + format(round(R2, 2), '.2f'), xy=(0.05, 0.25), xycoords='axes fraction')
+    Axes.annotate(r'$SE$ : ' + format(round(SE, 2), '.2f'), xy=(0.05, 0.175), xycoords='axes fraction')
+    Axes.annotate(r'$p$ : ' + format(round(FitResults.pvalues[1], 3), '.3f'), xy=(0.05, 0.1), xycoords='axes fraction')
+    Axes.annotate(r'$CI$ : ' + format(round(FitResults.conf_int()[0][1], 3), '.3f') + r'$,$ ' +
+                  format(round(FitResults.conf_int()[1][1], 3), '.3f'), xy=(0.05, 0.025), xycoords='axes fraction')
+
     Axes.set_ylabel(Data.columns[2])
     Axes.set_xlabel(Data.columns[1])
     plt.subplots_adjust(left=0.15, bottom=0.15)
