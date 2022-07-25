@@ -42,8 +42,11 @@ plt.figure()
 plt.title(sample_ID)
 plt.plot(df['disp_ext'], df['force_lc'], label='raw')
 plt.plot(df['disp_ext'], df['force_lc_filtered'], label='filtered')
-plt.ylabel('force lc / N')
-plt.xlabel('disp ext / mm')
+plt.plot(df['disp_MTS'], df['force_MTS'], label='MTS raw')
+plt.plot(df['disp_ext'], df['force_MTS'], label='disp_ext/force_MTS')
+plt.plot(df['disp_MTS'], df['force_lc_filtered'], label='disp_MTS/force_lc_filtered')
+plt.ylabel('force / N')
+plt.xlabel('disp / mm')
 plt.legend()
 savepath = Cwd / '04_Results/01_Demineralized/00_force_disp/'
 plt.savefig(os.path.join(savepath, 'force_disp_' + sample_ID + '.png'), dpi=300)
@@ -72,27 +75,28 @@ plt.savefig(os.path.join(savepath, 'stress_strain_' + sample_ID + '.png'), dpi=3
 plt.show()
 
 # find max value of stress_lc column
-max_stress_raw = df['stress_lc'].loc[36116]
+max_stress_raw = df['stress_lc'].max()
 
 # locate index of max value
-max_stress_index = 36116
+max_stress_index = df['stress_lc'][df['stress_lc'] == max_stress_raw].dropna()
+max_stress_index = max_stress_index.index
 
 # search for ultimate stress (filtered)
-row_max_stress_filtered = df['stress_lc_filtered'].iloc[36116]
+row_max_stress_filtered = df['stress_lc_filtered'].iloc[max_stress_index[0]]
 ultimate_stress_filtered = round(row_max_stress_filtered, 2)
 
 # search for ultimate strain
-row_max_strain = df['strain_ext'].iloc[36116]
+row_max_strain = df['strain_ext'].iloc[max_stress_index[0]]
 ultimate_strain = round(row_max_strain, 4)
 
 # find max value of force_lc column
-max_force_raw = df['force_lc'].loc[36116]
+max_force_raw = df['force_lc'].loc[max_stress_index[0]]
 
 # search for ultimate force (raw)
-max_force_index = 36116
+max_force_index = max_stress_index[0]
 
 # search for ultimate force (filtered)
-row_max_force_filtered = df['force_lc_filtered'].iloc[36116]
+row_max_force_filtered = df['force_lc_filtered'].iloc[max_force_index]
 ultimate_force_filtered = round(row_max_force_filtered, 2)
 
 ## calculate values for last cycle of stress/strain curve only
@@ -100,8 +104,8 @@ ultimate_force_filtered = round(row_max_force_filtered, 2)
 peaks_index, _ = find_peaks(df['force_lc'], width=200)
 
 # define range between last peak and second last peak to subsequently search for stress minimum as start point
-start_range_strain = df['strain_ext'][peaks_index[7]:36116]
-start_range_stress = df['stress_lc_filtered'][peaks_index[7]:36116]
+start_range_strain = df['strain_ext'][peaks_index[7]:max_stress_index[0]]
+start_range_stress = df['stress_lc_filtered'][peaks_index[7]:max_stress_index[0]]
 start_range = pd.DataFrame()
 start_range['strain_ext'] = start_range_strain
 start_range['stress_lc_filtered'] = start_range_stress
@@ -112,7 +116,7 @@ start_ind = start_range.loc[start_range['stress_lc_filtered'] == start_value]
 start_index = start_ind.index
 
 # find max stress value & corresponding index as end point
-end_value = df['stress_lc_filtered'][36116]
+end_value = df['stress_lc_filtered'][max_stress_index[0]]
 end_ind = df.loc[df['stress_lc_filtered'] == end_value]
 end_index = end_ind.index
 
@@ -155,7 +159,7 @@ for x in range(0, len(last_cycle) - 1 - window_width + 1, 1):
                                                                    last_cycle_mod['last_cycle_stress'])
     slope_value = slope
     slope_values.append(slope_value)
-apparent_modulus = round(max(slope_values),2)
+apparent_modulus = round(max(slope_values), 2)
 
 # calculate stiffness
 # create dataframe of final cycle using start/end index
