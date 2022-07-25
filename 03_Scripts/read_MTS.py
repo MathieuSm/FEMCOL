@@ -1,7 +1,7 @@
+# run read_MTS.py before running read_failure_MTS.py script if read_MTS.py was adjusted
+
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
-import glob
 import os
 from scipy.signal import butter, filtfilt
 from scipy.signal import find_peaks

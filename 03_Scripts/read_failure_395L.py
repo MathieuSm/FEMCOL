@@ -21,6 +21,9 @@ Cwd = Path.cwd()
 DataPath = Cwd / '02_Data/02_MTS/Failure_testing_demineralized/'
 filename_list = [File for File in os.listdir(DataPath) if File.endswith('.csv')]
 filename_list.sort()
+results_uCT = pd.read_csv(str('/home/stefan/Documents/PythonScripts/04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
+results_uCT = results_uCT.drop(index=[8, 13, 20, 24, 37], axis=0)
+results_uCT = results_uCT.reset_index(drop=True)
 
 i = 0
 result = list()
@@ -54,8 +57,8 @@ plt.show()
 
 # calculate stress and strain, filter & put into dataframe
 Pi = 3.1415
-area = 2*2*Pi/4
 l_initial = 6.5
+area = results_uCT['min_Area'][12]
 stress = df['force_lc']/area
 strain = df['disp_ext']/l_initial
 df['stress_lc'] = stress

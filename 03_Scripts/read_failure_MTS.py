@@ -1,7 +1,8 @@
+# run read_MTS.py before running this script if read_MTS.py was adjusted
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import glob
 import os
 from scipy.signal import butter, filtfilt
 from scipy.signal import find_peaks
