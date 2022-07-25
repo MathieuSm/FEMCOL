@@ -21,9 +21,14 @@ Cwd = Path.cwd()
 DataPath = Cwd / '02_Data/02_MTS/Elastic_testing_mineralized/'
 filename_list = [File for File in os.listdir(DataPath) if File.endswith('.csv')]
 filename_list.sort()
+results_uCT = pd.read_csv(str('/home/stefan/Documents/PythonScripts/04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
+results_uCT = results_uCT.drop(index=[8, 13, 20, 24, 37], axis=0)
+results_uCT = results_uCT.reset_index(drop=True)
+
 
 result = list()
 i = 0
+counter = 0
 
 for filename in filename_list:
     sample_ID = filename.split('/')[-1].split('_')[1]
@@ -115,14 +120,15 @@ for filename in filename_list:
     # plt.close()
 
     # calculate stress/strain
-    Pi = 3.1415
-    area = 2 * 2 * Pi / 4
+    Pi = 3.14159265
     l_initial = 6.5
+    area = results_uCT['min_Area'][counter]
     stress = df['force_lc'] / area
     strain = df['disp_ext'] / l_initial
     df['stress_lc'] = stress
     df['strain_ext'] = strain
     df['stress_lc_filtered'] = butter_lowpass_filter(df['stress_lc'], cutoff)
+    counter = counter + 1
 
     # plot stress/strain
     plt.figure()
@@ -218,7 +224,6 @@ for filename in filename_list:
 
 
 missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '400R', '402L', '433L']})
-# missing_IDs = pd.DataFrame(missing_sample_IDs, columns=['Sample ID'])
 result_dir = pd.concat([result_dir, missing_sample_IDs])
 result_dir_sorted = result_dir.sort_values(by=['Sample ID'], ascending=True)
 

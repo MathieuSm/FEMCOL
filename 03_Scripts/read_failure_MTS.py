@@ -21,8 +21,12 @@ Cwd = Path.cwd()
 DataPath = Cwd / '02_Data/02_MTS/Failure_testing_demineralized/'
 filename_list = [File for File in os.listdir(DataPath) if File.endswith('.csv')]
 filename_list.sort()
+results_uCT = pd.read_csv(str('/home/stefan/Documents/PythonScripts/04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
+results_uCT = results_uCT.drop(index=[8, 13, 20, 24, 27, 37], axis=0)
+results_uCT = results_uCT.reset_index(drop=True)
 
 i = 0
+counter = 0
 result = list()
 
 # loop over .csv files in Folder
@@ -41,14 +45,15 @@ for filename in filename_list:
     df['force_lc_filtered'] = butter_lowpass_filter(df['force_lc'], cutoff)
 
     # calculate stress and strain, filter & put into dataframe
-    Pi = 3.1415
-    area = 2*2*Pi/4
+    Pi = 3.14159265
     l_initial = 6.5
-    stress = df['force_lc']/area
-    strain = df['disp_ext']/l_initial
+    area = results_uCT['min_Area'][counter]
+    stress = df['force_lc'] / area
+    strain = df['disp_ext'] / l_initial
     df['stress_lc'] = stress
     df['strain_ext'] = strain
     df['stress_lc_filtered'] = butter_lowpass_filter(df['stress_lc'], cutoff)
+    counter = counter + 1
 
     # find max value of stress_lc column
     column = df['stress_lc']
