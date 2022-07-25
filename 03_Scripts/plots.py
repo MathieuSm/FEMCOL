@@ -48,7 +48,10 @@ def PlotRegressionResults(Model, Data, Alpha=0.95):
     Axes.plot(X[:, 1], Y_Fit, color=(1, 0, 0), label='Fit')
     # Axes.fill_between(X_Obs, np.sort(CI_Line_o), np.sort(CI_Line_u), color=(0, 0, 0), alpha=0.1, label=str(int(
     #     Alpha*100)) + '% CI')
-    Axes.plot(X[:, 1], Y_Obs, linestyle='none', marker='o', color=(0, 0, 0), fillstyle='none')
+    Axes.plot(X[:, 1][Data['Gender'] == 'M'], Y_Obs[Data['Gender'] == 'M'], linestyle='none', marker='o',
+              color=(0, 0, 0), fillstyle='none', label='male')
+    Axes.plot(X[:, 1][Data['Gender'] == 'F'], Y_Obs[Data['Gender'] == 'F'], linestyle='none', marker='x',
+              color=(0, 0, 0), fillstyle='none', label='female')
     Axes.annotate(r'$N$  : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
     Axes.annotate(r'$R^2$ : ' + format(round(R2, 2), '.2f'), xy=(0.05, 0.25), xycoords='axes fraction')
     Axes.annotate(r'$SE$ : ' + format(round(SE, 2), '.2f'), xy=(0.05, 0.175), xycoords='axes fraction')
@@ -423,6 +426,66 @@ Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_ax
 Data2Fit = Data2Fit.set_index('SID')
 
 FitResults = smf.ols('AMD ~ 1 + AMM', data=Data2Fit).fit()
+PlotRegressionResults(FitResults, Data)
+
+print(FitResults.conf_int())
+
+# Build dataframe with age and stiffness mineralized
+x_axis = 'Minimum Area mm^2'
+y_axis = 'Apparent Modulus Demineralized MPa'
+x_axis_abbrev = 'MA'
+y_axis_abbrev = 'AMD'
+Data = df.filter(['Sample ID', x_axis, y_axis, 'Gender']).dropna()
+Data2Fit = Data.copy()
+Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
+Data2Fit = Data2Fit.set_index('SID')
+
+FitResults = smf.ols('AMD ~ 1 + MA', data=Data2Fit).fit()
+PlotRegressionResults(FitResults, Data)
+
+print(FitResults.conf_int())
+
+# Build dataframe with age and stiffness mineralized
+x_axis = 'Minimum Area mm^2'
+y_axis = 'Apparent Modulus Mineralized MPa'
+x_axis_abbrev = 'MA'
+y_axis_abbrev = 'AMM'
+Data = df.filter(['Sample ID', x_axis, y_axis, 'Gender']).dropna()
+Data2Fit = Data.copy()
+Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
+Data2Fit = Data2Fit.set_index('SID')
+
+FitResults = smf.ols('AMM ~ 1 + MA', data=Data2Fit).fit()
+PlotRegressionResults(FitResults, Data)
+
+print(FitResults.conf_int())
+
+# Build dataframe with age and stiffness mineralized
+x_axis = 'Minimum Equivalent Diameter mm'
+y_axis = 'Apparent Modulus Demineralized MPa'
+x_axis_abbrev = 'MED'
+y_axis_abbrev = 'AMD'
+Data = df.filter(['Sample ID', x_axis, y_axis, 'Gender']).dropna()
+Data2Fit = Data.copy()
+Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
+Data2Fit = Data2Fit.set_index('SID')
+
+FitResults = smf.ols('AMD ~ 1 + MED', data=Data2Fit).fit()
+PlotRegressionResults(FitResults, Data)
+
+print(FitResults.conf_int())
+
+# Build dataframe with age and stiffness mineralized
+x_axis = 'Minimum Equivalent Diameter mm'
+y_axis = 'Apparent Modulus Mineralized MPa'
+x_axis_abbrev = 'MED'
+y_axis_abbrev = 'AMM'
+Data = df.filter(['Sample ID', x_axis, y_axis, 'Gender']).dropna()
+Data2Fit = Data.copy()
+Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
+Data2Fit = Data2Fit.set_index('SID')
+
+FitResults = smf.ols('AMM ~ 1 + MED', data=Data2Fit).fit()
 PlotRegressionResults(FitResults, Data)
 
 print(FitResults.conf_int())

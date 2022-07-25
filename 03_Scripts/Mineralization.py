@@ -1,12 +1,14 @@
 # Import standard packages
-from pathlib import Path                # Used to manage path variables in windows or linux
-import numpy as np                      # Used to do arrays (matrices) computations namely
-import pandas as pd                     # Used to manage data frames
-import SimpleITK as sitk                # Used to read images
-import matplotlib.pyplot as plt         # Used to perform plots
+from pathlib import Path                 # Used to manage path variables in windows or linux
+import numpy as np                       # Used to do arrays (matrices) computations namely
+import pandas as pd                      # Used to manage data frames
+import SimpleITK as sitk                 # Used to read images
+import matplotlib.pyplot as plt          # Used to perform plots
 import os
-from skimage import filters             # Used to perform filtering image operations (e.g. Otsu)
-from skimage import morphology, measure # Used to fill pores and circle fitting
+import math
+import statistics
+from skimage import filters              # Used to perform filtering image operations (e.g. Otsu)
+from skimage import morphology, measure  # Used to fill pores and circle fitting
 
 # Set directories
 CurrentDirectory = Path.cwd()
@@ -20,6 +22,8 @@ Data = Data.dropna().reset_index(drop=True)
 print(Data)
 
 results = list()
+Pi = 3.1415
+
 # Select sample to analyze (numbering starting from 0)
 for x in range(0, len(Data), 1):
     SampleNumber = x
@@ -134,21 +138,29 @@ for x in range(0, len(Data), 1):
     BMC = round(Tissue.sum() * BinaryScan.sum() * Voxel_Volume, 3)
     # print('Bone mineral content: ' + str(round(BMC, 3)) + ' mg HA')
 
+    Area = Voxel_Dimensions[0] * Voxel_Dimensions[1]
+    Areas = np.zeros(Scan.shape[0])
+    for i in range(Scan.shape[0]):
+        Areas[i] = BinaryScan[i].sum() * Area * 1e06
+    min_Area = round(Areas.min(), 3)
+    min_Diam = round(math.sqrt(min_Area/Pi*4), 3)
+
     # Collect data into filling list
     SampleID = Data.loc[SampleNumber, 'Sample']
-    values = [SampleID, BVTV, BMD, TMD, BMC]
+    values = [SampleID, BVTV, BMD, TMD, BMC, min_Area, min_Diam]
     results.append(values)
 
     print(x)
 
 # convert list to dataframe & save it as csv file
 result_dir = pd.DataFrame(results, columns=['Sample ID', 'Bone Volume Fraction -', 'Bone Mineral Density mg HA / cm3',
-                                            'Tissue Mineral Density mg HA / cm3', 'Bone Mineral Content mg HA'])
+                                            'Tissue Mineral Density mg HA / cm3', 'Bone Mineral Content mg HA',
+                                            'min_Area mm^2', 'min_Diam mm'])
 
 missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '402L']})
 result_dir = pd.concat([result_dir, missing_sample_IDs])
 result_dir_sorted = result_dir.sort_values(by=['Sample ID'], ascending=True)
-
 result_dir_sorted.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/03_uCT/', 'ResultsUCT.csv'),
                          index=False)
 print(result_dir_sorted)
+
