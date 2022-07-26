@@ -40,6 +40,41 @@ def PlotRegressionResults(Model, Data, Alpha=0.95):
     t_Alpha = t.interval(Alpha, N - X.shape[1] - 1)
     CI_Line_u = Y_Fit + t_Alpha[0] * SE * B_0
     CI_Line_o = Y_Fit + t_Alpha[1] * SE * B_0
+    CI_l = FitResults.conf_int()[0][1]
+    CI_r = FitResults.conf_int()[1][1]
+
+    if abs(CI_l) >= 100:
+        CI_l = round(CI_l)
+    elif abs(CI_l) >= 1:
+        CI_l = round(CI_l, 1)
+    elif abs(CI_l) == 0:
+        CI_l = int(CI_l)
+    elif abs(CI_l) >= 0.001:
+        CI_l = round(CI_l, 3)
+    elif abs(CI_l) < 0.001:
+        CI_l = '{:.2e}'.format(CI_l)
+
+    if abs(CI_r) >= 100:
+        CI_r = round(CI_r)
+    elif abs(CI_r) >= 1:
+        CI_r = round(CI_r, 1)
+    elif abs(CI_r) == 0:
+        CI_r = int(CI_r)
+    elif abs(CI_r) >= 0.001:
+        CI_r = round(CI_r, 3)
+    elif abs(CI_r) < 0.001:
+        CI_r = '{:.2e}'.format(CI_r)
+
+    if abs(SE) >= 100:
+        SE = round(SE)
+    elif abs(SE) >= 1:
+        SE = round(SE, 1)
+    elif abs(SE) == 0:
+        SE = int(SE)
+    elif abs(SE) >= 0.001:
+        SE = round(SE, 3)
+    elif abs(SE) < 0.001:
+        SE = '{:.1e}'.format(SE)
 
     ## Plots
     DPI = 300
@@ -49,15 +84,14 @@ def PlotRegressionResults(Model, Data, Alpha=0.95):
     # Axes.fill_between(X_Obs, np.sort(CI_Line_o), np.sort(CI_Line_u), color=(0, 0, 0), alpha=0.1, label=str(int(
     #     Alpha*100)) + '% CI')
     Axes.plot(X[:, 1][Data['Gender'] == 'M'], Y_Obs[Data['Gender'] == 'M'], linestyle='none', marker='o',
-              color=(0, 0, 0), fillstyle='none', label='male')
+              color=(0, 0, 1), fillstyle='none', label='male')
     Axes.plot(X[:, 1][Data['Gender'] == 'F'], Y_Obs[Data['Gender'] == 'F'], linestyle='none', marker='x',
-              color=(0, 0, 0), fillstyle='none', label='female')
+              color=(0, 0, 1), fillstyle='none', label='female')
     Axes.annotate(r'$N$  : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
     Axes.annotate(r'$R^2$ : ' + format(round(R2, 2), '.2f'), xy=(0.05, 0.25), xycoords='axes fraction')
-    Axes.annotate(r'$SE$ : ' + format(round(SE, 2), '.2f'), xy=(0.05, 0.175), xycoords='axes fraction')
+    Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
     Axes.annotate(r'$p$ : ' + format(round(FitResults.pvalues[1], 3), '.3f'), xy=(0.05, 0.1), xycoords='axes fraction')
-    Axes.annotate(r'$CI$ : ' + format(round(FitResults.conf_int()[0][1], 3), '.3f') + r'$,$ ' +
-                  format(round(FitResults.conf_int()[1][1], 3), '.3f'), xy=(0.05, 0.025), xycoords='axes fraction')
+    Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025), xycoords='axes fraction')
 
     Axes.set_ylabel(Data.columns[2])
     Axes.set_xlabel(Data.columns[1])
@@ -67,6 +101,30 @@ def PlotRegressionResults(Model, Data, Alpha=0.95):
     plt.show()
     plt.close(Figure)
 
+    # DPI = 300
+    # savepath = Cwd / '04_Results/04_Plots/'
+    # Figure, Axes = plt.subplots(1, 1, figsize=(5.5, 4.5), dpi=DPI, sharey=True, sharex=True)
+    # Axes.plot(X[:, 1], Y_Fit, color=(1, 0, 0), label='Fit')
+    # # Axes.fill_between(X_Obs, np.sort(CI_Line_o), np.sort(CI_Line_u), color=(0, 0, 0), alpha=0.1, label=str(int(
+    # #     Alpha*100)) + '% CI')
+    # Axes.plot(X[:, 1][Data['Gender'] == 'M'], Y_Obs[Data['Gender'] == 'M'], linestyle='none', marker='o',
+    #           color=(0, 0, 1), fillstyle='none', label='male')
+    # Axes.plot(X[:, 1][Data['Gender'] == 'F'], Y_Obs[Data['Gender'] == 'F'], linestyle='none', marker='x',
+    #           color=(0, 0, 1), fillstyle='none', label='female')
+    # Axes.annotate(r'$N$  : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
+    # Axes.annotate(r'$R^2$ : ' + format(round(R2, 2), '.2f'), xy=(0.05, 0.25), xycoords='axes fraction')
+    # Axes.annotate(r'$SE$ : ' + format(round(SE, 2), '.2f'), xy=(0.05, 0.175), xycoords='axes fraction')
+    # Axes.annotate(r'$p$ : ' + format(round(FitResults.pvalues[1], 3), '.3f'), xy=(0.05, 0.1), xycoords='axes fraction')
+    # Axes.annotate(r'$CI$ : ' + format(round(FitResults.conf_int()[0][1], 3), '.3f') + r'$,$ ' +
+    #               format(round(FitResults.conf_int()[1][1], 3), '.3f'), xy=(0.05, 0.025), xycoords='axes fraction')
+    #
+    # Axes.set_ylabel(Data.columns[2])
+    # Axes.set_xlabel(Data.columns[1])
+    # plt.subplots_adjust(left=0.15, bottom=0.15)
+    # plt.legend()
+    # plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'), dpi=300)
+    # plt.show()
+    # plt.close(Figure)
 
 SampleID = df['Sample ID'].values.tolist()
 
@@ -80,7 +138,7 @@ Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
 Data2Fit = Data2Fit.set_index('SID')
 
-FitResults = smf.ols('SM ~ 1 + Age', data=Data2Fit).fit()
+FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
 PlotRegressionResults(FitResults, Data)
 
 print(FitResults.conf_int())
@@ -95,7 +153,7 @@ Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
 Data2Fit = Data2Fit.set_index('SID')
 
-FitResults = smf.ols('AMM ~ 1 + Age', data=Data2Fit).fit()
+FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
 PlotRegressionResults(FitResults, Data)
 
 print(FitResults.conf_int())
@@ -110,7 +168,7 @@ Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
 Data2Fit = Data2Fit.set_index('SID')
 
-FitResults = smf.ols('UF ~ 1 + Age', data=Data2Fit).fit()
+FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
 PlotRegressionResults(FitResults, Data)
 
 print(FitResults.conf_int())
@@ -125,7 +183,7 @@ Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
 Data2Fit = Data2Fit.set_index('SID')
 
-FitResults = smf.ols('UStre ~ 1 + Age', data=Data2Fit).fit()
+FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
 PlotRegressionResults(FitResults, Data)
 
 print(FitResults.conf_int())
@@ -140,7 +198,7 @@ Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
 Data2Fit = Data2Fit.set_index('SID')
 
-FitResults = smf.ols('UStra ~ 1 + Age', data=Data2Fit).fit()
+FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
 PlotRegressionResults(FitResults, Data)
 
 print(FitResults.conf_int())
@@ -155,7 +213,7 @@ Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
 Data2Fit = Data2Fit.set_index('SID')
 
-FitResults = smf.ols('SD ~ 1 + Age', data=Data2Fit).fit()
+FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
 PlotRegressionResults(FitResults, Data)
 
 print(FitResults.conf_int())
@@ -170,14 +228,14 @@ Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
 Data2Fit = Data2Fit.set_index('SID')
 
-FitResults = smf.ols('AMD ~ 1 + Age', data=Data2Fit).fit()
+FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
 PlotRegressionResults(FitResults, Data)
 
 print(FitResults.conf_int())
 
 # Build dataframe with age and stiffness mineralized
 x_axis = 'Age'
-y_axis = 'Density g/cm^3'
+y_axis = 'Density g/' + 'cm\u00B3'
 x_axis_abbrev = 'Age'
 y_axis_abbrev = 'D'
 Data = df.filter(['Sample ID', x_axis, y_axis, 'Gender']).dropna()
@@ -185,7 +243,7 @@ Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
 Data2Fit = Data2Fit.set_index('SID')
 
-FitResults = smf.ols('D ~ 1 + Age', data=Data2Fit).fit()
+FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
 PlotRegressionResults(FitResults, Data)
 
 print(FitResults.conf_int())
@@ -200,7 +258,7 @@ Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
 Data2Fit = Data2Fit.set_index('SID')
 
-FitResults = smf.ols('OW ~ 1 + Age', data=Data2Fit).fit()
+FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
 PlotRegressionResults(FitResults, Data)
 
 print(FitResults.conf_int())
@@ -215,7 +273,7 @@ Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
 Data2Fit = Data2Fit.set_index('SID')
 
-FitResults = smf.ols('MW ~ 1 + Age', data=Data2Fit).fit()
+FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
 PlotRegressionResults(FitResults, Data)
 
 print(FitResults.conf_int())
@@ -230,7 +288,7 @@ Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
 Data2Fit = Data2Fit.set_index('SID')
 
-FitResults = smf.ols('WW ~ 1 + Age', data=Data2Fit).fit()
+FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
 PlotRegressionResults(FitResults, Data)
 
 print(FitResults.conf_int())
@@ -245,7 +303,7 @@ Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
 Data2Fit = Data2Fit.set_index('SID')
 
-FitResults = smf.ols('MWF ~ 1 + Age', data=Data2Fit).fit()
+FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
 PlotRegressionResults(FitResults, Data)
 
 print(FitResults.conf_int())
@@ -260,7 +318,7 @@ Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
 Data2Fit = Data2Fit.set_index('SID')
 
-FitResults = smf.ols('OWF ~ 1 + Age', data=Data2Fit).fit()
+FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
 PlotRegressionResults(FitResults, Data)
 
 print(FitResults.conf_int())
@@ -275,7 +333,7 @@ Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
 Data2Fit = Data2Fit.set_index('SID')
 
-FitResults = smf.ols('WWF ~ 1 + Age', data=Data2Fit).fit()
+FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
 PlotRegressionResults(FitResults, Data)
 
 print(FitResults.conf_int())
@@ -290,14 +348,14 @@ Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
 Data2Fit = Data2Fit.set_index('SID')
 
-FitResults = smf.ols('BVTV ~ 1 + Age', data=Data2Fit).fit()
+FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
 PlotRegressionResults(FitResults, Data)
 
 print(FitResults.conf_int())
 
 # Build dataframe with age and stiffness mineralized
 x_axis = 'Age'
-y_axis = 'Bone Mineral Density mg HA / cm^3'
+y_axis = 'Bone Mineral Density mg HA / ' + 'cm\u00B3'
 x_axis_abbrev = 'Age'
 y_axis_abbrev = 'BMD'
 Data = df.filter(['Sample ID', x_axis, y_axis, 'Gender']).dropna()
@@ -305,14 +363,14 @@ Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
 Data2Fit = Data2Fit.set_index('SID')
 
-FitResults = smf.ols('BMD ~ 1 + Age', data=Data2Fit).fit()
+FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
 PlotRegressionResults(FitResults, Data)
 
 print(FitResults.conf_int())
 
 # Build dataframe with age and stiffness mineralized
 x_axis = 'Age'
-y_axis = 'Tissue Mineral Density mg HA / cm^3'
+y_axis = 'Tissue Mineral Density mg HA / ' + 'cm\u00B3'
 x_axis_abbrev = 'Age'
 y_axis_abbrev = 'TMD'
 Data = df.filter(['Sample ID', x_axis, y_axis, 'Gender']).dropna()
@@ -320,7 +378,7 @@ Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
 Data2Fit = Data2Fit.set_index('SID')
 
-FitResults = smf.ols('TMD ~ 1 + Age', data=Data2Fit).fit()
+FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
 PlotRegressionResults(FitResults, Data)
 
 print(FitResults.conf_int())
@@ -335,7 +393,7 @@ Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
 Data2Fit = Data2Fit.set_index('SID')
 
-FitResults = smf.ols('BMC ~ 1 + Age', data=Data2Fit).fit()
+FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
 PlotRegressionResults(FitResults, Data)
 
 print(FitResults.conf_int())
@@ -350,13 +408,13 @@ Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
 Data2Fit = Data2Fit.set_index('SID')
 
-FitResults = smf.ols('SM ~ 1 + BMC', data=Data2Fit).fit()
+FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
 PlotRegressionResults(FitResults, Data)
 
 print(FitResults.conf_int())
 
 # Build dataframe with age and stiffness mineralized
-x_axis = 'Bone Mineral Density mg HA / cm^3'
+x_axis = 'Bone Mineral Density mg HA / ' + 'cm\u00B3'
 y_axis = 'Apparent Modulus Mineralized MPa'
 x_axis_abbrev = 'BMD'
 y_axis_abbrev = 'AMM'
@@ -365,13 +423,13 @@ Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
 Data2Fit = Data2Fit.set_index('SID')
 
-FitResults = smf.ols('AMM ~ 1 + BMD', data=Data2Fit).fit()
+FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
 PlotRegressionResults(FitResults, Data)
 
 print(FitResults.conf_int())
 
 # Build dataframe with age and stiffness mineralized
-x_axis = 'Bone Mineral Density mg HA / cm^3'
+x_axis = 'Bone Mineral Density mg HA / ' + 'cm\u00B3'
 y_axis = 'Ultimate Stress MPa'
 x_axis_abbrev = 'BMD'
 y_axis_abbrev = 'UStre'
@@ -380,7 +438,7 @@ Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
 Data2Fit = Data2Fit.set_index('SID')
 
-FitResults = smf.ols('UStre ~ 1 + BMD', data=Data2Fit).fit()
+FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
 PlotRegressionResults(FitResults, Data)
 
 print(FitResults.conf_int())
@@ -395,7 +453,7 @@ Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
 Data2Fit = Data2Fit.set_index('SID')
 
-FitResults = smf.ols('AMM ~ 1 + BVTV', data=Data2Fit).fit()
+FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
 PlotRegressionResults(FitResults, Data)
 
 print(FitResults.conf_int())
@@ -410,7 +468,7 @@ Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
 Data2Fit = Data2Fit.set_index('SID')
 
-FitResults = smf.ols('UStre ~ 1 + BVTV', data=Data2Fit).fit()
+FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
 PlotRegressionResults(FitResults, Data)
 
 print(FitResults.conf_int())
@@ -425,13 +483,13 @@ Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
 Data2Fit = Data2Fit.set_index('SID')
 
-FitResults = smf.ols('AMD ~ 1 + AMM', data=Data2Fit).fit()
+FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
 PlotRegressionResults(FitResults, Data)
 
 print(FitResults.conf_int())
 
 # Build dataframe with age and stiffness mineralized
-x_axis = 'Minimum Area mm^2'
+x_axis = 'Minimum Area ' + 'mm\u00B2'
 y_axis = 'Apparent Modulus Demineralized MPa'
 x_axis_abbrev = 'MA'
 y_axis_abbrev = 'AMD'
@@ -440,13 +498,13 @@ Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
 Data2Fit = Data2Fit.set_index('SID')
 
-FitResults = smf.ols('AMD ~ 1 + MA', data=Data2Fit).fit()
+FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
 PlotRegressionResults(FitResults, Data)
 
 print(FitResults.conf_int())
 
 # Build dataframe with age and stiffness mineralized
-x_axis = 'Minimum Area mm^2'
+x_axis = 'Minimum Area ' + 'mm\u00B2'
 y_axis = 'Apparent Modulus Mineralized MPa'
 x_axis_abbrev = 'MA'
 y_axis_abbrev = 'AMM'
@@ -455,7 +513,7 @@ Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
 Data2Fit = Data2Fit.set_index('SID')
 
-FitResults = smf.ols('AMM ~ 1 + MA', data=Data2Fit).fit()
+FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
 PlotRegressionResults(FitResults, Data)
 
 print(FitResults.conf_int())
@@ -470,7 +528,7 @@ Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
 Data2Fit = Data2Fit.set_index('SID')
 
-FitResults = smf.ols('AMD ~ 1 + MED', data=Data2Fit).fit()
+FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
 PlotRegressionResults(FitResults, Data)
 
 print(FitResults.conf_int())
@@ -485,7 +543,7 @@ Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
 Data2Fit = Data2Fit.set_index('SID')
 
-FitResults = smf.ols('AMM ~ 1 + MED', data=Data2Fit).fit()
+FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
 PlotRegressionResults(FitResults, Data)
 
 print(FitResults.conf_int())
