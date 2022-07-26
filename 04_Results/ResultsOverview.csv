@@ -1,4 +1,4 @@
-Sample ID,Age,Gender,Stiffness Mineralized N/mm,Apparent Modulus Mineralized MPa,Ultimate Force N,Ultimate Stress MPa,Ultimate Strain -,Stiffness Demineralized N/mm,Apparent Modulus Demineralized MPa,Density g/cm^3,Organic Weight g,Mineral Weight g,Water Weight g,Mineral weight fraction -,Organic weight fraction -,Water weight fraction -,Bone Volume Fraction -,Bone Mineral Density mg HA / cm^3,Tissue Mineral Density mg HA / cm^3,Bone Mineral Content mg HA,Minimum Area mm^2,Minimum Equivalent Diameter mm
+Sample ID,Age,Gender,Stiffness Mineralized N/mm,Apparent Modulus Mineralized MPa,Ultimate Force N,Ultimate Stress MPa,Ultimate Strain -,Stiffness Demineralized N/mm,Apparent Modulus Demineralized MPa,Density g/cm³,Organic Weight g,Mineral Weight g,Water Weight g,Mineral weight fraction -,Organic weight fraction -,Water weight fraction -,Bone Volume Fraction -,Bone Mineral Density mg HA / cm³,Tissue Mineral Density mg HA / cm³,Bone Mineral Content mg HA,Minimum Area mm²,Minimum Equivalent Diameter mm
 385L,87,F,7195.0,17051.0,35.27,12.87,0.0791,88.29355433005065,209.4800296064956,1.913,0.194,0.324,0.037,0.584,0.349,0.067,0.868,978.115,1096.207,1134.73,2.741,1.868
 385R,87,F,6690.0,15466.0,29.3,10.41,0.0835,70.7887208393552,163.5012882813271,1.941,0.192,0.318,0.032,0.587,0.354,0.059,0.908,1034.003,1124.839,1203.836,2.814,1.893
 386L,76,F,9418.0,20602.0,70.72,23.76,0.0948,122.92947640710796,268.4686550172569,1.98,0.214,0.364,0.034,0.595,0.35,0.055,0.955,1046.653,1097.176,1223.636,2.976,1.947
@@ -12,7 +12,7 @@ Sample ID,Age,Gender,Stiffness Mineralized N/mm,Apparent Modulus Mineralized MPa
 392R,94,F,8451.0,19163.0,47.16,16.46,0.0817,100.30478900406248,227.4716001349274,1.945,0.201,0.335,0.034,0.588,0.353,0.059,0.954,1048.534,1109.825,1235.271,2.865,1.91
 394L,78,F,7580.0,18135.0,54.69,20.2,0.0781,117.5375395953956,282.1841133400057,1.933,0.206,0.336,0.037,0.58,0.356,0.064,0.909,1007.741,1091.465,1103.004,2.707,1.857
 394R,78,F,6887.0,16753.0,44.76,16.73,0.0783,84.9903329806997,206.4093978023733,1.92,0.19,0.319,0.029,0.592,0.353,0.055,0.866,977.575,1104.597,1075.509,2.676,1.846
-395L,91,F,7261.0,18261.0,47.09,14.99,0.0717,102.96520369051052,270.2,1.919,0.191,0.322,0.041,0.58,0.344,0.076,,,,,,
+395L,91,F,7261.0,18261.0,47.09,18.27,0.0717,102.96520369051052,329.26,1.919,0.191,0.322,0.041,0.58,0.344,0.076,,,,,,
 395R,91,F,,,,,,,,1.868,0.169,0.28,0.029,0.586,0.354,0.06,0.844,959.155,1105.935,1021.899,2.578,1.812
 397L,64,M,9415.0,19923.0,66.96,21.9,0.0895,117.00731998176371,248.6558815457452,1.998,0.214,0.354,0.029,0.593,0.358,0.049,0.981,1095.525,1122.426,1361.196,3.058,1.973
 397R,64,M,7749.0,16822.0,43.18,14.46,0.0846,91.00137635737087,198.05624204879217,1.989,0.212,0.36,0.032,0.596,0.351,0.053,0.966,1082.141,1122.957,1321.245,2.986,1.95
