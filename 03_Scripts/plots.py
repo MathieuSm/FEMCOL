@@ -498,7 +498,7 @@ print(FitResults.conf_int())
 x_axis = 'Organic weight fraction -'
 y_axis = 'Ultimate Stress MPa'
 x_axis_abbrev = 'OWF'
-y_axis_abbrev = 'US'
+y_axis_abbrev = 'UStre'
 Data = df.filter(['Sample ID', x_axis, y_axis, 'Gender']).dropna()
 Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
@@ -513,7 +513,7 @@ print(FitResults.conf_int())
 x_axis = 'Organic Weight g'
 y_axis = 'Ultimate Stress MPa'
 x_axis_abbrev = 'OW'
-y_axis_abbrev = 'US'
+y_axis_abbrev = 'UStre'
 Data = df.filter(['Sample ID', x_axis, y_axis, 'Gender']).dropna()
 Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
@@ -558,7 +558,7 @@ print(FitResults.conf_int())
 x_axis = 'Min Area Fraction -'
 y_axis = 'Ultimate Stress MPa'
 x_axis_abbrev = 'MAF'
-y_axis_abbrev = 'US'
+y_axis_abbrev = 'UStre'
 Data = df.filter(['Sample ID', x_axis, y_axis, 'Gender']).dropna()
 Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
