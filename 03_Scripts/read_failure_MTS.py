@@ -219,8 +219,8 @@ for filename in filename_list:
     # plt.close()
 
     # collect all data in list
-    values = [sample_ID, ultimate_stress_filtered, ultimate_strain, ultimate_force_filtered, apparent_modulus,
-              stiffness]
+    values = [sample_ID, ultimate_stress_filtered, ultimate_strain, ultimate_force_filtered, round(apparent_modulus, 1),
+              round(stiffness, 1)]
 
     # update list with each iteration's data & generate dataframe
     result.append(values)
