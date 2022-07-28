@@ -140,14 +140,25 @@ for x in range(0, len(Data), 1):
 
     Area = Voxel_Dimensions[0] * Voxel_Dimensions[1]
     Areas = np.zeros(Scan.shape[0])
+    Areas_full = np.zeros(Scan.shape[0])
+    Areas_fraction = np.zeros(Scan.shape[0])
     for i in range(Scan.shape[0]):
         Areas[i] = BinaryScan[i].sum() * Area * 1e06
-    min_Area = round(Areas.min(), 3)
-    min_Diam = round(math.sqrt(min_Area/Pi*4), 3)
+        Areas_full[i] = Cylinder[i].sum() * Area * 1e06
+        Areas_fraction[i] = Areas[i] / Areas_full[i]
+    min_Area_wp = round(Areas.min(), 3)
+    max_Area_wp = round(Areas.max(), 3)
+    mean_Area_wop = round(statistics.mean(Areas_full), 3)
+    min_Diam_wp = round(math.sqrt(min_Area_wp/Pi*4), 3)
+    max_Diam_wp = round(math.sqrt(max_Area_wp/Pi*4), 3)
+    mean_Diam_wop = round(math.sqrt(mean_Area_wop/Pi*4), 3)
+    min_area_fraction = round(Areas_fraction.min(), 3)
+    max_area_fraction = round(Areas_fraction.max(), 3)
+    mean_area_fraction = round(statistics.mean(Areas_fraction), 3)
 
     # Collect data into filling list
     SampleID = Data.loc[SampleNumber, 'Sample']
-    values = [SampleID, BVTV, BMD, TMD, BMC, min_Area, min_Diam]
+    values = [SampleID, BVTV, BMD, TMD, BMC, min_Area_wp, min_Diam_wp, mean_Area_wop, mean_Diam_wop, mean_area_fraction]
     results.append(values)
 
     print(x)
@@ -155,7 +166,9 @@ for x in range(0, len(Data), 1):
 # convert list to dataframe & save it as csv file
 result_dir = pd.DataFrame(results, columns=['Sample ID', 'Bone Volume Fraction -', 'Bone Mineral Density mg HA / cm3',
                                             'Tissue Mineral Density mg HA / cm3', 'Bone Mineral Content mg HA',
-                                            'min_Area mm^2', 'min_Diam mm'])
+                                            'Min Area (w porosity) mm^2', 'Min Diam (w porosity) mm',
+                                            'Mean Area (w/o porosity) mm^2', 'Mean Diameter (w/o porosity) mm',
+                                            'Mean Area Fraction -'])
 
 missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '402L']})
 result_dir = pd.concat([result_dir, missing_sample_IDs])
