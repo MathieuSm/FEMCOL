@@ -162,7 +162,7 @@ for x in range(0, len(last_cycle) - 1 - window_width + 1, 1):
                                                                    last_cycle_mod['last_cycle_stress'])
     slope_value = slope
     slope_values.append(slope_value)
-apparent_modulus = round(max(slope_values), 2)
+apparent_modulus = round(max(slope_values), 1)
 
 # calculate stiffness
 # create dataframe of final cycle using start/end index
@@ -202,7 +202,7 @@ for j in range(0, len(last_cycle_fd) - 1 - window_width + 1, 1):
                                                                    last_cycle_mod['last_cycle_force'])
     slope_value_stiff = stiff
     slope_values_stiff.append(slope_value_stiff)
-stiffness = round(max(slope_values_stiff),2)
+stiffness = round(max(slope_values_stiff), 1)
 
 values = [sample_ID, ultimate_stress_filtered, ultimate_strain, ultimate_force_filtered, apparent_modulus, stiffness]
 
