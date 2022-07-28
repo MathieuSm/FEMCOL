@@ -72,7 +72,6 @@ for filename in filename_list:
     upper_disp = max(last_cycle['last_cycle_disp'])
     lower_disp = 0.005
 
-    # problem here
     # identify index range of defined region
     upper_cond_disp = last_cycle.loc[last_cycle['last_cycle_disp'] == upper_disp]
     lower_cond_disp = last_cycle.loc[last_cycle['last_cycle_disp'] >= lower_disp]
@@ -122,28 +121,32 @@ for filename in filename_list:
     # calculate stress/strain
     Pi = 3.14159265
     l_initial = 6.5
-    area = results_uCT['min_Area'][counter]
-    stress = df['force_lc'] / area
+    min_area_wp = results_uCT['Min Area (w porosity) mm^2'][counter]
+    mean_area_wop = results_uCT['Mean Area (w/o porosity) mm^2'][counter]
+    stress_wp = df['force_lc'] / min_area_wp
+    stress_wop = df['force_lc'] / mean_area_wop
     strain = df['disp_ext'] / l_initial
-    df['stress_lc'] = stress
+    df['stress_lc_wp'] = stress_wp
+    df['stress_lc_wop'] = stress_wop
     df['strain_ext'] = strain
-    df['stress_lc_filtered'] = butter_lowpass_filter(df['stress_lc'], cutoff)
+    df['stress_lc_filtered_wp'] = butter_lowpass_filter(df['stress_lc_wp'], cutoff)
+    df['stress_lc_filtered_wop'] = butter_lowpass_filter(df['stress_lc_wop'], cutoff)
     counter = counter + 1
-
-    # plot stress/strain
-    plt.figure()
-    plt.title(sample_ID)
-    plt.plot(df['strain_ext'], df['stress_lc'], label='raw')
-    plt.plot(df['strain_ext'], df['stress_lc_filtered'], label='filtered')
-    plt.ylabel('stress / MPa')
-    plt.xlabel('strain / -')
-    plt.legend()
-    savepath = Cwd / '04_Results/00_Mineralized/01_stress_strain/'
-    plt.savefig(os.path.join(savepath, 'stress_strain_' + sample_ID + '.png'), dpi=300)
-    plt.close()
+    #
+    # # plot stress/strain
+    # plt.figure()
+    # plt.title(sample_ID)
+    # plt.plot(df['strain_ext'], df['stress_lc'], label='raw')
+    # plt.plot(df['strain_ext'], df['stress_lc_filtered'], label='filtered')
+    # plt.ylabel('stress / MPa')
+    # plt.xlabel('strain / -')
+    # plt.legend()
+    # savepath = Cwd / '04_Results/00_Mineralized/01_stress_strain/'
+    # plt.savefig(os.path.join(savepath, 'stress_strain_' + sample_ID + '.png'), dpi=300)
+    # plt.close()
 
     # calculate values for last cycle of stress/strain curve only
-    last_cycle_stress = df['stress_lc_filtered'][peaks_index[-1]:]
+    last_cycle_stress = df['stress_lc_filtered_wop'][peaks_index[-1]:]
     last_cycle_strain = df['strain_ext'][peaks_index[-1]:]
     last_cycle_strain = last_cycle_strain.dropna().reset_index(drop=True)
     last_cycle_stress = last_cycle_stress.dropna().reset_index(drop=True)
@@ -159,7 +162,7 @@ for filename in filename_list:
 
     # calculate apparent modulus of elasticity using regression
     slope, intercept, r_value, p_value, std_err = stats.linregress(last_cycle_strain, last_cycle_stress)
-    youngs_modulus = round(slope,1)
+    youngs_modulus = round(slope, 1)
 
     ## calculate apparent modulus by using rolling regression
     # definition of strain region where regression should be carried out
@@ -207,7 +210,7 @@ for filename in filename_list:
     # generate plot
     plt.figure(figsize=(6, 4))
     plt.title(sample_ID)
-    plt.plot(df['strain_ext'], df['stress_lc_filtered'], label='filtered')
+    plt.plot(df['strain_ext'], df['stress_lc_filtered_wop'], label='filtered')
     plt.plot(last_cycle['last_cycle_strain'], last_cycle['last_cycle_stress'], label='last unloading cycle 0.001-0.0025')
     plt.plot(last_cycle_plot['last_cycle_strain'], last_cycle_plot['last_cycle_stress'], label='regress area',
              color='k')

@@ -58,34 +58,26 @@ plt.show()
 # calculate stress and strain, filter & put into dataframe
 Pi = 3.1415
 l_initial = 6.5
-area = results_uCT['min_Area'][12]
-stress = df['force_lc']/area
-strain = df['disp_ext']/l_initial
-df['stress_lc'] = stress
+min_area_wp = results_uCT['Min Area (w porosity) mm^2'][12]
+mean_area_wop = results_uCT['Mean Area (w/o porosity) mm^2'][12]
+stress_wp = df['force_lc'] / min_area_wp
+stress_wop = df['force_lc'] / mean_area_wop
+strain = df['disp_ext'] / l_initial
+df['stress_lc_wp'] = stress_wp
+df['stress_lc_wop'] = stress_wop
 df['strain_ext'] = strain
-df['stress_lc_filtered'] = butter_lowpass_filter(df['stress_lc'], cutoff)
-
-# plot stress vs strain raw/filtered & save
-plt.figure()
-plt.title(sample_ID)
-plt.plot(df['strain_ext'], df['stress_lc'], label='raw')
-plt.plot(df['strain_ext'], df['stress_lc_filtered'], label='filtered')
-plt.ylabel('stress / MPa')
-plt.xlabel('strain / -')
-plt.legend()
-savepath = Cwd / '04_Results/01_Demineralized/01_stress_strain/'
-plt.savefig(os.path.join(savepath, 'stress_strain_' + sample_ID + '.png'), dpi=300)
-plt.show()
+df['stress_lc_filtered_wp'] = butter_lowpass_filter(df['stress_lc_wp'], cutoff)
+df['stress_lc_filtered_wop'] = butter_lowpass_filter(df['stress_lc_wop'], cutoff)
 
 # find max value of stress_lc column
-max_stress_raw = df['stress_lc'].max()
+max_stress_raw = df['stress_lc_wp'].max()
 
 # locate index of max value
-max_stress_index = df['stress_lc'][df['stress_lc'] == max_stress_raw].dropna()
+max_stress_index = df['stress_lc_wp'][df['stress_lc_wp'] == max_stress_raw].dropna()
 max_stress_index = max_stress_index.index
 
 # search for ultimate stress (filtered)
-row_max_stress_filtered = df['stress_lc_filtered'].iloc[max_stress_index[0]]
+row_max_stress_filtered = df['stress_lc_filtered_wp'].iloc[max_stress_index[0]]
 ultimate_stress_filtered = round(row_max_stress_filtered, 2)
 
 # search for ultimate strain
@@ -108,23 +100,23 @@ peaks_index, _ = find_peaks(df['force_lc'], width=200)
 
 # define range between last peak and second last peak to subsequently search for stress minimum as start point
 start_range_strain = df['strain_ext'][peaks_index[7]:max_stress_index[0]]
-start_range_stress = df['stress_lc_filtered'][peaks_index[7]:max_stress_index[0]]
+start_range_stress = df['stress_lc_filtered_wop'][peaks_index[7]:max_stress_index[0]]
 start_range = pd.DataFrame()
 start_range['strain_ext'] = start_range_strain
-start_range['stress_lc_filtered'] = start_range_stress
+start_range['stress_lc_filtered_wop'] = start_range_stress
 
 # find smallest stress value & corresponding index as starting point
-start_value = min(start_range['stress_lc_filtered'])
-start_ind = start_range.loc[start_range['stress_lc_filtered'] == start_value]
+start_value = min(start_range['stress_lc_filtered_wop'])
+start_ind = start_range.loc[start_range['stress_lc_filtered_wop'] == start_value]
 start_index = start_ind.index
 
 # find max stress value & corresponding index as end point
-end_value = df['stress_lc_filtered'][max_stress_index[0]]
-end_ind = df.loc[df['stress_lc_filtered'] == end_value]
+end_value = df['stress_lc_filtered_wop'][max_stress_index[0]]
+end_ind = df.loc[df['stress_lc_filtered_wop'] == end_value]
 end_index = end_ind.index
 
 # create dataframe of final cycle using start/end index
-last_cycle_stress = df['stress_lc_filtered'].iloc[start_index[0]:end_index[0]]
+last_cycle_stress = df['stress_lc_filtered_wop'].iloc[start_index[0]:end_index[0]]
 last_cycle_strain = df['strain_ext'].iloc[start_index[0]:end_index[0]]
 last_cycle_strain = last_cycle_strain.dropna().reset_index(drop=True)
 last_cycle_stress = last_cycle_stress.dropna().reset_index(drop=True)
@@ -133,9 +125,9 @@ last_cycle = pd.DataFrame()
 last_cycle['last_cycle_strain'] = round(last_cycle_strain, 5)
 last_cycle['last_cycle_stress'] = round(last_cycle_stress, 5)
 
-plt.plot(df['strain_ext'], df['stress_lc_filtered'], label='filtered')
+plt.plot(df['strain_ext'], df['stress_lc_filtered_wop'], label='filtered')
 plt.plot(last_cycle['last_cycle_strain'], last_cycle['last_cycle_stress'], color='green', label='last cycle')
-plt.scatter(df['strain_ext'][peaks_index], df['stress_lc_filtered'][peaks_index], marker='o', color='red',
+plt.scatter(df['strain_ext'][peaks_index], df['stress_lc_filtered_wop'][peaks_index], marker='o', color='red',
             label='peaks')
 plt.scatter(last_cycle['last_cycle_strain'][len(last_cycle)-1], last_cycle['last_cycle_stress'][len(last_cycle)-1],
             marker='o', color='black', label='ultimate point')

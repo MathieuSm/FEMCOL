@@ -48,25 +48,29 @@ for filename in filename_list:
     # calculate stress and strain, filter & put into dataframe
     Pi = 3.14159265
     l_initial = 6.5
-    area = results_uCT['min_Area'][counter]
-    stress = df['force_lc'] / area
+    min_area_wp = results_uCT['Min Area (w porosity) mm^2'][counter]
+    mean_area_wop = results_uCT['Mean Area (w/o porosity) mm^2'][counter]
+    stress_wp = df['force_lc'] / min_area_wp        # needed to calculate ultimate stress
+    stress_wop = df['force_lc'] / mean_area_wop     # needed to calculate apparent modulus
     strain = df['disp_ext'] / l_initial
-    df['stress_lc'] = stress
+    df['stress_lc_wp'] = stress_wp
+    df['stress_lc_wop'] = stress_wop
     df['strain_ext'] = strain
-    df['stress_lc_filtered'] = butter_lowpass_filter(df['stress_lc'], cutoff)
+    df['stress_lc_filtered_wp'] = butter_lowpass_filter(df['stress_lc_wp'], cutoff)
+    df['stress_lc_filtered_wop'] = butter_lowpass_filter(df['stress_lc_wop'], cutoff)
     counter = counter + 1
 
     # find max value of stress_lc column
-    column = df['stress_lc']
+    column = df['stress_lc_wp']
     max_stress_raw = column.max()
 
     # locate index of max value
-    row_max_stress = df.loc[df['stress_lc'] == max_stress_raw]
+    row_max_stress = df.loc[df['stress_lc_wp'] == max_stress_raw]
     max_stress_index = row_max_stress.index
 
     # search for ultimate stress (filtered)
     row_max_stress_filtered = df.iloc[max_stress_index]
-    ultimate_stress_filtered = np.round(row_max_stress_filtered['stress_lc_filtered'].values, 2)
+    ultimate_stress_filtered = np.round(row_max_stress_filtered['stress_lc_filtered_wp'].values, 2)
     ultimate_stress_filtered = ultimate_stress_filtered[0]
 
     # search for ultimate strain
@@ -93,20 +97,20 @@ for filename in filename_list:
 
     # define range between last peak and second last peak to subsequently search for stress minimum as start point
     start_range_strain_unload = df['strain_ext'][peaks_index[6]:peaks_index[7]]
-    start_range_stress_unload = df['stress_lc_filtered'][peaks_index[6]:peaks_index[7]]
+    start_range_stress_unload = df['stress_lc_filtered_wp'][peaks_index[6]:peaks_index[7]]
     start_range_unload = pd.DataFrame()
     start_range_unload['strain_ext'] = start_range_strain_unload
-    start_range_unload['stress_lc_filtered'] = start_range_stress_unload
+    start_range_unload['stress_lc_filtered_wp'] = start_range_stress_unload
 
     # find smallest stress value & corresponding index as starting point
-    start_value_unload = min(start_range_unload['stress_lc_filtered'])
-    start_ind_unload = start_range_unload.loc[start_range_unload['stress_lc_filtered'] == start_value_unload]
+    start_value_unload = min(start_range_unload['stress_lc_filtered_wp'])
+    start_ind_unload = start_range_unload.loc[start_range_unload['stress_lc_filtered_wp'] == start_value_unload]
     start_index_unload = start_ind_unload.index
 
     # create dataframe using unloading part of last cycle
     last_cycle_unloading = pd.DataFrame()
     last_cycle_unloading['last_cycle_strain'] = df['strain_ext'].iloc[start_index_unload[0]:peaks_index[7]]
-    last_cycle_unloading['last_cycle_stress'] = df['stress_lc_filtered'].iloc[start_index_unload[0]:peaks_index[7]]
+    last_cycle_unloading['last_cycle_stress'] = df['stress_lc_filtered_wp'].iloc[start_index_unload[0]:peaks_index[7]]
 
     ## calculate stiffness using last unloading cycle
     # create dataframe of final unloading cycle using start/end index
@@ -165,7 +169,7 @@ for filename in filename_list:
 
     ## calculate apparent modulus using last unloading cycle
     # create dataframe of final unloading cycle using start/end index
-    last_cycle_stress_unload = df['stress_lc_filtered'].iloc[start_index_unload[0]:peaks_index[7]]
+    last_cycle_stress_unload = df['stress_lc_filtered_wop'].iloc[start_index_unload[0]:peaks_index[7]]
     last_cycle_strain_unload = df['strain_ext'].iloc[start_index_unload[0]:peaks_index[7]]
     last_cycle_strain_unload = last_cycle_strain_unload.dropna().reset_index(drop=True)
     last_cycle_stress_unload = last_cycle_stress_unload.dropna().reset_index(drop=True)
@@ -179,30 +183,31 @@ for filename in filename_list:
     intercept_values_app_unload = list()
 
     # rolling linear regression to calculate apparent modulus of last unloading cycle
-    for k in range(0, len(last_cycle_ss_unload) - 1 - window_width_unload + 1, 1):
-        last_cycle_mod_unload = last_cycle_ss_unload[k:k + window_width_unload]
+    for k in range(len(last_cycle_ss_unload) - 1 - window_width_unload + 1):
+        last_cycle_mod_unload2 = last_cycle_ss_unload[k:k + window_width_unload]
         slope_app_unload, intercept_app_unload, r_value, p_value, std_err = stats.linregress(
-            last_cycle_mod_unload['last_cycle_strain_unload'],
-            last_cycle_mod_unload['last_cycle_stress_unload'])
+            last_cycle_mod_unload2['last_cycle_strain_unload'],
+            last_cycle_mod_unload2['last_cycle_stress_unload'])
         # collect slope value & add to growing list; same for intercept
         slope_value_app_unload = slope_app_unload
         slope_values_app_unload.append(slope_value_app_unload)
         intercept_value_app_unload = intercept_app_unload
         intercept_values_app_unload.append(intercept_value_app_unload)
 
-    # Create DataFrames for slope/app. modulus to search for max. values & corresponding indices; create cycle for plotting
+    # Create DataFrames for slope/app. modulus to search for max. values & corresponding indices; create cycle for plot
     slope_value_app_unload_df = pd.DataFrame(slope_values_app_unload)
     intercept_values_app_unload_df = pd.DataFrame(intercept_values_app_unload)
     apparent_modulus = slope_value_app_unload_df.max()[0]
     max_slope_index_app_unload = slope_value_app_unload_df[slope_value_app_unload_df == apparent_modulus].dropna()
     max_slope_index_app_unload = max_slope_index_app_unload.index
     intercept_value_max_app_unload = intercept_values_app_unload_df.loc[max_slope_index_app_unload[0]].values[0]
-    last_cycle_unload_plot = last_cycle_ss_unload[max_slope_index_app_unload[0]:max_slope_index_app_unload[0] + window_width_unload]
+    last_cycle_unload_plot = last_cycle_ss_unload[max_slope_index_app_unload[0]:max_slope_index_app_unload[0] +
+                                                                                window_width_unload]
 
     # generate plot
     plt.figure(figsize=(6, 4))
     plt.title(sample_ID)
-    plt.plot(df['strain_ext'][0:peaks_index[-1]], df['stress_lc_filtered'][0:peaks_index[-1]], label='filtered')
+    plt.plot(df['strain_ext'][0:peaks_index[-1]], df['stress_lc_filtered_wop'][0:peaks_index[-1]], label='filtered')
     plt.plot(last_cycle_ss_unload['last_cycle_strain_unload'], last_cycle_ss_unload['last_cycle_stress_unload'],
              label='last unloading cycle')
     plt.plot(last_cycle_unload_plot['last_cycle_strain_unload'], last_cycle_unload_plot['last_cycle_stress_unload'],
@@ -227,23 +232,7 @@ for filename in filename_list:
     result_dir = pd.DataFrame(result, columns=['Sample ID', 'Ultimate stress / MPa', 'Ultimate strain / -',
                                                'Ultimate Force / N', 'Apparent modulus / MPa', 'Stiffness / N/mm'])
 
-# load manually adjusted curve from sample 395L (dataframe)
-df1 = pd.read_csv(str('/home/stefan/Documents/PythonScripts/04_Results/01_Demineralized/ResultsFailureTesting395L.csv'),
-                  skiprows=0)
-# initialize new dataframe
-result_dir_new = pd.DataFrame()
-
-# copy last column of existing dataframe into new dataframe as "clipboard"
-result_dir_new['Stiffness / N/mm'] = result_dir['Stiffness / N/mm']
-
-# replace data of existing dataframe by manually adjusted data
-result_dir.loc[12] = df1.loc[0]
-
-# paste last column from "clipboard" into existing dataframe
-result_dir['Stiffness / N/mm'] = result_dir_new['Stiffness / N/mm']
-
 missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '400R', '402L', '403R', '433L']})
-# missing_IDs = pd.DataFrame(missing_sample_IDs, columns=['Sample ID'])
 result_dir = pd.concat([result_dir, missing_sample_IDs])
 result_dir_sorted = result_dir.sort_values(by=['Sample ID'], ascending=True)
 

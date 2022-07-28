@@ -101,30 +101,6 @@ def PlotRegressionResults(Model, Data, Alpha=0.95):
     plt.show()
     plt.close(Figure)
 
-    # DPI = 300
-    # savepath = Cwd / '04_Results/04_Plots/'
-    # Figure, Axes = plt.subplots(1, 1, figsize=(5.5, 4.5), dpi=DPI, sharey=True, sharex=True)
-    # Axes.plot(X[:, 1], Y_Fit, color=(1, 0, 0), label='Fit')
-    # # Axes.fill_between(X_Obs, np.sort(CI_Line_o), np.sort(CI_Line_u), color=(0, 0, 0), alpha=0.1, label=str(int(
-    # #     Alpha*100)) + '% CI')
-    # Axes.plot(X[:, 1][Data['Gender'] == 'M'], Y_Obs[Data['Gender'] == 'M'], linestyle='none', marker='o',
-    #           color=(0, 0, 1), fillstyle='none', label='male')
-    # Axes.plot(X[:, 1][Data['Gender'] == 'F'], Y_Obs[Data['Gender'] == 'F'], linestyle='none', marker='x',
-    #           color=(0, 0, 1), fillstyle='none', label='female')
-    # Axes.annotate(r'$N$  : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
-    # Axes.annotate(r'$R^2$ : ' + format(round(R2, 2), '.2f'), xy=(0.05, 0.25), xycoords='axes fraction')
-    # Axes.annotate(r'$SE$ : ' + format(round(SE, 2), '.2f'), xy=(0.05, 0.175), xycoords='axes fraction')
-    # Axes.annotate(r'$p$ : ' + format(round(FitResults.pvalues[1], 3), '.3f'), xy=(0.05, 0.1), xycoords='axes fraction')
-    # Axes.annotate(r'$CI$ : ' + format(round(FitResults.conf_int()[0][1], 3), '.3f') + r'$,$ ' +
-    #               format(round(FitResults.conf_int()[1][1], 3), '.3f'), xy=(0.05, 0.025), xycoords='axes fraction')
-    #
-    # Axes.set_ylabel(Data.columns[2])
-    # Axes.set_xlabel(Data.columns[1])
-    # plt.subplots_adjust(left=0.15, bottom=0.15)
-    # plt.legend()
-    # plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'), dpi=300)
-    # plt.show()
-    # plt.close(Figure)
 
 SampleID = df['Sample ID'].values.tolist()
 
@@ -489,9 +465,9 @@ PlotRegressionResults(FitResults, Data)
 print(FitResults.conf_int())
 
 # Build dataframe with age and stiffness mineralized
-x_axis = 'Minimum Area ' + 'mm\u00B2'
+x_axis = 'Mean Area (w/o porosity) ' + 'mm\u00B2'
 y_axis = 'Apparent Modulus Demineralized MPa'
-x_axis_abbrev = 'MA'
+x_axis_abbrev = 'MAwop'
 y_axis_abbrev = 'AMD'
 Data = df.filter(['Sample ID', x_axis, y_axis, 'Gender']).dropna()
 Data2Fit = Data.copy()
@@ -504,9 +480,9 @@ PlotRegressionResults(FitResults, Data)
 print(FitResults.conf_int())
 
 # Build dataframe with age and stiffness mineralized
-x_axis = 'Minimum Area ' + 'mm\u00B2'
+x_axis = 'Mean Equivalent Diameter (w/o porosity) mm'
 y_axis = 'Apparent Modulus Mineralized MPa'
-x_axis_abbrev = 'MA'
+x_axis_abbrev = 'MEDwop'
 y_axis_abbrev = 'AMM'
 Data = df.filter(['Sample ID', x_axis, y_axis, 'Gender']).dropna()
 Data2Fit = Data.copy()
@@ -519,10 +495,10 @@ PlotRegressionResults(FitResults, Data)
 print(FitResults.conf_int())
 
 # Build dataframe with age and stiffness mineralized
-x_axis = 'Minimum Equivalent Diameter mm'
-y_axis = 'Apparent Modulus Demineralized MPa'
-x_axis_abbrev = 'MED'
-y_axis_abbrev = 'AMD'
+x_axis = 'Organic weight fraction -'
+y_axis = 'Ultimate Stress MPa'
+x_axis_abbrev = 'OWF'
+y_axis_abbrev = 'US'
 Data = df.filter(['Sample ID', x_axis, y_axis, 'Gender']).dropna()
 Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
@@ -534,10 +510,55 @@ PlotRegressionResults(FitResults, Data)
 print(FitResults.conf_int())
 
 # Build dataframe with age and stiffness mineralized
-x_axis = 'Minimum Equivalent Diameter mm'
-y_axis = 'Apparent Modulus Mineralized MPa'
-x_axis_abbrev = 'MED'
-y_axis_abbrev = 'AMM'
+x_axis = 'Organic Weight g'
+y_axis = 'Ultimate Stress MPa'
+x_axis_abbrev = 'OW'
+y_axis_abbrev = 'US'
+Data = df.filter(['Sample ID', x_axis, y_axis, 'Gender']).dropna()
+Data2Fit = Data.copy()
+Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
+Data2Fit = Data2Fit.set_index('SID')
+
+FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
+PlotRegressionResults(FitResults, Data)
+
+print(FitResults.conf_int())
+
+# Build dataframe with age and stiffness mineralized
+x_axis = 'Organic Weight g'
+y_axis = 'Stiffness Mineralized N/mm'
+x_axis_abbrev = 'OW'
+y_axis_abbrev = 'SM'
+Data = df.filter(['Sample ID', x_axis, y_axis, 'Gender']).dropna()
+Data2Fit = Data.copy()
+Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
+Data2Fit = Data2Fit.set_index('SID')
+
+FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
+PlotRegressionResults(FitResults, Data)
+
+print(FitResults.conf_int())
+
+# Build dataframe with age and stiffness mineralized
+x_axis = 'Organic Weight g'
+y_axis = 'Stiffness Demineralized N/mm'
+x_axis_abbrev = 'OW'
+y_axis_abbrev = 'SD'
+Data = df.filter(['Sample ID', x_axis, y_axis, 'Gender']).dropna()
+Data2Fit = Data.copy()
+Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
+Data2Fit = Data2Fit.set_index('SID')
+
+FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
+PlotRegressionResults(FitResults, Data)
+
+print(FitResults.conf_int())
+
+# Build dataframe with age and stiffness mineralized
+x_axis = 'Min Area Fraction -'
+y_axis = 'Ultimate Stress MPa'
+x_axis_abbrev = 'MAF'
+y_axis_abbrev = 'US'
 Data = df.filter(['Sample ID', x_axis, y_axis, 'Gender']).dropna()
 Data2Fit = Data.copy()
 Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)

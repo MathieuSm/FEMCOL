@@ -45,9 +45,15 @@ results_merged['Bone Volume Fraction -'] = results_uCT['Bone Volume Fraction -']
 results_merged['Bone Mineral Density mg HA / ' + 'cm\u00B3'] = results_uCT['Bone Mineral Density mg HA / cm3']
 results_merged['Tissue Mineral Density mg HA / ' + 'cm\u00B3'] = results_uCT['Tissue Mineral Density mg HA / cm3']
 results_merged['Bone Mineral Content mg HA'] = results_uCT['Bone Mineral Content mg HA']
-results_merged['Minimum Area ' + 'mm\u00B2'] = results_uCT['min_Area']
-results_merged['Minimum Equivalent Diameter mm'] = results_uCT['min_Diam']
-
+results_merged['Minimum Area (w porosity) ' + 'mm\u00B2'] = results_uCT['Min Area (w porosity) mm^2']
+results_merged['Mean Area (w/o porosity) ' + 'mm\u00B2'] = results_uCT['Mean Area (w/o porosity) mm^2']
+results_merged['Minimum Equivalent Diameter mm'] = results_uCT['Min Diam (w porosity) mm']
+results_merged['Mean Equivalent Diameter (w/o porosity) mm'] = results_uCT['Mean Diameter (w/o porosity) mm']
+results_merged['Mean Area Fraction -'] = results_uCT['Mean Area Fraction -']
+results_merged['Min Area Fraction -'] = results_uCT['Min Area Fraction -']
+results_merged['Max Area Fraction -'] = results_uCT['Max Area Fraction -']
+results_merged = results_merged.drop(index=[39], axis=0)
+results_merged = results_merged.reset_index(drop=True)
 results_merged.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/', 'ResultsOverview.csv'),
                       index=False)
 

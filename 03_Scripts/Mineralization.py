@@ -158,7 +158,8 @@ for x in range(0, len(Data), 1):
 
     # Collect data into filling list
     SampleID = Data.loc[SampleNumber, 'Sample']
-    values = [SampleID, BVTV, BMD, TMD, BMC, min_Area_wp, min_Diam_wp, mean_Area_wop, mean_Diam_wop, mean_area_fraction]
+    values = [SampleID, BVTV, BMD, TMD, BMC, min_Area_wp, min_Diam_wp, mean_Area_wop, mean_Diam_wop, mean_area_fraction,
+              min_area_fraction, max_area_fraction]
     results.append(values)
 
     print(x)
@@ -168,7 +169,7 @@ result_dir = pd.DataFrame(results, columns=['Sample ID', 'Bone Volume Fraction -
                                             'Tissue Mineral Density mg HA / cm3', 'Bone Mineral Content mg HA',
                                             'Min Area (w porosity) mm^2', 'Min Diam (w porosity) mm',
                                             'Mean Area (w/o porosity) mm^2', 'Mean Diameter (w/o porosity) mm',
-                                            'Mean Area Fraction -'])
+                                            'Mean Area Fraction -', 'Min Area Fraction -', 'Max Area Fraction -'])
 
 missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '402L']})
 result_dir = pd.concat([result_dir, missing_sample_IDs])
