@@ -1,11 +1,12 @@
-# Import standard packages
-from pathlib import Path                # Used to manage path variables in windows or linux
-import numpy as np                      # Used to do arrays (matrices) computations namely
-import pandas as pd                     # Used to manage data frames
-import matplotlib.pyplot as plt         # Used to perform plots
-import statsmodels.formula.api as smf   # Used for statistical analysis (ols here)
-from scipy.stats.distributions import t # Used to compute confidence intervals
+# This script loads .isq files, reduces its size by cropping and saves as mhd file
 
+# Import standard packages
+from pathlib import Path                    # Used to manage path variables in windows or linux
+import numpy as np                          # Used to do arrays (matrices) computations namely
+import pandas as pd                         # Used to manage data frames
+import matplotlib.pyplot as plt             # Used to perform plots
+import statsmodels.formula.api as smf       # Used for statistical analysis (ols here)
+from scipy.stats.distributions import t     # Used to compute confidence intervals
 
 
 # Set directories
@@ -131,4 +132,3 @@ BMD = FitResults.params['Intercept'] + Cropped * FitResults.params['GV']
 
 # Write BMD cropped scan into a MHD file
 QCData = ISQReader.WriteMHD(BMD, FileData[1], str(DataDirectory), File, 'float')
-
