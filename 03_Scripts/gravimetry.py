@@ -1,3 +1,6 @@
+# This script loads results from gravimetric analysis and calculates density and the three different weight fractions
+
+# load various packages
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -19,7 +22,7 @@ df = pd.read_excel(str(DataPath / FileName))
 # density of distilled water at 23°C
 H20_density = 0.99754
 
-# calculate density with density=wet weight*density of H2O/(wet weight-H2O weight)
+# calculate density with density=wet weight * density of H2O / (wet weight - H2O weight)
 for row in range(len(df)):
     density = round(df['wet weight'] * H20_density / (df['wet weight'] - df['H2O weight']), 3)
     w_organic = round(df['dry weight'] - df['ash weight'], 3)
@@ -41,8 +44,7 @@ result_dir['weight fraction of organic phase / -'] = wf_organic
 result_dir['weight fraction of water phase / -'] = wf_water
 
 # save dataframe to csv
-result_dir.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/02_Gravimetry/', 'ResultsGravimetry.csv'), index=False)
+result_dir.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/02_Gravimetry/',
+                               'ResultsGravimetry.csv'), index=False)
 
 print(result_dir)
-
-
