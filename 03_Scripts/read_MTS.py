@@ -132,15 +132,11 @@ for filename in filename_list:
 
     # calculate stress/strain, filter and put into dataframe
     l_initial = 6.5
-    min_area_wp = results_uCT['Min Area (w porosity) mm^2'][counter]
     mean_area_wop = results_uCT['Mean Area (w/o porosity) mm^2'][counter]
-    stress_wp = df['force_lc'] / min_area_wp
     stress_wop = df['force_lc'] / mean_area_wop
     strain = df['disp_ext'] / l_initial
-    df['stress_lc_wp'] = stress_wp
     df['stress_lc_wop'] = stress_wop
     df['strain_ext'] = strain
-    df['stress_lc_filtered_wp'] = butter_lowpass_filter(df['stress_lc_wp'], cutoff)
     df['stress_lc_filtered_wop'] = butter_lowpass_filter(df['stress_lc_wop'], cutoff)
     counter = counter + 1
 
