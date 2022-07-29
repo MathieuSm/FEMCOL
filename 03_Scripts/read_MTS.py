@@ -1,4 +1,8 @@
-# run read_MTS.py before running read_failure_MTS.py script if read_MTS.py was adjusted
+# This script loads data obtained during experimental tensile testing on the MTS. Force/displacement data is filtered
+# and used to calculate the corresponding stress/strain values. Stiffness/apparent modulus were extracted from the
+# respective slopes. The measures were calculated as follows:
+# Apparent modulus: stress/strain; stress = filtered force/mean apparent area
+# Stiffness: filtered force/displacement
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -17,19 +21,23 @@ def butter_lowpass_filter(data, cutoff, order=9):
     return y
 
 
+# definition of path
 Cwd = Path.cwd()
 DataPath = Cwd / '02_Data/02_MTS/Elastic_testing_mineralized/'
 filename_list = [File for File in os.listdir(DataPath) if File.endswith('.csv')]
 filename_list.sort()
+
+# load uCT results & remove naN entries; areas needed for stress calculations
 results_uCT = pd.read_csv(str('/home/stefan/Documents/PythonScripts/04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
 results_uCT = results_uCT.drop(index=[8, 13, 20, 24, 37], axis=0)
 results_uCT = results_uCT.reset_index(drop=True)
 
-
+# set counters for iterations over files (i) and areas for stress calculation (counter) & initialize results list
 result = list()
 i = 0
 counter = 0
 
+# loop over .csv files in Folder
 for filename in filename_list:
     sample_ID = filename.split('/')[-1].split('_')[1]
     # load csv:
@@ -69,6 +77,7 @@ for filename in filename_list:
     last_cycle['last_cycle_force'] = round(last_cycle_force, 5)
     last_cycle['last_cycle_disp'] = round(last_cycle_disp, 5)
 
+    # set boundaries for further calculation (represent approx. linear region)
     upper_disp = max(last_cycle['last_cycle_disp'])
     lower_disp = 0.005
 
@@ -79,7 +88,8 @@ for filename in filename_list:
     min_disp_ind = max(lower_cond_disp.index)
     last_cycle = last_cycle[max_disp_ind:min_disp_ind]
 
-    window_width = round(1 / 3 * (last_cycle.index[-1]))
+    # define window width for moving linear regression
+    window_width = round(1 / 3 * len(last_cycle))
 
     # rolling linear regression for stiffness calculation
     slope_values_stiff = list()
@@ -87,11 +97,14 @@ for filename in filename_list:
     for x in range(0, len(last_cycle) - 1 - window_width + 1, 1):
         last_cycle_mod = last_cycle[x:x + window_width]
         slope_stiff, intercept_stiff, r_value, p_value, std_err = stats.linregress(last_cycle_mod['last_cycle_disp'],
-                                                                       last_cycle_mod['last_cycle_force'])
+                                                                                   last_cycle_mod['last_cycle_force'])
+        # collect slope value & add to growing list; same for intercept
         slope_value_stiff = slope_stiff
         intercept_value = intercept_stiff
         slope_values_stiff.append(slope_value_stiff)
         intercept_values_stiff.append(intercept_value)
+
+    # Create DataFrames for slope or stiffness to search for max. values & indices; create cycle for plotting
     slope_value_df = pd.DataFrame(slope_values_stiff)
     intercept_values_df = pd.DataFrame(intercept_values_stiff)
     stiffness = slope_value_df.max()[0]
@@ -105,21 +118,19 @@ for filename in filename_list:
     plt.title(sample_ID)
     plt.plot(df['disp_ext'], df['force_lc_filtered'], label='filtered')
     plt.plot(last_cycle['last_cycle_disp'], last_cycle['last_cycle_force'], label='last unloading cycle 0.005-0.015')
-    plt.plot(last_cycle_plot['last_cycle_disp'], last_cycle_plot['last_cycle_force'], label='regress area',
-             color='k')
+    plt.plot(last_cycle_plot['last_cycle_disp'], last_cycle_plot['last_cycle_force'], label='regress area', color='k')
     plt.plot(last_cycle_plot['last_cycle_disp'], stiffness * last_cycle_plot['last_cycle_disp'] +
              intercept_value_max_stiff, 'r')
     plt.plot([], ' ', label=f'stiffness = {stiffness:.0f} N/mm')
     plt.ylabel('force lc / N')
     plt.xlabel('disp ext / mm')
     plt.legend()
-    savepath = Cwd / '04_Results/00_Mineralized/00_force_disp/'
-    plt.savefig(os.path.join(savepath, 'force_disp_' + sample_ID + '.png'), dpi=300)
+    savepath_fd = Cwd / '04_Results/00_Mineralized/00_force_disp/'
+    plt.savefig(os.path.join(savepath_fd, 'force_disp_' + sample_ID + '.png'), dpi=300)
     plt.show()
     # plt.close()
 
-    # calculate stress/strain
-    Pi = 3.14159265
+    # calculate stress/strain, filter and put into dataframe
     l_initial = 6.5
     min_area_wp = results_uCT['Min Area (w porosity) mm^2'][counter]
     mean_area_wop = results_uCT['Mean Area (w/o porosity) mm^2'][counter]
@@ -132,7 +143,7 @@ for filename in filename_list:
     df['stress_lc_filtered_wp'] = butter_lowpass_filter(df['stress_lc_wp'], cutoff)
     df['stress_lc_filtered_wop'] = butter_lowpass_filter(df['stress_lc_wop'], cutoff)
     counter = counter + 1
-    #
+
     # # plot stress/strain
     # plt.figure()
     # plt.title(sample_ID)
@@ -160,10 +171,6 @@ for filename in filename_list:
     # plt.show()
     plt.close()
 
-    # calculate apparent modulus of elasticity using regression
-    slope, intercept, r_value, p_value, std_err = stats.linregress(last_cycle_strain, last_cycle_stress)
-    youngs_modulus = round(slope, 1)
-
     ## calculate apparent modulus by using rolling regression
     # definition of strain region where regression should be carried out
     upper_strain = 0.00250
@@ -181,18 +188,22 @@ for filename in filename_list:
     min_strain_ind = min(lower_cond.index)
     last_cycle = last_cycle[max_strain_ind:min_strain_ind]
 
+    # initialize lists for slope/intercept value collection
     slope_values_app = list()
     intercept_values_app = list()
 
     # rolling linear regression for apparent modulus calculation
     for x in range(max_strain_ind, min_strain_ind - window_width + 1, 1):
-        last_cycle_mod_app = last_cycle[x:x+window_width]
-        slope_app, intercept_app, r_value, p_value, std_err = stats.linregress(last_cycle_mod_app['last_cycle_strain'],
-                                                                       last_cycle_mod_app['last_cycle_stress'])
+        last_cycle_mod = last_cycle[x:x+window_width]
+        slope_app, intercept_app, r_value, p_value, std_err = stats.linregress(last_cycle_mod['last_cycle_strain'],
+                                                                               last_cycle_mod['last_cycle_stress'])
+        # collect slope value & add to growing list; same for intercept
         slope_value_app = slope_app
         slope_values_app.append(slope_value_app)
         intercept_value_app = intercept_app
         intercept_values_app.append(intercept_value_app)
+
+    # Create DataFrames for slope or stiffness & intercept to search for max. values & indices; create cycle for plotting
     slope_value_app_df = pd.DataFrame(slope_values_app)
     intercept_values_app_df = pd.DataFrame(intercept_values_app)
     apparent_modulus = slope_value_app_df.max()[0]
@@ -200,12 +211,6 @@ for filename in filename_list:
     max_slope_index_app = max_slope_index_app.index
     intercept_value_max_app = intercept_values_app_df.loc[max_slope_index_app[0]].values[0]
     last_cycle_plot = last_cycle[max_slope_index_app[0]:max_slope_index_app[0] + window_width]
-
-    # create list with current values which are sample_ID, slope & apparent modulus & add them to result list which
-    # is then converted to dataframe
-    values = [sample_ID, round(stiffness), round(apparent_modulus)]
-    result.append(values)
-    result_dir = pd.DataFrame(result, columns=['Sample ID', 'Stiffness N/mm', 'Apparent modulus MPa'])
 
     # generate plot
     plt.figure(figsize=(6, 4))
@@ -225,15 +230,16 @@ for filename in filename_list:
     plt.show()
     # plt.close()
 
+    # create list with current values which are sample_ID, slope & apparent modulus & add them to result list which
+    # is then converted to dataframe
+    values = [sample_ID, round(stiffness), round(apparent_modulus)]
+    result.append(values)
+    result_dir = pd.DataFrame(result, columns=['Sample ID', 'Stiffness N/mm', 'Apparent modulus MPa'])
 
+# add missing samples to list & safe
 missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '400R', '402L', '433L']})
 result_dir = pd.concat([result_dir, missing_sample_IDs])
 result_dir_sorted = result_dir.sort_values(by=['Sample ID'], ascending=True)
 
-print(result_dir_sorted)
-
-# safe dataframe to csv
-result_dir_sorted.to_csv(
-    os.path.join('/home/stefan/Documents/PythonScripts/04_Results/00_Mineralized/', 'ResultsElasticTesting.csv'),
-    index=False)
-
+result_dir_sorted.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/00_Mineralized/',
+                                      'ResultsElasticTesting.csv'), index=False)

@@ -22,6 +22,7 @@ def butter_lowpass_filter(data, cutoff, order=9):
     y = filtfilt(b, a, data)
     return y
 
+
 # definition of path
 Cwd = Path.cwd()
 DataPath = Cwd / '02_Data/02_MTS/Failure_testing_demineralized/'
@@ -143,7 +144,7 @@ for filename in filename_list:
         intercept_value_stiff = intercept_stiff
         intercept_values_stiff.append(intercept_value_stiff)
 
-    # Create DataFrames for slope or stiffness to search for max. values & indices; create cycle for plotting
+    # Create DataFrames for slope or stiffness & intercept to search for max. values & indices; create cycle for plotting
     slope_value_stiff_df = pd.DataFrame(slope_values_stiff)
     intercept_values_stiff_df = pd.DataFrame(intercept_values_stiff)
     stiffness = slope_value_stiff_df.max()[0]
@@ -235,6 +236,7 @@ for filename in filename_list:
     result_dir = pd.DataFrame(result, columns=['Sample ID', 'Ultimate stress / MPa', 'Ultimate strain / -',
                                                'Ultimate Force / N', 'Apparent modulus / MPa', 'Stiffness / N/mm'])
 
+# add missing samples to list
 missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '400R', '402L', '403R', '433L']})
 result_dir = pd.concat([result_dir, missing_sample_IDs])
 result_dir_sorted = result_dir.sort_values(by=['Sample ID'], ascending=True)
