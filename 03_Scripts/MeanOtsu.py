@@ -7,14 +7,13 @@ import matplotlib.pyplot as plt         # Used to perform plots
 from skimage import filters             # Used to perform filtering image operations (e.g. Otsu)
 from skimage import morphology, measure # Used to fill pores and circle fitting
 import statistics                       # Used to perform statistics
-
+import os
 
 
 # Set directories
 CurrentDirectory = Path.cwd()
 ScriptsDirectory = CurrentDirectory / '03_Scripts'
 DataDirectory = CurrentDirectory / '02_Data/01_uCT'
-
 
 # Read data list and print it into console
 Data = pd.read_csv(str(DataDirectory / 'SampleList.csv'))
@@ -27,34 +26,25 @@ ThresholdValues = list()
 # Select sample to analyze (numbering starting from 0)
 for x in range(0, 36, 1):
     SampleNumber = x
-    File = Data.loc[SampleNumber,'uCT File']
+    File = Data.loc[SampleNumber, 'uCT File']
 
     # Read mhd file
     Image = sitk.ReadImage(str(DataDirectory / File) + '.mhd')
     Scan = sitk.GetArrayFromImage(Image)
 
-    # Compute scan mid-planes positions
-    ZMid, Ymid, XMid = np.round(np.array(Scan.shape) / 2).astype('int')
-
-    # Plot XY mid-plane
-    Size = np.array(Scan.shape[1:]) / 100
-    Figure, Axis = plt.subplots(1,1, figsize=(Size[1], Size[0]))
-    Axis.imshow(Scan[ZMid, :, :], cmap='bone')
-    Axis.axis('off')
-    plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
-    plt.close()
-    # plt.show()
-
     # Segment scan using Otsu's threshold
     Threshold = filters.threshold_otsu(Scan)
-    BinaryScan = np.zeros(Scan.shape)
-    BinaryScan[Scan > Threshold] = 1
 
+    # Produce growing list with sample ID and Otsu threshold value
     SampleID = Data.loc[SampleNumber, 'Sample']
     values = [SampleID, Threshold]
     ThresholdValues.append(values)
     print(x)
 
+# Create dataframe with threshold values, take mean and put into new dataframe which is saved as .csv
 result_dir = pd.DataFrame(ThresholdValues, columns=['Sample ID', 'Otsu Threshold'])
-mean_otsu = round(statistics.mean(result_dir['Otsu Threshold']),3)
-print(mean_otsu)
+mean_otsu = list()
+mean_otsu.append(round(statistics.mean(result_dir['Otsu Threshold']), 3))
+mean_otsu = pd.DataFrame(mean_otsu, columns=['Mean Otsu Threshold'])
+
+mean_otsu.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/03_uCT/', 'MeanOtsu.csv'), index=False)
