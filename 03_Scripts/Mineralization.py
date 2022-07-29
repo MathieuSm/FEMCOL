@@ -1,3 +1,5 @@
+# This script loads .mhd files and calculates various quantities such as BMC, BMD, TMD, BV/TV, etc.
+
 # Import standard packages
 from pathlib import Path                 # Used to manage path variables in windows or linux
 import numpy as np                       # Used to do arrays (matrices) computations namely
@@ -19,15 +21,17 @@ DataDirectory = CurrentDirectory / '02_Data/01_uCT'
 Data = pd.read_csv(str(DataDirectory / 'SampleList.csv'))
 Data = Data.drop('Remark', axis=1)
 Data = Data.dropna().reset_index(drop=True)
+MeanOtsu = pd.read_csv('/home/stefan/Documents/PythonScripts/04_Results/03_uCT/MeanOtsu.csv')
 print(Data)
+print('Mean Otsu Threshold = ' + MeanOtsu.loc[0][0])
 
 results = list()
-Pi = 3.1415
+Pi = 3.14159265
 
 # Select sample to analyze (numbering starting from 0)
 for x in range(0, len(Data), 1):
     SampleNumber = x
-    File = Data.loc[SampleNumber,'uCT File']
+    File = Data.loc[SampleNumber, 'uCT File']
 
     # Read mhd file
     Image = sitk.ReadImage(str(DataDirectory / File) + '.mhd')
@@ -46,7 +50,7 @@ for x in range(0, len(Data), 1):
     plt.close()
 
     # Segment scan using Otsu's threshold: mean threshold calculated with MeanOtsu.py --> 562.586
-    Threshold = 562.586
+    Threshold = MeanOtsu.loc[0][0]
     BinaryScan = np.zeros(Scan.shape)
     BinaryScan[Scan > Threshold] = 1
 
@@ -138,6 +142,8 @@ for x in range(0, len(Data), 1):
     BMC = round(Tissue.sum() * BinaryScan.sum() * Voxel_Volume, 3)
     # print('Bone mineral content: ' + str(round(BMC, 3)) + ' mg HA')
 
+    # Calculate area of segmented image (considering porosity), apparent area (total area without considering porosity),
+    # and area fraction (bone area/total area)
     Area = Voxel_Dimensions[0] * Voxel_Dimensions[1]
     Areas = np.zeros(Scan.shape[0])
     Areas_full = np.zeros(Scan.shape[0])
@@ -162,19 +168,17 @@ for x in range(0, len(Data), 1):
               min_area_fraction, max_area_fraction]
     results.append(values)
 
-    print(x)
+# Add missing samples
+missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '402L']})
 
-# convert list to dataframe & save it as csv file
+# convert list to dataframe
 result_dir = pd.DataFrame(results, columns=['Sample ID', 'Bone Volume Fraction -', 'Bone Mineral Density mg HA / cm3',
                                             'Tissue Mineral Density mg HA / cm3', 'Bone Mineral Content mg HA',
                                             'Min Area (w porosity) mm^2', 'Min Diam (w porosity) mm',
                                             'Mean Area (w/o porosity) mm^2', 'Mean Diameter (w/o porosity) mm',
                                             'Mean Area Fraction -', 'Min Area Fraction -', 'Max Area Fraction -'])
-
-missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '402L']})
 result_dir = pd.concat([result_dir, missing_sample_IDs])
 result_dir_sorted = result_dir.sort_values(by=['Sample ID'], ascending=True)
 result_dir_sorted.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/03_uCT/', 'ResultsUCT.csv'),
                          index=False)
 print(result_dir_sorted)
-
