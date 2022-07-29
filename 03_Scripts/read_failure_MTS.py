@@ -1,4 +1,9 @@
-# run read_MTS.py before running this script if read_MTS.py was adjusted
+# This script loads data obtained during experimental tensile testing on the MTS. Force/displacement data is filtered
+# and used to calculate the corresponding stress/strain values. Ultimate values and stiffness/apparent modulus were
+# extracted from the respective slopes. The measures were calculated as follows:
+# Ultimate stress: filtered force/min. apparent area (min. total area over sample gage length, extracted from uCT image)
+# Apparent modulus: stress/strain; stress = filtered force/mean apparent area (same as for US but mean instead of min)
+# Stiffness: filtered force/displacement
 
 import pandas as pd
 import numpy as np
@@ -22,10 +27,13 @@ Cwd = Path.cwd()
 DataPath = Cwd / '02_Data/02_MTS/Failure_testing_demineralized/'
 filename_list = [File for File in os.listdir(DataPath) if File.endswith('.csv')]
 filename_list.sort()
+
+# load uCT results & remove naN entries; areas needed for stress calculations
 results_uCT = pd.read_csv(str('/home/stefan/Documents/PythonScripts/04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
 results_uCT = results_uCT.drop(index=[8, 13, 20, 24, 27, 37], axis=0)
 results_uCT = results_uCT.reset_index(drop=True)
 
+# set counters for iterations over files (i) and areas for stress calculation (counter) & initialize results list
 i = 0
 counter = 0
 result = list()
@@ -36,17 +44,16 @@ for filename in filename_list:
     # load csv:
     df = pd.read_csv(str(DataPath / filename_list[i]), skiprows=2)
     df.rename(columns={'sec': 'time', 'N': 'force_MTS', 'N.1': 'force_lc', 'mm': 'disp_MTS', 'mm.1': 'disp_ext'},
-    inplace = True)
+              inplace=True)
     i = i + 1
 
-    # filter signals:
+    # filter signals
     fs = 102.4  # sample rate, Hz
     cutoff = 5
     nyq = 0.5 * fs
     df['force_lc_filtered'] = butter_lowpass_filter(df['force_lc'], cutoff)
 
     # calculate stress and strain, filter & put into dataframe
-    Pi = 3.14159265
     l_initial = 6.5
     min_area_wp = results_uCT['Min Area (w porosity) mm^2'][counter]
     mean_area_wop = results_uCT['Mean Area (w/o porosity) mm^2'][counter]
@@ -60,11 +67,9 @@ for filename in filename_list:
     df['stress_lc_filtered_wop'] = butter_lowpass_filter(df['stress_lc_wop'], cutoff)
     counter = counter + 1
 
-    # find max value of stress_lc column
+    # find max value of stress_lc_wp column & locate index
     column = df['stress_lc_wp']
     max_stress_raw = column.max()
-
-    # locate index of max value
     row_max_stress = df.loc[df['stress_lc_wp'] == max_stress_raw]
     max_stress_index = row_max_stress.index
 
@@ -78,11 +83,9 @@ for filename in filename_list:
     ultimate_strain = np.round(row_max_strain['strain_ext'].values, 4)
     ultimate_strain = ultimate_strain[0]
 
-    # find max value of force_lc column
+    # find max value of force_lc column & find ultimate force (raw)
     column_force = df['force_lc']
     max_force_raw = column_force.max()
-
-    # search for ultimate force (raw)
     row_max_force = df.loc[df['force_lc'] == max_force_raw]
     max_force_index = row_max_force.index
 
@@ -96,130 +99,130 @@ for filename in filename_list:
     peaks_index, _ = find_peaks(df['force_lc'], width=200)
 
     # define range between last peak and second last peak to subsequently search for stress minimum as start point
-    start_range_strain_unload = df['strain_ext'][peaks_index[6]:peaks_index[7]]
-    start_range_stress_unload = df['stress_lc_filtered_wp'][peaks_index[6]:peaks_index[7]]
-    start_range_unload = pd.DataFrame()
-    start_range_unload['strain_ext'] = start_range_strain_unload
-    start_range_unload['stress_lc_filtered_wp'] = start_range_stress_unload
+    start_range_strain = df['strain_ext'][peaks_index[6]:peaks_index[7]]
+    start_range_stress = df['stress_lc_filtered_wp'][peaks_index[6]:peaks_index[7]]
+    start_range = pd.DataFrame()
+    start_range['strain_ext'] = start_range_strain
+    start_range['stress_lc_filtered_wp'] = start_range_stress
 
     # find smallest stress value & corresponding index as starting point
-    start_value_unload = min(start_range_unload['stress_lc_filtered_wp'])
-    start_ind_unload = start_range_unload.loc[start_range_unload['stress_lc_filtered_wp'] == start_value_unload]
-    start_index_unload = start_ind_unload.index
+    start_value = min(start_range['stress_lc_filtered_wp'])
+    start_ind = start_range.loc[start_range['stress_lc_filtered_wp'] == start_value]
+    start_index = start_ind.index
 
     # create dataframe using unloading part of last cycle
-    last_cycle_unloading = pd.DataFrame()
-    last_cycle_unloading['last_cycle_strain'] = df['strain_ext'].iloc[start_index_unload[0]:peaks_index[7]]
-    last_cycle_unloading['last_cycle_stress'] = df['stress_lc_filtered_wp'].iloc[start_index_unload[0]:peaks_index[7]]
+    last_cycle = pd.DataFrame()
+    last_cycle['last_cycle_strain'] = df['strain_ext'].iloc[start_index[0]:peaks_index[7]]
+    last_cycle['last_cycle_stress'] = df['stress_lc_filtered_wp'].iloc[start_index[0]:peaks_index[7]]
 
-    ## calculate stiffness using last unloading cycle
-    # create dataframe of final unloading cycle using start/end index
-    last_cycle_force_unload = df['force_lc_filtered'].iloc[start_index_unload[0]:peaks_index[7]]
-    last_cycle_disp_unload = df['disp_ext'].iloc[start_index_unload[0]:peaks_index[7]]
-    last_cycle_disp_unload = last_cycle_disp_unload.dropna().reset_index(drop=True)
-    last_cycle_force_unload = last_cycle_force_unload.dropna().reset_index(drop=True)
+    ## calculate stiffness using last unloading cycle of force/displacement data
+    # create dataframe of final unloading cycle using start/end index (same as for stress/strain)
+    last_cycle_force = df['force_lc_filtered'].iloc[start_index[0]:peaks_index[7]]
+    last_cycle_disp = df['disp_ext'].iloc[start_index[0]:peaks_index[7]]
+    last_cycle_disp = last_cycle_disp.dropna().reset_index(drop=True)
+    last_cycle_force = last_cycle_force.dropna().reset_index(drop=True)
 
-    last_cycle_fd_unload = pd.DataFrame()
-    last_cycle_fd_unload['last_cycle_disp_unload'] = round(last_cycle_disp_unload, 5)
-    last_cycle_fd_unload['last_cycle_force_unload'] = round(last_cycle_force_unload, 5)
+    last_cycle_fd = pd.DataFrame()
+    last_cycle_fd['last_cycle_disp'] = round(last_cycle_disp, 5)
+    last_cycle_fd['last_cycle_force'] = round(last_cycle_force, 5)
 
-    # calculate stiffness of last unloading cycle (preconditioning) by using rolling regression
-    window_width_unload = round(1 / 3 * (last_cycle_fd_unload.index[-1]))
-    slope_values_stiff_unload = list()
-    intercept_values_stiff_unload = list()
+    # define window width & initialize lists for slope/intercept value collection
+    window_width = round(1 / 3 * len(last_cycle_fd))
+    slope_values_stiff = list()
+    intercept_values_stiff = list()
 
     # rolling linear regression
-    for k in range(0, len(last_cycle_fd_unload) - 1 - window_width_unload + 1, 1):
-        last_cycle_mod_unload = last_cycle_fd_unload[k:k + window_width_unload]
-        slope_stiff_unload, intercept_stiff_unload, r_value, p_value, std_err = stats.linregress(
-            last_cycle_mod_unload['last_cycle_disp_unload'], last_cycle_mod_unload['last_cycle_force_unload'])
-        # collect slope value & add to growing list; same for intercept
-        slope_value_stiff_unload = slope_stiff_unload
-        slope_values_stiff_unload.append(slope_value_stiff_unload)
-        intercept_value_stiff_unload = intercept_stiff_unload
-        intercept_values_stiff_unload.append(intercept_value_stiff_unload)
+    for k in range(0, len(last_cycle_fd) - 1 - window_width + 1, 1):
+        last_cycle_mod = last_cycle_fd[k:k + window_width]
+        slope_stiff, intercept_stiff, r_value, p_value, std_err = stats.linregress(last_cycle_mod['last_cycle_disp'],
+                                                                                   last_cycle_mod['last_cycle_force'])
 
-    # Create DataFrames for slope/stiffness to search for max. values & corresponding indices; create cycle for plotting
-    slope_value_stiff_unload_df = pd.DataFrame(slope_values_stiff_unload)
-    intercept_values_stiff_unload_df = pd.DataFrame(intercept_values_stiff_unload)
-    stiffness = slope_value_stiff_unload_df.max()[0]
-    max_slope_index_stiff_unload = slope_value_stiff_unload_df[slope_value_stiff_unload_df == stiffness].dropna()
-    max_slope_index_stiff_unload = max_slope_index_stiff_unload.index
-    intercept_value_max_stiff_unload = intercept_values_stiff_unload_df.loc[max_slope_index_stiff_unload[0]].values[0]
-    last_cycle_unload_plot = last_cycle_fd_unload[max_slope_index_stiff_unload[0]:max_slope_index_stiff_unload[0] + window_width_unload]
+        # collect slope value & add to growing list; same for intercept
+        slope_value_stiff = slope_stiff
+        slope_values_stiff.append(slope_value_stiff)
+        intercept_value_stiff = intercept_stiff
+        intercept_values_stiff.append(intercept_value_stiff)
+
+    # Create DataFrames for slope or stiffness to search for max. values & indices; create cycle for plotting
+    slope_value_stiff_df = pd.DataFrame(slope_values_stiff)
+    intercept_values_stiff_df = pd.DataFrame(intercept_values_stiff)
+    stiffness = slope_value_stiff_df.max()[0]
+    max_slope_index_stiff = slope_value_stiff_df[slope_value_stiff_df == stiffness].dropna()
+    max_slope_index_stiff = max_slope_index_stiff.index
+    intercept_value_max_stiff = intercept_values_stiff_df.loc[max_slope_index_stiff[0]].values[0]
+    last_cycle_plot_fd = last_cycle_fd[max_slope_index_stiff[0]:max_slope_index_stiff[0] + window_width]
 
     # generate plot
     plt.figure(figsize=(6, 4))
     plt.title(sample_ID)
     plt.plot(df['disp_ext'][0:peaks_index[-1]], df['force_lc_filtered'][0:peaks_index[-1]], label='filtered')
-    plt.plot(last_cycle_fd_unload['last_cycle_disp_unload'], last_cycle_fd_unload['last_cycle_force_unload'],
-             label='last unloading cycle')
-    plt.plot(last_cycle_unload_plot['last_cycle_disp_unload'], last_cycle_unload_plot['last_cycle_force_unload'],
-             label='regress area', color='k')
-    plt.plot(last_cycle_unload_plot['last_cycle_disp_unload'], stiffness *
-             last_cycle_unload_plot['last_cycle_disp_unload'] + intercept_value_max_stiff_unload, 'r', label='fit')
+    plt.plot(last_cycle_fd['last_cycle_disp'], last_cycle_fd['last_cycle_force'],
+             label='lasting cycle')
+    plt.plot(last_cycle_plot_fd['last_cycle_disp'], last_cycle_plot_fd['last_cycle_force'], label='regress area',
+             color='k')
+    plt.plot(last_cycle_plot_fd['last_cycle_disp'], stiffness * last_cycle_plot_fd['last_cycle_disp'] +
+             intercept_value_max_stiff, 'r', label='fit')
     plt.plot([], ' ', label=f'stiffness = {stiffness:.0f} N/mm')
     plt.ylabel('force / N')
     plt.xlabel('disp / mm')
     plt.legend()
-    savepath = Cwd / '04_Results/00_Mineralized/00_force_disp/'
-    plt.savefig(os.path.join(savepath, 'force_disp_' + sample_ID + '.png'), dpi=300)
+    savepath_fd = Cwd / '04_Results/00_Mineralized/00_force_disp/'
+    plt.savefig(os.path.join(savepath_fd, 'force_disp_' + sample_ID + '.png'), dpi=300)
     plt.show()
     # plt.close()
 
     ## calculate apparent modulus using last unloading cycle
-    # create dataframe of final unloading cycle using start/end index
-    last_cycle_stress_unload = df['stress_lc_filtered_wop'].iloc[start_index_unload[0]:peaks_index[7]]
-    last_cycle_strain_unload = df['strain_ext'].iloc[start_index_unload[0]:peaks_index[7]]
-    last_cycle_strain_unload = last_cycle_strain_unload.dropna().reset_index(drop=True)
-    last_cycle_stress_unload = last_cycle_stress_unload.dropna().reset_index(drop=True)
+    # create dataframe of final unloading cycle using start/end index (same as above)
+    last_cycle_stress = df['stress_lc_filtered_wop'].iloc[start_index[0]:peaks_index[7]]
+    last_cycle_strain = df['strain_ext'].iloc[start_index[0]:peaks_index[7]]
+    last_cycle_strain = last_cycle_strain.dropna().reset_index(drop=True)
+    last_cycle_stress = last_cycle_stress.dropna().reset_index(drop=True)
 
-    last_cycle_ss_unload = pd.DataFrame()
-    last_cycle_ss_unload['last_cycle_strain_unload'] = round(last_cycle_strain_unload, 5)
-    last_cycle_ss_unload['last_cycle_stress_unload'] = round(last_cycle_stress_unload, 5)
+    last_cycle_ss = pd.DataFrame()
+    last_cycle_ss['last_cycle_strain'] = round(last_cycle_strain, 5)
+    last_cycle_ss['last_cycle_stress'] = round(last_cycle_stress, 5)
 
-    window_width_unload = round(1 / 3 * len(last_cycle_ss_unload))
-    slope_values_app_unload = list()
-    intercept_values_app_unload = list()
+    # define window width (same as for force/disp) & initialize lists for slope/intercept value collection
+    window_width = round(1 / 3 * len(last_cycle_ss))
+    slope_values_app = list()
+    intercept_values_app = list()
 
     # rolling linear regression to calculate apparent modulus of last unloading cycle
-    for k in range(len(last_cycle_ss_unload) - 1 - window_width_unload + 1):
-        last_cycle_mod_unload2 = last_cycle_ss_unload[k:k + window_width_unload]
-        slope_app_unload, intercept_app_unload, r_value, p_value, std_err = stats.linregress(
-            last_cycle_mod_unload2['last_cycle_strain_unload'],
-            last_cycle_mod_unload2['last_cycle_stress_unload'])
-        # collect slope value & add to growing list; same for intercept
-        slope_value_app_unload = slope_app_unload
-        slope_values_app_unload.append(slope_value_app_unload)
-        intercept_value_app_unload = intercept_app_unload
-        intercept_values_app_unload.append(intercept_value_app_unload)
+    for k in range(len(last_cycle_ss) - 1 - window_width + 1):
+        last_cycle_mod = last_cycle_ss[k:k + window_width]
+        slope_app, intercept_app, r_value, p_value, std_err = stats.linregress(last_cycle_mod['last_cycle_strain'],
+                                                                               last_cycle_mod['last_cycle_stress'])
+
+        # collect slope/intercept values & add to growing lists
+        slope_value_app = slope_app
+        slope_values_app.append(slope_value_app)
+        intercept_value_app = intercept_app
+        intercept_values_app.append(intercept_value_app)
 
     # Create DataFrames for slope/app. modulus to search for max. values & corresponding indices; create cycle for plot
-    slope_value_app_unload_df = pd.DataFrame(slope_values_app_unload)
-    intercept_values_app_unload_df = pd.DataFrame(intercept_values_app_unload)
-    apparent_modulus = slope_value_app_unload_df.max()[0]
-    max_slope_index_app_unload = slope_value_app_unload_df[slope_value_app_unload_df == apparent_modulus].dropna()
-    max_slope_index_app_unload = max_slope_index_app_unload.index
-    intercept_value_max_app_unload = intercept_values_app_unload_df.loc[max_slope_index_app_unload[0]].values[0]
-    last_cycle_unload_plot = last_cycle_ss_unload[max_slope_index_app_unload[0]:max_slope_index_app_unload[0] +
-                                                                                window_width_unload]
+    slope_value_app_df = pd.DataFrame(slope_values_app)
+    intercept_values_app_df = pd.DataFrame(intercept_values_app)
+    apparent_modulus = slope_value_app_df.max()[0]
+    max_slope_index_app = slope_value_app_df[slope_value_app_df == apparent_modulus].dropna()
+    max_slope_index_app = max_slope_index_app.index
+    intercept_value_max_app = intercept_values_app_df.loc[max_slope_index_app[0]].values[0]
+    last_cycle_plot_ss = last_cycle_ss[max_slope_index_app[0]:max_slope_index_app[0] + window_width]
 
     # generate plot
     plt.figure(figsize=(6, 4))
     plt.title(sample_ID)
     plt.plot(df['strain_ext'][0:peaks_index[-1]], df['stress_lc_filtered_wop'][0:peaks_index[-1]], label='filtered')
-    plt.plot(last_cycle_ss_unload['last_cycle_strain_unload'], last_cycle_ss_unload['last_cycle_stress_unload'],
-             label='last unloading cycle')
-    plt.plot(last_cycle_unload_plot['last_cycle_strain_unload'], last_cycle_unload_plot['last_cycle_stress_unload'],
-             label='regress area', color='k')
-    plt.plot(last_cycle_unload_plot['last_cycle_strain_unload'], apparent_modulus *
-             last_cycle_unload_plot['last_cycle_strain_unload'] + intercept_value_max_app_unload, 'r', label='fit')
+    plt.plot(last_cycle_ss['last_cycle_strain'], last_cycle_ss['last_cycle_stress'], label='lasting cycle')
+    plt.plot(last_cycle_plot_ss['last_cycle_strain'], last_cycle_plot_ss['last_cycle_stress'], label='regress area',
+             color='k')
+    plt.plot(last_cycle_plot_ss['last_cycle_strain'], apparent_modulus * last_cycle_plot_ss['last_cycle_strain'] +
+             intercept_value_max_app, 'r', label='fit')
     plt.plot([], ' ', label=f'apparent modulus = {apparent_modulus:.0f} MPa')
     plt.ylabel('stress / MPa')
     plt.xlabel('strain / -')
     plt.legend()
-    savepath = Cwd / '04_Results/01_Demineralized/01_stress_strain/'
-    plt.savefig(os.path.join(savepath, 'stress_strain_' + sample_ID + '.png'), dpi=300)
+    savepath_ss = Cwd / '04_Results/01_Demineralized/01_stress_strain/'
+    plt.savefig(os.path.join(savepath_ss, 'stress_strain_' + sample_ID + '.png'), dpi=300)
     plt.show()
     # plt.close()
 
@@ -237,5 +240,4 @@ result_dir = pd.concat([result_dir, missing_sample_IDs])
 result_dir_sorted = result_dir.sort_values(by=['Sample ID'], ascending=True)
 
 result_dir_sorted.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/01_Demineralized/',
-                               'ResultsFailureTesting.csv'), index=False)
-
+                                      'ResultsFailureTesting.csv'), index=False)
