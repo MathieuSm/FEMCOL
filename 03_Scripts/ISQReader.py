@@ -371,7 +371,8 @@ if __name__ == '__main__':
     # Add long and short optional arguments
     ScriptVersion = Parser.prog + ' version ' + Version
     Parser.add_argument('-v', '--Version', help='Show script version', action='version', version=ScriptVersion)
-    Parser.add_argument('--BMD', default=False, help='Convert gray values to BMD (bool), !!! Depends on voltage, current and time !!!', type=bool)
+    Parser.add_argument('--BMD', default=False, help='Convert gray values to BMD (bool), !!! Depends on voltage, '
+                                                     'current and time !!!', type=bool)
     Parser.add_argument('--Echo', default=True, help='Print out current operation and results (bool)', type=bool)
 
     # Read arguments from the command line
