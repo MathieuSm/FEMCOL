@@ -38,6 +38,7 @@ def PlotRegressionResults(Model, Data, Alpha=0.95):
     CI_Line_o = Y_Fit + t_Alpha[1] * SE * B_0
     CI_l = FitResults.conf_int()[0][1]
     CI_r = FitResults.conf_int()[1][1]
+    p = FitResults.pvalues[1]
 
     if abs(CI_l) >= 100:
         CI_l = round(CI_l)
@@ -72,29 +73,54 @@ def PlotRegressionResults(Model, Data, Alpha=0.95):
     elif abs(SE) < 0.001:
         SE = '{:.1e}'.format(SE)
 
+    if p < 0.001:
+        p = '{:.1e}'.format(p)
+    else:
+        p = round(p, 3)
+
     ## Plots
     DPI = 300
     savepath = Cwd / '04_Results/04_Plots/'
     Figure, Axes = plt.subplots(1, 1, figsize=(5.5, 4.5), dpi=DPI, sharey=True, sharex=True)
-    Axes.plot(X[:, 1], Y_Fit, color=(1, 0, 0), label='Fit')
-    # Axes.fill_between(X_Obs, np.sort(CI_Line_o), np.sort(CI_Line_u), color=(0, 0, 0), alpha=0.1, label=str(int(
-    #     Alpha*100)) + '% CI')
-    Axes.plot(X[:, 1][Data['Gender'] == 'M'], Y_Obs[Data['Gender'] == 'M'], linestyle='none', marker='o',
-              color=(0, 0, 1), fillstyle='none', label='male')
-    Axes.plot(X[:, 1][Data['Gender'] == 'F'], Y_Obs[Data['Gender'] == 'F'], linestyle='none', marker='x',
-              color=(0, 0, 1), fillstyle='none', label='female')
-    Axes.annotate(r'$N$  : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
-    Axes.annotate(r'$R^2$ : ' + format(round(R2, 2), '.2f'), xy=(0.05, 0.25), xycoords='axes fraction')
-    Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
-    Axes.annotate(r'$p$ : ' + format(round(FitResults.pvalues[1], 3), '.3f'), xy=(0.05, 0.1), xycoords='axes fraction')
-    Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025), xycoords='axes fraction')
-    Axes.set_ylabel(Data.columns[2])
-    Axes.set_xlabel(Data.columns[1])
-    plt.subplots_adjust(left=0.15, bottom=0.15)
-    plt.legend(loc='upper left')
-    plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'), dpi=300)
-    plt.show()
-    plt.close(Figure)
+    if float(p) <= 0.05:
+        Axes.plot(X[:, 1], Y_Fit, color=(1, 0, 0), label='Fit')
+        # Axes.fill_between(X_Obs, np.sort(CI_Line_o), np.sort(CI_Line_u), color=(0, 0, 0), alpha=0.1, label=str(int(
+        #  Alpha*100)) + '% CI')
+        Axes.plot(X[:, 1][Data['Gender'] == 'M'], Y_Obs[Data['Gender'] == 'M'], linestyle='none', marker='o',
+                  color=(0, 0, 1), fillstyle='none', label='male')
+        Axes.plot(X[:, 1][Data['Gender'] == 'F'], Y_Obs[Data['Gender'] == 'F'], linestyle='none', marker='x',
+                  color=(0, 0, 1), fillstyle='none', label='female')
+        Axes.annotate(r'$N$  : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
+        Axes.annotate(r'$R^2$ : ' + format(round(R2, 2), '.2f'), xy=(0.05, 0.25), xycoords='axes fraction')
+        Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
+        Axes.annotate(r'$p$ : ' + str(p), xy=(0.05, 0.1), xycoords='axes fraction')
+        Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025), xycoords='axes fraction')
+        Axes.set_ylabel(Data.columns[2])
+        Axes.set_xlabel(Data.columns[1])
+        plt.subplots_adjust(left=0.15, bottom=0.15)
+        plt.legend(loc='upper left')
+        plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'), dpi=300)
+        plt.show()
+        plt.close(Figure)
+    else:
+        # Axes.fill_between(X_Obs, np.sort(CI_Line_o), np.sort(CI_Line_u), color=(0, 0, 0), alpha=0.1, label=str(int(
+        #  Alpha*100)) + '% CI')
+        Axes.plot(X[:, 1][Data['Gender'] == 'M'], Y_Obs[Data['Gender'] == 'M'], linestyle='none', marker='o',
+                  color=(0, 0, 1), fillstyle='none', label='male')
+        Axes.plot(X[:, 1][Data['Gender'] == 'F'], Y_Obs[Data['Gender'] == 'F'], linestyle='none', marker='x',
+                  color=(0, 0, 1), fillstyle='none', label='female')
+        Axes.annotate(r'$N$  : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
+        Axes.annotate(r'$R^2$ : ' + format(round(R2, 2), '.2f'), xy=(0.05, 0.25), xycoords='axes fraction')
+        Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
+        Axes.annotate(r'$p$ : ' + format(round(p, 3), '.3f'), xy=(0.05, 0.1), xycoords='axes fraction')
+        Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025), xycoords='axes fraction')
+        Axes.set_ylabel(Data.columns[2])
+        Axes.set_xlabel(Data.columns[1])
+        plt.subplots_adjust(left=0.15, bottom=0.15)
+        plt.legend(loc='upper left')
+        plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'), dpi=300)
+        plt.show()
+        plt.close(Figure)
 
 # Set directory & load data
 Cwd = Path.cwd()
@@ -113,9 +139,9 @@ print(ColumnNames)
 
 # Create plots by using indices of specific variable names
 x_numbers = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 20, 18, 18, 17, 17, 4, 22, 24, 15, 11, 11, 11, 26,
-             12, 12]
+             12, 12, 20, 20]
 y_numbers = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 3, 4, 6, 4, 6, 9, 9, 4, 6, 6, 3, 8, 6, 8,
-             3]
+             3, 12, 14]
 
 # Check if x_numbers and y_numbers are of equal length -> if not: abort script
 if len(x_numbers) != len(y_numbers):
@@ -124,7 +150,7 @@ if len(x_numbers) != len(y_numbers):
 else:
     # for loop to iterate through lists of numbers & create plots
     results = list()
-    for i in range(len(x_numbers)-1):
+    for i in range(len(x_numbers)):
         x_axis = ColumnNames['Column Names'][x_numbers[i]]
         y_axis = ColumnNames['Column Names'][y_numbers[i]]
         x_axis_abbrev = ColumnNames['Abbreviations'][x_numbers[i]]
@@ -182,13 +208,17 @@ else:
         elif abs(SE) < 0.001:
             SE = '{:.1e}'.format(SE)
 
+        if p < 0.001:
+            p = '{:.1e}'.format(p)
+        else:
+            p = round(p, 3)
+
         # Put everything into growing list and convert to DataFrame that is saved as .csv file
-        values = [x_axis, y_axis, round(p, 4), SE, round(R2, 3), N, CI_l, CI_r]
+        values = [x_axis, y_axis, p, SE, round(R2, 3), N, CI_l, CI_r]
         results.append(values)
         result_dir = pd.DataFrame(results, columns=['X-axis', 'Y-axis', 'p-value', '\u03C3\u2091\u209B\u209C',
                                                     'R\u00B2', 'N', 'lower bound 95% CI', 'upper bound 95% CI'])
         result_dir.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/04_Plots/',
-                                              'ResultsPlots.csv'), index=False)
+                                       'ResultsPlots.csv'), index=False)
 
         # print(FitResults.conf_int())
-
