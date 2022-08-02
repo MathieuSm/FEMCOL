@@ -52,8 +52,6 @@ results_merged['Mean Equivalent Diameter (w/o porosity) mm'] = results_uCT['Mean
 results_merged['Mean Area Fraction -'] = results_uCT['Mean Area Fraction -']
 results_merged['Min Area Fraction -'] = results_uCT['Min Area Fraction -']
 results_merged['Max Area Fraction -'] = results_uCT['Max Area Fraction -']
-results_merged = results_merged.drop(index=[39], axis=0)
-results_merged = results_merged.reset_index(drop=True)
 results_merged.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/', 'ResultsOverview.csv'),
                       index=False)
 
