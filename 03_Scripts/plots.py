@@ -4,11 +4,16 @@
 from pathlib import Path                 # Used to manage path variables in windows or linux
 import numpy as np                       # Used to do arrays (matrices) computations namely
 import pandas as pd                      # Used to manage data frames
+import seaborn
+import seaborn as sns
 import matplotlib.pyplot as plt          # Used to perform plots
 import statsmodels.formula.api as smf    # Used for statistical analysis (ols here)
 import os
 from scipy.stats.distributions import t  # Used to compute confidence intervals
 import sys
+import matplotlib.colors as col
+import matplotlib as mpl
+
 
 # Define some functions
 def PlotRegressionResults(Model, Data, Alpha=0.95):
@@ -84,8 +89,8 @@ def PlotRegressionResults(Model, Data, Alpha=0.95):
     Figure, Axes = plt.subplots(1, 1, figsize=(5.5, 4.5), dpi=DPI, sharey=True, sharex=True)
     if float(p) <= 0.05:
         Axes.plot(X[:, 1], Y_Fit, color=(1, 0, 0), label='Fit')
-        # Axes.fill_between(X_Obs, np.sort(CI_Line_o), np.sort(CI_Line_u), color=(0, 0, 0), alpha=0.1, label=str(int(
-        #  Alpha*100)) + '% CI')
+        Axes.fill_between(X_Obs, np.sort(CI_Line_o), np.sort(CI_Line_u), color=(0, 0, 0), alpha=0.1, label=str(int(
+         Alpha*100)) + '% CI')
         Axes.plot(X[:, 1][Data['Gender'] == 'M'], Y_Obs[Data['Gender'] == 'M'], linestyle='none', marker='o',
                   color=(0, 0, 1), fillstyle='none', label='male')
         Axes.plot(X[:, 1][Data['Gender'] == 'F'], Y_Obs[Data['Gender'] == 'F'], linestyle='none', marker='x',
@@ -155,7 +160,7 @@ else:
         y_axis = ColumnNames['Column Names'][y_numbers[i]]
         x_axis_abbrev = ColumnNames['Abbreviations'][x_numbers[i]]
         y_axis_abbrev = ColumnNames['Abbreviations'][y_numbers[i]]
-        Data = df.filter(['Sample ID', x_axis, y_axis, 'Gender']).dropna()
+        Data = df.filter(['Sample ID', x_axis, y_axis, 'Gender', 'Age']).dropna()
         Data2Fit = Data.copy()
         Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
         Data2Fit = Data2Fit.set_index('SID')
