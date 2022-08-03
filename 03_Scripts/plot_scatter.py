@@ -2,10 +2,10 @@
 
 # Import standard packages
 from pathlib import Path                 # Used to manage path variables in windows or linux
+
+import matplotlib.image
 import numpy as np                       # Used to do arrays (matrices) computations namely
 import pandas as pd                      # Used to manage data frames
-import seaborn
-import seaborn as sns
 import matplotlib.pyplot as plt          # Used to perform plots
 import statsmodels.formula.api as smf    # Used for statistical analysis (ols here)
 import os
@@ -83,6 +83,7 @@ def PlotRegressionResults(Model, Data, Alpha=0.95):
     else:
         p = round(p, 3)
 
+
     ## Plots
     DPI = 300
     savepath = '/home/stefan/Documents/PythonScripts/04_Results/04_Plots/'
@@ -99,6 +100,12 @@ def PlotRegressionResults(Model, Data, Alpha=0.95):
         Axes.scatter(X_np[:, 1][Data['Gender'] == 'F'], Y_Obs_np[Data['Gender'] == 'F'],
                      c=list(tuple(female_age.tolist())), cmap='plasma_r', vmin=Data['Age'].min(), vmax=Data['Age'].max()
                      , label='female', marker='o')
+        ax = plt.gca()
+        # for PCM in ax.get_children():
+        #     if type(PCM) == matplotlib.image.AxesImage:
+        #         break
+        PCM = ax.get_children()[2]
+        plt.colorbar(PCM, ax=ax)
         Axes.annotate(r'$N$  : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
         Axes.annotate(r'$R^2$ : ' + format(round(R2, 2), '.2f'), xy=(0.05, 0.25), xycoords='axes fraction')
         Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
@@ -108,10 +115,11 @@ def PlotRegressionResults(Model, Data, Alpha=0.95):
         Axes.set_xlabel(Data.columns[1])
         plt.subplots_adjust(left=0.15, bottom=0.15)
         plt.legend(loc='upper left')
-        # plt.colorbar()
-        plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'), dpi=300)
+        # plt.colorbar(label='Age y', Orientation='vertical')
+        # plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'), dpi=300)
         plt.show()
-        plt.close(Figure)
+        # plt.close(Figure)
+
 
         # test_plot = plt.scatter(df['Bone Mineral Content mg HA'], df['Mineral Weight g'], c=df['Age'], cmap='viridis', vmin=64, vmax=96)
         # test_data = [[1000, 0.24], [1200, 0.24], [1400, 0.24]]
@@ -128,6 +136,9 @@ def PlotRegressionResults(Model, Data, Alpha=0.95):
         Axes.scatter(X_np[:, 1][Data['Gender'] == 'F'], Y_Obs_np[Data['Gender'] == 'F'],
                      c=list(tuple(female_age.tolist())), cmap='plasma_r', vmin=Data['Age'].min(), vmax=Data['Age'].max(),
                      label='female', marker='o')
+        ax = plt.gca()
+        PCM = ax.get_children()
+        plt.colorbar(PCM, ax=ax, label='Age y')
         Axes.annotate(r'$N$  : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
         Axes.annotate(r'$R^2$ : ' + format(round(R2, 2), '.2f'), xy=(0.05, 0.25), xycoords='axes fraction')
         Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
@@ -137,14 +148,15 @@ def PlotRegressionResults(Model, Data, Alpha=0.95):
         Axes.set_xlabel(Data.columns[1])
         plt.subplots_adjust(left=0.15, bottom=0.15)
         plt.legend(loc='upper left')
-        # plt.colorbar()
-        plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'), dpi=300)
+        # plt.colorbar(label='Age y', Orientation='vertical')
+        # plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'), dpi=300)
         plt.show()
-        plt.close(Figure)
+        # plt.close(Figure)
 
 # Set directory & load data
 Cwd = Path.cwd()
-DataPath = '/home/stefan/Documents/PythonScripts/04_Results/ResultsOverview.csv'
+# DataPath = '/home/stefan/Documents/PythonScripts/04_Results/ResultsOverview.csv'
+DataPath = 'C:/Users/Stefan/Dropbox/02_MScThesis/09_Results/ResultsOverview.csv'
 df = pd.read_csv(str(DataPath), skiprows=0)
 SampleID = df['Sample ID'].values.tolist()
 
@@ -236,7 +248,6 @@ else:
         results.append(values)
         result_dir = pd.DataFrame(results, columns=['X-axis', 'Y-axis', 'p-value', '\u03C3\u2091\u209B\u209C',
                                                     'R\u00B2', 'N', 'lower bound 95% CI', 'upper bound 95% CI'])
-        result_dir.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/04_Plots/',
-                                       'ResultsPlots.csv'), index=False)
+        result_dir.to_csv(os.path.join('C:/Users/Stefan/Dropbox/02_MScThesis/09_Results/04_Plots/ResultsPlots.csv'), index=False)
 
         # print(FitResults.conf_int())
