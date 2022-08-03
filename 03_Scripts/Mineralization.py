@@ -23,7 +23,7 @@ Data = Data.drop('Remark', axis=1)
 Data = Data.dropna().reset_index(drop=True)
 MeanOtsu = pd.read_csv('/home/stefan/Documents/PythonScripts/04_Results/03_uCT/MeanOtsu.csv')
 print(Data)
-print('Mean Otsu Threshold = ' + MeanOtsu.loc[0][0])
+print('Mean Otsu Threshold = ' + str(MeanOtsu.loc[0][0]))
 
 results = list()
 Pi = 3.14159265
@@ -42,7 +42,7 @@ for x in range(0, len(Data), 1):
 
     # Plot XY mid-plane
     Size = np.array(Scan.shape[1:]) / 100
-    Figure, Axis = plt.subplots(1,1, figsize=(Size[1], Size[0]))
+    Figure, Axis = plt.subplots(1, 1, figsize=(Size[1], Size[0]))
     Axis.imshow(Scan[ZMid, :, :], cmap='bone')
     Axis.axis('off')
     plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
@@ -93,8 +93,8 @@ for x in range(0, len(Data), 1):
     Axis.plot(X0 + RotatedEllipse[0, :], Y0 - RotatedEllipse[1, :], color=(0, 1, 0), label='Fitted ellipse')
     Axis.axis('off')
     plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
-    # plt.show()
-    plt.close()
+    plt.show()
+    # plt.close()
 
     # Build full cylinder representing the sample
     Disk = morphology.disk(int(round(RegionProperties.equivalent_diameter/2)))
@@ -148,10 +148,13 @@ for x in range(0, len(Data), 1):
     Areas = np.zeros(Scan.shape[0])
     Areas_full = np.zeros(Scan.shape[0])
     Areas_fraction = np.zeros(Scan.shape[0])
+    BoneVolumes = np.zeros(Scan.shape[0])
+
     for i in range(Scan.shape[0]):
         Areas[i] = BinaryScan[i].sum() * Area * 1e06
         Areas_full[i] = Cylinder[i].sum() * Area * 1e06
         Areas_fraction[i] = Areas[i] / Areas_full[i]
+        BoneVolumes[i] = Areas[i] * Voxel_Dimensions[2] * 1e03
     min_Area_wp = round(Areas.min(), 3)
     max_Area_wp = round(Areas.max(), 3)
     mean_Area_wop = round(statistics.mean(Areas_full), 3)
@@ -161,18 +164,24 @@ for x in range(0, len(Data), 1):
     min_area_fraction = round(Areas_fraction.min(), 3)
     max_area_fraction = round(Areas_fraction.max(), 3)
     mean_area_fraction = round(statistics.mean(Areas_fraction), 3)
+    TotalVolume_mean = mean_Area_wop * 946 * Voxel_Dimensions[0] * 1e03
+    TotalVolume_filled = RegionProperties.area
+
+    BVTV_new = round(BoneVolumes.sum() / TotalVolume_mean, 3)
 
     # Collect data into filling list
     SampleID = Data.loc[SampleNumber, 'Sample']
-    values = [SampleID, BVTV, BMD, TMD, BMC, min_Area_wp, min_Diam_wp, mean_Area_wop, mean_Diam_wop, mean_area_fraction,
-              min_area_fraction, max_area_fraction]
+    values = [SampleID, BVTV, BVTV_new, BMD, TMD, BMC, min_Area_wp, min_Diam_wp, mean_Area_wop, mean_Diam_wop,
+              mean_area_fraction, min_area_fraction, max_area_fraction]
     results.append(values)
+
+    print(x)
 
 # Add missing samples
 missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '402L']})
 
 # convert list to dataframe
-result_dir = pd.DataFrame(results, columns=['Sample ID', 'Bone Volume Fraction -', 'Bone Mineral Density mg HA / cm3',
+result_dir = pd.DataFrame(results, columns=['Sample ID', 'Bone Volume Fraction -', 'Bone Volume Fraction new -','Bone Mineral Density mg HA / cm3',
                                             'Tissue Mineral Density mg HA / cm3', 'Bone Mineral Content mg HA',
                                             'Min Area (w porosity) mm^2', 'Min Diam (w porosity) mm',
                                             'Mean Area (w/o porosity) mm^2', 'Mean Diameter (w/o porosity) mm',

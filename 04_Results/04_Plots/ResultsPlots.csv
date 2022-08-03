@@ -1,22 +1,4 @@
 X-axis,Y-axis,p-value,σₑₛₜ,R²,N,lower bound 95% CI,upper bound 95% CI
-Age,Stiffness Mineralized N/mm,0.028,853.0,0.143,34,-73.0,-4.6
-Age,Apparent Modulus Mineralized MPa,0.059,1764.0,0.107,34,-139,2.6
-Age,Ultimate Force N,0.002,12.5,0.27,33,-1.3,-0.332
-Age,Ultimate Stress MPa,0.004,4.3,0.237,33,-0.44,-0.091
-Age,Ultimate Strain -,0.142,0.011,0.068,33,-7.46e-04,1.12e-04
-Age,Stiffness Demineralized N/mm,0.005,18.7,0.228,33,-1.9,-0.365
-Age,Apparent Modulus Demineralized MPa,0.006,37.9,0.22,33,-3.8,-0.69
-Age,Density g/cm³,0.183,0.054,0.047,39,-0.003,6.73e-04
-Age,Organic Weight g,0.268,0.019,0.033,39,-0.001,3.13e-04
-Age,Mineral Weight g,0.274,0.033,0.032,39,-0.002,5.63e-04
-Age,Water Weight g,0.331,0.006,0.026,39,-1.15e-04,3.33e-04
-Age,Mineral weight fraction -,0.22,0.01,0.04,39,-6.29e-04,1.50e-04
-Age,Organic weight fraction -,0.417,0.006,0.018,39,-3.34e-04,1.42e-04
-Age,Water weight fraction -,0.18,0.013,0.048,39,-1.62e-04,8.34e-04
-Age,Bone Volume Fraction -,0.93,0.049,0.0,36,-0.002,0.002
-Age,Bone Mineral Density mg HA / cm³,0.861,59.2,0.001,36,-2.1,2.5
-Age,Tissue Mineral Density mg HA / cm³,0.288,17.1,0.033,36,-0.317,1.0
-Age,Bone Mineral Content mg HA,0.869,136.0,0.001,36,-4.9,5.8
 Bone Mineral Content mg HA,Stiffness Mineralized N/mm,0.043,870.0,0.126,33,0.086,4.7
 Bone Mineral Density mg HA / cm³,Apparent Modulus Mineralized MPa,0.004,1647.0,0.237,33,5.3,25.6
 Bone Mineral Density mg HA / cm³,Ultimate Stress MPa,0.289,4.9,0.037,32,-0.047,0.014
