@@ -11,12 +11,12 @@ import statsmodels.formula.api as smf    # Used for statistical analysis (ols he
 import os
 from scipy.stats.distributions import t  # Used to compute confidence intervals
 import sys
-import matplotlib.colors as col
+import seaborn as sns
 
 # Set directory & load data
 Cwd = Path.cwd()
-# DataPath = '/home/stefan/Documents/PythonScripts/04_Results/ResultsOverview.csv'
-DataPath = 'C:/Users/Stefan/Dropbox/02_MScThesis/09_Results/ResultsOverview.csv'
+DataPath = '/home/stefan/Documents/PythonScripts/04_Results/ResultsOverview.csv'
+# DataPath = 'C:/Users/Stefan/Dropbox/02_MScThesis/09_Results/ResultsOverview.csv'
 df = pd.read_csv(str(DataPath), skiprows=0)
 SampleID = df['Sample ID'].values.tolist()
 
@@ -30,8 +30,10 @@ ColumnNames['Abbreviations'] = column_names_abbrev
 print(ColumnNames)
 
 # Create plots by using indices of specific variable names
-x_numbers = [20, 18, 18, 17, 17, 4, 22, 24, 15, 11, 11, 11, 26, 12, 12, 20, 20]
-y_numbers = [3, 4, 6, 4, 6, 9, 9, 4, 6, 6, 3, 8, 6, 8, 3, 12, 14]
+x_numbers = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 20, 18, 18, 17, 17, 4, 22, 24, 15, 11, 11, 11, 26,
+             12, 12, 20, 20]
+y_numbers = [9, 4, 20, 18, 17, 10, 12, 14, 11, 15, 8, 3, 19, 5, 7, 6, 13, 16, 3, 4, 6, 4, 6, 9, 9, 4, 6, 6, 3, 8, 6,
+             8, 3, 12, 14]
 
 # Check if x_numbers and y_numbers are of equal length -> if not: abort script
 if len(x_numbers) != len(y_numbers):
@@ -40,6 +42,8 @@ if len(x_numbers) != len(y_numbers):
 else:
     # for loop to iterate through lists of numbers & create plots
     results = list()
+
+    j = 0
     for i in range(len(x_numbers)):
         x_axis = ColumnNames['Column Names'][x_numbers[i]]
         y_axis = ColumnNames['Column Names'][y_numbers[i]]
@@ -51,11 +55,10 @@ else:
         Data2Fit = Data2Fit.set_index('SID')
         FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
 
-        # PlotRegressionResults(FitResults, Data)
-
         # Calculate R^2, p-value, 95% CI, SE, N
         Y_Obs = FitResults.model.endog
         Y_Fit = FitResults.fittedvalues
+
         E = Y_Obs - Y_Fit
         RSS = np.sum(E ** 2)
         SE = np.sqrt(RSS / FitResults.df_resid)
@@ -64,6 +67,22 @@ else:
         N = int(FitResults.nobs)
         R2 = FitResults.rsquared
         p = FitResults.pvalues[1]
+        X = np.matrix(FitResults.model.exog)
+        X_Obs = np.sort(np.array(X[:, 1]).reshape(len(X)))
+        C = np.matrix(FitResults.cov_params())
+        B_0 = np.sqrt(np.diag(np.abs(X * C * X.T)))
+        Alpha = 0.95
+        t_Alpha = t.interval(Alpha, N - X.shape[1] - 1)
+        CI_Line_u = Y_Fit + t_Alpha[0] * SE * B_0
+        CI_Line_o = Y_Fit + t_Alpha[1] * SE * B_0
+
+        DPI = 300
+        savepath = '/home/stefan/Documents/PythonScripts/04_Results/04_Plots/'
+        Figure, Axes = plt.subplots(1, 1, figsize=(5.5, 4.5), dpi=DPI, sharey=True, sharex=True)
+        male_age = Data[Data['Gender'] == 'M']['Age']
+        female_age = Data[Data['Gender'] == 'F']['Age']
+        X_np = np.array(X)
+        Y_Obs_np = np.array(Y_Obs)
 
         # Requirements for rounding: depending on value
         if abs(CI_l) >= 100:
@@ -104,11 +123,161 @@ else:
         else:
             p = round(p, 3)
 
+        autoscale_list = pd.DataFrame({'x_axis_abbrev': ['Age', 'Age', 'Age', 'Age', 'Age', 'Age', 'BMC'],
+                                       'y_axis_abbrev': ['BMD', 'BVTV', 'D', 'MWF', 'OWF', 'TMD', 'MWF']})
+        if float(p) <= 0.05:
+            if x_axis != 'Age':
+                # sns.regplot(x=X_np[:, 1], y=Y_Fit, color='0.7', scatter=False)
+                Axes.plot(X[:, 1], Y_Fit, color=(1, 0, 0), label='Fit')
+                # Axes.fill_between(X_Obs, np.sort(CI_Line_o), np.sort(CI_Line_u), color=(0, 0, 0), alpha=0.1,
+                #                   label=str(int(Alpha * 100)) + '% CI')
+                Axes.scatter(X_np[:, 1][Data['Gender'] == 'M'], Y_Obs_np[Data['Gender'] == 'M'],
+                             c=list(tuple(male_age.tolist())), cmap='plasma_r', vmin=Data['Age'].min(),
+                             vmax=Data['Age'].max(), label='male', marker='s')
+                Axes.scatter(X_np[:, 1][Data['Gender'] == 'F'], Y_Obs_np[Data['Gender'] == 'F'],
+                             c=list(tuple(female_age.tolist())), cmap='plasma_r', vmin=Data['Age'].min(),
+                             vmax=Data['Age'].max(), label='female', marker='o')
+                Regression_line = FitResults.params[1] * X_np[:, 1] + FitResults.params[0]
+                ax = plt.gca()
+                PCM = ax.get_children()[2]
+                plt.colorbar(PCM, ax=ax, label='Age y')
+                Axes.annotate(r'$N$ : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
+                Axes.annotate(r'$R^2$ : ' + format(round(R2, 2), '.2f'), xy=(0.05, 0.25), xycoords='axes fraction')
+                Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
+                Axes.annotate(r'$p$ : ' + str(p), xy=(0.05, 0.1), xycoords='axes fraction')
+                Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025),
+                              xycoords='axes fraction')
+                Axes.set_ylabel(Data.columns[2])
+                Axes.set_xlabel(Data.columns[1])
+
+                if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
+                    # plt.ylim(ymin=0, ymax=round(Y_Fit.max() * 1.2, 2))
+                    plt.autoscale()
+                    plt.subplots_adjust(left=0.15, bottom=0.15)
+                    plt.legend(loc='lower right')
+                    plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                                dpi=300)
+                    plt.show()
+                    j = j + 1
+                else:
+                    plt.ylim(ymin=0)
+                    plt.subplots_adjust(left=0.15, bottom=0.15)
+                    plt.legend(loc='lower right')
+                    plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                                dpi=300)
+                    plt.show()
+                # plt.close(Figure)
+
+            else:
+                # sns.regplot(x=X_np[:, 1], y=Y_Fit, color='0.7', scatter=False)
+                Axes.plot(X[:, 1], Y_Fit, color=(1, 0, 0), label='Fit')
+                # Axes.fill_between(X_Obs, np.sort(CI_Line_o), np.sort(CI_Line_u), color=(0, 0, 0), alpha=0.1,
+                #                   label=str(int(Alpha*100)) + '% CI')
+                Axes.plot(X[:, 1][Data['Gender'] == 'M'], Y_Obs[Data['Gender'] == 'M'], linestyle='none', marker='s',
+                          color=(0, 0, 0), fillstyle='none', label='male')
+                Axes.plot(X[:, 1][Data['Gender'] == 'F'], Y_Obs[Data['Gender'] == 'F'], linestyle='none', marker='o',
+                          color=(0, 0, 0), fillstyle='none', label='female')
+                Axes.annotate(r'$N$ : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
+                Axes.annotate(r'$R^2$ : ' + format(round(R2, 2), '.2f'), xy=(0.05, 0.25), xycoords='axes fraction')
+                Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
+                Axes.annotate(r'$p$ : ' + str(p), xy=(0.05, 0.1), xycoords='axes fraction')
+                Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025),
+                              xycoords='axes fraction')
+                Axes.set_ylabel(Data.columns[2])
+                Axes.set_xlabel(Data.columns[1])
+
+                if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
+                    # plt.ylim(ymin=0, ymax=round(Y_Fit.max() * 1.2, 2))
+                    plt.autoscale()
+                    plt.subplots_adjust(left=0.15, bottom=0.15)
+                    plt.legend(loc='lower right')
+                    plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                                dpi=300)
+                    plt.show()
+                    j = j + 1
+                else:
+                    plt.ylim(ymin=0)
+                    plt.subplots_adjust(left=0.15, bottom=0.15)
+                    plt.legend(loc='lower right')
+                    plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                                dpi=300)
+                    plt.show()
+                # plt.close(Figure)
+        else:
+            if x_axis != 'Age':
+                Axes.scatter(X_np[:, 1][Data['Gender'] == 'M'], Y_Obs_np[Data['Gender'] == 'M'],
+                             c=list(tuple(male_age.tolist())), cmap='plasma_r', vmin=Data['Age'].min(),
+                             vmax=Data['Age'].max(), label='male', marker='s')
+                Axes.scatter(X_np[:, 1][Data['Gender'] == 'F'], Y_Obs_np[Data['Gender'] == 'F'],
+                             c=list(tuple(female_age.tolist())), cmap='plasma_r', vmin=Data['Age'].min(),
+                             vmax=Data['Age'].max(), label='female', marker='o')
+                ax = plt.gca()
+                PCM = ax.get_children()[0]
+                plt.colorbar(PCM, ax=ax, label='Age y')
+                Axes.annotate(r'$N$ : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
+                Axes.annotate(r'$R^2$ : ' + format(round(R2, 2), '.2f'), xy=(0.05, 0.25), xycoords='axes fraction')
+                Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
+                Axes.annotate(r'$p$ : ' + format(round(p, 3), '.3f'), xy=(0.05, 0.1), xycoords='axes fraction')
+                Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025),
+                              xycoords='axes fraction')
+                Axes.set_ylabel(Data.columns[2])
+                Axes.set_xlabel(Data.columns[1])
+
+
+                if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
+                    # plt.ylim(ymin=0, ymax=round(Y_Fit.max() * 1.2, 2))
+                    plt.autoscale()
+                    plt.subplots_adjust(left=0.15, bottom=0.15)
+                    plt.legend(loc='lower right')
+                    plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                                dpi=300)
+                    plt.show()
+                    j = j + 1
+                else:
+                    plt.ylim(ymin=0)
+                    plt.subplots_adjust(left=0.15, bottom=0.15)
+                    plt.legend(loc='lower right')
+                    plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                                dpi=300)
+                    plt.show()
+                # plt.close(Figure)
+
+            else:
+                Axes.plot(X[:, 1][Data['Gender'] == 'M'], Y_Obs[Data['Gender'] == 'M'], linestyle='none', marker='s',
+                          color=(0, 0, 0), fillstyle='none', label='male')
+                Axes.plot(X[:, 1][Data['Gender'] == 'F'], Y_Obs[Data['Gender'] == 'F'], linestyle='none', marker='o',
+                          color=(0, 0, 0), fillstyle='none', label='female')
+                Axes.annotate(r'$N$ : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
+                Axes.annotate(r'$R^2$ : ' + format(round(R2, 2), '.2f'), xy=(0.05, 0.25), xycoords='axes fraction')
+                Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
+                Axes.annotate(r'$p$ : ' + str(p), xy=(0.05, 0.1), xycoords='axes fraction')
+                Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025),
+                              xycoords='axes fraction')
+                Axes.set_ylabel(Data.columns[2])
+                Axes.set_xlabel(Data.columns[1])
+
+                if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
+                    # plt.ylim(ymin=0, ymax=round(Y_Fit.max() * 1.2, 2))
+                    plt.autoscale()
+                    plt.subplots_adjust(left=0.15, bottom=0.15)
+                    plt.legend(loc='lower right')
+                    plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                                dpi=300)
+                    plt.show()
+                    j = j + 1
+                else:
+                    plt.ylim(ymin=0)
+                    plt.subplots_adjust(left=0.15, bottom=0.15)
+                    plt.legend(loc='lower right')
+                    plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                                dpi=300)
+                    plt.show()
+                # plt.close(Figure)
+
         # Put everything into growing list and convert to DataFrame that is saved as .csv file
         values = [x_axis, y_axis, p, SE, round(R2, 3), N, CI_l, CI_r]
         results.append(values)
         result_dir = pd.DataFrame(results, columns=['X-axis', 'Y-axis', 'p-value', '\u03C3\u2091\u209B\u209C',
                                                     'R\u00B2', 'N', 'lower bound 95% CI', 'upper bound 95% CI'])
-        result_dir.to_csv(os.path.join('C:/Users/Stefan/Dropbox/02_MScThesis/09_Results/04_Plots/ResultsPlots.csv'), index=False)
-
-        # print(FitResults.conf_int())
+        result_dir.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/04_Plots/ResultsPlots.csv'),
+                          index=False)
