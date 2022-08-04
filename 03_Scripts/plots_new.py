@@ -2,8 +2,6 @@
 
 # Import standard packages
 from pathlib import Path                 # Used to manage path variables in windows or linux
-
-import matplotlib.image as mpl
 import numpy as np                       # Used to do arrays (matrices) computations namely
 import pandas as pd                      # Used to manage data frames
 import matplotlib.pyplot as plt          # Used to perform plots
@@ -71,8 +69,10 @@ Pair = pd.DataFrame([['Age',                                'Apparent Modulus De
                      ['Apparent Modulus Demineralized MPa', 'Ultimate Stress MPa'],
                      ])
 
+# assign abbreviations to above list of variables
 Pair_abbrev1 = list()
 Pair_abbrev2 = list()
+
 for i in range(len(Pair)):
     index1 = ColumnNames.loc[ColumnNames['Column Names'] == Pair[0][i]].index[0]
     index2 = ColumnNames.loc[ColumnNames['Column Names'] == Pair[1][i]].index[0]
@@ -87,10 +87,10 @@ Pair_abbrev_df = pd.DataFrame()
 Pair_abbrev_df['Abbrev_x'] = Pair_abbrev1_df
 Pair_abbrev_df['Abbrev_y'] = Pair_abbrev2_df
 
-# for loop to iterate through lists of names & create plots
+# loop to iterate through lists of names & create plots
 results = list()
-
 j = 0
+
 for i in range(len(Pair)):
     x_axis = Pair[0][i]
     y_axis = Pair[1][i]
@@ -170,10 +170,12 @@ for i in range(len(Pair)):
     else:
         p = round(p, 3)
 
+    # list of plots which need autoscaling, has to be ordered manually
     autoscale_list = pd.DataFrame({'x_axis_abbrev': ['Age',  'Age', 'Age', 'Age', 'Age', 'Age',    'Age',  'Age',
                                                         'Age',   'Age', 'BMC'],
                                    'y_axis_abbrev': ['BMD', 'BVTV',   'D', 'MWF', 'OWF', 'TMD', 'MEANAA', 'MINA',
                                                      'MEANAF', 'MINAF', 'MWF']})
+    # if p-value smaller than 0.05 create fit curve and if variable 'Age' should be plotted, no colormap will be used
     if float(p) <= 0.05:
         if x_axis != 'Age':
             # ax2 = sns.regplot(x=X_np[:, 1], y=Y_Obs_np, color='0.7', scatter=False)
@@ -199,6 +201,7 @@ for i in range(len(Pair)):
             Axes.set_ylabel(Data.columns[2])
             Axes.set_xlabel(Data.columns[1])
 
+            # condition used for autoscaling
             if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
                 # plt.ylim(ymin=0, ymax=round(Y_Fit.max() * 1.2, 2))
                 plt.autoscale()
@@ -217,6 +220,7 @@ for i in range(len(Pair)):
                 plt.show()
             # plt.close(Figure)
 
+        # use of colormap if age is not plotted on main axes
         else:
             # sns.regplot(x=X_np[:, 1], y=Y_Fit, color='0.7', scatter=False)
             Axes.plot(X[:, 1], Y_Fit, color=(1, 0, 0), label='Fit')
@@ -235,6 +239,7 @@ for i in range(len(Pair)):
             Axes.set_ylabel(Data.columns[2])
             Axes.set_xlabel(Data.columns[1])
 
+            # condition used for autoscaling
             if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
                 # plt.ylim(ymin=0, ymax=round(Y_Fit.max() * 1.2, 2))
                 plt.autoscale()
@@ -252,6 +257,7 @@ for i in range(len(Pair)):
                             dpi=300)
                 plt.show()
             # plt.close(Figure)
+    # if p-value greater than 0.05, no fit will be drawn & if age is contained on main axes, no colormap will be used
     else:
         if x_axis != 'Age':
             Axes.scatter(X_np[:, 1][Data['Gender'] == 'M'], Y_Obs_np[Data['Gender'] == 'M'],
@@ -272,7 +278,7 @@ for i in range(len(Pair)):
             Axes.set_ylabel(Data.columns[2])
             Axes.set_xlabel(Data.columns[1])
 
-
+            # condition used for autoscaling
             if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
                 # plt.ylim(ymin=0, ymax=round(Y_Fit.max() * 1.2, 2))
                 plt.autoscale()
@@ -291,6 +297,7 @@ for i in range(len(Pair)):
                 plt.show()
             # plt.close(Figure)
 
+        # use of colormap if age is not plotted on main axes
         else:
             Axes.plot(X[:, 1][Data['Gender'] == 'M'], Y_Obs[Data['Gender'] == 'M'], linestyle='none', marker='s',
                       color=(0, 0, 0), fillstyle='none', label='male')
@@ -305,6 +312,7 @@ for i in range(len(Pair)):
             Axes.set_ylabel(Data.columns[2])
             Axes.set_xlabel(Data.columns[1])
 
+            # condition for autoscaling
             if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
                 # plt.ylim(ymin=0, ymax=round(Y_Fit.max() * 1.2, 2))
                 plt.autoscale()
@@ -330,4 +338,3 @@ for i in range(len(Pair)):
                                                 'R\u00B2', 'N', 'lower bound 95% CI', 'upper bound 95% CI'])
     result_dir.to_csv(os.path.join(savepath, 'ResultsPlots.csv'),
                       index=False)
-
