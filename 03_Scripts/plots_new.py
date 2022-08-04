@@ -331,10 +331,9 @@ for i in range(len(Pair)):
                 plt.show()
             # plt.close(Figure)
 
-    # Put everything into growing list and convert to DataFrame that is saved as .csv file
+# Put everything into growing list and convert to DataFrame that is saved as .csv file
     values = [x_axis, y_axis, p, SE, round(R2, 3), N, CI_l, CI_r]
     results.append(values)
-    result_dir = pd.DataFrame(results, columns=['X-axis', 'Y-axis', 'p-value', '\u03C3\u2091\u209B\u209C',
-                                                'R\u00B2', 'N', 'lower bound 95% CI', 'upper bound 95% CI'])
-    result_dir.to_csv(os.path.join(savepath, 'ResultsPlots.csv'),
-                      index=False)
+result_dir = pd.DataFrame(results, columns=['X-axis', 'Y-axis', 'p-value', '\u03C3\u2091\u209B\u209C', 'R\u00B2', 'N',
+                                            'lower bound 95% CI', 'upper bound 95% CI'])
+result_dir.to_csv(os.path.join(savepath, 'ResultsPlots.csv'), index=False)
