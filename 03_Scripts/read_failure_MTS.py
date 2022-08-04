@@ -1,7 +1,7 @@
 # This script loads data obtained during experimental tensile testing on the MTS. Force/displacement data is filtered
 # and used to calculate the corresponding stress/strain values. Ultimate values and stiffness/apparent modulus were
 # extracted from the respective slopes. The measures were calculated as follows:
-# Ultimate stress: filtered force/min. apparent area (min. total area over sample gage length, extracted from uCT image)
+# Ultimate stress: filtered force/mean apparent area (mean total area over sample gage length, extracted from uCT image)
 # Apparent modulus: stress/strain; stress = filtered force/mean apparent area (same as for US but mean instead of min)
 # Stiffness: filtered force/displacement
 
@@ -56,10 +56,10 @@ for filename in filename_list:
 
     # calculate stress and strain, filter & put into dataframe
     l_initial = 6.5
-    min_area_wp = results_uCT['Min Area (w porosity) mm^2'][counter]
-    mean_area_wop = results_uCT['Mean Area (w/o porosity) mm^2'][counter]
-    stress_wp = df['force_lc'] / min_area_wp        # needed to calculate ultimate stress
-    stress_wop = df['force_lc'] / mean_area_wop     # needed to calculate apparent modulus
+    min_area_wp = results_uCT['Min Area mm^2'][counter]
+    mean_area_wop = results_uCT['Mean Apparent Area mm^2'][counter]
+    stress_wp = df['force_lc'] / min_area_wp
+    stress_wop = df['force_lc'] / mean_area_wop     # needed to calculate apparent modulus/ultimate stress
     strain = df['disp_ext'] / l_initial
     df['stress_lc_wp'] = stress_wp
     df['stress_lc_wop'] = stress_wop
@@ -68,15 +68,15 @@ for filename in filename_list:
     df['stress_lc_filtered_wop'] = butter_lowpass_filter(df['stress_lc_wop'], cutoff)
     counter = counter + 1
 
-    # find max value of stress_lc_wp column & locate index
-    column = df['stress_lc_wp']
+    # find max value of stress_lc_wop column & locate index
+    column = df['stress_lc_wop']
     max_stress_raw = column.max()
-    row_max_stress = df.loc[df['stress_lc_wp'] == max_stress_raw]
+    row_max_stress = df.loc[df['stress_lc_wop'] == max_stress_raw]
     max_stress_index = row_max_stress.index
 
     # search for ultimate stress (filtered)
     row_max_stress_filtered = df.iloc[max_stress_index]
-    ultimate_stress_filtered = np.round(row_max_stress_filtered['stress_lc_filtered_wp'].values, 2)
+    ultimate_stress_filtered = np.round(row_max_stress_filtered['stress_lc_filtered_wop'].values, 2)
     ultimate_stress_filtered = ultimate_stress_filtered[0]
 
     # search for ultimate strain
@@ -101,20 +101,20 @@ for filename in filename_list:
 
     # define range between last peak and second last peak to subsequently search for stress minimum as start point
     start_range_strain = df['strain_ext'][peaks_index[6]:peaks_index[7]]
-    start_range_stress = df['stress_lc_filtered_wp'][peaks_index[6]:peaks_index[7]]
+    start_range_stress = df['stress_lc_filtered_wop'][peaks_index[6]:peaks_index[7]]
     start_range = pd.DataFrame()
     start_range['strain_ext'] = start_range_strain
-    start_range['stress_lc_filtered_wp'] = start_range_stress
+    start_range['stress_lc_filtered_wop'] = start_range_stress
 
     # find smallest stress value & corresponding index as starting point
-    start_value = min(start_range['stress_lc_filtered_wp'])
-    start_ind = start_range.loc[start_range['stress_lc_filtered_wp'] == start_value]
+    start_value = min(start_range['stress_lc_filtered_wop'])
+    start_ind = start_range.loc[start_range['stress_lc_filtered_wop'] == start_value]
     start_index = start_ind.index
 
     # create dataframe using unloading part of last cycle
     last_cycle = pd.DataFrame()
     last_cycle['last_cycle_strain'] = df['strain_ext'].iloc[start_index[0]:peaks_index[7]]
-    last_cycle['last_cycle_stress'] = df['stress_lc_filtered_wp'].iloc[start_index[0]:peaks_index[7]]
+    last_cycle['last_cycle_stress'] = df['stress_lc_filtered_wop'].iloc[start_index[0]:peaks_index[7]]
 
     ## calculate stiffness using last unloading cycle of force/displacement data
     # create dataframe of final unloading cycle using start/end index (same as for stress/strain)
