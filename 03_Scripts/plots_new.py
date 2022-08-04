@@ -337,3 +337,79 @@ for i in range(len(Pair)):
 result_dir = pd.DataFrame(results, columns=['X-axis', 'Y-axis', 'p-value', '\u03C3\u2091\u209B\u209C', 'R\u00B2', 'N',
                                             'lower bound 95% CI', 'upper bound 95% CI'])
 result_dir.to_csv(os.path.join(savepath, 'ResultsPlots.csv'), index=False)
+
+# boxplots of specific component weights
+MWF = df['Mineral weight fraction -']
+OWF = df['Organic weight fraction -']
+WWF = df['Water weight fraction -']
+WF = [MWF, OWF, WWF]
+
+fig = plt.figure(figsize=(5.5, 4.5))
+ax1 = fig.add_subplot(111)
+bp = ax1.boxplot(WF)
+ax1.set_ylabel('Weight Fraction -')
+ax1.set_xticklabels(['Mineral', 'Organic', 'Water'])
+plt.ylim(ymin=0)
+plt.show()
+
+
+
+# 30 points between [0, 0.2) originally made using np.random.rand(30)*.2
+
+# boxplot of AMM/AMD
+AMM = df['Apparent Modulus Mineralized MPa'].dropna().reset_index(drop=True)
+AMD = df['Apparent Modulus Demineralized MPa'].dropna().reset_index(drop=True)
+AMM = AMM.values.tolist()
+AMD = AMD.values.tolist()
+# AMM = np.array(AMM)
+# AMD = np.array(AMD)
+
+# If we were to simply plot pts, we'd lose most of the interesting
+# details due to the outliers. So let's 'break' or 'cut-out' the y-axis
+# into two portions - use the top (ax) for the outliers, and the bottom
+# (ax2) for the details of the majority of our data
+f, (ax, ax2) = plt.subplots(2, 1, sharex=True)
+
+# plot the same data on both axes
+ax.boxplot(AMM, positions=[1])
+ax2.boxplot(AMD, positions=[2])
+
+# zoom-in / limit the view to different portions of the data
+ax.set_ylim(10000, 20000)  # outliers only
+ax2.set_ylim(0, 300)  # most of the data
+
+# hide the spines between ax and ax2
+ax.spines['bottom'].set_visible(False)
+ax2.spines['top'].set_visible(False)
+ax.tick_params(labeltop=False, labelbottom=False)  # don't put tick labels at the top
+ax2.tick_params(labeltop=False)
+ax2.xaxis.tick_bottom()
+plt.
+
+ax.set_ylabel('Apparent Modulus MPa')
+ax.yaxis.set_label_coords(-0.12, 0)
+
+# This looks pretty good, and was fairly painless, but you can get that
+# cut-out diagonal lines look with just a bit more work. The important
+# thing to know here is that in axes coordinates, which are always
+# between 0-1, spine endpoints are at these locations (0,0), (0,1),
+# (1,0), and (1,1).  Thus, we just need to put the diagonals in the
+# appropriate corners of each of our axes, and so long as we use the
+# right transform and disable clipping.
+
+d = .015  # how big to make the diagonal lines in axes coordinates
+# arguments to pass to plot, just so we don't keep repeating them
+kwargs = dict(transform=ax.transAxes, color='k', clip_on=False)
+ax.plot((-d, +d), (-d, +d), **kwargs)        # top-left diagonal
+ax.plot((1 - d, 1 + d), (-d, +d), **kwargs)  # top-right diagonal
+
+kwargs.update(transform=ax2.transAxes)  # switch to the bottom axes
+ax2.plot((-d, +d), (1 - d, 1 + d), **kwargs)  # bottom-left diagonal
+ax2.plot((1 - d, 1 + d), (1 - d, 1 + d), **kwargs)  # bottom-right diagonal
+
+# What's cool about this is that now if we vary the distance between
+# ax and ax2 via f.subplots_adjust(hspace=...) or plt.subplot_tool(),
+# the diagonal lines will move accordingly, and stay right at the tips
+# of the spines they are 'breaking'
+
+plt.show()
