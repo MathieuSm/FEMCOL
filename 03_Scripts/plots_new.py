@@ -354,8 +354,6 @@ plt.show()
 
 
 
-# 30 points between [0, 0.2) originally made using np.random.rand(30)*.2
-
 # boxplot of AMM/AMD
 AMM = df['Apparent Modulus Mineralized MPa'].dropna().reset_index(drop=True)
 AMD = df['Apparent Modulus Demineralized MPa'].dropna().reset_index(drop=True)
@@ -384,7 +382,7 @@ ax2.spines['top'].set_visible(False)
 ax.tick_params(labeltop=False, labelbottom=False)  # don't put tick labels at the top
 ax2.tick_params(labeltop=False)
 ax2.xaxis.tick_bottom()
-plt.
+ax2.set_xticklabels(['Mineralized', 'Demineralized'])
 
 ax.set_ylabel('Apparent Modulus MPa')
 ax.yaxis.set_label_coords(-0.12, 0)
