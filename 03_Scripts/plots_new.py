@@ -170,6 +170,13 @@ for i in range(len(Pair)):
     else:
         p = round(p, 3)
 
+    if float(R2) < 0.01:
+        R2 = float(R2)
+        R2 = '{:.1e}'.format(R2)
+    else:
+        R2 = float(R2)
+        R2 = round(R2, 3)
+
     # list of plots which need autoscaling, has to be ordered manually
     autoscale_list = pd.DataFrame({'x_axis_abbrev': ['Age',  'Age', 'Age', 'Age', 'Age', 'Age',    'Age',  'Age',
                                                         'Age',   'Age', 'BMC'],
@@ -193,7 +200,7 @@ for i in range(len(Pair)):
             PCM = ax.get_children()[2]
             plt.colorbar(PCM, ax=ax, label='Age y')
             Axes.annotate(r'$N$ : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
-            Axes.annotate(r'$R^2$ : ' + format(round(R2, 2), '.2f'), xy=(0.05, 0.25), xycoords='axes fraction')
+            Axes.annotate(r'$R^2$ : ' + str(R2), xy=(0.05, 0.25), xycoords='axes fraction')
             Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
             Axes.annotate(r'$p$ : ' + str(p), xy=(0.05, 0.1), xycoords='axes fraction')
             Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025),
@@ -231,7 +238,7 @@ for i in range(len(Pair)):
             Axes.plot(X[:, 1][Data['Gender'] == 'F'], Y_Obs[Data['Gender'] == 'F'], linestyle='none', marker='o',
                       color=(0, 0, 0), fillstyle='none', label='female')
             Axes.annotate(r'$N$ : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
-            Axes.annotate(r'$R^2$ : ' + format(round(R2, 2), '.2f'), xy=(0.05, 0.25), xycoords='axes fraction')
+            Axes.annotate(r'$R^2$ : ' + str(R2), xy=(0.05, 0.25), xycoords='axes fraction')
             Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
             Axes.annotate(r'$p$ : ' + str(p), xy=(0.05, 0.1), xycoords='axes fraction')
             Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025),
@@ -270,7 +277,7 @@ for i in range(len(Pair)):
             PCM = ax.get_children()[0]
             plt.colorbar(PCM, ax=ax, label='Age y')
             Axes.annotate(r'$N$ : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
-            Axes.annotate(r'$R^2$ : ' + format(round(R2, 2), '.2f'), xy=(0.05, 0.25), xycoords='axes fraction')
+            Axes.annotate(r'$R^2$ : ' + str(R2), xy=(0.05, 0.25), xycoords='axes fraction')
             Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
             Axes.annotate(r'$p$ : ' + format(round(p, 3), '.3f'), xy=(0.05, 0.1), xycoords='axes fraction')
             Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025),
@@ -304,7 +311,7 @@ for i in range(len(Pair)):
             Axes.plot(X[:, 1][Data['Gender'] == 'F'], Y_Obs[Data['Gender'] == 'F'], linestyle='none', marker='o',
                       color=(0, 0, 0), fillstyle='none', label='female')
             Axes.annotate(r'$N$ : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
-            Axes.annotate(r'$R^2$ : ' + format(round(R2, 2), '.2f'), xy=(0.05, 0.25), xycoords='axes fraction')
+            Axes.annotate(r'$R^2$ : ' + str(R2), xy=(0.05, 0.25), xycoords='axes fraction')
             Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
             Axes.annotate(r'$p$ : ' + str(p), xy=(0.05, 0.1), xycoords='axes fraction')
             Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025),
@@ -332,7 +339,7 @@ for i in range(len(Pair)):
             # plt.close(Figure)
 
 # Put everything into growing list and convert to DataFrame that is saved as .csv file
-    values = [x_axis, y_axis, p, SE, round(R2, 3), N, CI_l, CI_r]
+    values = [x_axis, y_axis, p, SE, R2, N, CI_l, CI_r]
     results.append(values)
 result_dir = pd.DataFrame(results, columns=['X-axis', 'Y-axis', 'p-value', '\u03C3\u2091\u209B\u209C', 'R\u00B2', 'N',
                                             'lower bound 95% CI', 'upper bound 95% CI'])
@@ -350,6 +357,7 @@ bp = ax1.boxplot(WF)
 ax1.set_ylabel('Weight Fraction -')
 ax1.set_xticklabels(['Mineral', 'Organic', 'Water'])
 plt.ylim(ymin=0)
+plt.savefig(os.path.join(savepath, 'WF_boxplt.png'), dpi=300)
 plt.show()
 
 
@@ -409,5 +417,5 @@ ax2.plot((1 - d, 1 + d), (1 - d, 1 + d), **kwargs)  # bottom-right diagonal
 # ax and ax2 via f.subplots_adjust(hspace=...) or plt.subplot_tool(),
 # the diagonal lines will move accordingly, and stay right at the tips
 # of the spines they are 'breaking'
-
+plt.savefig(os.path.join(savepath, 'AM_boxplt.png'), dpi=300)
 plt.show()
