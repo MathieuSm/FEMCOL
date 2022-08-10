@@ -123,9 +123,8 @@ for i in range(len(Pair)):
     CI_Line_u = Y_Fit + t_Alpha[0] * SE * B_0
     CI_Line_o = Y_Fit + t_Alpha[1] * SE * B_0
 
-    DPI = 300
     savepath = Cwd / '04_Results/04_Plots/'
-    Figure, Axes = plt.subplots(1, 1, figsize=(5.5, 4.5), dpi=DPI, sharey=True, sharex=True)
+    Figure, Axes = plt.subplots(1, 1, figsize=(5.5, 4.5), dpi=300, sharey=True, sharex=True)
     male_age = Data[Data['Gender'] == 'M']['Age']
     female_age = Data[Data['Gender'] == 'F']['Age']
     X_np = np.array(X)
@@ -215,7 +214,7 @@ for i in range(len(Pair)):
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='lower right')
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300)
+                            dpi=300, bbox_inches='tight')
                 plt.show()
                 j = j + 1
             else:
@@ -223,7 +222,7 @@ for i in range(len(Pair)):
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='lower right')
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300)
+                            dpi=300, bbox_inches='tight')
                 plt.show()
             # plt.close(Figure)
 
@@ -253,7 +252,7 @@ for i in range(len(Pair)):
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='lower right')
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300)
+                            dpi=300, bbox_inches='tight')
                 plt.show()
                 j = j + 1
             else:
@@ -261,7 +260,7 @@ for i in range(len(Pair)):
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='lower right')
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300)
+                            dpi=300, bbox_inches='tight')
                 plt.show()
             # plt.close(Figure)
     # if p-value greater than 0.05, no fit will be drawn & if age is contained on main axes, no colormap will be used
@@ -292,7 +291,7 @@ for i in range(len(Pair)):
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='lower right')
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300)
+                            dpi=300, bbox_inches='tight')
                 plt.show()
                 j = j + 1
             else:
@@ -300,7 +299,7 @@ for i in range(len(Pair)):
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='lower right')
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300)
+                            dpi=300, bbox_inches='tight')
                 plt.show()
             # plt.close(Figure)
 
@@ -326,7 +325,7 @@ for i in range(len(Pair)):
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='lower right')
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300)
+                            dpi=300, bbox_inches='tight')
                 plt.show()
                 j = j + 1
             else:
@@ -334,7 +333,7 @@ for i in range(len(Pair)):
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='lower right')
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300)
+                            dpi=300, bbox_inches='tight')
                 plt.show()
             # plt.close(Figure)
 
@@ -357,7 +356,7 @@ bp = ax1.boxplot(WF)
 ax1.set_ylabel('Weight Fraction -')
 ax1.set_xticklabels(['Mineral', 'Organic', 'Water'])
 plt.ylim(ymin=0)
-plt.savefig(os.path.join(savepath, 'WF_boxplt.png'), dpi=300)
+plt.savefig(os.path.join(savepath, 'WF_boxplt.png'), dpi=300, bbox_inches='tight')
 plt.show()
 
 
@@ -417,5 +416,5 @@ ax2.plot((1 - d, 1 + d), (1 - d, 1 + d), **kwargs)  # bottom-right diagonal
 # ax and ax2 via f.subplots_adjust(hspace=...) or plt.subplot_tool(),
 # the diagonal lines will move accordingly, and stay right at the tips
 # of the spines they are 'breaking'
-plt.savefig(os.path.join(savepath, 'AM_boxplt.png'), dpi=300)
+plt.savefig(os.path.join(savepath, 'AM_boxplt.png'), dpi=300, bbox_inches='tight')
 plt.show()
