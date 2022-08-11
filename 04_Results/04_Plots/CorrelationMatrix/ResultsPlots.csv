@@ -1,0 +1,56 @@
+X-axis,Y-axis,p-value,σₑₛₜ,R²,N,lower bound 95% CI,upper bound 95% CI
+Bone Volume Fraction -,Bone Mineral Density mg HA / cm³,5.0e-21,15.9,0.928,36,1040,1264
+Bone Volume Fraction -,Tissue Mineral Density mg HA / cm³,0.001,14.9,0.266,36,76.5,287
+Bone Volume Fraction -,Mineral weight fraction -,2.8e-04,0.008,0.326,36,0.053,0.158
+Bone Volume Fraction -,Organic weight fraction -,0.264,0.005,0.037,36,-0.017,0.06
+Bone Volume Fraction -,Water weight fraction -,9.4e-05,0.008,0.366,36,-0.185,-0.069
+Bone Volume Fraction -,Density g/cm³,3.8e-07,0.027,0.537,36,0.391,0.765
+Bone Volume Fraction -,Apparent Modulus Mineralized MPa,0.003,1623.0,0.244,34,6661,29733
+Bone Volume Fraction -,Apparent Modulus Demineralized MPa,0.482,42.6,0.016,33,-411,198
+Bone Volume Fraction -,Ultimate Stress MPa,0.576,4.5,0.01,33,-23.2,41.0
+Bone Volume Fraction -,Ultimate Strain -,0.246,0.011,0.043,33,-0.032,0.121
+Bone Mineral Density mg HA / cm³,Tissue Mineral Density mg HA / cm³,1.4e-06,12.3,0.501,36,0.136,0.281
+Bone Mineral Density mg HA / cm³,Mineral weight fraction -,1.1e-05,0.007,0.438,36,6.19e-05,1.43e-04
+Bone Mineral Density mg HA / cm³,Organic weight fraction -,0.452,0.006,0.017,36,-2.03e-05,4.46e-05
+Bone Mineral Density mg HA / cm³,Water weight fraction -,1.7e-05,0.008,0.424,36,-1.61e-04,-6.80e-05
+Bone Mineral Density mg HA / cm³,Density g/cm³,2.2e-08,0.024,0.607,36,3.70e-04,6.58e-04
+Bone Mineral Density mg HA / cm³,Apparent Modulus Mineralized MPa,0.003,1621.0,0.246,34,5.7,25.0
+Bone Mineral Density mg HA / cm³,Apparent Modulus Demineralized MPa,0.263,42.1,0.04,33,-0.394,0.111
+Bone Mineral Density mg HA / cm³,Ultimate Stress MPa,0.83,4.5,1.5e-03,33,-0.024,0.03
+Bone Mineral Density mg HA / cm³,Ultimate Strain -,0.234,0.011,0.045,33,-2.61e-05,1.03e-04
+Tissue Mineral Density mg HA / cm³,Mineral weight fraction -,4.1e-05,0.007,0.395,36,1.87e-04,4.72e-04
+Tissue Mineral Density mg HA / cm³,Organic weight fraction -,0.489,0.006,0.014,36,-1.48e-04,7.24e-05
+Tissue Mineral Density mg HA / cm³,Water weight fraction -,0.002,0.009,0.239,36,-4.73e-04,-1.10e-04
+Tissue Mineral Density mg HA / cm³,Density g/cm³,8.5e-05,0.031,0.369,36,7.41e-04,0.002
+Tissue Mineral Density mg HA / cm³,Apparent Modulus Mineralized MPa,0.078,1777.0,0.094,34,-3.9,69.3
+Tissue Mineral Density mg HA / cm³,Apparent Modulus Demineralized MPa,0.044,40.2,0.125,33,-1.7,-0.026
+Tissue Mineral Density mg HA / cm³,Ultimate Stress MPa,0.383,4.5,0.025,33,-0.134,0.053
+Tissue Mineral Density mg HA / cm³,Ultimate Strain -,0.279,0.011,0.038,33,-1.04e-04,3.47e-04
+Mineral weight fraction -,Organic weight fraction -,0.147,0.006,0.056,39,-0.053,0.339
+Mineral weight fraction -,Water weight fraction -,3.8e-14,0.006,0.791,39,-1.3,-0.947
+Mineral weight fraction -,Density g/cm³,1.1e-11,0.029,0.717,39,3.5,5.4
+Mineral weight fraction -,Apparent Modulus Mineralized MPa,0.004,1633.0,0.235,34,33783,158941
+Mineral weight fraction -,Apparent Modulus Demineralized MPa,0.205,41.8,0.051,33,-2626,587
+Mineral weight fraction -,Ultimate Stress MPa,0.889,4.5,6.4e-04,33,-185,162
+Mineral weight fraction -,Ultimate Strain -,0.34,0.011,0.029,33,-0.218,0.614
+Organic weight fraction -,Water weight fraction -,6.2e-06,0.01,0.428,39,-1.9,-0.856
+Organic weight fraction -,Density g/cm³,0.001,0.048,0.243,39,1.8,6.8
+Organic weight fraction -,Apparent Modulus Mineralized MPa,0.919,1867.0,3.2e-04,34,-125701,113716
+Organic weight fraction -,Apparent Modulus Demineralized MPa,0.993,43.0,2.7e-06,33,-2846,2820
+Organic weight fraction -,Ultimate Stress MPa,0.919,4.5,3.4e-04,33,-283,313
+Organic weight fraction -,Ultimate Strain -,0.812,0.011,1.9e-03,33,-0.81,0.639
+Water weight fraction -,Density g/cm³,3.2e-14,0.025,0.793,39,-4.3,-3.0
+Water weight fraction -,Apparent Modulus Mineralized MPa,0.013,1694.0,0.177,34,-131702,-16541
+Water weight fraction -,Apparent Modulus Demineralized MPa,0.255,42.0,0.042,33,-625,2272
+Water weight fraction -,Ultimate Stress MPa,0.943,4.5,1.7e-04,33,-150,161
+Water weight fraction -,Ultimate Strain -,0.466,0.011,0.017,33,-0.511,0.24
+Density g/cm³,Apparent Modulus Mineralized MPa,0.012,1688.0,0.183,34,4823,35516
+Density g/cm³,Apparent Modulus Demineralized MPa,0.181,41.7,0.057,33,-642,126
+Density g/cm³,Ultimate Stress MPa,0.763,4.5,3.0e-03,33,-47.8,35.4
+Density g/cm³,Ultimate Strain -,0.63,0.011,7.6e-03,33,-0.077,0.125
+Apparent Modulus Mineralized MPa,Apparent Modulus Demineralized MPa,0.002,37.0,0.259,33,0.004,0.019
+Apparent Modulus Mineralized MPa,Ultimate Stress MPa,1.0e-05,3.3,0.471,33,0.001,0.002
+Apparent Modulus Mineralized MPa,Ultimate Strain -,0.004,0.01,0.24,33,1.00e-06,4.75e-06
+Apparent Modulus Demineralized MPa,Ultimate Stress MPa,5.2e-09,2.6,0.673,33,0.064,0.108
+Apparent Modulus Demineralized MPa,Ultimate Strain -,0.364,0.011,0.027,33,-5.07e-05,1.34e-04
+Ultimate Stress MPa,Ultimate Strain -,7.1e-05,0.008,0.404,33,8.58e-04,0.002
