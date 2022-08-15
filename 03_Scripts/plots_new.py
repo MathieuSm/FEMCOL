@@ -188,6 +188,8 @@ for i in range(len(Pair)):
     t_Alpha = t.interval(Alpha, N - X.shape[1] - 1)
     CI_Line_u = Y_Fit + t_Alpha[0] * SE * B_0
     CI_Line_o = Y_Fit + t_Alpha[1] * SE * B_0
+    Sorted_CI_u = CI_Line_u[np.argsort(FitResults.model.exog[:,1])]
+    Sorted_CI_o = CI_Line_o[np.argsort(FitResults.model.exog[:,1])]
 
     savepath = Cwd / '04_Results/04_Plots/'
     savepathCorrMat = Cwd / '04_Results/04_Plots/CorrelationMatrix'
@@ -253,8 +255,8 @@ for i in range(len(Pair)):
         if x_axis != 'Age':
             # ax2 = sns.regplot(x=X_np[:, 1], y=Y_Obs_np, color='0.7', scatter=False)
             Axes.plot(X[:, 1], Y_Fit, color=(1, 0, 0), label='Fit')
-            # Axes.fill_between(X_Obs, np.sort(CI_Line_o), np.sort(CI_Line_u), color=(0, 0, 0), alpha=0.1,
-            #                   label=str(int(Alpha * 100)) + '% CI')
+            Axes.fill_between(X_Obs, Sorted_CI_o, Sorted_CI_u, color=(0, 0, 0), alpha=0.1,
+                              label=str(int(Alpha * 100)) + '% CI')
             Axes.scatter(X_np[:, 1][Data['Gender'] == 'M'], Y_Obs_np[Data['Gender'] == 'M'],
                          c=list(tuple(male_age.tolist())), cmap='plasma_r', vmin=Data['Age'].min(),
                          vmax=Data['Age'].max(), label='male', marker='s')
