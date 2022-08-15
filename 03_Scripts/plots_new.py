@@ -250,13 +250,14 @@ for i in range(len(Pair)):
                                                         'Age',   'Age', 'BMC'],
                                    'y_axis_abbrev': ['BMD', 'BVTV',   'D', 'MWF', 'OWF', 'TMD', 'MEANAA', 'MINA',
                                                      'MEANAF', 'MINAF', 'MWF']})
-    # if p-value smaller than 0.05 create fit curve and if variable 'Age' should be plotted, no colormap will be used
+    # if p-value smaller than 0.05 create fit curve and if variable 'Age' should not be plotted on main axis, no
+    # colormap will be used
     if float(p) <= 0.05:
         if x_axis != 'Age':
-            # ax2 = sns.regplot(x=X_np[:, 1], y=Y_Obs_np, color='0.7', scatter=False)
+            # sns.regplot(x=FitResults.model.exog[:,1], y=Y_Obs, ax=Axes, scatter=False)
             Axes.plot(X[:, 1], Y_Fit, color=(1, 0, 0), label='Fit')
-            Axes.fill_between(X_Obs, Sorted_CI_o, Sorted_CI_u, color=(0, 0, 0), alpha=0.1,
-                              label=str(int(Alpha * 100)) + '% CI')
+            # Axes.fill_between(X_Obs, Sorted_CI_o, Sorted_CI_u, color=(0, 0, 0), alpha=0.1,
+            #                   label=str(int(Alpha * 100)) + '% CI')
             Axes.scatter(X_np[:, 1][Data['Gender'] == 'M'], Y_Obs_np[Data['Gender'] == 'M'],
                          c=list(tuple(male_age.tolist())), cmap='plasma_r', vmin=Data['Age'].min(),
                          vmax=Data['Age'].max(), label='male', marker='s')
@@ -281,7 +282,7 @@ for i in range(len(Pair)):
                 # plt.ylim(ymin=0, ymax=round(Y_Fit.max() * 1.2, 2))
                 plt.autoscale()
                 plt.subplots_adjust(left=0.15, bottom=0.15)
-                plt.legend(loc='lower right')
+                plt.legend(loc='upper center', bbox_to_anchor=(0,1.07), ncol=2)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, bbox_inches='tight')
                 plt.show()
@@ -289,18 +290,18 @@ for i in range(len(Pair)):
             else:
                 plt.ylim(ymin=0)
                 plt.subplots_adjust(left=0.15, bottom=0.15)
-                plt.legend(loc='lower right')
+                plt.legend(loc='upper center', bbox_to_anchor=(0,1.07), ncol=2)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, bbox_inches='tight')
                 plt.show()
             # plt.close(Figure)
 
-        # use of colormap if age is not plotted on main axes
+        # don't use colormap if age is plotted on main axes
         else:
-            # sns.regplot(x=X_np[:, 1], y=Y_Fit, color='0.7', scatter=False)
+            # sns.regplot(x=FitResults.model.exog[:,1], y=Y_Obs, ax=Axes, scatter=False)
             Axes.plot(X[:, 1], Y_Fit, color=(1, 0, 0), label='Fit')
-            # Axes.fill_between(X_Obs, np.sort(CI_Line_o), np.sort(CI_Line_u), color=(0, 0, 0), alpha=0.1,
-            #                   label=str(int(Alpha*100)) + '% CI')
+            # Axes.fill_between(X_Obs, Sorted_CI_o, Sorted_CI_u, color=(0, 0, 0), alpha=0.1,
+            #                   label=str(int(Alpha * 100)) + '% CI')
             Axes.plot(X[:, 1][Data['Gender'] == 'M'], Y_Obs[Data['Gender'] == 'M'], linestyle='none', marker='s',
                       color=(0, 0, 0), fillstyle='none', label='male')
             Axes.plot(X[:, 1][Data['Gender'] == 'F'], Y_Obs[Data['Gender'] == 'F'], linestyle='none', marker='o',

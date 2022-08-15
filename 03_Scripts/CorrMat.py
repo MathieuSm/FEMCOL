@@ -28,18 +28,35 @@ df_new.columns = ['Bone Volume Fraction', 'Bone Mineral Density', 'Tissue Minera
                   'Organic Weight Fraction', 'Water Weight Fraction', 'Bone Density', 'Apparent Modulus Mineralized',
                   'Apparent Modulus Demineralized', 'Ultimate Stress', 'Ultimate Strain']
 corr_matrix = df_new.corr()
+
+from scipy.stats import linregress
+
+for i in df_new.columns:
+    for j in df_new.columns:
+        corr_matrix.loc[i, j] = round(linregress(df_new[j], df_new[i])[3], 3)
+
+
+
+p_matrix = pd.DataFrame()
 mask = np.zeros_like(corr_matrix, dtype=np.bool_)
 mask[np.triu_indices_from(mask)] = True
+
+# Colormap trick
+from matplotlib import cm
+from matplotlib.colors import ListedColormap
+viridis = cm.get_cmap('plasma', 8)
+newcolors = viridis(np.linspace(0, 1, 8))
+newcmp = ListedColormap(newcolors)
 
 f, ax = plt.subplots(figsize=(11, 15))
 heatmap = sns.heatmap(corr_matrix,
                       mask=mask,
                       square=True,
                       linewidths=.5,
-                      cmap='plasma_r',
+                      cmap=newcmp,
                       cbar_kws={'shrink': .5,
-                                'ticks': [-1, -.5, 0, 0.5, 1]},
-                      vmin=-1,
+                                'ticks': np.linspace(0, 1, 9)},
+                      vmin=0,
                       vmax=1,
                       annot=True,
                       annot_kws={'size': 12})
