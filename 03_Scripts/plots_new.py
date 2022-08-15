@@ -186,8 +186,8 @@ for i in range(len(Pair)):
     B_0 = np.sqrt(np.diag(np.abs(X * C * X.T)))
     Alpha = 0.95
     t_Alpha = t.interval(Alpha, N - X.shape[1] - 1)
-    CI_Line_u = Y_Fit + t_Alpha[0] * SE * B_0
-    CI_Line_o = Y_Fit + t_Alpha[1] * SE * B_0
+    CI_Line_u = Y_Fit + t_Alpha[0] * B_0
+    CI_Line_o = Y_Fit + t_Alpha[1] * B_0
     Sorted_CI_u = CI_Line_u[np.argsort(FitResults.model.exog[:,1])]
     Sorted_CI_o = CI_Line_o[np.argsort(FitResults.model.exog[:,1])]
 
@@ -299,8 +299,8 @@ for i in range(len(Pair)):
         else:
             # sns.regplot(x=X_np[:, 1], y=Y_Fit, color='0.7', scatter=False)
             Axes.plot(X[:, 1], Y_Fit, color=(1, 0, 0), label='Fit')
-            # Axes.fill_between(X_Obs, np.sort(CI_Line_o), np.sort(CI_Line_u), color=(0, 0, 0), alpha=0.1,
-            #                   label=str(int(Alpha*100)) + '% CI')
+            Axes.fill_between(X_Obs, Sorted_CI_o, Sorted_CI_u, color=(0, 0, 0), alpha=0.1,
+                              label=str(int(Alpha*100)) + '% CI')
             Axes.plot(X[:, 1][Data['Gender'] == 'M'], Y_Obs[Data['Gender'] == 'M'], linestyle='none', marker='s',
                       color=(0, 0, 0), fillstyle='none', label='male')
             Axes.plot(X[:, 1][Data['Gender'] == 'F'], Y_Obs[Data['Gender'] == 'F'], linestyle='none', marker='o',
