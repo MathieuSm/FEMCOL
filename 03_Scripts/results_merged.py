@@ -15,6 +15,8 @@ results_demineralized = pd.read_csv(str('/home/stefan/Documents/PythonScripts/04
 results_gravimetry = pd.read_csv(str('/home/stefan/Documents/PythonScripts/04_Results/02_Gravimetry/ResultsGravimetry.csv'),
                   skiprows=0)
 results_uCT = pd.read_csv(str('/home/stefan/Documents/PythonScripts/04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
+results_raman = pd.read_csv(str('/home/stefan/Documents/PythonScripts/04_Results/05_Raman/RamanResults.csv'),
+                            skiprows=0)
 
 age = [87, 87, 76, 81, 88, 88, 91, 91, 96, 94, 94, 78, 78, 91, 91, 64, 64, 71, 85, 85, 77, 77, 90, 90, 80, 80, 89, 89,
        89, 89, 78, 79, 96, 74, 74, 92, 65, 88, 88, '']
@@ -51,6 +53,8 @@ results_merged['Minimum Equivalent Diameter mm'] = results_uCT['Min Diameter mm'
 results_merged['Mean Apparent Diameter mm'] = results_uCT['Mean Apparent Diameter mm']
 results_merged['Mean Area Fraction -'] = results_uCT['Mean Area Fraction -']
 results_merged['Min Area Fraction -'] = results_uCT['Min Area Fraction -']
+results_merged['Mineral to Matrix Ratio -'] = results_raman['M2M_ratio_mean']
 results_merged.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/', 'ResultsOverview.csv'),
                       index=False)
+
 
