@@ -10,6 +10,7 @@ import os
 from scipy.stats.distributions import t  # Used to compute confidence intervals
 import sys
 import seaborn as sns
+from scipy.stats import linregress
 
 # Set directory & load data
 Cwd = Path.cwd()
@@ -21,21 +22,17 @@ df = df.drop(columns=['Sample ID', 'Age', 'Gender', 'Ultimate Force N', 'Organic
                       'Water Weight g', 'Minimum Equivalent Diameter mm', 'Mean Apparent Diameter mm',
                       'Mean Area Fraction -', 'Min Area Fraction -', 'Minimum Area mm²', 'Mean Apparent Area mm²'])
 df_new = df[['Bone Volume Fraction -', 'Bone Mineral Density mg HA / cm³', 'Tissue Mineral Density mg HA / cm³',
-             'Mineral weight fraction -', 'Organic weight fraction -', 'Water weight fraction -', 'Density g/cm³',
-             'Apparent Modulus Mineralized MPa', 'Apparent Modulus Demineralized MPa', 'Ultimate Stress MPa',
-             'Ultimate Strain -']]
-df_new.columns = ['Bone Volume Fraction', 'Bone Mineral Density', 'Tissue Mineral Density', 'Mineral Weight Fraction',
-                  'Organic Weight Fraction', 'Water Weight Fraction', 'Bone Density', 'Apparent Modulus Mineralized',
-                  'Apparent Modulus Demineralized', 'Ultimate Stress', 'Ultimate Strain']
+             'Mineral to Matrix Ratio -', 'Mineral weight fraction -', 'Organic weight fraction -',
+             'Water weight fraction -', 'Density g/cm³', 'Apparent Modulus Mineralized MPa',
+             'Apparent Modulus Demineralized MPa', 'Ultimate Stress MPa', 'Ultimate Strain -']]
+df_new.columns = ['Bone Volume Fraction', 'Bone Mineral Density', 'Tissue Mineral Density', 'Mineral to Matrix Ratio',
+                  'Mineral Weight Fraction', 'Organic Weight Fraction', 'Water Weight Fraction', 'Bone Density',
+                  'Apparent Modulus Mineralized', 'Apparent Modulus Demineralized', 'Ultimate Stress', 'Ultimate Strain']
 corr_matrix = df_new.corr()
-
-from scipy.stats import linregress
 
 for i in df_new.columns:
     for j in df_new.columns:
         corr_matrix.loc[i, j] = round(linregress(df_new[j], df_new[i])[3], 3)
-
-
 
 p_matrix = pd.DataFrame()
 mask = np.zeros_like(corr_matrix, dtype=np.bool_)
