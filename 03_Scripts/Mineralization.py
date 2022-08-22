@@ -38,12 +38,19 @@ for x in range(0, len(Data), 1):
     Scan = sitk.GetArrayFromImage(Image)
 
     # Compute scan mid-planes positions
-    ZMid, Ymid, XMid = np.round(np.array(Scan.shape) / 2).astype('int')
+    ZMid, YMid, XMid = np.round(np.array(Scan.shape) / 2).astype('int')
 
     # Plot XY mid-plane
     Size = np.array(Scan.shape[1:]) / 100
     Figure, Axis = plt.subplots(1, 1, figsize=(Size[1], Size[0]))
     Axis.imshow(Scan[ZMid, :, :], cmap='bone')
+    Axis.axis('off')
+    plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
+    # plt.show()
+    plt.close()
+
+    Figure, Axis = plt.subplots(1, 1, figsize=(Size[1], Size[0]))
+    Axis.imshow(Scan[:, XMid, YMid], cmap='bone')
     Axis.axis('off')
     plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
     # plt.show()
