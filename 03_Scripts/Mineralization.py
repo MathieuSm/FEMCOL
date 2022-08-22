@@ -31,6 +31,7 @@ Pi = 3.14159265
 # Select sample to analyze (numbering starting from 0)
 for x in range(0, len(Data), 1):
     SampleNumber = x
+    SampleID = Data.loc[SampleNumber, 'Sample']
     File = Data.loc[SampleNumber, 'uCT File']
 
     # Read mhd file
@@ -49,12 +50,15 @@ for x in range(0, len(Data), 1):
     # plt.show()
     plt.close()
 
+    # Plot YZ mid-plane
     Figure, Axis = plt.subplots(1, 1, figsize=(Size[1], Size[0]))
-    Axis.imshow(Scan[:, XMid, YMid], cmap='bone')
+    Axis.imshow(Scan[:, :, YMid], cmap='bone')
     Axis.axis('off')
     plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
-    # plt.show()
-    plt.close()
+    plt.savefig(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/03_uCT/', SampleID + '_' + 'YZ_Plane'),
+                dpi=300)
+    plt.show()
+    # plt.close()
 
     # Segment scan using Otsu's threshold: mean threshold calculated with MeanOtsu.py --> 562.586
     Threshold = MeanOtsu.loc[0][0]
@@ -100,8 +104,8 @@ for x in range(0, len(Data), 1):
     Axis.plot(X0 + RotatedEllipse[0, :], Y0 - RotatedEllipse[1, :], color=(0, 1, 0), label='Fitted ellipse')
     Axis.axis('off')
     plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
-    plt.show()
-    # plt.close()
+    # plt.show()
+    plt.close()
 
     # Build full cylinder representing the sample
     Disk = morphology.disk(int(round(RegionProperties.equivalent_diameter/2)))
@@ -174,7 +178,6 @@ for x in range(0, len(Data), 1):
     # BVTV_new = round(BoneVolumes.sum() / TotalVolume_mean, 3)
 
     # Collect data into filling list
-    SampleID = Data.loc[SampleNumber, 'Sample']
     values = [SampleID, BVTV, BMD, TMD, BMC, min_BoneArea_wp, min_Diam_wp, mean_Area_wop, mean_Diam_wop,
               mean_areas_fraction, min_areas_fraction]
     results.append(values)
