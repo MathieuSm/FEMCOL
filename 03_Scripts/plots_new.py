@@ -72,7 +72,8 @@ Pair = pd.DataFrame([
                      ['Mineral weight fraction -',          'Mineral to Matrix Ratio -'],
                      ['Mineral to Matrix Ratio -',          'Stiffness Demineralized N/mm'],
                      ['Mineral to Matrix Ratio -',          'Stiffness Mineralized N/mm'],
-                     ['Mineral to Matrix Ratio -',          'Ultimate Stress MPa']
+                     ['Mineral to Matrix Ratio -',          'Ultimate Stress MPa'],
+                     ['Organic weight fraction -',          'Apparent Modulus Demineralized MPa']
 #                      ['Bone Volume Fraction -',             'Bone Mineral Density mg HA / cm³'],
 #                      ['Bone Volume Fraction -',             'Tissue Mineral Density mg HA / cm³'],
 #                      ['Bone Volume Fraction -',             'Mineral weight fraction -'],

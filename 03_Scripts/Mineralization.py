@@ -21,7 +21,7 @@ DataDirectory = CurrentDirectory / '02_Data/01_uCT'
 Data = pd.read_csv(str(DataDirectory / 'SampleList.csv'))
 Data = Data.drop('Remark', axis=1)
 Data = Data.dropna().reset_index(drop=True)
-MeanOtsu = pd.read_csv('/home/stefan/Documents/PythonScripts/04_Results/03_uCT/MeanOtsu.csv')
+MeanOtsu = pd.read_csv(CurrentDirectory / '04_Results/03_uCT/MeanOtsu.csv')
 print(Data)
 print('Mean Otsu Threshold = ' + str(MeanOtsu.loc[0][0]))
 
