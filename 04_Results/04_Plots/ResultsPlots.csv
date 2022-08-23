@@ -40,3 +40,6 @@ Bone Mineral Content mg HA,Mineral Weight g,2.1e-07,0.021,0.552,36,1.16e-04,2.23
 Mean Apparent Area mm²,Ultimate Stress MPa,0.075,4.3,0.098,33,-60.8,3.1
 Apparent Modulus Demineralized MPa,Ultimate Stress MPa,5.2e-09,2.6,0.673,33,0.064,0.108
 Mineral weight fraction -,Mineral to Matrix Ratio -,2.7e-04,0.033,0.304,39,1.0,3.1
+Mineral to Matrix Ratio -,Stiffness Demineralized N/mm,0.828,21.3,1.6e-03,33,-172,214
+Mineral to Matrix Ratio -,Stiffness Mineralized N/mm,0.076,877.0,0.095,34,-778,14748
+Mineral to Matrix Ratio -,Ultimate Stress MPa,0.482,4.5,0.016,33,-26.5,54.9

@@ -69,7 +69,10 @@ Pair = pd.DataFrame([
                      ['Bone Mineral Content mg HA',         'Mineral Weight g'],
                      ['Mean Apparent Area mm²',             'Ultimate Stress MPa'],
                      ['Apparent Modulus Demineralized MPa', 'Ultimate Stress MPa'],
-                     ['Mineral weight fraction -',          'Mineral to Matrix Ratio -']
+                     ['Mineral weight fraction -',          'Mineral to Matrix Ratio -'],
+                     ['Mineral to Matrix Ratio -',          'Stiffness Demineralized N/mm'],
+                     ['Mineral to Matrix Ratio -',          'Stiffness Mineralized N/mm'],
+                     ['Mineral to Matrix Ratio -',          'Ultimate Stress MPa']
 #                      ['Bone Volume Fraction -',             'Bone Mineral Density mg HA / cm³'],
 #                      ['Bone Volume Fraction -',             'Tissue Mineral Density mg HA / cm³'],
 #                      ['Bone Volume Fraction -',             'Mineral weight fraction -'],
@@ -248,9 +251,9 @@ for i in range(len(Pair)):
 
     # list of plots which need autoscaling, has to be ordered manually
     autoscale_list = pd.DataFrame({'x_axis_abbrev': ['Age',  'Age', 'Age', 'Age', 'Age', 'Age',    'Age',  'Age',
-                                                        'Age',   'Age', 'Age', 'BMC', 'MWF'],
+                                                        'Age',   'Age', 'Age', 'BMC', 'MWF', ''],
                                    'y_axis_abbrev': ['BMD', 'BVTV',   'D', 'MWF', 'OWF', 'TMD', 'MEANAA', 'MINA',
-                                                     'MEANAF', 'MINAF', 'MMR',  'MW', 'MMR']})
+                                                     'MEANAF', 'MINAF', 'MMR',  'MW', 'MMR', '']})
     # if p-value smaller than 0.05 create fit curve and if variable 'Age' should not be plotted on main axis, no
     # colormap will be used
     if float(p) <= 0.05:
