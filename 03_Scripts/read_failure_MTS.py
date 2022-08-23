@@ -13,6 +13,7 @@ from scipy.signal import butter, filtfilt
 from scipy.signal import find_peaks
 from scipy import stats
 from pathlib import Path
+from matplotlib import rcParams
 
 # definition of lowpass filter
 def butter_lowpass_filter(data, cutoff, order=9):
@@ -30,8 +31,9 @@ filename_list = [File for File in os.listdir(DataPath) if File.endswith('.csv')]
 filename_list.sort()
 
 # load uCT results & remove naN entries; areas needed for stress calculations
-results_uCT = pd.read_csv(str('/home/stefan/Documents/PythonScripts/04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
-results_uCT = results_uCT.drop(index=[8, 13, 20, 24, 27, 37], axis=0)
+# results_uCT = pd.read_csv(str('/home/stefan/Documents/PythonScripts/04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
+results_uCT = pd.read_csv(str('C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
+results_uCT = results_uCT.drop(index=[8, 14, 20, 24, 27, 37], axis=0)
 results_uCT = results_uCT.reset_index(drop=True)
 
 # set counters for iterations over files (i) and areas for stress calculation (counter) & initialize results list
@@ -236,10 +238,27 @@ for filename in filename_list:
     result_dir = pd.DataFrame(result, columns=['Sample ID', 'Ultimate stress / MPa', 'Ultimate strain / -',
                                                'Ultimate Force / N', 'Apparent modulus / MPa', 'Stiffness / N/mm'])
 
+    rcParams.update({'figure.autolayout': True})
+    time = pd.DataFrame()
+    time = df['time'] - df['time'].loc[0]
+    fig, ax1 = plt.subplots()
+    ax1.plot(time[0:peaks_index[-1]], df['disp_ext'][0:peaks_index[-1]])
+    ax2 = ax1.twinx()
+    ax2.plot(time[0:peaks_index[-1]], df['strain_ext'][0:peaks_index[-1]])
+    ax1.set_xlabel('Time s')
+    ax1.set_ylabel('Displacement mm')
+    ax2.set_ylabel('Strain -')
+    ax2.autoscale()
+    savepath_new = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/01_Demineralized'
+    plt.savefig(os.path.join(savepath_new, 'disp_time_failure' + sample_ID + '.png'), dpi=300)
+    plt.show()
+
 # add missing samples to list
 missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '400R', '402L', '403R', '433L']})
 result_dir = pd.concat([result_dir, missing_sample_IDs])
 result_dir_sorted = result_dir.sort_values(by=['Sample ID'], ascending=True)
-
-result_dir_sorted.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/01_Demineralized/',
+#
+# result_dir_sorted.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/01_Demineralized/',
+#                                       'ResultsFailureTesting.csv'), index=False)
+result_dir_sorted.to_csv(os.path.join('C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/01_Demineralized',
                                       'ResultsFailureTesting.csv'), index=False)

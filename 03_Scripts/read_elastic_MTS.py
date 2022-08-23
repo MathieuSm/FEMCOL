@@ -11,6 +11,7 @@ from scipy.signal import butter, filtfilt
 from scipy.signal import find_peaks
 from scipy import stats
 from pathlib import Path
+from matplotlib import rcParams
 
 # definition of lowpass filter
 def butter_lowpass_filter(data, cutoff, order=9):
@@ -28,8 +29,9 @@ filename_list = [File for File in os.listdir(DataPath) if File.endswith('.csv')]
 filename_list.sort()
 
 # load uCT results & remove naN entries; areas needed for stress calculations
-results_uCT = pd.read_csv(str('/home/stefan/Documents/PythonScripts/04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
-results_uCT = results_uCT.drop(index=[8, 13, 20, 24, 37], axis=0)
+# results_uCT = pd.read_csv(str('/home/stefan/Documents/PythonScripts/04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
+results_uCT = pd.read_csv(str('C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
+results_uCT = results_uCT.drop(index=[8, 14, 20, 24, 37], axis=0)
 results_uCT = results_uCT.reset_index(drop=True)
 
 # set counters for iterations over files (i) and areas for stress calculation (counter) & initialize results list
@@ -132,7 +134,7 @@ for filename in filename_list:
 
     # calculate stress/strain, filter and put into dataframe
     l_initial = 6.5
-    mean_area_wop = results_uCT['Mean Area (w/o porosity) mm^2'][counter]
+    mean_area_wop = results_uCT['Mean Apparent Area mm^2'][counter]
     stress_wop = df['force_lc'] / mean_area_wop
     strain = df['disp_ext'] / l_initial
     df['stress_lc_wop'] = stress_wop
@@ -232,10 +234,31 @@ for filename in filename_list:
     result.append(values)
     result_dir = pd.DataFrame(result, columns=['Sample ID', 'Stiffness N/mm', 'Apparent modulus MPa'])
 
+    rcParams.update({'figure.autolayout': True})
+    time = pd.DataFrame()
+    time = df['time'] - df['time'].loc[0]
+    fig, ax1 = plt.subplots()
+    ax1.plot(time, df['disp_ext'])
+    ax2 = ax1.twinx()
+    ax2.plot(time, df['strain_ext'])
+    ax1.set_xlabel('Time s')
+    ax1.set_ylabel('Displacement mm')
+    ax2.set_ylabel('Strain -')
+    ax2.autoscale()
+    savepath_new = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/00_Mineralized'
+    plt.savefig(os.path.join(savepath_new, 'disp_time_elastic' + sample_ID + '.png'), dpi=300)
+    plt.show()
+
 # add missing samples to list & safe
 missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '400R', '402L', '433L']})
 result_dir = pd.concat([result_dir, missing_sample_IDs])
 result_dir_sorted = result_dir.sort_values(by=['Sample ID'], ascending=True)
 
-result_dir_sorted.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/00_Mineralized/',
+# result_dir_sorted.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/00_Mineralized/',
+#                                       'ResultsElasticTesting.csv'), index=False)
+result_dir_sorted.to_csv(os.path.join('C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/00_Mineralized',
                                       'ResultsElasticTesting.csv'), index=False)
+
+
+
+
