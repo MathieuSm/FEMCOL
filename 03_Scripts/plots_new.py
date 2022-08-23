@@ -248,9 +248,9 @@ for i in range(len(Pair)):
 
     # list of plots which need autoscaling, has to be ordered manually
     autoscale_list = pd.DataFrame({'x_axis_abbrev': ['Age',  'Age', 'Age', 'Age', 'Age', 'Age',    'Age',  'Age',
-                                                        'Age',   'Age', 'BMC'],
+                                                        'Age',   'Age', 'Age', 'BMC', 'MWF'],
                                    'y_axis_abbrev': ['BMD', 'BVTV',   'D', 'MWF', 'OWF', 'TMD', 'MEANAA', 'MINA',
-                                                     'MEANAF', 'MINAF', 'MWF']})
+                                                     'MEANAF', 'MINAF', 'MMR',  'MW', 'MMR']})
     # if p-value smaller than 0.05 create fit curve and if variable 'Age' should not be plotted on main axis, no
     # colormap will be used
     if float(p) <= 0.05:
