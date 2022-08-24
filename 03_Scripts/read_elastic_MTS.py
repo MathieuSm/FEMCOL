@@ -129,7 +129,7 @@ for filename in filename_list:
     plt.legend()
     plt.autoscale()
     savepath_fd = Cwd / '04_Results/00_Mineralized/00_force_disp/'
-    plt.savefig(os.path.join(savepath_fd, 'force_disp_' + sample_ID + '.png'), dpi=300)
+    plt.savefig(os.path.join(savepath_fd, 'force_disp_' + sample_ID + '.png'), dpi=300, bbox_inches='tight')
     plt.show()
     # plt.close()
 
@@ -225,7 +225,7 @@ for filename in filename_list:
     plt.legend()
     plt.autoscale()
     savepath = Cwd / '04_Results/00_Mineralized/01_stress_strain/'
-    plt.savefig(os.path.join(savepath, 'stress_strain_' + sample_ID + '.png'), dpi=300)
+    plt.savefig(os.path.join(savepath, 'stress_strain_' + sample_ID + '.png'), dpi=300, bbox_inches='tight')
     plt.show()
     # plt.close()
 

@@ -156,21 +156,21 @@ for filename in filename_list:
     last_cycle_plot_fd = last_cycle_fd[max_slope_index_stiff[0]:max_slope_index_stiff[0] + window_width]
 
     # generate plot
-    plt.figure(figsize=(6, 4))
-    plt.title(sample_ID)
-    plt.plot(df['disp_ext'][0:peaks_index[-1]], df['force_lc_filtered'][0:peaks_index[-1]], label='filtered')
-    plt.plot(last_cycle_fd['last_cycle_disp'], last_cycle_fd['last_cycle_force'],
-             label='lasting cycle')
-    plt.plot(last_cycle_plot_fd['last_cycle_disp'], last_cycle_plot_fd['last_cycle_force'], label='regress area',
-             color='k')
+    # plt.figure(figsize=(6, 4))
+    # plt.title(sample_ID)
+    plt.plot(df['disp_ext'][0:peaks_index[-1]], df['force_lc_filtered'][0:peaks_index[-1]], label='Filtered')
+    plt.plot(last_cycle_fd['last_cycle_disp'], last_cycle_fd['last_cycle_force'], label='Lasting unloading cycle')
+    # plt.plot(last_cycle_plot_fd['last_cycle_disp'], last_cycle_plot_fd['last_cycle_force'], label='regress area',
+    #          color='k')
     plt.plot(last_cycle_plot_fd['last_cycle_disp'], stiffness * last_cycle_plot_fd['last_cycle_disp'] +
-             intercept_value_max_stiff, 'r', label='fit')
-    plt.plot([], ' ', label=f'stiffness = {stiffness:.0f} N/mm')
+             intercept_value_max_stiff, label='Fit', color='black')
+    plt.plot([], ' ', label=f'Stiffness = {stiffness:.0f} N/mm')
     plt.ylabel('force / N')
     plt.xlabel('disp / mm')
     plt.legend()
+    plt.autoscale()
     savepath_fd = Cwd / '04_Results/00_Mineralized/00_force_disp/'
-    plt.savefig(os.path.join(savepath_fd, 'force_disp_' + sample_ID + '.png'), dpi=300)
+    plt.savefig(os.path.join(savepath_fd, 'force_disp_' + sample_ID + '.png'), dpi=300, bbox_inches='tight')
     plt.show()
     # plt.close()
 
@@ -212,20 +212,21 @@ for filename in filename_list:
     last_cycle_plot_ss = last_cycle_ss[max_slope_index_app[0]:max_slope_index_app[0] + window_width]
 
     # generate plot
-    plt.figure(figsize=(6, 4))
-    plt.title(sample_ID)
-    plt.plot(df['strain_ext'][0:peaks_index[-1]], df['stress_lc_filtered_wop'][0:peaks_index[-1]], label='filtered')
-    plt.plot(last_cycle_ss['last_cycle_strain'], last_cycle_ss['last_cycle_stress'], label='lasting cycle')
-    plt.plot(last_cycle_plot_ss['last_cycle_strain'], last_cycle_plot_ss['last_cycle_stress'], label='regress area',
-             color='k')
+    # plt.figure(figsize=(6, 4))
+    # plt.title(sample_ID)
+    plt.plot(df['strain_ext'][0:peaks_index[-1]], df['stress_lc_filtered_wop'][0:peaks_index[-1]], label='Filtered')
+    plt.plot(last_cycle_ss['last_cycle_strain'], last_cycle_ss['last_cycle_stress'], label='Last unloading cycle')
+    # plt.plot(last_cycle_plot_ss['last_cycle_strain'], last_cycle_plot_ss['last_cycle_stress'], label='regress area',
+    #          color='k')
     plt.plot(last_cycle_plot_ss['last_cycle_strain'], apparent_modulus * last_cycle_plot_ss['last_cycle_strain'] +
-             intercept_value_max_app, 'r', label='fit')
-    plt.plot([], ' ', label=f'apparent modulus = {apparent_modulus:.0f} MPa')
+             intercept_value_max_app, label='Fit', color='black')
+    plt.plot([], ' ', label=f'Apparent modulus = {apparent_modulus:.0f} MPa')
     plt.ylabel('stress / MPa')
     plt.xlabel('strain / -')
     plt.legend()
+    plt.autoscale()
     savepath_ss = Cwd / '04_Results/01_Demineralized/01_stress_strain/'
-    plt.savefig(os.path.join(savepath_ss, 'stress_strain_' + sample_ID + '.png'), dpi=300)
+    plt.savefig(os.path.join(savepath_ss, 'stress_strain_' + sample_ID + '.png'), dpi=300, bbox_inches='tight')
     plt.show()
     # plt.close()
 
@@ -242,15 +243,16 @@ for filename in filename_list:
     time = pd.DataFrame()
     time = df['time'] - df['time'].loc[0]
     fig, ax1 = plt.subplots()
-    ax1.plot(time[0:peaks_index[-1]], df['disp_ext'][0:peaks_index[-1]])
+    ax1.plot(time[0:peaks_index[-1]], df['disp_ext'][0:peaks_index[-1]], label='Displacement')
     ax2 = ax1.twinx()
-    ax2.plot(time[0:peaks_index[-1]], df['strain_ext'][0:peaks_index[-1]])
+    ax2.plot(time[0:peaks_index[-1]], df['force_lc'][0:peaks_index[-1]], color='darkorange', label='Force')
     ax1.set_xlabel('Time s')
     ax1.set_ylabel('Displacement mm')
-    ax2.set_ylabel('Strain -')
+    ax2.set_ylabel('Force N')
+    fig.legend(loc='upper center', bbox_to_anchor=(0.5, 1.05), ncol=2)
     ax2.autoscale()
     savepath_new = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/01_Demineralized'
-    plt.savefig(os.path.join(savepath_new, 'disp_time_failure' + sample_ID + '.png'), dpi=300)
+    plt.savefig(os.path.join(savepath_new, 'disp_time_failure' + sample_ID + '.png'), dpi=300, bbox_inches='tight')
     plt.show()
 
 # add missing samples to list
