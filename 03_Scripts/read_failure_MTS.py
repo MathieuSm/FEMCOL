@@ -169,7 +169,7 @@ for filename in filename_list:
     plt.xlabel('disp / mm')
     plt.legend()
     plt.autoscale()
-    savepath_fd = Cwd / '04_Results/00_Mineralized/00_force_disp/'
+    savepath_fd = Cwd / '04_Results/01_Demineralized/00_force_disp/'
     plt.savefig(os.path.join(savepath_fd, 'force_disp_fail_' + sample_ID + '.png'), dpi=300, bbox_inches='tight')
     plt.show()
     # plt.close()
@@ -251,7 +251,7 @@ for filename in filename_list:
     ax2.set_ylabel('Force N')
     fig.legend(loc='upper center', bbox_to_anchor=(0.5, 1.05), ncol=2)
     ax2.autoscale()
-    savepath_new = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/01_Demineralized'
+    savepath_new = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/01_Demineralized/02_disp_force_time'
     plt.savefig(os.path.join(savepath_new, 'disp_time_fail_' + sample_ID + '.png'), dpi=300, bbox_inches='tight')
     plt.show()
 
