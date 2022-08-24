@@ -116,7 +116,7 @@ for filename in filename_list:
     last_cycle_plot = last_cycle[max_slope_index[0]:max_slope_index[0] + window_width]
 
     # generate plot
-    plt.figure(figsize=(6, 4))
+    # plt.figure(figsize=(6, 4))
     plt.title(sample_ID)
     plt.plot(df['disp_ext'], df['force_lc_filtered'], label='Filtered')
     plt.plot(last_cycle['last_cycle_disp'], last_cycle['last_cycle_force'], label='Last unloading cycle')
@@ -127,6 +127,7 @@ for filename in filename_list:
     plt.ylabel('force lc / N')
     plt.xlabel('disp ext / mm')
     plt.legend()
+    plt.autoscale()
     savepath_fd = Cwd / '04_Results/00_Mineralized/00_force_disp/'
     plt.savefig(os.path.join(savepath_fd, 'force_disp_' + sample_ID + '.png'), dpi=300)
     plt.show()
@@ -211,7 +212,7 @@ for filename in filename_list:
     last_cycle_plot = last_cycle[max_slope_index_app[0]:max_slope_index_app[0] + window_width]
 
     # generate plot
-    plt.figure(figsize=(6, 4))
+    # plt.figure(figsize=(6, 4))
     plt.title(sample_ID)
     plt.plot(df['strain_ext'], df['stress_lc_filtered_wop'], label='Filtered')
     plt.plot(last_cycle['last_cycle_strain'], last_cycle['last_cycle_stress'], label='Last unloading cycle')
@@ -222,6 +223,7 @@ for filename in filename_list:
     plt.ylabel('stress / MPa')
     plt.xlabel('strain / -')
     plt.legend()
+    plt.autoscale()
     savepath = Cwd / '04_Results/00_Mineralized/01_stress_strain/'
     plt.savefig(os.path.join(savepath, 'stress_strain_' + sample_ID + '.png'), dpi=300)
     plt.show()
