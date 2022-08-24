@@ -239,15 +239,18 @@ for filename in filename_list:
     time = pd.DataFrame()
     time = df['time'] - df['time'].loc[0]
     fig, ax1 = plt.subplots()
-    ax1.plot(time, df['disp_ext'])
+    ax1.plot(time, df['disp_ext'], label='Displacement')
     ax2 = ax1.twinx()
-    ax2.plot(time, df['strain_ext'])
+    ax2.plot(time, df['force_lc'], color='black', label='Force')
     ax1.set_xlabel('Time s')
     ax1.set_ylabel('Displacement mm')
-    ax2.set_ylabel('Strain -')
+    ax2.set_ylabel('Force N')
+    # fig.legend()
+    fig.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=2)
+    ax1.autoscale()
     ax2.autoscale()
     savepath_new = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/00_Mineralized'
-    plt.savefig(os.path.join(savepath_new, 'disp_time_elastic_' + sample_ID + '.png'), dpi=300)
+    plt.savefig(os.path.join(savepath_new, 'disp_time_elastic_' + sample_ID + '.png'), dpi=300, bbox_inches='tight')
     plt.show()
 
 # add missing samples to list & safe
