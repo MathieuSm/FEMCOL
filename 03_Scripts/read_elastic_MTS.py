@@ -118,12 +118,12 @@ for filename in filename_list:
     # generate plot
     plt.figure(figsize=(6, 4))
     plt.title(sample_ID)
-    plt.plot(df['disp_ext'], df['force_lc_filtered'], label='filtered')
-    plt.plot(last_cycle['last_cycle_disp'], last_cycle['last_cycle_force'], label='last unloading cycle 0.005-0.015')
+    plt.plot(df['disp_ext'], df['force_lc_filtered'], label='Filtered')
+    plt.plot(last_cycle['last_cycle_disp'], last_cycle['last_cycle_force'], label='Last unloading cycle')
     # plt.plot(last_cycle_plot['last_cycle_disp'], last_cycle_plot['last_cycle_force'], label='regression area', color='k')
     plt.plot(last_cycle_plot['last_cycle_disp'], stiffness * last_cycle_plot['last_cycle_disp'] +
-             intercept_value_max_stiff, label='fit', color='black')
-    plt.plot([], ' ', label=f'stiffness = {stiffness:.0f} N/mm')
+             intercept_value_max_stiff, label='Fit', color='black')
+    plt.plot([], ' ', label=f'Stiffness = {stiffness:.0f} N/mm')
     plt.ylabel('force lc / N')
     plt.xlabel('disp ext / mm')
     plt.legend()
@@ -213,12 +213,12 @@ for filename in filename_list:
     # generate plot
     plt.figure(figsize=(6, 4))
     plt.title(sample_ID)
-    plt.plot(df['strain_ext'], df['stress_lc_filtered_wop'], label='filtered')
-    plt.plot(last_cycle['last_cycle_strain'], last_cycle['last_cycle_stress'], label='last unloading cycle 0.001-0.0025')
+    plt.plot(df['strain_ext'], df['stress_lc_filtered_wop'], label='Filtered')
+    plt.plot(last_cycle['last_cycle_strain'], last_cycle['last_cycle_stress'], label='Last unloading cycle')
     # plt.plot(last_cycle_plot['last_cycle_strain'], last_cycle_plot['last_cycle_stress'], label='regress area', color='k')
     plt.plot(last_cycle_plot['last_cycle_strain'], apparent_modulus * last_cycle_plot['last_cycle_strain'] +
-             intercept_value_max_app, label='fit', color='black')
-    plt.plot([], ' ', label=f'apparent modulus = {apparent_modulus:.0f} MPa')
+             intercept_value_max_app, label='Fit', color='black')
+    plt.plot([], ' ', label=f'Apparent modulus = {apparent_modulus:.0f} MPa')
     plt.ylabel('stress / MPa')
     plt.xlabel('strain / -')
     plt.legend()
