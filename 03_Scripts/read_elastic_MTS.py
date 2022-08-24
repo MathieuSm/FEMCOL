@@ -120,9 +120,9 @@ for filename in filename_list:
     plt.title(sample_ID)
     plt.plot(df['disp_ext'], df['force_lc_filtered'], label='filtered')
     plt.plot(last_cycle['last_cycle_disp'], last_cycle['last_cycle_force'], label='last unloading cycle 0.005-0.015')
-    plt.plot(last_cycle_plot['last_cycle_disp'], last_cycle_plot['last_cycle_force'], label='regress area', color='k')
+    # plt.plot(last_cycle_plot['last_cycle_disp'], last_cycle_plot['last_cycle_force'], label='regression area', color='k')
     plt.plot(last_cycle_plot['last_cycle_disp'], stiffness * last_cycle_plot['last_cycle_disp'] +
-             intercept_value_max_stiff, 'r')
+             intercept_value_max_stiff, label='fit', color='black')
     plt.plot([], ' ', label=f'stiffness = {stiffness:.0f} N/mm')
     plt.ylabel('force lc / N')
     plt.xlabel('disp ext / mm')
@@ -215,10 +215,9 @@ for filename in filename_list:
     plt.title(sample_ID)
     plt.plot(df['strain_ext'], df['stress_lc_filtered_wop'], label='filtered')
     plt.plot(last_cycle['last_cycle_strain'], last_cycle['last_cycle_stress'], label='last unloading cycle 0.001-0.0025')
-    plt.plot(last_cycle_plot['last_cycle_strain'], last_cycle_plot['last_cycle_stress'], label='regress area',
-             color='k')
+    # plt.plot(last_cycle_plot['last_cycle_strain'], last_cycle_plot['last_cycle_stress'], label='regress area', color='k')
     plt.plot(last_cycle_plot['last_cycle_strain'], apparent_modulus * last_cycle_plot['last_cycle_strain'] +
-             intercept_value_max_app, 'r')
+             intercept_value_max_app, label='fit', color='black')
     plt.plot([], ' ', label=f'apparent modulus = {apparent_modulus:.0f} MPa')
     plt.ylabel('stress / MPa')
     plt.xlabel('strain / -')
