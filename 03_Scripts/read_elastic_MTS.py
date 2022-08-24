@@ -245,7 +245,7 @@ for filename in filename_list:
     ax2.set_ylabel('Strain -')
     ax2.autoscale()
     savepath_new = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/00_Mineralized'
-    plt.savefig(os.path.join(savepath_new, 'disp_time_elastic' + sample_ID + '.png'), dpi=300)
+    plt.savefig(os.path.join(savepath_new, 'disp_time_elastic_' + sample_ID + '.png'), dpi=300)
     plt.show()
 
 # add missing samples to list & safe
