@@ -170,7 +170,7 @@ for filename in filename_list:
     plt.legend()
     plt.autoscale()
     savepath_fd = Cwd / '04_Results/00_Mineralized/00_force_disp/'
-    plt.savefig(os.path.join(savepath_fd, 'force_disp_' + sample_ID + '.png'), dpi=300, bbox_inches='tight')
+    plt.savefig(os.path.join(savepath_fd, 'force_disp_fail_' + sample_ID + '.png'), dpi=300, bbox_inches='tight')
     plt.show()
     # plt.close()
 
@@ -226,7 +226,7 @@ for filename in filename_list:
     plt.legend()
     plt.autoscale()
     savepath_ss = Cwd / '04_Results/01_Demineralized/01_stress_strain/'
-    plt.savefig(os.path.join(savepath_ss, 'stress_strain_' + sample_ID + '.png'), dpi=300, bbox_inches='tight')
+    plt.savefig(os.path.join(savepath_ss, 'stress_strain_fail_' + sample_ID + '.png'), dpi=300, bbox_inches='tight')
     plt.show()
     # plt.close()
 
@@ -252,7 +252,7 @@ for filename in filename_list:
     fig.legend(loc='upper center', bbox_to_anchor=(0.5, 1.05), ncol=2)
     ax2.autoscale()
     savepath_new = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/01_Demineralized'
-    plt.savefig(os.path.join(savepath_new, 'disp_time_failure' + sample_ID + '.png'), dpi=300, bbox_inches='tight')
+    plt.savefig(os.path.join(savepath_new, 'disp_time_fail_' + sample_ID + '.png'), dpi=300, bbox_inches='tight')
     plt.show()
 
 # add missing samples to list

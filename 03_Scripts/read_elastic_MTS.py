@@ -129,7 +129,7 @@ for filename in filename_list:
     plt.legend()
     plt.autoscale()
     savepath_fd = Cwd / '04_Results/00_Mineralized/00_force_disp/'
-    plt.savefig(os.path.join(savepath_fd, 'force_disp_' + sample_ID + '.png'), dpi=300, bbox_inches='tight')
+    plt.savefig(os.path.join(savepath_fd, 'force_disp_el' + sample_ID + '.png'), dpi=300, bbox_inches='tight')
     plt.show()
     # plt.close()
 
@@ -225,7 +225,7 @@ for filename in filename_list:
     plt.legend()
     plt.autoscale()
     savepath = Cwd / '04_Results/00_Mineralized/01_stress_strain/'
-    plt.savefig(os.path.join(savepath, 'stress_strain_' + sample_ID + '.png'), dpi=300, bbox_inches='tight')
+    plt.savefig(os.path.join(savepath, 'stress_strain_el_' + sample_ID + '.png'), dpi=300, bbox_inches='tight')
     plt.show()
     # plt.close()
 
@@ -249,7 +249,7 @@ for filename in filename_list:
     ax1.autoscale()
     ax2.autoscale()
     savepath_new = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/00_Mineralized'
-    plt.savefig(os.path.join(savepath_new, 'disp_time_elastic_' + sample_ID + '.png'), dpi=300, bbox_inches='tight')
+    plt.savefig(os.path.join(savepath_new, 'disp_time_el_' + sample_ID + '.png'), dpi=300, bbox_inches='tight')
     plt.show()
 
 # add missing samples to list & safe
