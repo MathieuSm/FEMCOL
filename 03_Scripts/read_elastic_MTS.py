@@ -246,7 +246,7 @@ for filename in filename_list:
     ax1.set_ylabel('Displacement mm')
     ax2.set_ylabel('Force N')
     # fig.legend()
-    fig.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=2)
+    fig.legend(loc='upper center', bbox_to_anchor=(0.5, 1.11), ncol=2)
     ax1.autoscale()
     ax2.autoscale()
     savepath_new = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/00_Mineralized'
