@@ -117,7 +117,7 @@ for filename in filename_list:
 
     # generate plot
     # plt.figure(figsize=(6, 4))
-    plt.title(sample_ID)
+    # plt.title(sample_ID)
     plt.plot(df['disp_ext'], df['force_lc_filtered'], label='Filtered')
     plt.plot(last_cycle['last_cycle_disp'], last_cycle['last_cycle_force'], label='Last unloading cycle')
     # plt.plot(last_cycle_plot['last_cycle_disp'], last_cycle_plot['last_cycle_force'], label='regression area', color='k')
@@ -213,7 +213,7 @@ for filename in filename_list:
 
     # generate plot
     # plt.figure(figsize=(6, 4))
-    plt.title(sample_ID)
+    # plt.title(sample_ID)
     plt.plot(df['strain_ext'], df['stress_lc_filtered_wop'], label='Filtered')
     plt.plot(last_cycle['last_cycle_strain'], last_cycle['last_cycle_stress'], label='Last unloading cycle')
     # plt.plot(last_cycle_plot['last_cycle_strain'], last_cycle_plot['last_cycle_stress'], label='regress area', color='k')
