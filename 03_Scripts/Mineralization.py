@@ -157,20 +157,25 @@ for x in range(0, len(Data), 1):
     # and area fraction (bone area/total area)
     Area = Voxel_Dimensions[0] * Voxel_Dimensions[1]
     BoneAreas = np.zeros(Scan.shape[0])
+    BoneAreas_new = np.zeros(Scan.shape[0])
     TotalAreas = np.zeros(Scan.shape[0])
     Areas_fraction = np.zeros(Scan.shape[0])
+    Areas_fraction_new = np.zeros(Scan.shape[0])
     BoneVolumes = np.zeros(Scan.shape[0])
 
     for i in range(Scan.shape[0]):
         BoneAreas[i] = BinaryScan[i].sum() * Area * 1e06
+        BoneAreas_new[i] = Sample[i].sum() * Area * 1e06
         TotalAreas[i] = Cylinder[i].sum() * Area * 1e06
         Areas_fraction[i] = BoneAreas[i] / TotalAreas[i]
+        Areas_fraction_new[i] = BoneAreas_new[i] / TotalAreas[i]
         # BoneVolumes[i] = BoneAreas[i] * Voxel_Dimensions[2] * 1e03
     min_BoneArea_wp = round(BoneAreas.min(), 3)
     mean_Area_wop = round(statistics.mean(TotalAreas), 3)
     min_Diam_wp = round(math.sqrt(min_BoneArea_wp/Pi*4), 3)
     mean_Diam_wop = round(math.sqrt(mean_Area_wop/Pi*4), 3)
     min_areas_fraction = round(Areas_fraction.min(), 3)
+    min_areas_fraction_new = round(Areas_fraction_new.min(), 3)
     mean_areas_fraction = round(statistics.mean(Areas_fraction), 3)
 
     # TotalVolume_mean = mean_Area_wop * 946 * Voxel_Dimensions[0] * 1e03
@@ -179,7 +184,7 @@ for x in range(0, len(Data), 1):
 
     # Collect data into filling list
     values = [SampleID, BVTV, BMD, TMD, BMC, min_BoneArea_wp, min_Diam_wp, mean_Area_wop, mean_Diam_wop,
-              mean_areas_fraction, min_areas_fraction]
+              mean_areas_fraction, min_areas_fraction, min_areas_fraction_new]
     results.append(values)
 
     print('Progress: ' + str(x) + ' of ' + str(len(Data)-1))
@@ -191,7 +196,8 @@ missing_sample_IDs = pd.DataFrame({'Sample ID': ['390_R', '395_R', '402_L']})
 result_dir = pd.DataFrame(results, columns=['Sample ID', 'Bone Volume Fraction -', 'Bone Mineral Density mg HA / cm3',
                                             'Tissue Mineral Density mg HA / cm3', 'Bone Mineral Content mg HA',
                                             'Min Area mm^2', 'Min Diameter mm', 'Mean Apparent Area mm^2',
-                                            'Mean Apparent Diameter mm', 'Mean Area Fraction -', 'Min Area Fraction -'])
+                                            'Mean Apparent Diameter mm', 'Mean Area Fraction -', 'Min Area Fraction -',
+                                            'Min Area Fraction Adjusted -'])
 result_dir = pd.concat([result_dir, missing_sample_IDs])
 result_dir_sorted = result_dir.sort_values(by=['Sample ID'], ascending=True)
 result_dir_sorted.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/03_uCT/', 'ResultsUCT.csv'),
