@@ -165,7 +165,7 @@ for x in range(0, len(Data), 1):
 
     for i in range(Scan.shape[0]):
         BoneAreas[i] = BinaryScan[i].sum() * Area * 1e06
-        BoneAreas_new[i] = Sample[i].sum() * Area * 1e06
+        BoneAreas_new[i] = Sample[i].sum() * Area * 1e03
         TotalAreas[i] = Cylinder[i].sum() * Area * 1e06
         Areas_fraction[i] = BoneAreas[i] / TotalAreas[i]
         Areas_fraction_new[i] = BoneAreas_new[i] / TotalAreas[i]
