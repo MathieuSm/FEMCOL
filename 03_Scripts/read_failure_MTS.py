@@ -164,11 +164,12 @@ for filename in filename_list:
     #          color='k')
     plt.plot(last_cycle_plot_fd['last_cycle_disp'], stiffness * last_cycle_plot_fd['last_cycle_disp'] +
              intercept_value_max_stiff, label='Fit', color='black')
-    plt.plot([], ' ', label=f'Stiffness = {stiffness:.0f} N/mm')
+    # plt.plot([], ' ', label=f'Stiffness = {stiffness:.0f} N/mm')
     plt.ylabel('force / N')
     plt.xlabel('disp / mm')
     plt.legend()
     plt.autoscale()
+    plt.rcParams.update({'font.size': 14})
     savepath_fd = Cwd / '04_Results/01_Demineralized/00_force_disp/'
     plt.savefig(os.path.join(savepath_fd, 'force_disp_fail_' + sample_ID + '.png'), dpi=300, bbox_inches='tight')
     plt.show()
@@ -220,11 +221,12 @@ for filename in filename_list:
     #          color='k')
     plt.plot(last_cycle_plot_ss['last_cycle_strain'], apparent_modulus * last_cycle_plot_ss['last_cycle_strain'] +
              intercept_value_max_app, label='Fit', color='black')
-    plt.plot([], ' ', label=f'Apparent modulus = {apparent_modulus:.0f} MPa')
+    # plt.plot([], ' ', label=f'Apparent modulus = {apparent_modulus:.0f} MPa')
     plt.ylabel('stress / MPa')
     plt.xlabel('strain / -')
     plt.legend()
     plt.autoscale()
+    plt.rcParams.update({'font.size': 14})
     savepath_ss = Cwd / '04_Results/01_Demineralized/01_stress_strain/'
     plt.savefig(os.path.join(savepath_ss, 'stress_strain_fail_' + sample_ID + '.png'), dpi=300, bbox_inches='tight')
     plt.show()
@@ -249,8 +251,10 @@ for filename in filename_list:
     ax1.set_xlabel('Time s')
     ax1.set_ylabel('Displacement mm')
     ax2.set_ylabel('Force N')
-    fig.legend(loc='upper center', bbox_to_anchor=(0.5, 1.05), ncol=2)
+    # fig.legend(loc='upper center', bbox_to_anchor=(0.5, 1.07), ncol=2)
+    fig.legend(loc='upper left', bbox_to_anchor=(0.14, 0.95), ncol=1)
     ax2.autoscale()
+    plt.rcParams.update({'font.size': 14})
     savepath_new = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/01_Demineralized/02_disp_force_time'
     plt.savefig(os.path.join(savepath_new, 'disp_time_fail_' + sample_ID + '.png'), dpi=300, bbox_inches='tight')
     plt.show()

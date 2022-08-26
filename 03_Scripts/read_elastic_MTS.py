@@ -92,7 +92,8 @@ for filename in filename_list:
 
     # define window width for moving linear regression
     window_width = round(1 / 3 * len(last_cycle))
-
+    print(str(sample_ID) + '   window width: ' + str(window_width) + '   len(last_cycle): ' + str(len(last_cycle)) +
+          '   ratio len/ww: ' + str(round(len(last_cycle)/window_width)))
     # rolling linear regression for stiffness calculation
     slope_values_stiff = list()
     intercept_values_stiff = list()
@@ -123,11 +124,13 @@ for filename in filename_list:
     # plt.plot(last_cycle_plot['last_cycle_disp'], last_cycle_plot['last_cycle_force'], label='regression area', color='k')
     plt.plot(last_cycle_plot['last_cycle_disp'], stiffness * last_cycle_plot['last_cycle_disp'] +
              intercept_value_max_stiff, label='Fit', color='black')
-    plt.plot([], ' ', label=f'Stiffness = {stiffness:.0f} N/mm')
+    # plt.plot([], ' ', label=f'Stiffness = {stiffness:.0f} N/mm')
     plt.ylabel('force lc / N')
     plt.xlabel('disp ext / mm')
     plt.legend()
     plt.autoscale()
+    plt.rcParams.update({'font.size': 14})
+    # plt.legend(prop={'size': 14})
     savepath_fd = Cwd / '04_Results/00_Mineralized/00_force_disp/'
     plt.savefig(os.path.join(savepath_fd, 'force_disp_el_' + sample_ID + '.png'), dpi=300, bbox_inches='tight')
     plt.show()
@@ -219,11 +222,13 @@ for filename in filename_list:
     # plt.plot(last_cycle_plot['last_cycle_strain'], last_cycle_plot['last_cycle_stress'], label='regress area', color='k')
     plt.plot(last_cycle_plot['last_cycle_strain'], apparent_modulus * last_cycle_plot['last_cycle_strain'] +
              intercept_value_max_app, label='Fit', color='black')
-    plt.plot([], ' ', label=f'Apparent modulus = {apparent_modulus:.0f} MPa')
+    # plt.plot([], ' ', label=f'Apparent modulus = {apparent_modulus:.0f} MPa')
     plt.ylabel('stress / MPa')
     plt.xlabel('strain / -')
     plt.legend()
     plt.autoscale()
+    plt.rcParams.update({'font.size': 14})
+    # plt.legend(prop={'size': 14})
     savepath = Cwd / '04_Results/00_Mineralized/01_stress_strain/'
     plt.savefig(os.path.join(savepath, 'stress_strain_el_' + sample_ID + '.png'), dpi=300, bbox_inches='tight')
     plt.show()
@@ -245,9 +250,10 @@ for filename in filename_list:
     ax1.set_xlabel('Time s')
     ax1.set_ylabel('Displacement mm')
     ax2.set_ylabel('Force N')
-    fig.legend(loc='upper center', bbox_to_anchor=(0.5, 1.05), ncol=2)
+    fig.legend(loc='upper center', bbox_to_anchor=(0.5, 1.07), ncol=2)
     ax1.autoscale()
     ax2.autoscale()
+    plt.rcParams.update({'font.size': 14})
     savepath_new = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/00_Mineralized/02_disp_force_time'
     plt.savefig(os.path.join(savepath_new, 'disp_time_el_' + sample_ID + '.png'), dpi=300, bbox_inches='tight')
     plt.show()
