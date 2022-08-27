@@ -288,7 +288,7 @@ for i in range(len(Pair)):
                 plt.autoscale()
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 # plt.legend(loc='upper center', ncol=2, bbox_to_anchor=(0.5, 1.15), prop={'size': 10})
-                plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
+                plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=3)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, bbox_inches='tight')
                 plt.show()
@@ -296,7 +296,7 @@ for i in range(len(Pair)):
             else:
                 plt.ylim(ymin=0)
                 plt.subplots_adjust(left=0.15, bottom=0.15)
-                plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
+                plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=3)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, bbox_inches='tight')
                 plt.show()
@@ -326,7 +326,7 @@ for i in range(len(Pair)):
                 # plt.ylim(ymin=0, ymax=round(Y_Fit.max() * 1.2, 2))
                 plt.autoscale()
                 plt.subplots_adjust(left=0.15, bottom=0.15)
-                plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
+                plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=3)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, bbox_inches='tight')
                 plt.show()
@@ -334,7 +334,7 @@ for i in range(len(Pair)):
             else:
                 plt.ylim(ymin=0)
                 plt.subplots_adjust(left=0.15, bottom=0.15)
-                plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
+                plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=3)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, bbox_inches='tight')
                 plt.show()
@@ -365,7 +365,7 @@ for i in range(len(Pair)):
                 # plt.ylim(ymin=0, ymax=round(Y_Fit.max() * 1.2, 2))
                 plt.autoscale()
                 plt.subplots_adjust(left=0.15, bottom=0.15)
-                plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
+                plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=3)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, bbox_inches='tight')
                 plt.show()
@@ -373,7 +373,7 @@ for i in range(len(Pair)):
             else:
                 plt.ylim(ymin=0)
                 plt.subplots_adjust(left=0.15, bottom=0.15)
-                plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
+                plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=3)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, bbox_inches='tight')
                 plt.show()
@@ -399,7 +399,7 @@ for i in range(len(Pair)):
                 # plt.ylim(ymin=0, ymax=round(Y_Fit.max() * 1.2, 2))
                 plt.autoscale()
                 plt.subplots_adjust(left=0.15, bottom=0.15)
-                plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
+                plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=3)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, bbox_inches='tight')
                 plt.show()
@@ -407,7 +407,7 @@ for i in range(len(Pair)):
             else:
                 plt.ylim(ymin=0)
                 plt.subplots_adjust(left=0.15, bottom=0.15)
-                plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
+                plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=3)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, bbox_inches='tight')
                 plt.show()
