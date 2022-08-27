@@ -45,7 +45,6 @@ viridis = cm.get_cmap('plasma', 8)
 newcolors = viridis(np.linspace(0, 1, 8))
 newcmp = ListedColormap(newcolors)
 
-# abbreviations = ['BVTV', 'BMD', 'TMD', 'MMR', 'WF\u2098', 'WF\u2092', 'WFw', 'db', 'E\u2098', 'Ec', '\u03C3u', '\u03B5u']
 abbreviations = ['BVTV', 'BMD', 'TMD', 'MMR', 'WF$_m$', 'WF$_o$', 'WF$_w$', 'd$_b$', 'E$_m$', 'E$_c$', '$\sigma_u$', '$\epsilon_u$']
 
 plt.rcParams["text.usetex"] = True
