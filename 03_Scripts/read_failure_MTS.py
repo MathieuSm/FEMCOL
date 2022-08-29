@@ -164,7 +164,8 @@ for filename in filename_list:
     #          color='k')
     plt.plot(last_cycle_plot_fd['last_cycle_disp'], stiffness * last_cycle_plot_fd['last_cycle_disp'] +
              intercept_value_max_stiff, label='Fit', color='black')
-    # plt.plot([], ' ', label=f'Stiffness = {stiffness:.0f} N/mm')
+    plt.plot([], ' ', label=f'Stiffness = {stiffness:.0f} N/mm')
+    plt.plot([], ' ', label='Sample ID: ' + sample_ID)
     plt.ylabel('force / N')
     plt.xlabel('disp / mm')
     plt.legend()
@@ -221,7 +222,8 @@ for filename in filename_list:
     #          color='k')
     plt.plot(last_cycle_plot_ss['last_cycle_strain'], apparent_modulus * last_cycle_plot_ss['last_cycle_strain'] +
              intercept_value_max_app, label='Fit', color='black')
-    # plt.plot([], ' ', label=f'Apparent modulus = {apparent_modulus:.0f} MPa')
+    plt.plot([], ' ', label=f'Apparent modulus = {apparent_modulus:.0f} MPa')
+    plt.plot([], ' ', label='Sample ID: ' + sample_ID)
     plt.ylabel('stress / MPa')
     plt.xlabel('strain / -')
     plt.legend()
@@ -248,6 +250,7 @@ for filename in filename_list:
     ax1.plot(time[0:peaks_index[-1]], df['disp_ext'][0:peaks_index[-1]], label='Displacement')
     ax2 = ax1.twinx()
     ax2.plot(time[0:peaks_index[-1]], df['force_lc'][0:peaks_index[-1]], color='darkorange', label='Force')
+    plt.plot([], ' ', label='Sample ID: ' + sample_ID)
     ax1.set_xlabel('Time s')
     ax1.set_ylabel('Displacement mm')
     ax2.set_ylabel('Force N')
