@@ -49,7 +49,7 @@ Axes.annotate('95% CI [' + str(lower_CI) + r'$,$ ' + str(upper_CI) + ']', xy=(0.
                           xycoords='axes fraction')
 plt.autoscale()
 plt.rcParams.update({'font.size': 14})
-plt.savefig(os.path.join(savepath, '437R_Preconditioning.png'), dpi=300, bbox_inches='tight')
+plt.savefig(os.path.join(savepath, '437R_Preconditioning.eps'), dpi=300, bbox_inches='tight', format='eps')
 plt.show()
 
 

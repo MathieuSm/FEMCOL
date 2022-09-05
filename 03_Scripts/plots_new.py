@@ -193,8 +193,8 @@ for i in range(len(Pair)):
     t_Alpha = t.interval(Alpha, N - X.shape[1] - 1)
     CI_Line_u = Y_Fit + t_Alpha[0] * SE * B_0
     CI_Line_o = Y_Fit + t_Alpha[1] * SE * B_0
-    Sorted_CI_u = CI_Line_u[np.argsort(FitResults.model.exog[:,1])]
-    Sorted_CI_o = CI_Line_o[np.argsort(FitResults.model.exog[:,1])]
+    Sorted_CI_u = CI_Line_u[np.argsort(FitResults.model.exog[:, 1])]
+    Sorted_CI_o = CI_Line_o[np.argsort(FitResults.model.exog[:, 1])]
 
     savepath = Cwd / '04_Results/04_Plots/'
     savepathCorrMat = Cwd / '04_Results/04_Plots/CorrelationMatrix'
@@ -259,7 +259,7 @@ for i in range(len(Pair)):
     # colormap will be used
     if float(p) <= 0.05:
         if x_axis != 'Age':
-            # sns.regplot(x=FitResults.model.exog[:,1], y=Y_Obs, ax=Axes, scatter=False)
+            sns.regplot(x=FitResults.model.exog[:, 1], y=Y_Obs, ax=Axes, scatter=False)
             Axes.plot(X[:, 1], Y_Fit, color=(1, 0, 0), label='Fit')
             # Axes.fill_between(X_Obs, Sorted_CI_o, Sorted_CI_u, color=(0, 0, 0), alpha=0.1,
             #                   label=str(int(Alpha * 100)) + '% CI')
@@ -284,28 +284,27 @@ for i in range(len(Pair)):
 
             # condition used for autoscaling
             if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
-                # plt.ylim(ymin=0, ymax=round(Y_Fit.max() * 1.2, 2))
                 # plt.autoscale()
                 plt.ylim(ymin=round(Y_Obs.min()*2/3, 1), ymax=round(Y_Obs.max()*1.02, 2))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 # plt.legend(loc='upper center', ncol=2, bbox_to_anchor=(0.5, 1.15), prop={'size': 10})
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
-                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, bbox_inches='tight')
+                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.eps'),
+                            dpi=300, bbox_inches='tight', format='eps', )
                 plt.show()
                 j = j + 1
             else:
                 plt.ylim(ymin=0)
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
-                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, bbox_inches='tight')
+                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.eps'),
+                            dpi=300, bbox_inches='tight', format='eps')
                 plt.show()
             # plt.close(Figure)
 
         # don't use colormap if age is plotted on main axes
         else:
-            # sns.regplot(x=FitResults.model.exog[:,1], y=Y_Obs, ax=Axes, scatter=False)
+            sns.regplot(x=FitResults.model.exog[:,1], y=Y_Obs, ax=Axes, scatter=False)
             Axes.plot(X[:, 1], Y_Fit, color=(1, 0, 0), label='Fit')
             # Axes.fill_between(X_Obs, Sorted_CI_o, Sorted_CI_u, color=(0, 0, 0), alpha=0.1,
             #                   label=str(int(Alpha * 100)) + '% CI')
@@ -329,16 +328,16 @@ for i in range(len(Pair)):
                 plt.ylim(ymin=round(Y_Obs.min()*2/3, 1), ymax=round(Y_Obs.max()*1.02, 2))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
-                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, bbox_inches='tight')
+                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.eps'),
+                            dpi=300, bbox_inches='tight', format='eps')
                 plt.show()
                 j = j + 1
             else:
                 plt.ylim(ymin=0)
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
-                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, bbox_inches='tight')
+                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.eps'),
+                            dpi=300, bbox_inches='tight', format='eps')
                 plt.show()
             # plt.close(Figure)
     # if p-value greater than 0.05, no fit will be drawn & if age is contained on main axes, no colormap will be used
@@ -364,21 +363,20 @@ for i in range(len(Pair)):
 
             # condition used for autoscaling
             if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
-                # plt.ylim(ymin=0, ymax=round(Y_Fit.max() * 1.2, 2))
                 # plt.autoscale()
                 plt.ylim(ymin=round(Y_Obs.min()*2/3, 1), ymax=round(Y_Obs.max()*1.02, 2))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
-                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, bbox_inches='tight')
+                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.eps'),
+                            dpi=300, bbox_inches='tight', format='eps')
                 plt.show()
                 j = j + 1
             else:
                 plt.ylim(ymin=0)
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
-                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, bbox_inches='tight')
+                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.eps'),
+                            dpi=300, bbox_inches='tight', format='eps')
                 plt.show()
             # plt.close(Figure)
 
@@ -399,21 +397,20 @@ for i in range(len(Pair)):
 
             # condition for autoscaling
             if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
-                # plt.ylim(ymin=0, ymax=round(Y_Fit.max() * 1.2, 2))
                 # plt.autoscale()
                 plt.ylim(ymin=round(Y_Obs.min()*2/3, 1), ymax=round(Y_Obs.max()*1.02, 2))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
-                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, bbox_inches='tight')
+                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.eps'),
+                            dpi=300, bbox_inches='tight', format='eps')
                 plt.show()
                 j = j + 1
             else:
                 plt.ylim(ymin=0)
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
-                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, bbox_inches='tight')
+                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.eps'),
+                            dpi=300, bbox_inches='tight', format='eps')
                 plt.show()
             # plt.close(Figure)
 
@@ -436,7 +433,7 @@ bp = ax1.boxplot(WF)
 ax1.set_ylabel('Weight Fraction -')
 ax1.set_xticklabels(['Mineral', 'Organic', 'Water'])
 plt.ylim(ymin=0)
-plt.savefig(os.path.join(savepath, 'WF_boxplt.png'), dpi=300, bbox_inches='tight')
+plt.savefig(os.path.join(savepath, 'WF_boxplt.eps'), dpi=300, bbox_inches='tight', format='eps')
 plt.show()
 
 
@@ -496,5 +493,5 @@ ax2.plot((1 - d, 1 + d), (1 - d, 1 + d), **kwargs)  # bottom-right diagonal
 # ax and ax2 via f.subplots_adjust(hspace=...) or plt.subplot_tool(),
 # the diagonal lines will move accordingly, and stay right at the tips
 # of the spines they are 'breaking'
-plt.savefig(os.path.join(savepath, 'AM_boxplt.png'), dpi=300, bbox_inches='tight')
+plt.savefig(os.path.join(savepath, 'AM_boxplt.eps'), dpi=300, bbox_inches='tight', format='eps')
 plt.show()

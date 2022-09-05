@@ -42,7 +42,7 @@ KernelEstimator = KernelEstimator / N
 
 ## Histogram and density distribution
 TheoreticalDistribution = norm.pdf(SortedValues, X_Bar, S_X)
-Figure, Axes = plt.subplots(1, 1, figsize=(5.5, 4.5), dpi=100)
+Figure, Axes = plt.subplots(1, 1, figsize=(5.5, 4.5), dpi=300)
 Axes.hist(X, density=True, bins=20, edgecolor=(0, 0, 1), color=(1, 1, 1), label='Histogram')
 Axes.plot(SortedValues, KernelEstimator, color=(1, 0, 0), label='Kernel Density')
 Axes.plot(SortedValues, TheoreticalDistribution, linestyle='--', color=(0, 0, 0), label='Normal Distribution')
@@ -50,14 +50,14 @@ plt.xlabel('Donor Age')
 plt.ylabel('Density (-)')
 # plt.legend(loc='upper center', ncol=3, bbox_to_anchor=(0.5, 1.15), prop={'size': 10})
 plt.legend(loc='upper left')
-plt.savefig(os.path.join(savepath, 'AgeDistribution.png'), dpi=300, bbox_inches='tight')
+plt.savefig(os.path.join(savepath, 'AgeDistribution.eps'), dpi=300, bbox_inches='tight', format='eps')
 plt.show()
 
 
 import statsmodels.api as sm
 from scipy.stats import norm
 import pylab
-Figure, Axes = plt.subplots(1, 1, figsize=(5.5, 4.5), dpi=100)
+Figure, Axes = plt.subplots(1, 1, figsize=(5.5, 4.5), dpi=300)
 sm.qqplot(X, line='s')
-plt.savefig(os.path.join(savepath, 'AgeDistribution_qqplot.png'), dpi=300, bbox_inches='tight')
+plt.savefig(os.path.join(savepath, 'AgeDistribution_qqplot.eps'), dpi=300, bbox_inches='tight', format='eps')
 pylab.show()

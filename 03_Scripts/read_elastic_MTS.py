@@ -133,7 +133,7 @@ for filename in filename_list:
     plt.rcParams.update({'font.size': 14})
     # plt.legend(prop={'size': 14})
     savepath_fd = Cwd / '04_Results/00_Mineralized/00_force_disp/'
-    plt.savefig(os.path.join(savepath_fd, 'force_disp_el_' + sample_ID + '.png'), dpi=300, bbox_inches='tight')
+    plt.savefig(os.path.join(savepath_fd, 'force_disp_el_' + sample_ID + '.eps'), dpi=300, bbox_inches='tight', format='eps')
     plt.show()
     # plt.close()
 
@@ -156,7 +156,7 @@ for filename in filename_list:
     # plt.xlabel('strain / -')
     # plt.legend()
     # savepath = Cwd / '04_Results/00_Mineralized/01_stress_strain/'
-    # plt.savefig(os.path.join(savepath, 'stress_strain_' + sample_ID + '.png'), dpi=300)
+    # plt.savefig(os.path.join(savepath, 'stress_strain_' + sample_ID + '.eps'), dpi=300)
     # plt.close()
 
     # calculate values for last cycle of stress/strain curve only
@@ -232,7 +232,7 @@ for filename in filename_list:
     plt.rcParams.update({'font.size': 14})
     # plt.legend(prop={'size': 14})
     savepath = Cwd / '04_Results/00_Mineralized/01_stress_strain/'
-    plt.savefig(os.path.join(savepath, 'stress_strain_el_' + sample_ID + '.png'), dpi=300, bbox_inches='tight')
+    plt.savefig(os.path.join(savepath, 'stress_strain_el_' + sample_ID + '.eps'), dpi=300, bbox_inches='tight', format='eps')
     plt.show()
     # plt.close()
 
@@ -259,7 +259,7 @@ for filename in filename_list:
     ax2.autoscale()
     plt.rcParams.update({'font.size': 14})
     savepath_new = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/00_Mineralized/02_disp_force_time'
-    plt.savefig(os.path.join(savepath_new, 'disp_time_el_' + sample_ID + '.png'), dpi=300, bbox_inches='tight')
+    plt.savefig(os.path.join(savepath_new, 'disp_time_el_' + sample_ID + '.eps'), dpi=300, bbox_inches='tight', format='eps')
     plt.show()
 
 # add missing samples to list & safe

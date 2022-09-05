@@ -72,7 +72,8 @@ ax.set_yticklabels(abbreviations, rotation=0, fontsize=14)
 ax.set_xticklabels(abbreviations, fontsize=14)
 
 sns.set_style({'xtick.bottom': True}, {'ytick.left': True})
-plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap.png'), dpi=300, bbox_inches='tight')
+plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap.eps'), dpi=300, bbox_inches='tight', format='eps')
+# plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap.png'), dpi=300, bbox_inches='tight')
 
 plt.show()
 
