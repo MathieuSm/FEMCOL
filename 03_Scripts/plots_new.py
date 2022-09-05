@@ -10,6 +10,9 @@ import os
 from scipy.stats.distributions import t  # Used to compute confidence intervals
 import sys
 import seaborn as sns
+import statistics
+from statsmodels.tools.eval_measures import rmse
+
 
 # Set directory & load data
 Cwd = Path.cwd()
@@ -195,6 +198,10 @@ for i in range(len(Pair)):
     CI_Line_o = Y_Fit + t_Alpha[1] * SE * B_0
     Sorted_CI_u = CI_Line_u[np.argsort(FitResults.model.exog[:, 1])]
     Sorted_CI_o = CI_Line_o[np.argsort(FitResults.model.exog[:, 1])]
+    Y_Fit_df = pd.DataFrame(Y_Fit)
+    Y_Obs_df = pd.DataFrame(Y_Obs)
+    RMSE = rmse(Y_Obs_df, Y_Fit_df)
+    cv = round(100*(RMSE/statistics.mean(Y_Obs))[0], 2)
 
     savepath = Cwd / '04_Results/04_Plots/'
     savepathCorrMat = Cwd / '04_Results/04_Plots/CorrelationMatrix'
@@ -248,7 +255,7 @@ for i in range(len(Pair)):
         R2 = '{:.1e}'.format(R2)
     else:
         R2 = float(R2)
-        R2 = round(R2, 3)
+        R2 = round(R2, 2)
 
     # list of plots which need autoscaling, has to be ordered manually
     autoscale_list = pd.DataFrame({'x_axis_abbrev': ['Age',  'Age', 'Age', 'Age', 'Age', 'Age',    'Age',  'Age',
@@ -259,9 +266,9 @@ for i in range(len(Pair)):
     # colormap will be used
     if float(p) <= 0.05:
         if x_axis != 'Age':
-            sns.regplot(x=FitResults.model.exog[:, 1], y=Y_Obs, ax=Axes, scatter=False, color=(0, 0, 0),
-                        label=str(int(Alpha * 100)) + '% CI', line_kws={'color': 'red'})
-            Axes.plot(X[:, 1], Y_Fit, color=(1, 0, 0), label='Fit', linewidth=2)
+            # sns.regplot(x=FitResults.model.exog[:, 1], y=Y_Obs, ax=Axes, scatter=False, color=(0, 0, 0),
+            #             line_kws={'color': 'black'})
+            Axes.plot(X[:, 1], Y_Fit, color=(0, 0, 0), label='Fit', linewidth=2)
             # Axes.fill_between(X_Obs, Sorted_CI_o, Sorted_CI_u, color=(0, 0, 0), alpha=0.1,
             #                   label=str(int(Alpha * 100)) + '% CI')
             Axes.scatter(X_np[:, 1][Data['Gender'] == 'M'], Y_Obs_np[Data['Gender'] == 'M'],
@@ -276,10 +283,11 @@ for i in range(len(Pair)):
             plt.colorbar(PCM, ax=ax, label='Age y')
             Axes.annotate(r'$N$ : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
             Axes.annotate(r'$R^2$ : ' + str(R2), xy=(0.05, 0.25), xycoords='axes fraction')
-            Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
+            # Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
+            Axes.annotate(r'$CV$ : ' + str(cv), xy=(0.05, 0.175), xycoords='axes fraction')
             Axes.annotate(r'$p$ : ' + str(p), xy=(0.05, 0.1), xycoords='axes fraction')
-            # Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025),
-            #               xycoords='axes fraction')
+            Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025),
+                          xycoords='axes fraction')
             Axes.set_ylabel(Data.columns[2])
             Axes.set_xlabel(Data.columns[1])
 
@@ -305,9 +313,9 @@ for i in range(len(Pair)):
 
         # don't use colormap if age is plotted on main axes
         else:
-            sns.regplot(x=FitResults.model.exog[:, 1], y=Y_Obs, ax=Axes, scatter=False, color=(0, 0, 0),
-                        label=str(int(Alpha * 100)) + '% CI', line_kws={'color': 'none'})
-            Axes.plot(X[:, 1], Y_Fit, color=(1, 0, 0), label='Fit', linewidth=2)
+            # sns.regplot(x=FitResults.model.exog[:, 1], y=Y_Obs, ax=Axes, scatter=False, color=(0, 0, 0),
+            #             line_kws={'color': 'black'})
+            Axes.plot(X[:, 1], Y_Fit, color=(0, 0, 0), label='Fit', linewidth=2)
             # Axes.fill_between(X_Obs, Sorted_CI_o, Sorted_CI_u, color=(0, 0, 0), alpha=0.1,
             #                   label=str(int(Alpha * 100)) + '% CI')
             Axes.plot(X[:, 1][Data['Gender'] == 'M'], Y_Obs[Data['Gender'] == 'M'], linestyle='none', marker='s',
@@ -316,10 +324,11 @@ for i in range(len(Pair)):
                       color=(0, 0, 0), fillstyle='none', label='female')
             Axes.annotate(r'$N$ : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
             Axes.annotate(r'$R^2$ : ' + str(R2), xy=(0.05, 0.25), xycoords='axes fraction')
-            Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
+            # Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
+            Axes.annotate(r'$CV$ : ' + str(cv), xy=(0.05, 0.175), xycoords='axes fraction')
             Axes.annotate(r'$p$ : ' + str(p), xy=(0.05, 0.1), xycoords='axes fraction')
-            # Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025),
-            #               xycoords='axes fraction')
+            Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025),
+                          xycoords='axes fraction')
             Axes.set_ylabel(Data.columns[2])
             Axes.set_xlabel(Data.columns[1])
 
@@ -356,7 +365,8 @@ for i in range(len(Pair)):
             plt.colorbar(PCM, ax=ax, label='Age y')
             Axes.annotate(r'$N$ : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
             Axes.annotate(r'$R^2$ : ' + str(R2), xy=(0.05, 0.25), xycoords='axes fraction')
-            Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
+            # Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
+            Axes.annotate(r'$CV$ : ' + str(cv), xy=(0.05, 0.175), xycoords='axes fraction')
             Axes.annotate(r'$p$ : ' + format(round(p, 3), '.3f'), xy=(0.05, 0.1), xycoords='axes fraction')
             Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025),
                           xycoords='axes fraction')
@@ -390,7 +400,8 @@ for i in range(len(Pair)):
                       color=(0, 0, 0), fillstyle='none', label='female')
             Axes.annotate(r'$N$ : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
             Axes.annotate(r'$R^2$ : ' + str(R2), xy=(0.05, 0.25), xycoords='axes fraction')
-            Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
+            # Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
+            Axes.annotate(r'$CV$ : ' + str(cv), xy=(0.05, 0.175), xycoords='axes fraction')
             Axes.annotate(r'$p$ : ' + str(p), xy=(0.05, 0.1), xycoords='axes fraction')
             Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025),
                           xycoords='axes fraction')
