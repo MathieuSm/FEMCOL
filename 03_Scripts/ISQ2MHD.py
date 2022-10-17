@@ -37,7 +37,7 @@ def PlotRegressionResults(Model, Alpha=0.95):
     N = int(Model.nobs)
     C = np.matrix(Model.cov_params())
     X = np.matrix(Model.model.exog)
-    X_Obs = np.sort(np.array(X[:,1]).reshape(len(X)))
+    X_Obs = np.sort(np.array(X[:, 1]).reshape(len(X)))
 
 
     ## Compute R2 and standard error of the estimate
@@ -101,7 +101,7 @@ Data = pd.read_csv(str(DataDirectory / 'SampleList.csv'))
 print(Data)
 
 # Select sample to analyze (numbering starting from 0)
-SampleNumber = 7
+SampleNumber = 7  # change this number manually
 File = Data.loc[SampleNumber, 'uCT File']
 
 # Read ISQ file
@@ -119,7 +119,7 @@ Axis.imshow(Scan[ZMid, :, :], cmap='bone')
 plt.show()
 
 # Crop image to desired size
-Cropped = Scan[:,875:1175,875:1175]
+Cropped = Scan[:, 875:1175, 875:1175]  # change these numbers manually
 Size = np.array(Cropped.shape[1:]) / 100
 Figure, Axis = plt.subplots(1,1, figsize=(Size[1], Size[0]))
 Axis.imshow(Cropped[ZMid, :, :], cmap='bone')
