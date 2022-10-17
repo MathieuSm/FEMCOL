@@ -109,17 +109,18 @@ ISQArguments.File = str(DataDirectory / File) + '.ISQ'
 FileData = ISQReader.Main(ISQArguments)
 
 # # Compute scan mid-planes positions
-# Scan = FileData[0]
-# ZMid, Ymid, XMid = np.round(np.array(Scan.shape) / 2).astype('int')
+Scan = FileData[0]
+ZMid, Ymid, XMid = np.round(np.array(Scan.shape) / 2).astype('int')
+
 
 # # Plot XY mid-plane
-# Size = np.array(Scan.shape[1:]) / 100
-# Figure, Axis = plt.subplots(1,1, figsize=(Size[1], Size[0]))
-# Axis.imshow(Scan[ZMid, :, :], cmap='bone')
-# plt.show()
+Size = np.array(Scan.shape[1:]) / 100
+Figure, Axis = plt.subplots(1,1, figsize=(Size[1], Size[0]))
+Axis.imshow(Scan[ZMid, :, :], cmap='bone')
+plt.show()
 
 # Crop image to desired size
-Cropped = Scan[:,875:1175,875:1175]
+Cropped = Scan[:, 500:3000, 1750:2050]
 Size = np.array(Cropped.shape[1:]) / 100
 Figure, Axis = plt.subplots(1,1, figsize=(Size[1], Size[0]))
 Axis.imshow(Cropped[ZMid, :, :], cmap='bone')
