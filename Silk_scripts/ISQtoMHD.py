@@ -120,16 +120,27 @@ Axis.imshow(Scan[ZMid, :, :], cmap='bone')
 plt.show()
 
 # Crop image to desired size
-Cropped = Scan[:, 500:3000, 1750:2050]
-Size = np.array(Cropped.shape[1:]) / 100
+Cropped_free = Scan[:, 530:1370, 1750:1970]
+Size = np.array(Cropped_free.shape[1:]) / 100
 Figure, Axis = plt.subplots(1,1, figsize=(Size[1], Size[0]))
-Axis.imshow(Cropped[ZMid, :, :], cmap='bone')
+Axis.imshow(Cropped_free[ZMid, :, :], cmap='bone')
+Axis.axis('off')
+plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
+plt.show()
+
+# Crop image to desired size
+Cropped_stretch = Scan[:, 1650:2380, 1770:2020]
+Size = np.array(Cropped_stretch.shape[1:]) / 100
+Figure, Axis = plt.subplots(1,1, figsize=(Size[1], Size[0]))
+Axis.imshow(Cropped_stretch[ZMid, :, :], cmap='bone')
 Axis.axis('off')
 plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
 plt.show()
 
 # Transform gray values to BMD values
-BMD = FitResults.params['Intercept'] + Cropped * FitResults.params['GV']
+BMD_free = FitResults.params['Intercept'] + Cropped_free * FitResults.params['GV']
+BMD_stretch = FitResults.params['Intercept'] + Cropped_stretch * FitResults.params['GV']
 
 # Write BMD cropped scan into a MHD file
-QCData = ISQReader.WriteMHD(BMD, FileData[1], str(DataDirectory), File, 'float')
+QCData = ISQReader.WriteMHD(BMD_free, FileData[1], str(DataDirectory), File + '_free', 'float')
+QCData = ISQReader.WriteMHD(BMD_stretch, FileData[1], str(DataDirectory), File + '_stretched', 'float')
