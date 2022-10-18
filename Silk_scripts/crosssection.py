@@ -1,4 +1,4 @@
-# This script loads .mhd files and calculates crossectional area.
+# This script loads .mhd files and calculates cross-sectional area.
 
 # Import standard packages
 from pathlib import Path                 # Used to manage path variables in windows or linux
@@ -70,7 +70,7 @@ for x in range(0, len(Data), 1):
     # Plot XY mid-plane
     Size_f = np.array(Scan_f.shape[1:]) / 100
     Figure, Axis = plt.subplots(1, 1, figsize=(Size_f[1], Size_f[0]))
-    Axis.imshow(Scan_f[ZMid_f, :, :], cmap='bone')
+    Axis.imshow(Scan_f[ZMid_f, :, :], cmap='Greys_r')
     Axis.axis('off')
     plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
     plt.show()
@@ -78,7 +78,7 @@ for x in range(0, len(Data), 1):
 
     # Plot YZ mid-plane
     Figure, Axis = plt.subplots(1, 1, figsize=(Size_f[1], Size_f[0]))
-    Axis.imshow(Scan_f[:, :, XMid_f], cmap='bone')
+    Axis.imshow(Scan_f[:, :, XMid_f], cmap='Greys_r')
     Axis.axis('off')
     plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
     plt.savefig(os.path.join('/home/stefan/Documents/PythonScripts/Silk_data/', 'x' + '_' + 'YZ_Plane'),
@@ -89,14 +89,14 @@ for x in range(0, len(Data), 1):
     # Plot XY mid-plane
     Size_s = np.array(Scan_s.shape[1:]) / 100
     Figure, Axis = plt.subplots(1, 1, figsize=(Size_s[1], Size_s[0]))
-    Axis.imshow(Scan_s[ZMid_s, :, :], cmap='bone')
+    Axis.imshow(Scan_s[ZMid_s, :, :], cmap='Greys_r')
     Axis.axis('off')
     plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
     plt.show()
 
     # Plot YZ mid-plane
     Figure, Axis = plt.subplots(1, 1, figsize=(Size_s[1], Size_s[0]))
-    Axis.imshow(Scan_s[:, :, XMid_s], cmap='bone')
+    Axis.imshow(Scan_s[:, :, XMid_s], cmap='Greys_r')
     Axis.axis('off')
     plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
     plt.savefig(os.path.join('/home/stefan/Documents/PythonScripts/Silk_data/', 'x' + '_' + 'YZ_Plane'),
@@ -155,13 +155,15 @@ for x in range(0, len(Data), 1):
     plt.show()
     # plt.close()
 
-    openeded_image = opening(Image_f, radius=20)
+    opened_image_f = opening(Image_f, radius=30)
+    final_image_f = sitk.GetArrayFromImage(opened_image_f)
+
     Figure, Axis = plt.subplots(1, 1, figsize=(Size_f[1], Size_f[0]))
-    Axis.imshow(openeded_image, cmap='Greys_r')
+    Axis.imshow(final_image_f[ZMid_f, :, :], cmap='Greys_r')
     Axis.axis('off')
     plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
     plt.show()
-
+    # imshow(final_image_f)
 #
 #     RegionProperties = measure.regionprops(Eroded*1)[0]
 #
