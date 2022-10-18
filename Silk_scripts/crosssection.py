@@ -155,6 +155,13 @@ for x in range(0, len(Data), 1):
     plt.show()
     # plt.close()
 
+    openeded_image = opening(Image_f, radius=20)
+    Figure, Axis = plt.subplots(1, 1, figsize=(Size_f[1], Size_f[0]))
+    Axis.imshow(openeded_image, cmap='Greys_r')
+    Axis.axis('off')
+    plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
+    plt.show()
+
 #
 #     RegionProperties = measure.regionprops(Eroded*1)[0]
 #
