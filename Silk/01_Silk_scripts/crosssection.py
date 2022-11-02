@@ -43,8 +43,8 @@ def cv2_open(seg_np, radius, axis=2, disp_tqdm=True):
 # Set directories
 CurrentDirectory = Path.cwd()
 ScriptsDirectory = CurrentDirectory / 'Silk/01_Silk_scripts'
-DataDirectory = CurrentDirectory / 'Silk/00_Silk_data'
-ResultsDirectory = CurrentDirectory / 'Silk/02_Silk_results'
+DataDirectory = CurrentDirectory / 'Silk/00_Silk_data/00_uCT'
+ResultsDirectory = CurrentDirectory / 'Silk/02_Silk_results/00_uCT'
 
 # Read data list and print it into console
 Data = pd.read_csv(str(DataDirectory / 'SampleList.csv'))
