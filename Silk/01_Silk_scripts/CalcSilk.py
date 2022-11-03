@@ -38,7 +38,6 @@ results_uCT = results_uCT.reset_index(drop=True)
 # set counters for iterations over files (i) and areas for stress calculation (counter) & initialize results list
 result = list()
 i = 0
-counter = 0
 
 # loop over .csv files in Folder
 for filename in filename_list:
@@ -46,7 +45,6 @@ for filename in filename_list:
     sample_ID = filename.split('/')[-1].split('.')[0]
     # load csv:
     df = pd.read_csv(str(DataPath / filename_list[i]), skiprows=2)
-    df = df.drop('cycles', axis=1)
     df.rename(columns={'sec': 'time', 'N': 'force', 'mm': 'disp'}, inplace=True)
     i = i + 1
 
@@ -92,39 +90,16 @@ for filename in filename_list:
     plt.xlabel('disp / mm')
     plt.show()
 
-    # calculate values for last cycle of force/disp curve only
-    last_cycle_force = df['force_lc_filtered'][peaks_index[-1]:]
-    last_cycle_disp = df['disp_ext'][peaks_index[-1]:]
-    last_cycle_disp = last_cycle_disp.dropna().reset_index(drop=True)
-    last_cycle_force = last_cycle_force.dropna().reset_index(drop=True)
+    precond_unload = df[(df.cycle == 14)]
+    window_width = round(1/3 * len(precond_unload))
 
-    # isolate stress/strain values
-    last_cycle = pd.DataFrame()
-    last_cycle['last_cycle_force'] = round(last_cycle_force, 5)
-    last_cycle['last_cycle_disp'] = round(last_cycle_disp, 5)
-
-    # set boundaries for further calculation (represent approx. linear region)
-    upper_disp = max(last_cycle['last_cycle_disp'])
-    lower_disp = 0.005
-
-    # identify index range of defined region
-    upper_cond_disp = last_cycle.loc[last_cycle['last_cycle_disp'] == upper_disp]
-    lower_cond_disp = last_cycle.loc[last_cycle['last_cycle_disp'] >= lower_disp]
-    max_disp_ind = min(upper_cond_disp.index)
-    min_disp_ind = max(lower_cond_disp.index)
-    last_cycle = last_cycle[max_disp_ind:min_disp_ind]
-
-    # define window width for moving linear regression
-    window_width = round(1 / 3 * len(last_cycle))
-    print(str(sample_ID) + '   window width: ' + str(window_width) + '   len(last_cycle): ' + str(len(last_cycle)) +
-          '   ratio len/ww: ' + str(round(len(last_cycle)/window_width)))
     # rolling linear regression for stiffness calculation
     slope_values_stiff = list()
     intercept_values_stiff = list()
-    for x in range(0, len(last_cycle) - 1 - window_width + 1, 1):
-        last_cycle_mod = last_cycle[x:x + window_width]
-        slope_stiff, intercept_stiff, r_value, p_value, std_err = stats.linregress(last_cycle_mod['last_cycle_disp'],
-                                                                                   last_cycle_mod['last_cycle_force'])
+    for x in range(0, len(precond_unload) - 1 - window_width + 1, 1):
+        precond_unload_mod = precond_unload[x:x + window_width]
+        slope_stiff, intercept_stiff, r_value, p_value, std_err = stats.linregress(precond_unload_mod['disp'],
+                                                                                   precond_unload_mod['force'])
         # collect slope value & add to growing list; same for intercept
         slope_value_stiff = slope_stiff
         intercept_value = intercept_stiff
@@ -138,92 +113,74 @@ for filename in filename_list:
     max_slope_index = slope_value_df[slope_value_df == stiffness].dropna()
     max_slope_index = max_slope_index.index
     intercept_value_max_stiff = intercept_values_df.loc[max_slope_index[0]].values[0]
-    last_cycle_plot = last_cycle[max_slope_index[0]:max_slope_index[0] + window_width]
+    last_cycle_plot = precond_unload[max_slope_index[0]:max_slope_index[0] + window_width]
 
     # generate plot
     # plt.figure(figsize=(6, 4))
     # plt.title(sample_ID)
-    plt.plot(df['disp_ext'], df['force_lc_filtered'], label='Filtered')
-    plt.plot(last_cycle['last_cycle_disp'], last_cycle['last_cycle_force'], label='Last unloading cycle')
-    # plt.plot(last_cycle_plot['last_cycle_disp'], last_cycle_plot['last_cycle_force'], label='regression area', color='k')
-    plt.plot(last_cycle_plot['last_cycle_disp'], stiffness * last_cycle_plot['last_cycle_disp'] +
+    plt.plot(precond_unload['disp'], precond_unload['force'], label='Last unloading cycle')
+    plt.plot(last_cycle_plot['disp'], stiffness * last_cycle_plot['disp'] +
              intercept_value_max_stiff, label='Fit', color='black')
     plt.plot([], ' ', label=f'Stiffness = {stiffness:.0f} N/mm')
     plt.plot([], ' ', label='Sample ID: ' + sample_ID)
-    plt.ylabel('force lc / N')
-    plt.xlabel('disp ext / mm')
+    plt.ylabel('force / N')
+    plt.xlabel('disp / mm')
     plt.legend()
     plt.autoscale()
     plt.rcParams.update({'font.size': 14})
     # plt.legend(prop={'size': 14})
-    savepath_fd = Cwd / '04_Results/00_Mineralized/00_force_disp/'
-    plt.savefig(os.path.join(savepath_fd, 'force_disp_el_' + sample_ID + '.eps'), dpi=300, bbox_inches='tight', format='eps')
+    anpassen savepath_fd = Cwd / '04_Results/00_Mineralized/00_force_disp/'
+    plt.savefig(os.path.join(savepath_fd, 'force_disp_el_' + sample_ID + '.png'), dpi=300, bbox_inches='tight', format='png')
+    # plt.savefig(os.path.join(savepath_fd, 'force_disp_el_' + sample_ID + '.eps'), dpi=300, bbox_inches='tight', format='eps')
     plt.show()
     # plt.close()
 
-    # calculate stress/strain, filter and put into dataframe
-    l_initial = 6.5
-    mean_area_wop = results_uCT['Mean Apparent Area mm^2'][counter]
-    stress_wop = df['force_lc'] / mean_area_wop
-    strain = df['disp_ext'] / l_initial
-    df['stress_lc_wop'] = stress_wop
-    df['strain_ext'] = strain
-    df['stress_lc_filtered_wop'] = butter_lowpass_filter(df['stress_lc_wop'], cutoff)
-    counter = counter + 1
+    # calculate stress/strain, and put into dataframe
+    l_initial = 50
+    area = results_uCT['Mean Area'][0]
+    stress = df['force_filt'] / area
+    strain = df['disp'] / l_initial
+    df['stress'] = stress
+    df['strain'] = strain
 
-    # # plot stress/strain
-    # plt.figure()
-    # plt.title(sample_ID)
-    # plt.plot(df['strain_ext'], df['stress_lc'], label='raw')
-    # plt.plot(df['strain_ext'], df['stress_lc_filtered'], label='filtered')
-    # plt.ylabel('stress / MPa')
-    # plt.xlabel('strain / -')
-    # plt.legend()
-    # savepath = Cwd / '04_Results/00_Mineralized/01_stress_strain/'
-    # plt.savefig(os.path.join(savepath, 'stress_strain_' + sample_ID + '.eps'), dpi=300)
-    # plt.close()
+    # plot stress/strain
+    plt.figure()
+    plt.title(sample_ID)
+    plt.plot(df['strain_ext'], df['stress'], label='raw')
+    plt.plot(df['strain_ext'], df['stress'], label='filtered')
+    plt.ylabel('stress / MPa')
+    plt.xlabel('strain / -')
+    plt.legend()
+    anpassen savepath = Cwd / '04_Results/00_Mineralized/01_stress_strain/'
+    plt.savefig(os.path.join(savepath, 'stress_strain_' + sample_ID + '.png'), dpi=300, format='png')
+    # plt.savefig(os.path.join(savepath, 'stress_strain_' + sample_ID + '.eps'), dpi=300, format='eps')
+    plt.close()
 
     # calculate values for last cycle of stress/strain curve only
-    last_cycle_stress = df['stress_lc_filtered_wop'][peaks_index[-1]:]
-    last_cycle_strain = df['strain_ext'][peaks_index[-1]:]
-    last_cycle_strain = last_cycle_strain.dropna().reset_index(drop=True)
-    last_cycle_stress = last_cycle_stress.dropna().reset_index(drop=True)
+    stress_lc = precond_unload['force_filt'] / area
+    strain_lc = precond_unload['disp'] / l_initial
+    precond_unload['stress_lc'] = stress_lc
+    precond_unload['strain_lc'] = strain_lc
 
     # plot last cycle of stress/strain curve
     plt.figure()
     plt.title(sample_ID)
-    plt.plot(last_cycle_strain, last_cycle_stress)
+    plt.plot(precond_unload['strain_lc'], precond_unload['stress_lc'])
     plt.ylabel('stress / MPa')
     plt.xlabel('strain / -')
     # plt.show()
     plt.close()
 
     ## calculate apparent modulus by using rolling regression
-    # definition of strain region where regression should be carried out
-    upper_strain = 0.00250
-    lower_strain = 0.00100
-
-    # isolate stress/strain values of defined strain region
-    last_cycle = pd.DataFrame()
-    last_cycle['last_cycle_strain'] = round(last_cycle_strain, 5)
-    last_cycle['last_cycle_stress'] = round(last_cycle_stress, 5)
-
-    # identify index range of defined region
-    upper_cond = last_cycle.loc[last_cycle['last_cycle_strain'] == upper_strain]
-    lower_cond = last_cycle.loc[last_cycle['last_cycle_strain'] == lower_strain]
-    max_strain_ind = min(upper_cond.index)
-    min_strain_ind = min(lower_cond.index)
-    last_cycle = last_cycle[max_strain_ind:min_strain_ind]
-
     # initialize lists for slope/intercept value collection
     slope_values_app = list()
     intercept_values_app = list()
 
     # rolling linear regression for apparent modulus calculation
-    for x in range(max_strain_ind, min_strain_ind - window_width + 1, 1):
-        last_cycle_mod = last_cycle[x:x+window_width]
-        slope_app, intercept_app, r_value, p_value, std_err = stats.linregress(last_cycle_mod['last_cycle_strain'],
-                                                                               last_cycle_mod['last_cycle_stress'])
+    for x in range(precond_unload['disp_lc'].max(), precond_unload['disp_lc'].min() - window_width + 1, 1):
+        last_cycle_mod = precond_unload[x:x+window_width]
+        slope_app, intercept_app, r_value, p_value, std_err = stats.linregress(last_cycle_mod['strain_lc'],
+                                                                               last_cycle_mod['stress_lc'])
         # collect slope value & add to growing list; same for intercept
         slope_value_app = slope_app
         slope_values_app.append(slope_value_app)
@@ -237,15 +194,14 @@ for filename in filename_list:
     max_slope_index_app = slope_value_app_df[slope_value_app_df == apparent_modulus].dropna()
     max_slope_index_app = max_slope_index_app.index
     intercept_value_max_app = intercept_values_app_df.loc[max_slope_index_app[0]].values[0]
-    last_cycle_plot = last_cycle[max_slope_index_app[0]:max_slope_index_app[0] + window_width]
+    last_cycle_plot = precond_unload[max_slope_index_app[0]:max_slope_index_app[0] + window_width]
 
     # generate plot
     # plt.figure(figsize=(6, 4))
     # plt.title(sample_ID)
-    plt.plot(df['strain_ext'], df['stress_lc_filtered_wop'], label='Filtered')
-    plt.plot(last_cycle['last_cycle_strain'], last_cycle['last_cycle_stress'], label='Last unloading cycle')
+    plt.plot(precond_unload['strain'], precond_unload['stress_lc'], label='last unloading cycle')
     # plt.plot(last_cycle_plot['last_cycle_strain'], last_cycle_plot['last_cycle_stress'], label='regress area', color='k')
-    plt.plot(last_cycle_plot['last_cycle_strain'], apparent_modulus * last_cycle_plot['last_cycle_strain'] +
+    plt.plot(last_cycle_plot['strain_lc'], apparent_modulus * last_cycle_plot['strain_lc'] +
              intercept_value_max_app, label='Fit', color='black')
     plt.plot([], ' ', label=f'Apparent modulus = {apparent_modulus:.0f} MPa')
     plt.plot([], ' ', label='Sample ID: ' + sample_ID)
@@ -255,8 +211,9 @@ for filename in filename_list:
     plt.autoscale()
     plt.rcParams.update({'font.size': 14})
     # plt.legend(prop={'size': 14})
-    savepath = Cwd / '04_Results/00_Mineralized/01_stress_strain/'
-    plt.savefig(os.path.join(savepath, 'stress_strain_el_' + sample_ID + '.eps'), dpi=300, bbox_inches='tight', format='eps')
+    anpassen savepath = Cwd / '04_Results/00_Mineralized/01_stress_strain/'
+    plt.savefig(os.path.join(savepath, 'stress_strain_el_' + sample_ID + '.png'), dpi=300, bbox_inches='tight', format='png')
+    # plt.savefig(os.path.join(savepath, 'stress_strain_el_' + sample_ID + '.eps'), dpi=300, bbox_inches='tight', format='eps')
     plt.show()
     # plt.close()
 
@@ -266,35 +223,30 @@ for filename in filename_list:
     result.append(values)
     result_dir = pd.DataFrame(result, columns=['Sample ID', 'Stiffness N/mm', 'Apparent modulus MPa'])
 
-    rcParams.update({'figure.autolayout': True})
-    time = pd.DataFrame()
-    time = df['time'] - df['time'].loc[0]
-    fig, ax1 = plt.subplots()
-    ax1.plot(time, df['disp_ext'], label='Displacement')
-    ax2 = ax1.twinx()
-    ax2.plot(time, df['force_lc'], color='darkorange', label='Force')
-    plt.plot([], ' ', label='Sample ID: ' + sample_ID)
-    # plt.title(sample_ID)
-    ax1.set_xlabel('Time s')
-    ax1.set_ylabel('Displacement mm')
-    ax2.set_ylabel('Force N')
-    fig.legend(loc='upper center', bbox_to_anchor=(0.5, 1.07), ncol=3)
-    ax1.autoscale()
-    ax2.autoscale()
-    plt.rcParams.update({'font.size': 14})
-    savepath_new = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/00_Mineralized/02_disp_force_time'
-    plt.savefig(os.path.join(savepath_new, 'disp_time_el_' + sample_ID + '.eps'), dpi=300, bbox_inches='tight', format='eps')
-    plt.show()
+    # rcParams.update({'figure.autolayout': True})
+    # time = pd.DataFrame()
+    # time = df['time'] - df['time'].loc[0]
+    # fig, ax1 = plt.subplots()
+    # ax1.plot(time, df['disp_ext'], label='Displacement')
+    # ax2 = ax1.twinx()
+    # ax2.plot(time, df['force_lc'], color='darkorange', label='Force')
+    # plt.plot([], ' ', label='Sample ID: ' + sample_ID)
+    # # plt.title(sample_ID)
+    # ax1.set_xlabel('Time s')
+    # ax1.set_ylabel('Displacement mm')
+    # ax2.set_ylabel('Force N')
+    # fig.legend(loc='upper center', bbox_to_anchor=(0.5, 1.07), ncol=3)
+    # ax1.autoscale()
+    # ax2.autoscale()
+    # plt.rcParams.update({'font.size': 14})
+    # savepath_new = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/00_Mineralized/02_disp_force_time'
+    # plt.savefig(os.path.join(savepath_new, 'disp_time_el_' + sample_ID + '.eps'), dpi=300, bbox_inches='tight', format='eps')
+    # plt.show()
 
-# add missing samples to list & safe
-missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '400R', '402L', '433L']})
-result_dir = pd.concat([result_dir, missing_sample_IDs])
-result_dir_sorted = result_dir.sort_values(by=['Sample ID'], ascending=True)
-
-# result_dir_sorted.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/00_Mineralized/',
-#                                       'ResultsElasticTesting.csv'), index=False)
-result_dir_sorted.to_csv(os.path.join('C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/00_Mineralized',
+anpassen result_dir.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/Silk/00_Mineralized/',
                                       'ResultsElasticTesting.csv'), index=False)
+# result_dir_sorted.to_csv(os.path.join('C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/00_Mineralized',
+#                                       'ResultsElasticTesting.csv'), index=False)
 
 
 
