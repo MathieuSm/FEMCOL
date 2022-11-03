@@ -25,6 +25,7 @@ def butter_lp_filt(data, cutoff, order=5):
 # definition of path
 Cwd = Path.cwd()
 DataPath = Cwd / 'Silk/00_Silk_data/01_mechanical_testing/'
+Savepath = Cwd / 'Silk/02_Silk_results/01_mechanical_Testing'
 filename_list = [File for File in os.listdir(DataPath) if File.endswith('.csv')]
 filename_list.sort()
 
@@ -62,11 +63,13 @@ for filename in filename_list:
     plt.ylabel('force / N')
     plt.xlabel('disp / mm')
     plt.legend()
+    plt.savefig(os.path.join(Savepath, 'force_disp_full_' + sample_ID + '.png'), dpi=300, bbox_inches='tight',
+                format='png')
     # plt.show()
     plt.close()
 
     # peak detection
-    peaks_index, _ = find_peaks(df['force'], width=200, prominence=0.7)
+    peaks_index, _ = find_peaks(df['force'], width=250, prominence=0.1)
     plt.figure()
     plt.title(sample_ID)
     plt.plot(df['disp'], df['force'], label='raw')
@@ -88,9 +91,11 @@ for filename in filename_list:
     plt.scatter(df['disp'][peaks_index[0:13]], df['force_filt'][peaks_index[0:13]], marker='o', color='red')
     plt.ylabel('force / N')
     plt.xlabel('disp / mm')
+    plt.savefig(os.path.join(Savepath, 'force_disp_precond_' + sample_ID + '.png'), dpi=300, bbox_inches='tight', format='png')
     plt.show()
 
-    precond_unload = df[(df.cycle == 14)]
+    precond_unload = df[(df.cycles == 14)]
+    precond_unload = precond_unload.reset_index(drop=True)
     window_width = round(1/3 * len(precond_unload))
 
     # rolling linear regression for stiffness calculation
@@ -129,15 +134,14 @@ for filename in filename_list:
     plt.autoscale()
     plt.rcParams.update({'font.size': 14})
     # plt.legend(prop={'size': 14})
-    savepath_fd = Cwd / '04_Results/00_Mineralized/00_force_disp/'
-    plt.savefig(os.path.join(savepath_fd, 'force_disp_el_' + sample_ID + '.png'), dpi=300, bbox_inches='tight', format='png')
+    plt.savefig(os.path.join(Savepath, 'force_disp_lc_' + sample_ID + '.png'), dpi=300, bbox_inches='tight', format='png')
     # plt.savefig(os.path.join(savepath_fd, 'force_disp_el_' + sample_ID + '.eps'), dpi=300, bbox_inches='tight', format='eps')
     plt.show()
     # plt.close()
 
     # calculate stress/strain, and put into dataframe
     l_initial = 50
-    area = results_uCT['Mean Area'][0]
+    area = results_uCT['Area of pre-stretched strap / mm^2'][0]
     stress = df['force_filt'] / area
     strain = df['disp'] / l_initial
     df['stress'] = stress
@@ -146,13 +150,12 @@ for filename in filename_list:
     # plot stress/strain
     plt.figure()
     plt.title(sample_ID)
-    plt.plot(df['strain_ext'], df['stress'], label='raw')
-    plt.plot(df['strain_ext'], df['stress'], label='filtered')
+    plt.plot(df['strain'], df['stress'], label='raw')
+    plt.plot(df['strain'], df['stress'], label='filtered')
     plt.ylabel('stress / MPa')
     plt.xlabel('strain / -')
     plt.legend()
-    anpassen savepath = Cwd / '04_Results/00_Mineralized/01_stress_strain/'
-    plt.savefig(os.path.join(savepath, 'stress_strain_' + sample_ID + '.png'), dpi=300, format='png')
+    plt.savefig(os.path.join(Savepath, 'stress_strain_full_' + sample_ID + '.png'), dpi=300, format='png')
     # plt.savefig(os.path.join(savepath, 'stress_strain_' + sample_ID + '.eps'), dpi=300, format='eps')
     plt.close()
 
@@ -177,7 +180,7 @@ for filename in filename_list:
     intercept_values_app = list()
 
     # rolling linear regression for apparent modulus calculation
-    for x in range(precond_unload['disp_lc'].max(), precond_unload['disp_lc'].min() - window_width + 1, 1):
+    for x in range(0, len(precond_unload) - 1 - window_width + 1, 1):
         last_cycle_mod = precond_unload[x:x+window_width]
         slope_app, intercept_app, r_value, p_value, std_err = stats.linregress(last_cycle_mod['strain_lc'],
                                                                                last_cycle_mod['stress_lc'])
@@ -199,7 +202,7 @@ for filename in filename_list:
     # generate plot
     # plt.figure(figsize=(6, 4))
     # plt.title(sample_ID)
-    plt.plot(precond_unload['strain'], precond_unload['stress_lc'], label='last unloading cycle')
+    plt.plot(precond_unload['strain_lc'], precond_unload['stress_lc'], label='last unloading cycle')
     # plt.plot(last_cycle_plot['last_cycle_strain'], last_cycle_plot['last_cycle_stress'], label='regress area', color='k')
     plt.plot(last_cycle_plot['strain_lc'], apparent_modulus * last_cycle_plot['strain_lc'] +
              intercept_value_max_app, label='Fit', color='black')
@@ -211,8 +214,7 @@ for filename in filename_list:
     plt.autoscale()
     plt.rcParams.update({'font.size': 14})
     # plt.legend(prop={'size': 14})
-    anpassen savepath = Cwd / '04_Results/00_Mineralized/01_stress_strain/'
-    plt.savefig(os.path.join(savepath, 'stress_strain_el_' + sample_ID + '.png'), dpi=300, bbox_inches='tight', format='png')
+    plt.savefig(os.path.join(Savepath, 'stress_strain_lc_' + sample_ID + '.png'), dpi=300, bbox_inches='tight', format='png')
     # plt.savefig(os.path.join(savepath, 'stress_strain_el_' + sample_ID + '.eps'), dpi=300, bbox_inches='tight', format='eps')
     plt.show()
     # plt.close()
@@ -243,8 +245,8 @@ for filename in filename_list:
     # plt.savefig(os.path.join(savepath_new, 'disp_time_el_' + sample_ID + '.eps'), dpi=300, bbox_inches='tight', format='eps')
     # plt.show()
 
-anpassen result_dir.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/Silk/00_Mineralized/',
-                                      'ResultsElasticTesting.csv'), index=False)
+result_dir.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/Silk/02_Silk_results/01_mechanical_Testing/',
+                                      'ResultsMechTesting.csv'), index=False)
 # result_dir_sorted.to_csv(os.path.join('C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/00_Mineralized',
 #                                       'ResultsElasticTesting.csv'), index=False)
 
