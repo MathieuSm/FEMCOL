@@ -129,7 +129,7 @@ for filename in filename_list:
     plt.autoscale()
     plt.rcParams.update({'font.size': 14})
     # plt.legend(prop={'size': 14})
-    anpassen savepath_fd = Cwd / '04_Results/00_Mineralized/00_force_disp/'
+    savepath_fd = Cwd / '04_Results/00_Mineralized/00_force_disp/'
     plt.savefig(os.path.join(savepath_fd, 'force_disp_el_' + sample_ID + '.png'), dpi=300, bbox_inches='tight', format='png')
     # plt.savefig(os.path.join(savepath_fd, 'force_disp_el_' + sample_ID + '.eps'), dpi=300, bbox_inches='tight', format='eps')
     plt.show()
