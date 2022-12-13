@@ -24,7 +24,7 @@ print(Data)
 ThresholdValues = list()
 
 # Select sample to analyze (numbering starting from 0)
-for x in range(0, 36, 1):
+for x in range(0, len(Data), 1):
     SampleNumber = x
     File = Data.loc[SampleNumber, 'uCT File']
 
