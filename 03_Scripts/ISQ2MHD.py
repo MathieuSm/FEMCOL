@@ -101,7 +101,7 @@ Data = pd.read_csv(str(DataDirectory / 'SampleList.csv'))
 print(Data)
 
 # Select sample to analyze (numbering starting from 0)
-SampleNumber = 7  # change this number manually
+SampleNumber = 57  # change this number manually (0-79)
 File = Data.loc[SampleNumber, 'uCT File']
 
 # Read ISQ file
@@ -119,7 +119,7 @@ Axis.imshow(Scan[ZMid, :, :], cmap='bone')
 plt.show()
 
 # Crop image to desired size
-Cropped = Scan[:, 875:1175, 875:1175]  # change these numbers manually
+Cropped = Scan[:, 900:1200, 825:1150]  # change these numbers manually, first set: height, second set: width
 Size = np.array(Cropped.shape[1:]) / 100
 Figure, Axis = plt.subplots(1,1, figsize=(Size[1], Size[0]))
 Axis.imshow(Cropped[ZMid, :, :], cmap='bone')
