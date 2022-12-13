@@ -31,8 +31,14 @@ filename_list.sort()
 # load uCT results & remove naN entries; areas needed for stress calculations
 results_uCT = pd.read_csv(str('/home/stefan/Documents/PythonScripts/04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
 # results_uCT = pd.read_csv(str('C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
-results_uCT = results_uCT.drop(index=[8, 14, 20, 24, 37], axis=0)
-results_uCT = results_uCT.reset_index(drop=True)
+# results_uCT = results_uCT.drop(index=[8, 14, 20, 24, 37], axis=0)
+test = results_uCT.drop(results_uCT.loc[results_uCT['Sample ID'] == '390_R'].index)
+test1 = test.drop(results_uCT.loc[results_uCT['Sample ID'] == '395_R'].index)
+test2 = test1.drop(results_uCT.loc[results_uCT['Sample ID'] == '400_R'].index)
+test3 = test2.drop(results_uCT.loc[results_uCT['Sample ID'] == '402_L'].index)
+test4 = test3.drop(results_uCT.loc[results_uCT['Sample ID'] == '410_L'].index)
+test5 = test4.drop(results_uCT.loc[results_uCT['Sample ID'] == '433_R'].index)
+results_uCT = test5.reset_index(drop=True)
 
 # set counters for iterations over files (i) and areas for stress calculation (counter) & initialize results list
 result = list()
@@ -187,8 +193,8 @@ for filename in filename_list:
     # identify index range of defined region
     upper_cond = last_cycle.loc[last_cycle['last_cycle_strain'] == upper_strain]
     lower_cond = last_cycle.loc[last_cycle['last_cycle_strain'] == lower_strain]
-    max_strain_ind = min(upper_cond.index)
-    min_strain_ind = min(lower_cond.index)
+    max_strain_ind = min(upper_cond.index[0])
+    min_strain_ind = min(lower_cond.index[0])
     last_cycle = last_cycle[max_strain_ind:min_strain_ind]
 
     # initialize lists for slope/intercept value collection
@@ -265,7 +271,7 @@ for filename in filename_list:
     plt.show()
 
 # add missing samples to list & safe
-missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '400R', '402L', '433L']})
+missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '400R', '402L', '410L', '433L']})
 result_dir = pd.concat([result_dir, missing_sample_IDs])
 result_dir_sorted = result_dir.sort_values(by=['Sample ID'], ascending=True)
 

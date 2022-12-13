@@ -187,7 +187,7 @@ for x in range(0, len(Data), 1):
               mean_areas_fraction, min_areas_fraction, min_areas_fraction_new]
     results.append(values)
 
-    print('Progress: ' + str(x) + ' of ' + str(len(Data)-1))
+    print('Progress: ' + str(x+1) + ' of ' + str(len(Data)-1))
 
 # Add missing samples
 missing_sample_IDs = pd.DataFrame({'Sample ID': ['390_R', '395_R', '402_L']})
