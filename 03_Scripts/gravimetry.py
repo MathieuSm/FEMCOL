@@ -35,6 +35,8 @@ for row in range(len(df)):
 # add results to dataframe
 result_dir = pd.DataFrame()
 result_dir['Sample ID'] = df['Sample ID']
+result_dir['age'] = df['age']
+result_dir['sex'] = df['sex']
 result_dir['density / g/cm^3'] = density
 result_dir['organic weight / g'] = w_organic
 result_dir['mineral weight / g'] = w_mineral
@@ -44,6 +46,8 @@ result_dir['weight fraction of organic phase / -'] = wf_organic
 result_dir['weight fraction of water phase / -'] = wf_water
 
 # save dataframe to csv
+result_dir.sort_values(by=['Sample ID'], inplace=True, ascending=True)
+result_dir = result_dir.reset_index(drop=True)
 result_dir.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/02_Gravimetry/',
                                'ResultsGravimetry.csv'), index=False)
 
