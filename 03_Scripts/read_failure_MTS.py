@@ -30,11 +30,18 @@ DataPath = Cwd / '02_Data/02_MTS/Failure_testing_demineralized/'
 filename_list = [File for File in os.listdir(DataPath) if File.endswith('.csv')]
 filename_list.sort()
 
-# load uCT results & remove naN entries; areas needed for stress calculations
-# results_uCT = pd.read_csv(str('/home/stefan/Documents/PythonScripts/04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
-results_uCT = pd.read_csv(str('C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
-results_uCT = results_uCT.drop(index=[8, 14, 20, 24, 27, 37], axis=0)
-results_uCT = results_uCT.reset_index(drop=True)
+# # load uCT results & remove naN entries; areas needed for stress calculations
+results_uCT = pd.read_csv(str('/home/stefan/Documents/PythonScripts/04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
+# results_uCT = pd.read_csv(str('C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
+test = results_uCT.drop(results_uCT.loc[results_uCT['Sample ID'] == '390_R'].index)
+test1 = test.drop(results_uCT.loc[results_uCT['Sample ID'] == '395_R'].index)
+test2 = test1.drop(results_uCT.loc[results_uCT['Sample ID'] == '400_R'].index)
+test3 = test2.drop(results_uCT.loc[results_uCT['Sample ID'] == '402_L'].index)
+test4 = test3.drop(results_uCT.loc[results_uCT['Sample ID'] == '410_L'].index)
+test5 = test4.drop(results_uCT.loc[results_uCT['Sample ID'] == '433_R'].index)
+test6 = test5.drop(results_uCT.loc[results_uCT['Sample ID'] == '396_R'].index)
+# results_uCT = results_uCT.drop(index=[8, 14, 20, 24, 27, 37], axis=0)
+results_uCT = test5.reset_index(drop=True)
 
 # set counters for iterations over files (i) and areas for stress calculation (counter) & initialize results list
 i = 0
@@ -172,7 +179,7 @@ for filename in filename_list:
     plt.autoscale()
     plt.rcParams.update({'font.size': 14})
     savepath_fd = Cwd / '04_Results/01_Demineralized/00_force_disp/'
-    plt.savefig(os.path.join(savepath_fd, 'force_disp_fail_' + sample_ID + '.eps'), dpi=300, bbox_inches='tight', format='eps')
+    plt.savefig(os.path.join(savepath_fd, 'force_disp_fail_' + sample_ID + 'png'), dpi=300, bbox_inches='tight', format='png')
     plt.show()
     # plt.close()
 
@@ -230,7 +237,7 @@ for filename in filename_list:
     plt.autoscale()
     plt.rcParams.update({'font.size': 14})
     savepath_ss = Cwd / '04_Results/01_Demineralized/01_stress_strain/'
-    plt.savefig(os.path.join(savepath_ss, 'stress_strain_fail_' + sample_ID + '.eps'), dpi=300, bbox_inches='tight', format='eps')
+    plt.savefig(os.path.join(savepath_ss, 'stress_strain_fail_' + sample_ID + 'png'), dpi=300, bbox_inches='tight', format='png')
     plt.show()
     # plt.close()
 
@@ -259,11 +266,11 @@ for filename in filename_list:
     ax2.autoscale()
     plt.rcParams.update({'font.size': 14})
     savepath_new = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/01_Demineralized/02_disp_force_time'
-    plt.savefig(os.path.join(savepath_new, 'disp_time_fail_' + sample_ID + '.eps'), dpi=300, bbox_inches='tight', format='eps')
+    plt.savefig(os.path.join(savepath_new, 'disp_time_fail_' + sample_ID + 'png'), dpi=300, bbox_inches='tight', format='png')
     plt.show()
 
 # add missing samples to list
-missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '400R', '402L', '403R', '433L']})
+missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '396R', '400R', '402L', '403R', '410L', '433L']})
 result_dir = pd.concat([result_dir, missing_sample_IDs])
 result_dir_sorted = result_dir.sort_values(by=['Sample ID'], ascending=True)
 #
