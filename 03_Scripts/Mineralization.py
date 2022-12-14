@@ -187,7 +187,7 @@ for x in range(0, len(Data), 1):
               mean_areas_fraction, min_areas_fraction, min_areas_fraction_new]
     results.append(values)
 
-    print('Progress: ' + str(x+1) + ' of ' + str(len(Data)-1))
+    print('Progress: ' + str(x+1) + ' of ' + str(len(Data)))
 
 # Add missing samples
 missing_sample_IDs = pd.DataFrame({'Sample ID': ['390_R', '395_R', '402_L']})
@@ -200,6 +200,7 @@ result_dir = pd.DataFrame(results, columns=['Sample ID', 'Bone Volume Fraction -
                                             'Min Area Fraction Adjusted -'])
 result_dir = pd.concat([result_dir, missing_sample_IDs])
 result_dir_sorted = result_dir.sort_values(by=['Sample ID'], ascending=True)
+result_dir_sorted = result_dir_sorted.reset_index(drop=True)
 result_dir_sorted.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/03_uCT/', 'ResultsUCT.csv'),
                          index=False)
 print(result_dir_sorted)
