@@ -61,15 +61,15 @@ for filename in filename_list:
     df['force_lc_filtered'] = butter_lowpass_filter(df['force_lc'], cutoff)
 
     # plot filtered signals (displacement extensometer vs. force MTS)
-    plt.figure()
-    plt.title(sample_ID)
-    plt.plot(df['disp_ext'], df['force_lc'], label='raw')
-    plt.plot(df['disp_ext'], df['force_lc_filtered'], label='filtered')
-    plt.ylabel('force lc / N')
-    plt.xlabel('disp ext / mm')
-    plt.legend()
+    # plt.figure()
+    # plt.title(sample_ID)
+    # plt.plot(df['disp_ext'], df['force_lc'], label='raw')
+    # plt.plot(df['disp_ext'], df['force_lc_filtered'], label='filtered')
+    # plt.ylabel('force lc / N')
+    # plt.xlabel('disp ext / mm')
+    # plt.legend()
     # plt.show()
-    plt.close()
+    # plt.close()
 
     # peak detection
     peaks_index, _ = find_peaks(df['force_lc'], width=50)
@@ -97,7 +97,7 @@ for filename in filename_list:
     last_cycle = last_cycle[max_disp_ind:min_disp_ind]
 
     # define window width for moving linear regression
-    window_width = round(1 / 3 * len(last_cycle))
+    window_width = round(1 / 2 * len(last_cycle))
     print(str(sample_ID) + '   window width: ' + str(window_width) + '   len(last_cycle): ' + str(len(last_cycle)) +
           '   ratio len/ww: ' + str(round(len(last_cycle)/window_width)))
     # rolling linear regression for stiffness calculation
@@ -139,9 +139,9 @@ for filename in filename_list:
     plt.rcParams.update({'font.size': 14})
     # plt.legend(prop={'size': 14})
     savepath_fd = Cwd / '04_Results/00_Mineralized/00_force_disp/'
-    plt.savefig(os.path.join(savepath_fd, 'force_disp_el_' + sample_ID + '.eps'), dpi=300, bbox_inches='tight', format='eps')
-    plt.show()
-    # plt.close()
+    plt.savefig(os.path.join(savepath_fd, 'force_disp_el_' + sample_ID + '.png'), dpi=300, bbox_inches='tight', format='png')
+    # plt.show()
+    plt.close()
 
     # calculate stress/strain, filter and put into dataframe
     l_initial = 6.5
@@ -153,17 +153,18 @@ for filename in filename_list:
     df['stress_lc_filtered_wop'] = butter_lowpass_filter(df['stress_lc_wop'], cutoff)
     counter = counter + 1
 
-    # # plot stress/strain
-    # plt.figure()
-    # plt.title(sample_ID)
-    # plt.plot(df['strain_ext'], df['stress_lc'], label='raw')
-    # plt.plot(df['strain_ext'], df['stress_lc_filtered'], label='filtered')
-    # plt.ylabel('stress / MPa')
-    # plt.xlabel('strain / -')
-    # plt.legend()
+    # plot stress/strain
+    plt.figure()
+    plt.title(sample_ID)
+    plt.plot(df['strain_ext'], df['stress_lc_wop'], label='raw')
+    plt.plot(df['strain_ext'], df['stress_lc_filtered_wop'], label='filtered')
+    plt.ylabel('stress / MPa')
+    plt.xlabel('strain / -')
+    plt.legend()
+    # plt.show()
     # savepath = Cwd / '04_Results/00_Mineralized/01_stress_strain/'
-    # plt.savefig(os.path.join(savepath, 'stress_strain_' + sample_ID + '.eps'), dpi=300)
-    # plt.close()
+    # plt.savefig(os.path.join(savepath, 'stress_strain_' + sample_ID + '.png'), dpi=300)
+    plt.close()
 
     # calculate values for last cycle of stress/strain curve only
     last_cycle_stress = df['stress_lc_filtered_wop'][peaks_index[-1]:]
@@ -181,20 +182,28 @@ for filename in filename_list:
     plt.close()
 
     ## calculate apparent modulus by using rolling regression
-    # definition of strain region where regression should be carried out
-    upper_strain = 0.00250
-    lower_strain = 0.00100
-
     # isolate stress/strain values of defined strain region
     last_cycle = pd.DataFrame()
     last_cycle['last_cycle_strain'] = round(last_cycle_strain, 5)
     last_cycle['last_cycle_stress'] = round(last_cycle_stress, 5)
 
-    # identify index range of defined region
-    upper_cond = last_cycle.loc[last_cycle['last_cycle_strain'] == upper_strain]
-    lower_cond = last_cycle.loc[last_cycle['last_cycle_strain'] == lower_strain]
-    max_strain_ind = min(upper_cond.index[0])
-    min_strain_ind = min(lower_cond.index[0])
+    # identify index range of defined region, exact upper_strain value not found
+    if 0.00250 in last_cycle['last_cycle_strain'].values:
+        upper_cond = last_cycle.loc[last_cycle['last_cycle_strain'] == 0.00250]
+    elif 0.00249 in last_cycle['last_cycle_strain'].values:
+        upper_cond = last_cycle.loc[last_cycle['last_cycle_strain'] == 0.00249]
+    elif 0.00251 in last_cycle['last_cycle_strain'].values:
+        upper_cond = last_cycle.loc[last_cycle['last_cycle_strain'] == 0.00251]
+
+    if 0.00100 in last_cycle['last_cycle_strain'].values:
+        lower_cond = last_cycle.loc[last_cycle['last_cycle_strain'] == 0.00100]
+    elif 0.0009 in last_cycle['last_cycle_strain'].values:
+        lower_cond = last_cycle.loc[last_cycle['last_cycle_strain'] == 0.00090]
+    elif 0.00110 in last_cycle['last_cycle_strain'].values:
+        lower_cond = last_cycle.loc[last_cycle['last_cycle_strain'] == 0.00110]
+
+    max_strain_ind = min(upper_cond.index)
+    min_strain_ind = min(lower_cond.index)
     last_cycle = last_cycle[max_strain_ind:min_strain_ind]
 
     # initialize lists for slope/intercept value collection
@@ -238,9 +247,9 @@ for filename in filename_list:
     plt.rcParams.update({'font.size': 14})
     # plt.legend(prop={'size': 14})
     savepath = Cwd / '04_Results/00_Mineralized/01_stress_strain/'
-    plt.savefig(os.path.join(savepath, 'stress_strain_el_' + sample_ID + '.eps'), dpi=300, bbox_inches='tight', format='eps')
-    plt.show()
-    # plt.close()
+    plt.savefig(os.path.join(savepath, 'stress_strain_el_' + sample_ID + '.png'), dpi=300, bbox_inches='tight', format='png')
+    # plt.show()
+    plt.close()
 
     # create list with current values which are sample_ID, slope & apparent modulus & add them to result list which
     # is then converted to dataframe
@@ -266,9 +275,10 @@ for filename in filename_list:
     plt.rcParams.update({'font.size': 14})
     # savepath_new = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/00_Mineralized/02_disp_force_time'
     savepath_new = '/home/stefan/Documents/PythonScripts/04_Results/00_Mineralized/02_disp_force_time'
-    plt.savefig(os.path.join(savepath_new, 'disp_time_el_' + sample_ID + '.eps'), dpi=300, bbox_inches='tight',
-                format='eps')
-    plt.show()
+    plt.savefig(os.path.join(savepath_new, 'disp_time_el_' + sample_ID + '.png'), dpi=300, bbox_inches='tight',
+                format='png')
+    # plt.show()
+    plt.close()
 
 # add missing samples to list & safe
 missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '400R', '402L', '410L', '433L']})
