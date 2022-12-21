@@ -38,10 +38,13 @@ test1 = test.drop(results_uCT.loc[results_uCT['Sample ID'] == '395_R'].index)
 test2 = test1.drop(results_uCT.loc[results_uCT['Sample ID'] == '400_R'].index)
 test3 = test2.drop(results_uCT.loc[results_uCT['Sample ID'] == '402_L'].index)
 test4 = test3.drop(results_uCT.loc[results_uCT['Sample ID'] == '410_L'].index)
-test5 = test4.drop(results_uCT.loc[results_uCT['Sample ID'] == '433_R'].index)
+test5 = test4.drop(results_uCT.loc[results_uCT['Sample ID'] == '433_L'].index)
 test6 = test5.drop(results_uCT.loc[results_uCT['Sample ID'] == '396_R'].index)
-# results_uCT = results_uCT.drop(index=[8, 14, 20, 24, 27, 37], axis=0)
-results_uCT = test5.reset_index(drop=True)
+test7 = test6.drop(results_uCT.loc[results_uCT['Sample ID'] == '410_R'].index)
+test8 = test7.drop(results_uCT.loc[results_uCT['Sample ID'] == '422_R'].index)
+test9 = test8.drop(results_uCT.loc[results_uCT['Sample ID'] == '431_L'].index)
+
+results_uCT = test9.reset_index(drop=True)
 
 # set counters for iterations over files (i) and areas for stress calculation (counter) & initialize results list
 i = 0
@@ -179,7 +182,7 @@ for filename in filename_list:
     plt.autoscale()
     plt.rcParams.update({'font.size': 14})
     savepath_fd = Cwd / '04_Results/01_Demineralized/00_force_disp/'
-    plt.savefig(os.path.join(savepath_fd, 'force_disp_fail_' + sample_ID + 'png'), dpi=300, bbox_inches='tight', format='png')
+    plt.savefig(os.path.join(savepath_fd, 'force_disp_fail_' + sample_ID + '.png'), dpi=300, bbox_inches='tight', format='png')
     plt.show()
     # plt.close()
 
@@ -237,7 +240,7 @@ for filename in filename_list:
     plt.autoscale()
     plt.rcParams.update({'font.size': 14})
     savepath_ss = Cwd / '04_Results/01_Demineralized/01_stress_strain/'
-    plt.savefig(os.path.join(savepath_ss, 'stress_strain_fail_' + sample_ID + 'png'), dpi=300, bbox_inches='tight', format='png')
+    plt.savefig(os.path.join(savepath_ss, 'stress_strain_fail_' + sample_ID + '.png'), dpi=300, bbox_inches='tight', format='png')
     plt.show()
     # plt.close()
 
@@ -265,16 +268,18 @@ for filename in filename_list:
     fig.legend(loc='upper left', bbox_to_anchor=(0.14, 0.95), ncol=1)
     ax2.autoscale()
     plt.rcParams.update({'font.size': 14})
-    savepath_new = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/01_Demineralized/02_disp_force_time'
-    plt.savefig(os.path.join(savepath_new, 'disp_time_fail_' + sample_ID + 'png'), dpi=300, bbox_inches='tight', format='png')
+    savepath_dft = Cwd / '04_Results/01_Demineralized/02_disp_force_time/'
+    # savepath_new = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/01_Demineralized/02_disp_force_time'
+    plt.savefig(os.path.join(savepath_dft, 'disp_time_fail_' + sample_ID + '.png'), dpi=300, bbox_inches='tight', format='png')
     plt.show()
 
 # add missing samples to list
-missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '396R', '400R', '402L', '403R', '410L', '433L']})
+missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '396R', '400R', '402L', '403R', '410L', '410R', '422R',
+                                                 '431L', '433L']})
 result_dir = pd.concat([result_dir, missing_sample_IDs])
 result_dir_sorted = result_dir.sort_values(by=['Sample ID'], ascending=True)
 #
-# result_dir_sorted.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/01_Demineralized/',
-#                                       'ResultsFailureTesting.csv'), index=False)
-result_dir_sorted.to_csv(os.path.join('C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/01_Demineralized',
+result_dir_sorted.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/01_Demineralized/',
                                       'ResultsFailureTesting.csv'), index=False)
+# result_dir_sorted.to_csv(os.path.join('C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/01_Demineralized',
+#                                       'ResultsFailureTesting.csv'), index=False)

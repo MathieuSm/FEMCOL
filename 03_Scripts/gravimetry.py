@@ -37,6 +37,7 @@ result_dir = pd.DataFrame()
 result_dir['Sample ID'] = df['Sample ID']
 result_dir['age'] = df['age']
 result_dir['sex'] = df['sex']
+result_dir['site'] = df['site']
 result_dir['density / g/cm^3'] = density
 result_dir['organic weight / g'] = w_organic
 result_dir['mineral weight / g'] = w_mineral

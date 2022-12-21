@@ -8,15 +8,12 @@ from scipy.signal import find_peaks
 from scipy import stats
 from pathlib import Path
 
-results_mineralized = pd.read_csv(str('/home/stefan/Documents/PythonScripts/04_Results/00_Mineralized/ResultsElasticTesting.csv'),
-                  skiprows=0)
-results_demineralized = pd.read_csv(str('/home/stefan/Documents/PythonScripts/04_Results/01_Demineralized/ResultsFailureTesting.csv'),
-                  skiprows=0)
-results_gravimetry = pd.read_csv(str('/home/stefan/Documents/PythonScripts/04_Results/02_Gravimetry/ResultsGravimetry.csv'),
-                  skiprows=0)
-results_uCT = pd.read_csv(str('/home/stefan/Documents/PythonScripts/04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
-results_raman = pd.read_csv(str('/home/stefan/Documents/PythonScripts/04_Results/05_Raman/RamanResults.csv'),
-                            skiprows=0)
+Cwd = Path.cwd()
+results_mineralized = pd.read_csv(str(Cwd / '04_Results/00_Mineralized/ResultsElasticTesting.csv'), skiprows=0)
+results_demineralized = pd.read_csv(str(Cwd / '04_Results/01_Demineralized/ResultsFailureTesting.csv'), skiprows=0)
+results_gravimetry = pd.read_csv(str(Cwd / '04_Results/02_Gravimetry/ResultsGravimetry.csv'), skiprows=0)
+results_uCT = pd.read_csv(str(Cwd / '04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
+results_raman = pd.read_csv(str(Cwd / '04_Results/05_Raman/RamanResults.csv'), skiprows=0)
 
 results_merged = pd.DataFrame()
 results_merged['Sample ID'] = results_mineralized['Sample ID']
