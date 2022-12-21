@@ -19,6 +19,7 @@ results_merged = pd.DataFrame()
 results_merged['Sample ID'] = results_mineralized['Sample ID']
 results_merged['Age'] = results_gravimetry['age']
 results_merged['Gender'] = results_gravimetry['sex']
+results_merged['Site'] = results_gravimetry['site']
 results_merged['Stiffness Mineralized N/mm'] = results_mineralized['Stiffness N/mm']
 results_merged['Apparent Modulus Mineralized MPa'] = results_mineralized['Apparent modulus MPa']
 results_merged['Ultimate Force N'] = results_demineralized['Ultimate Force / N']
