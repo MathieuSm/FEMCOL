@@ -41,10 +41,10 @@ test4 = test3.drop(results_uCT.loc[results_uCT['Sample ID'] == '410_L'].index)
 test5 = test4.drop(results_uCT.loc[results_uCT['Sample ID'] == '433_L'].index)
 test6 = test5.drop(results_uCT.loc[results_uCT['Sample ID'] == '396_R'].index)
 test7 = test6.drop(results_uCT.loc[results_uCT['Sample ID'] == '410_R'].index)
-test8 = test7.drop(results_uCT.loc[results_uCT['Sample ID'] == '422_R'].index)
-test9 = test8.drop(results_uCT.loc[results_uCT['Sample ID'] == '431_L'].index)
+# test8 = test7.drop(results_uCT.loc[results_uCT['Sample ID'] == '422_R'].index)
+# test9 = test8.drop(results_uCT.loc[results_uCT['Sample ID'] == '431_L'].index)
 
-results_uCT = test9.reset_index(drop=True)
+results_uCT = test7.reset_index(drop=True)
 
 # set counters for iterations over files (i) and areas for stress calculation (counter) & initialize results list
 i = 0
@@ -59,7 +59,7 @@ for filename in filename_list:
     df.rename(columns={'sec': 'time', 'N': 'force_MTS', 'N.1': 'force_lc', 'mm': 'disp_MTS', 'mm.1': 'disp_ext'},
               inplace=True)
     i = i + 1
-
+    print(sample_ID)
     # filter signals
     fs = 102.4  # sample rate, Hz
     cutoff = 5
@@ -274,8 +274,10 @@ for filename in filename_list:
     plt.show()
 
 # add missing samples to list
-missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '396R', '400R', '402L', '403R', '410L', '410R', '422R',
-                                                 '431L', '433L']})
+# missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '396R', '400R', '402L', '403R', '410L', '410R', '422R',
+#                                                  '431L', '433L']})
+missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '396R', '400R', '402L', '403R', '410L', '410R',
+                                                 '433L']})
 result_dir = pd.concat([result_dir, missing_sample_IDs])
 result_dir_sorted = result_dir.sort_values(by=['Sample ID'], ascending=True)
 #
