@@ -16,7 +16,9 @@ plt.rc('font', size=12)
 Cwd = Path.cwd()
 DataPath = Cwd / '04_Results/ResultsOverview.csv'
 savepath = Cwd / '04_Results/04_Plots'
-df = pd.read_csv(str(DataPath), skiprows=0).dropna().reset_index(drop=True)
+df = pd.read_csv(str(DataPath), skiprows=0)
+df = df[df['Age'].notna()].reset_index(drop=True)
+
 Data = pd.DataFrame()
 # Data['Variable'] = np.random.randn(100)
 
@@ -59,5 +61,5 @@ from scipy.stats import norm
 import pylab
 Figure, Axes = plt.subplots(1, 1, figsize=(5.5, 4.5), dpi=300)
 sm.qqplot(X, line='s')
-plt.savefig(os.path.join(savepath, 'AgeDistribution_qqplot.eps'), dpi=300, bbox_inches='tight', format='eps')
+plt.savefig(os.path.join(savepath, 'AgeDistribution_qqplot.png'), dpi=300, bbox_inches='tight', format='png')
 pylab.show()
