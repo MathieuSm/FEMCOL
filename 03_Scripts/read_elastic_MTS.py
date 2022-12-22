@@ -12,6 +12,7 @@ from scipy.signal import find_peaks
 from scipy import stats
 from pathlib import Path
 from matplotlib import rcParams
+from tqdm import tqdm
 
 # definition of lowpass filter
 def butter_lowpass_filter(data, cutoff, order=9):
@@ -46,8 +47,8 @@ i = 0
 counter = 0
 
 # loop over .csv files in Folder
-for filename in filename_list:
-    sample_ID = filename.split('/')[-1].split('_')[1]
+for filename in tqdm(filename_list):
+    sample_ID = filename.split('/')[-1].split('_')[0]
     # load csv:
     df = pd.read_csv(str(DataPath / filename_list[i]), skiprows=2)
     df.rename(columns={'sec': 'time', 'N': 'force_MTS', 'N.1': 'force_lc', 'mm': 'disp_MTS', 'mm.1': 'disp_ext'},
