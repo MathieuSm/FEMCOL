@@ -74,28 +74,29 @@ else:
         nyq = 0.5 * fs
         df['force_lc_filtered'] = butter_lowpass_filter(df['force_lc'], cutoff)
 
-        # +++++++++++++++
+        # # +++++++++++++++  this part was used for end of curve analysis; corrections were done in the raw files by
+        # # removal of last columns
 
-        filename = '431L_fail.csv'
-        sample_ID = '431L'
-        df = pd.read_csv(str(DataPath / filename), skiprows=2)
-        df.rename(columns={'sec': 'time', 'N': 'force_MTS', 'N.1': 'force_lc', 'mm': 'disp_MTS', 'mm.1': 'disp_ext'},
-                  inplace=True)
-        fs = 102.4  # sample rate, Hz
-        cutoff = 5
-        nyq = 0.5 * fs
-        df['force_lc_filtered'] = butter_lowpass_filter(df['force_lc'], cutoff)
-        peaks_index, _ = find_peaks(df['force_lc'], width=200)
+        # filename = '431L_fail.csv'
+        # sample_ID = '431L'
+        # df = pd.read_csv(str(DataPath / filename), skiprows=2)
+        # df.rename(columns={'sec': 'time', 'N': 'force_MTS', 'N.1': 'force_lc', 'mm': 'disp_MTS', 'mm.1': 'disp_ext'},
+        #           inplace=True)
+        # fs = 102.4  # sample rate, Hz
+        # cutoff = 5
+        # nyq = 0.5 * fs
+        # df['force_lc_filtered'] = butter_lowpass_filter(df['force_lc'], cutoff)
+        # peaks_index, _ = find_peaks(df['force_lc'], width=200)
+        #
+        # plt.plot(df['disp_ext'], df['force_lc_filtered'], label='Filtered')
+        # plt.plot(df['disp_ext'], df['force_lc'], label='raw')
+        # plt.scatter(df['disp_ext'][peaks_index[-1]], df['force_lc_filtered'][peaks_index[-1]], label='peak')
+        # plt.ylabel('force / N')
+        # plt.xlabel('disp / mm')
+        # plt.legend()
+        # plt.show()
 
-        plt.plot(df['disp_ext'], df['force_lc_filtered'], label='Filtered')
-        plt.plot(df['disp_ext'], df['force_lc'], label='raw')
-        plt.scatter(df['disp_ext'][peaks_index[-1]], df['force_lc_filtered'][peaks_index[-1]], label='peak')
-        plt.ylabel('force / N')
-        plt.xlabel('disp / mm')
-        plt.legend()
-        plt.show()
-
-        # +++++++++++++++++
+        # # +++++++++++++++++
 
         # calculate stress and strain, filter & put into dataframe
         l_initial = 6.5

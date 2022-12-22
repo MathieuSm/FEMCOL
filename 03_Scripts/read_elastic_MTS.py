@@ -99,8 +99,7 @@ for filename in tqdm(filename_list):
 
     # define window width for moving linear regression
     window_width = round(1 / 2 * len(last_cycle))
-    print(str(sample_ID) + '   window width: ' + str(window_width) + '   len(last_cycle): ' + str(len(last_cycle)) +
-          '   ratio len/ww: ' + str(round(len(last_cycle)/window_width)))
+
     # rolling linear regression for stiffness calculation
     slope_values_stiff = list()
     intercept_values_stiff = list()
