@@ -76,8 +76,8 @@ else:
 
         # +++++++++++++++
 
-        filename = '414L_fail.csv'
-        sample_ID = '414L'
+        filename = '422R_fail.csv'
+        sample_ID = '422R'
         df = pd.read_csv(str(DataPath / filename), skiprows=2)
         df.rename(columns={'sec': 'time', 'N': 'force_MTS', 'N.1': 'force_lc', 'mm': 'disp_MTS', 'mm.1': 'disp_ext'},
                   inplace=True)
