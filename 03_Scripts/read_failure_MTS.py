@@ -56,6 +56,7 @@ for filename in filename_list:
     sample_ID = filename.split('/')[-1].split('_')[1]
     # load csv:
     df = pd.read_csv(str(DataPath / filename_list[i]), skiprows=2)
+    df = pd.read_csv(str(DataPath / filename), skiprows=2)
     df.rename(columns={'sec': 'time', 'N': 'force_MTS', 'N.1': 'force_lc', 'mm': 'disp_MTS', 'mm.1': 'disp_ext'},
               inplace=True)
     i = i + 1
