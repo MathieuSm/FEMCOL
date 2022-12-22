@@ -24,7 +24,7 @@ SampleID = df['Sample ID'].values.tolist()
 # Create dataframe with variable names & respective abbreviations
 ColumnNames = pd.DataFrame()
 ColumnNames['Column Names'] = df.columns
-column_names_abbrev = ['SID', 'Age', 'G', 'SM', 'AMM', 'UF', 'USTRE', 'USTRA', 'SD', 'AMD', 'D', 'OW', 'MW', 'WW',
+column_names_abbrev = ['SID', 'Age', 'G', 'Site', 'SM', 'AMM', 'UF', 'USTRE', 'USTRA', 'SD', 'AMD', 'D', 'OW', 'MW', 'WW',
                        'MWF', 'OWF', 'WWF', 'BVTV', 'BMD', 'TMD', 'BMC', 'MINA', 'MEANAA', 'MINED', 'MEANAD', 'MEANAF',
                        'MINAF', 'MMR']
 ColumnNames['Abbreviations'] = column_names_abbrev
