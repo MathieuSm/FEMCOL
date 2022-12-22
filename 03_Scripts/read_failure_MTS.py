@@ -76,8 +76,8 @@ else:
 
         # +++++++++++++++
 
-        filename = '405L_fail.csv'
-        sample_ID = '405L'
+        filename = '413L_fail.csv'
+        sample_ID = '413L'
         df = pd.read_csv(str(DataPath / filename), skiprows=2)
         df.rename(columns={'sec': 'time', 'N': 'force_MTS', 'N.1': 'force_lc', 'mm': 'disp_MTS', 'mm.1': 'disp_ext'},
                   inplace=True)
@@ -88,7 +88,7 @@ else:
         peaks_index, _ = find_peaks(df['force_lc'], width=200)
 
         plt.plot(df['disp_ext'], df['force_lc_filtered'], label='Filtered')
-        # plt.plot(df['disp_ext'], df['force_lc'], label='raw')
+        plt.plot(df['disp_ext'], df['force_lc'], label='raw')
         plt.scatter(df['disp_ext'][peaks_index[-1]], df['force_lc_filtered'][peaks_index[-1]], label='peak')
         plt.ylabel('force / N')
         plt.xlabel('disp / mm')
