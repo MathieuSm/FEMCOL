@@ -45,6 +45,26 @@ results_uCT = test5.reset_index(drop=True)
 result = list()
 i = 0
 counter = 0
+# # +++++++++++++++ this part was used for end of curve analysis +++++++++++++++
+# filename = '386R_el.csv'
+# sample_ID = '386R'
+# df = pd.read_csv(str(DataPath / filename), skiprows=2)
+# df.rename(columns={'sec': 'time', 'N': 'force_MTS', 'N.1': 'force_lc', 'mm': 'disp_MTS', 'mm.1': 'disp_ext'},
+#           inplace=True)
+# fs = 102.4  # sample rate, Hz
+# cutoff = 5
+# nyq = 0.5 * fs
+# df['force_lc_filtered'] = butter_lowpass_filter(df['force_lc'], cutoff)
+# peaks_index, _ = find_peaks(df['force_lc'], width=200)
+#
+# plt.plot(df['disp_ext'], df['force_lc_filtered'], label='Filtered')
+# plt.plot(df['disp_ext'], df['force_lc'], label='raw')
+# plt.scatter(df['disp_ext'][peaks_index[-1]], df['force_lc_filtered'][peaks_index[-1]], label='peak')
+# plt.ylabel('force / N')
+# plt.xlabel('disp / mm')
+# plt.legend()
+# plt.show()
+# # +++++++++++++++++
 
 # loop over .csv files in Folder
 for filename in tqdm(filename_list):
