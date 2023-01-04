@@ -32,7 +32,15 @@ corr_matrix = df_new.corr()
 
 for i in df_new.columns:
     for j in df_new.columns:
-        corr_matrix.loc[i, j] = round(linregress(df_new[j], df_new[i])[3], 3)
+        pvalue = round(linregress(df_new[j], df_new[i])[3], 3)
+        if pvalue <= 0.001:
+            p = str('***')
+        elif pvalue <= 0.01:
+            p = str('**')
+        elif pvalue <= 0.05:
+            p = str('*')
+        #corr_matrix.loc[i, j] = round(linregress(df_new[j], df_new[i])[2], 3) + p
+        corr_matrix.loc[i, j] = round(linregress(df_new[j], df_new[i])[2], 3)
 
 p_matrix = pd.DataFrame()
 mask = np.zeros_like(corr_matrix, dtype=np.bool_)
