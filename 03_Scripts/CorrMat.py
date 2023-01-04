@@ -46,7 +46,8 @@ newcolors = viridis(np.linspace(0, 1, 8))
 newcmp = ListedColormap(newcolors)
 
 # abbreviations = ['BVTV', 'BMD', 'TMD', 'MMR', 'WF\u2098', 'WF\u2092', 'WFw', 'db', 'E\u2098', 'Ec', '\u03C3u', '\u03B5u']
-abbreviations = ['BVTV', 'BMD', 'TMD', 'MMR', 'WF$_m$', 'WF$_o$', 'WF$_w$', 'd$_b$', 'E$_m$', 'E$_c$', '$\sigma_u$', '$\epsilon_u$']
+abbreviations = ['BVTV', 'BMD', 'TMD', 'MMR', 'WF$_m$', 'WF$_o$', 'WF$_w$', 'd$_b$', 'E$_m$', 'E$_c$', '$\sigma_u$',
+                 '$\epsilon_u$']
 
 plt.rcParams["text.usetex"] = True
 plt.rcParams["font.family"] = "serif"
@@ -73,6 +74,7 @@ ax.set_xticklabels(abbreviations, fontsize=14)
 
 sns.set_style({'xtick.bottom': True}, {'ytick.left': True})
 plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap.eps'), dpi=300, bbox_inches='tight', format='eps')
+plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap.png'), dpi=300, bbox_inches='tight', format='png')
 # plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap.png'), dpi=300, bbox_inches='tight')
 
 plt.show()

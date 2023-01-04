@@ -267,7 +267,7 @@ for i in range(len(Pair)):
     if float(p) <= 0.05:
         if x_axis != 'Age':
             # sns.regplot(x=FitResults.model.exog[:, 1], y=Y_Obs, ax=Axes, scatter=False, color=(0, 0, 0),
-            #             line_kws={'color': 'black'})
+            #             line_kws={'color': 'black'}) # this does not work in combination with color coding
             Axes.plot(X[:, 1], Y_Fit, color=(0, 0, 0), label='Fit', linewidth=2)
             # Axes.fill_between(X_Obs, Sorted_CI_o, Sorted_CI_u, color=(0, 0, 0), alpha=0.1,
             #                   label=str(int(Alpha * 100)) + '% CI')
@@ -294,7 +294,7 @@ for i in range(len(Pair)):
             # condition used for autoscaling
             if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
                 # plt.autoscale()
-                plt.ylim(ymin=round(Y_Obs.min()*2/3, 1), ymax=round(Y_Obs.max()*1.02, 2))
+                plt.ylim(ymin=round(Y_Obs.min()*0.85, 1), ymax=round(Y_Obs.max()*1.02, 2))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 # plt.legend(loc='upper center', ncol=2, bbox_to_anchor=(0.5, 1.15), prop={'size': 10})
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
@@ -313,8 +313,8 @@ for i in range(len(Pair)):
 
         # don't use colormap if age is plotted on main axes
         else:
-            # sns.regplot(x=FitResults.model.exog[:, 1], y=Y_Obs, ax=Axes, scatter=False, color=(0, 0, 0),
-            #             line_kws={'color': 'black'})
+            sns.regplot(x=FitResults.model.exog[:, 1], y=Y_Obs, ax=Axes, scatter=False, color=(0, 0, 0),
+                        line_kws={'color': 'black'})
             Axes.plot(X[:, 1], Y_Fit, color=(0, 0, 0), label='Fit', linewidth=2)
             # Axes.fill_between(X_Obs, Sorted_CI_o, Sorted_CI_u, color=(0, 0, 0), alpha=0.1,
             #                   label=str(int(Alpha * 100)) + '% CI')
@@ -336,7 +336,7 @@ for i in range(len(Pair)):
             if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
                 # plt.ylim(ymin=0, ymax=round(Y_Fit.max() * 1.2, 2))
                 # plt.autoscale()
-                plt.ylim(ymin=round(Y_Obs.min()*2/3, 1), ymax=round(Y_Obs.max()*1.02, 2))
+                plt.ylim(ymin=round(Y_Obs.min()*0.85, 1), ymax=round(Y_Obs.max()*1.02, 2))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
@@ -376,7 +376,7 @@ for i in range(len(Pair)):
             # condition used for autoscaling
             if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
                 # plt.autoscale()
-                plt.ylim(ymin=round(Y_Obs.min()*2/3, 1), ymax=round(Y_Obs.max()*1.02, 2))
+                plt.ylim(ymin=round(Y_Obs.min()*0.85, 1), ymax=round(Y_Obs.max()*1.02, 2))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
@@ -411,7 +411,7 @@ for i in range(len(Pair)):
             # condition for autoscaling
             if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
                 # plt.autoscale()
-                plt.ylim(ymin=round(Y_Obs.min()*2/3, 1), ymax=round(Y_Obs.max()*1.02, 2))
+                plt.ylim(ymin=round(Y_Obs.min()*0.85, 1), ymax=round(Y_Obs.max()*1.02, 2))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
