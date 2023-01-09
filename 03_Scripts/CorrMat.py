@@ -11,6 +11,8 @@ from scipy.stats.distributions import t  # Used to compute confidence intervals
 import sys
 import seaborn as sns
 from scipy.stats import linregress
+from matplotlib import cm
+from matplotlib.colors import ListedColormap
 
 # Set directory & load data
 Cwd = Path.cwd()
@@ -28,27 +30,28 @@ df_new = df[['Bone Volume Fraction -', 'Bone Mineral Density mg HA / cm³', 'Tis
 df_new.columns = ['Bone Volume Fraction', 'Bone Mineral Density', 'Tissue Mineral Density', 'Mineral to Matrix Ratio',
                   'Mineral Weight Fraction', 'Organic Weight Fraction', 'Water Weight Fraction', 'Bone Density',
                   'Apparent Modulus Mineralized', 'Apparent Modulus Demineralized', 'Ultimate Stress', 'Ultimate Strain']
-corr_matrix = df_new.corr()
+corr_matrix_p = df_new.corr()
+corr_matrix_r = df_new.corr()
 
 for i in df_new.columns:
     for j in df_new.columns:
         pvalue = round(linregress(df_new[j], df_new[i])[3], 3)
         if pvalue <= 0.001:
-            p = str('***')
+            p = r'\textsuperscript{***}'
         elif pvalue <= 0.01:
-            p = str('**')
+            p = r'\textsuperscript{**}'
         elif pvalue <= 0.05:
-            p = str('*')
-        #corr_matrix.loc[i, j] = round(linregress(df_new[j], df_new[i])[2], 3) + p
-        corr_matrix.loc[i, j] = round(linregress(df_new[j], df_new[i])[2], 3)
+            p = r'\textsuperscript{*}'
+
+        # corr_matrix.loc[i, j] = round(linregress(df_new[j], df_new[i])[2], 3)
+        corr_matrix_p.loc[i, j] = round(linregress(df_new[j], df_new[i])[3], 3)
+        corr_matrix_r.loc[i, j] = round(linregress(df_new[j], df_new[i])[2], 3)
 
 p_matrix = pd.DataFrame()
-mask = np.zeros_like(corr_matrix, dtype=np.bool_)
-mask[np.triu_indices_from(mask)] = True
+mask_p = np.zeros_like(corr_matrix_p, dtype=np.bool_)
+mask_p[np.triu_indices_from(mask_p)] = True
 
 # Colormap trick
-from matplotlib import cm
-from matplotlib.colors import ListedColormap
 viridis = cm.get_cmap('plasma', 8)
 newcolors = viridis(np.linspace(0, 1, 8))
 newcmp = ListedColormap(newcolors)
@@ -62,17 +65,17 @@ plt.rcParams["font.family"] = "serif"
 plt.rcParams["font.size"] = "10"
 
 f, ax = plt.subplots(figsize=(11, 15))
-heatmap = sns.heatmap(corr_matrix,
-                      mask=mask,
-                      square=True,
-                      linewidths=.5,
-                      cmap=newcmp,
-                      cbar_kws={'shrink': .5,
-                                'ticks': np.linspace(0, 1, 9)},
-                      vmin=0,
-                      vmax=1,
-                      annot=True,
-                      annot_kws={'size': 12})
+heatmap_p = sns.heatmap(corr_matrix_p,
+                        mask=mask_p,
+                        square=True,
+                        linewidths=.5,
+                        cmap=newcmp,
+                        cbar_kws={'shrink': .5,
+                                  'ticks': np.linspace(0, 1, 9)},
+                        vmin=0,
+                        vmax=1,
+                        annot=True,
+                        annot_kws={'size': 12})
 
 #add the column names as labels
 # ax.set_yticklabels(corr_matrix.columns, rotation=0, fontsize=14)
@@ -81,9 +84,32 @@ ax.set_yticklabels(abbreviations, rotation=0, fontsize=14)
 ax.set_xticklabels(abbreviations, fontsize=14)
 
 sns.set_style({'xtick.bottom': True}, {'ytick.left': True})
-plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap.eps'), dpi=300, bbox_inches='tight', format='eps')
-plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap.png'), dpi=300, bbox_inches='tight', format='png')
+plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_pvalues.eps'), dpi=300, bbox_inches='tight', format='eps')
+plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_pvalues.png'), dpi=300, bbox_inches='tight', format='png')
+
+f, ax = plt.subplots(figsize=(11, 15))
+heatmap_r = sns.heatmap(corr_matrix_r,
+                        mask=mask_p,
+                        square=True,
+                        linewidths=.5,
+                        cmap=newcmp,
+                        cbar_kws={'shrink': .5,
+                                  'ticks': np.linspace(0, 1, 9)},
+                        vmin=0,
+                        vmax=1,
+                        annot=True,
+                        annot_kws={'size': 12})
+
+#add the column names as labels
+# ax.set_yticklabels(corr_matrix.columns, rotation=0, fontsize=14)
+# ax.set_xticklabels(corr_matrix.columns, fontsize=14)
+ax.set_yticklabels(abbreviations, rotation=0, fontsize=14)
+ax.set_xticklabels(abbreviations, fontsize=14)
+
+sns.set_style({'xtick.bottom': True}, {'ytick.left': True})
+plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_rvalues.eps'), dpi=300, bbox_inches='tight', format='eps')
+plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_rvalues.png'), dpi=300, bbox_inches='tight', format='png')
+
 # plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap.png'), dpi=300, bbox_inches='tight')
 
 plt.show()
-
