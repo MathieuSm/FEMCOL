@@ -20,13 +20,9 @@ df = pd.read_csv(str(DataPath), skiprows=0)
 df = df[df['Age'].notna()].reset_index(drop=True)
 
 Data = pd.DataFrame()
-# Data['Variable'] = np.random.randn(100)
-
-# 01 Get data attributes
 Data['Age'] = df['Age']
 
 # 01 Get data attributes
-# X = Data['Variable']
 X = Data['Age']
 SortedValues = np.sort(X.values)
 N = len(X)
