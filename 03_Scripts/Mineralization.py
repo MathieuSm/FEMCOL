@@ -55,7 +55,7 @@ for x in range(0, len(Data), 1):
     Axis.imshow(Scan[:, :, YMid], cmap='bone')
     Axis.axis('off')
     plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
-    plt.savefig(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/03_uCT/', SampleID + '_' + 'YZ_Plane'),
+    plt.savefig(os.path.join('/home/stefan/Documents/FEMCOL/04_Results/03_uCT/', SampleID + '_' + 'YZ_Plane'),
                 dpi=300)
     plt.show()
     # plt.close()
@@ -201,6 +201,6 @@ result_dir = pd.DataFrame(results, columns=['Sample ID', 'Bone Volume Fraction -
 result_dir = pd.concat([result_dir, missing_sample_IDs])
 result_dir_sorted = result_dir.sort_values(by=['Sample ID'], ascending=True)
 result_dir_sorted = result_dir_sorted.reset_index(drop=True)
-result_dir_sorted.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/03_uCT/', 'ResultsUCT.csv'),
+result_dir_sorted.to_csv(os.path.join('/home/stefan/Documents/FEMCOL/04_Results/03_uCT/', 'ResultsUCT.csv'),
                          index=False)
 print(result_dir_sorted)

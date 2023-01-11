@@ -30,7 +30,7 @@ filename_list = [File for File in os.listdir(DataPath) if File.endswith('.csv')]
 filename_list.sort()
 
 # load uCT results & remove naN entries; areas needed for stress calculations
-results_uCT = pd.read_csv(str('/home/stefan/Documents/PythonScripts/04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
+results_uCT = pd.read_csv(str('/home/stefan/Documents/FEMCOL/04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
 # results_uCT = pd.read_csv(str('C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
 # results_uCT = results_uCT.drop(index=[8, 14, 20, 24, 37], axis=0)
 test = results_uCT.drop(results_uCT.loc[results_uCT['Sample ID'] == '390_R'].index)
@@ -294,7 +294,7 @@ for filename in tqdm(filename_list):
     ax2.autoscale()
     plt.rcParams.update({'font.size': 14})
     # savepath_new = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/00_Mineralized/02_disp_force_time'
-    savepath_new = '/home/stefan/Documents/PythonScripts/04_Results/00_Mineralized/02_disp_force_time'
+    savepath_new = '/home/stefan/Documents/FEMCOL/04_Results/00_Mineralized/02_disp_force_time'
     plt.savefig(os.path.join(savepath_new, 'disp_time_el_' + sample_ID + '.png'), dpi=300, bbox_inches='tight',
                 format='png')
     # plt.show()
@@ -305,7 +305,7 @@ missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '400R', '402L',
 result_dir = pd.concat([result_dir, missing_sample_IDs])
 result_dir_sorted = result_dir.sort_values(by=['Sample ID'], ascending=True)
 
-result_dir_sorted.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/00_Mineralized/',
+result_dir_sorted.to_csv(os.path.join('/home/stefan/Documents/FEMCOL/04_Results/00_Mineralized/',
                                       'ResultsElasticTesting.csv'), index=False)
 # result_dir_sorted.to_csv(os.path.join('C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/00_Mineralized',
 #                                       'ResultsElasticTesting.csv'), index=False)

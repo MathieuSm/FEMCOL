@@ -45,7 +45,7 @@ results_merged['Mean Apparent Diameter mm'] = results_uCT['Mean Apparent Diamete
 results_merged['Mean Area Fraction -'] = results_uCT['Mean Area Fraction -']
 results_merged['Min Area Fraction -'] = results_uCT['Min Area Fraction -']
 results_merged['Mineral to Matrix Ratio -'] = results_raman['M2M_ratio_mean']
-results_merged.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/', 'ResultsOverview.csv'),
+results_merged.to_csv(os.path.join('/home/stefan/Documents/FEMCOL/04_Results/', 'ResultsOverview.csv'),
                       index=False)
 
 

@@ -87,7 +87,7 @@ for x in range(0, 2):
     Axis.imshow(Scan_f[:, :, XMid_f], cmap='Greys_r')
     Axis.axis('off')
     plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
-    # plt.savefig(os.path.join('/home/stefan/Documents/PythonScripts/Silk_data/', 'x' + '_' + 'YZ_Plane'),
+    # plt.savefig(os.path.join('/home/stefan/Documents/FEMCOL/Silk_data/', 'x' + '_' + 'YZ_Plane'),
     #             dpi=300)
     # plt.show()
     plt.close()
@@ -105,7 +105,7 @@ for x in range(0, 2):
     Axis.imshow(Scan_s[:, :, XMid_s], cmap='Greys_r')
     Axis.axis('off')
     plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
-    # plt.savefig(os.path.join('/home/stefan/Documents/PythonScripts/Silk_data/', 'x' + '_' + 'YZ_Plane'),
+    # plt.savefig(os.path.join('/home/stefan/Documents/FEMCOL/Silk_data/', 'x' + '_' + 'YZ_Plane'),
     #             dpi=300)
     # plt.show()
     plt.close()

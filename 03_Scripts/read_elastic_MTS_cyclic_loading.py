@@ -35,7 +35,7 @@ for filename in filename_list:
 
 
     # load uCT results & remove naN entries; areas needed for stress calculations
-    # results_uCT = pd.read_csv(str('/home/stefan/Documents/PythonScripts/04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
+    # results_uCT = pd.read_csv(str('/home/stefan/Documents/FEMCOL/04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
     results_uCT = pd.read_csv(str('C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
     results_uCT = results_uCT.drop(index=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
                                           23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38], axis=0)
@@ -269,7 +269,7 @@ missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '400R', '402L',
 result_dir = pd.concat([result_dir, missing_sample_IDs])
 result_dir_sorted = result_dir.sort_values(by=['Sample ID'], ascending=True)
 
-# result_dir_sorted.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/00_Mineralized/',
+# result_dir_sorted.to_csv(os.path.join('/home/stefan/Documents/FEMCOL/04_Results/00_Mineralized/',
 #                                       'ResultsElasticTesting.csv'), index=False)
 # result_dir_sorted.to_csv(os.path.join('C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/00_Mineralized',
 #                                       'ResultsElasticTesting.csv'), index=False)

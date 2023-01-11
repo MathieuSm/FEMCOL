@@ -47,4 +47,4 @@ mean_otsu = list()
 mean_otsu.append(round(statistics.mean(result_dir['Otsu Threshold']), 3))
 mean_otsu = pd.DataFrame(mean_otsu, columns=['Mean Otsu Threshold'])
 
-mean_otsu.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/04_Results/03_uCT/', 'MeanOtsu.csv'), index=False)
+mean_otsu.to_csv(os.path.join('/home/stefan/Documents/FEMCOL/04_Results/03_uCT/', 'MeanOtsu.csv'), index=False)

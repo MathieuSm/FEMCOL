@@ -30,7 +30,7 @@ filename_list = [File for File in os.listdir(DataPath) if File.endswith('.csv')]
 filename_list.sort()
 
 # load uCT results & remove naN entries; areas needed for stress calculations
-results_uCT = pd.read_csv(str('/home/stefan/Documents/PythonScripts/Silk/02_Silk_results/00_uCT/CrossSectionalArea.csv')
+results_uCT = pd.read_csv(str('/home/stefan/Documents/FEMCOL/Silk/02_Silk_results/00_uCT/CrossSectionalArea.csv')
                           , skiprows=0)
 # results_uCT = pd.read_csv(str('C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
 results_uCT = results_uCT.drop(index=[0], axis=0)
@@ -245,7 +245,7 @@ for filename in filename_list:
     # plt.savefig(os.path.join(savepath_new, 'disp_time_el_' + sample_ID + '.eps'), dpi=300, bbox_inches='tight', format='eps')
     # plt.show()
 
-result_dir.to_csv(os.path.join('/home/stefan/Documents/PythonScripts/Silk/02_Silk_results/01_mechanical_Testing/',
+result_dir.to_csv(os.path.join('/home/stefan/Documents/FEMCOL/Silk/02_Silk_results/01_mechanical_Testing/',
                                       'ResultsMechTesting.csv'), index=False)
 # result_dir_sorted.to_csv(os.path.join('C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/00_Mineralized',
 #                                       'ResultsElasticTesting.csv'), index=False)
