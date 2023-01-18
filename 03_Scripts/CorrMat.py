@@ -52,9 +52,13 @@ mask_p = np.zeros_like(corr_matrix_p, dtype=np.bool_)
 mask_p[np.triu_indices_from(mask_p)] = True
 
 # Colormap trick
-viridis = cm.get_cmap('plasma', 8)
-newcolors = viridis(np.linspace(0, 1, 8))
-newcmp = ListedColormap(newcolors)
+viridis_p = cm.get_cmap('plasma', 3)
+newcolors_p = viridis_p(np.linspace(0, 1, 3))
+newcmp_p = ListedColormap(newcolors_p)
+
+viridis_r = cm.get_cmap('plasma', 8)
+newcolors_r = viridis_r(np.linspace(0, 1, 8))
+newcmp_r = ListedColormap(newcolors_r)
 
 # abbreviations = ['BVTV', 'BMD', 'TMD', 'MMR', 'WF\u2098', 'WF\u2092', 'WFw', 'db', 'E\u2098', 'Ec', '\u03C3u', '\u03B5u']
 abbreviations = ['BVTV', 'BMD', 'TMD', 'MMR', 'WF$_m$', 'WF$_o$', 'WF$_w$', 'd$_b$', 'E$_m$', 'E$_c$', '$\sigma_u$',
@@ -69,9 +73,9 @@ heatmap_p = sns.heatmap(corr_matrix_p,
                         mask=mask_p,
                         square=True,
                         linewidths=.5,
-                        cmap=newcmp,
+                        cmap=newcmp_p,
                         cbar_kws={'shrink': .5,
-                                  'ticks': np.linspace(0, 1, 9)},
+                                  'ticks': np.array([0, 0.001, 0.01, 0.05])},
                         vmin=0,
                         vmax=1,
                         annot=True,
@@ -87,12 +91,14 @@ sns.set_style({'xtick.bottom': True}, {'ytick.left': True})
 plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_pvalues.eps'), dpi=300, bbox_inches='tight', format='eps')
 plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_pvalues.png'), dpi=300, bbox_inches='tight', format='png')
 
+plt.show()
+
 f, ax = plt.subplots(figsize=(11, 15))
 heatmap_r = sns.heatmap(corr_matrix_r,
                         mask=mask_p,
                         square=True,
                         linewidths=.5,
-                        cmap=newcmp,
+                        cmap=newcmp_r,
                         cbar_kws={'shrink': .5,
                                   'ticks': np.linspace(0, 1, 9)},
                         vmin=0,

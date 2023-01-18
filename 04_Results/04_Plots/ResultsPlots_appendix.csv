@@ -1,6 +1,4 @@
 X-axis,Y-axis,p-value,σₑₛₜ,R²,N,lower bound 95% CI,upper bound 95% CI
-Mean Apparent Diameter mm,Apparent Modulus Mineralized MPa,0.491,1821.0,6.7e-03,73,-31746,15384
-Organic Weight g,Ultimate Stress MPa,0.159,4.7,0.03,70,-19.1,115
 Bone Volume Fraction -,Bone Mineral Density mg HA / cm³,1.0e-37,17.5,0.89,76,1038,1219
 Bone Volume Fraction -,Tissue Mineral Density mg HA / cm³,0.006,17.9,0.1,76,39.6,224
 Bone Volume Fraction -,Mineral weight fraction -,3.6e-04,0.012,0.16,76,0.052,0.171
