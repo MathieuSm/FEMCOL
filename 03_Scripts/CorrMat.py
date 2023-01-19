@@ -75,11 +75,14 @@ heatmap_p = sns.heatmap(corr_matrix_p,
                         linewidths=.5,
                         cmap=newcmp_p,
                         cbar_kws={'shrink': .5,
-                                  'ticks': np.array([0, 0.001, 0.01, 0.05])},
+                                  'ticks': np.array([1/6, 3/6, 5/6])},
                         vmin=0,
                         vmax=1,
                         annot=True,
                         annot_kws={'size': 12})
+
+ax.collections[0].colorbar.set_ticklabels([0.001, 0.01, 0.05])
+
 
 #add the column names as labels
 # ax.set_yticklabels(corr_matrix.columns, rotation=0, fontsize=14)
