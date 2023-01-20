@@ -17,7 +17,7 @@ from matplotlib.colors import ListedColormap
 # Set directory & load data
 Cwd = Path.cwd()
 DataPath = Cwd / '04_Results/ResultsOverview.csv'
-savepath = Cwd / '04_Results/04_Plots/CorrelationMatrix'
+savepath = Cwd / '04_Results/04_Plots/'
 
 df = pd.read_csv(str(DataPath), skiprows=0).dropna().reset_index(drop=True)
 df = df.drop(columns=['Sample ID', 'Age / y', 'Gender', 'Ultimate Force / N', 'Organic Weight / g', 'Mineral Weight / g',
@@ -95,7 +95,7 @@ ax.set_yticklabels(abbreviations, rotation=0, fontsize=14)
 ax.set_xticklabels(abbreviations, fontsize=14)
 
 sns.set_style({'xtick.bottom': True}, {'ytick.left': True})
-plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_pvalues.eps'), dpi=600, bbox_inches='tight', format='eps')
+plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_pvalues.eps'), dpi=300, bbox_inches='tight', format='eps')
 plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_pvalues.png'), dpi=600, bbox_inches='tight', format='png')
 
 plt.show()
@@ -120,7 +120,7 @@ ax.set_yticklabels(abbreviations, rotation=0, fontsize=14)
 ax.set_xticklabels(abbreviations, fontsize=14)
 
 sns.set_style({'xtick.bottom': True}, {'ytick.left': True})
-plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_rvalues.eps'), dpi=600, bbox_inches='tight', format='eps')
+plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_rvalues.eps'), dpi=300, bbox_inches='tight', format='eps')
 plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_rvalues.png'), dpi=600, bbox_inches='tight', format='png')
 
 # plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap.png'), dpi=300, bbox_inches='tight')
