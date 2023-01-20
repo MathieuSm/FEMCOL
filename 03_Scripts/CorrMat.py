@@ -18,18 +18,20 @@ from matplotlib.colors import ListedColormap
 Cwd = Path.cwd()
 DataPath = Cwd / '04_Results/ResultsOverview.csv'
 savepath = Cwd / '04_Results/04_Plots/CorrelationMatrix'
-# DataPath = 'C:/Users/Stefan/Dropbox/02_MScThesis/09_Results/ResultsOverview.csv'
+
 df = pd.read_csv(str(DataPath), skiprows=0).dropna().reset_index(drop=True)
-df = df.drop(columns=['Sample ID', 'Age', 'Gender', 'Ultimate Force N', 'Organic Weight g', 'Mineral Weight g',
-                      'Water Weight g', 'Minimum Equivalent Diameter mm', 'Mean Apparent Diameter mm',
-                      'Mean Area Fraction -', 'Min Area Fraction -', 'Minimum Area mm²', 'Mean Apparent Area mm²'])
-df_new = df[['Bone Volume Fraction -', 'Bone Mineral Density mg HA / cm³', 'Tissue Mineral Density mg HA / cm³',
-             'Mineral to Matrix Ratio -', 'Mineral weight fraction -', 'Organic weight fraction -',
-             'Water weight fraction -', 'Density g/cm³', 'Apparent Modulus Mineralized MPa',
-             'Apparent Modulus Demineralized MPa', 'Ultimate Stress MPa', 'Ultimate Strain -']]
+df = df.drop(columns=['Sample ID', 'Age / y', 'Gender', 'Ultimate Force / N', 'Organic Weight / g', 'Mineral Weight / g',
+                      'Water Weight / g', 'Minimum Equivalent Diameter / mm', 'Mean Apparent Diameter / mm',
+                      'Mean Area Fraction / -', 'Min Area Fraction / -', 'Minimum Area / mm²', 'Mean Apparent Area / mm²'])
+df_new = df[['Bone Volume Fraction / -', 'Bone Mineral Density / mg HA / cm³', 'Tissue Mineral Density / mg HA / cm³',
+             'Mineral to Matrix Ratio / -', 'Mineral weight fraction / -', 'Organic weight fraction / -',
+             'Water weight fraction / -', 'Density / g/cm³', 'Apparent Modulus Mineralized / MPa',
+             'Apparent Modulus Demineralized / MPa', 'Ultimate Stress / MPa', 'Ultimate Strain / -',
+             'Apparent Modulus Mineralized uFE / MPa', 'Yield Stress uFE / MPa', 'Ultimate Stress uFE / MPa']]
 df_new.columns = ['Bone Volume Fraction', 'Bone Mineral Density', 'Tissue Mineral Density', 'Mineral to Matrix Ratio',
                   'Mineral Weight Fraction', 'Organic Weight Fraction', 'Water Weight Fraction', 'Bone Density',
-                  'Apparent Modulus Mineralized', 'Apparent Modulus Demineralized', 'Ultimate Stress', 'Ultimate Strain']
+                  'Apparent Modulus Mineralized', 'Apparent Modulus Demineralized', 'Ultimate Stress', 'Ultimate Strain',
+                  'Apparent Modulus Mineralized uFE', 'Yield Stress uFE', 'Ultimate Stress uFE']
 corr_matrix_p = df_new.corr()
 corr_matrix_r = df_new.corr()
 
@@ -47,6 +49,8 @@ for i in df_new.columns:
         corr_matrix_p.loc[i, j] = round(linregress(df_new[j], df_new[i])[3], 3)
         corr_matrix_r.loc[i, j] = round(linregress(df_new[j], df_new[i])[2], 3)
 
+# test = linregress(df_new['Ultimate Stress'], df_new['Ultimate Strain'])
+
 p_matrix = pd.DataFrame()
 mask_p = np.zeros_like(corr_matrix_p, dtype=np.bool_)
 mask_p[np.triu_indices_from(mask_p)] = True
@@ -62,7 +66,7 @@ newcmp_r = ListedColormap(newcolors_r)
 
 # abbreviations = ['BVTV', 'BMD', 'TMD', 'MMR', 'WF\u2098', 'WF\u2092', 'WFw', 'db', 'E\u2098', 'Ec', '\u03C3u', '\u03B5u']
 abbreviations = ['BVTV', 'BMD', 'TMD', 'MMR', 'WF$_m$', 'WF$_o$', 'WF$_w$', 'd$_b$', 'E$_m$', 'E$_c$', '$\sigma_u$',
-                 '$\epsilon_u$']
+                 '$\epsilon_u$', 'E$_{m, \mu FE}$', '$\sigma_{y, \mu FE}$', '$\sigma_{u, \mu FE}$']
 
 plt.rcParams["text.usetex"] = True
 plt.rcParams["font.family"] = "serif"
@@ -91,8 +95,8 @@ ax.set_yticklabels(abbreviations, rotation=0, fontsize=14)
 ax.set_xticklabels(abbreviations, fontsize=14)
 
 sns.set_style({'xtick.bottom': True}, {'ytick.left': True})
-plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_pvalues.eps'), dpi=300, bbox_inches='tight', format='eps')
-plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_pvalues.png'), dpi=300, bbox_inches='tight', format='png')
+plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_pvalues.eps'), dpi=600, bbox_inches='tight', format='eps')
+plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_pvalues.png'), dpi=600, bbox_inches='tight', format='png')
 
 plt.show()
 
@@ -116,8 +120,8 @@ ax.set_yticklabels(abbreviations, rotation=0, fontsize=14)
 ax.set_xticklabels(abbreviations, fontsize=14)
 
 sns.set_style({'xtick.bottom': True}, {'ytick.left': True})
-plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_rvalues.eps'), dpi=300, bbox_inches='tight', format='eps')
-plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_rvalues.png'), dpi=300, bbox_inches='tight', format='png')
+plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_rvalues.eps'), dpi=600, bbox_inches='tight', format='eps')
+plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_rvalues.png'), dpi=600, bbox_inches='tight', format='png')
 
 # plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap.png'), dpi=300, bbox_inches='tight')
 
