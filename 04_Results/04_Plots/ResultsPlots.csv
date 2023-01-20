@@ -1,46 +1,49 @@
 X-axis,Y-axis,p-value,σₑₛₜ,R²,N,lower bound 95% CI,upper bound 95% CI
-Age,Apparent Modulus Demineralized MPa,0.096,37.9,0.04,70,-0.912,0.076
-Age,Apparent Modulus Mineralized MPa,0.005,1728.0,0.11,73,-54.8,-10.0
-Age,Bone Mineral Content mg HA,0.078,125.0,0.04,76,-3.1,0.166
-Age,Bone Mineral Density mg HA / cm³,0.07,52.4,0.04,76,-1.3,0.052
-Age,Bone Volume Fraction -,0.076,0.044,0.04,76,-0.001,5.45e-05
-Age,Density g/cm³,0.013,0.05,0.08,79,-0.001,-1.71e-04
-Age,Mineral Weight g,0.09,0.031,0.04,79,-7.33e-04,5.47e-05
-Age,Mineral weight fraction -,0.034,0.013,0.06,79,-3.30e-04,-1.28e-05
-Age,Organic Weight g,0.37,0.018,0.01,79,-3.23e-04,1.22e-04
-Age,Organic weight fraction -,0.149,0.009,0.03,79,-2.88e-05,1.86e-04
-Age,Stiffness Demineralized N/mm,0.081,18.8,0.04,70,-0.464,0.028
-Age,Stiffness Mineralized N/mm,0.01,922.0,0.09,73,-27.7,-3.8
-Age,Tissue Mineral Density mg HA / cm³,0.488,18.7,6.5e-03,76,-0.325,0.157
-Age,Ultimate Force N,0.1,15.4,0.04,70,-0.369,0.033
-Age,Ultimate Strain -,0.585,0.012,4.4e-03,70,-1.95e-04,1.11e-04
-Age,Ultimate Stress MPa,0.113,4.7,0.04,70,-0.111,0.012
-Age,Water Weight g,0.626,0.007,3.1e-03,79,-6.65e-05,1.10e-04
-Age,Water weight fraction -,0.361,0.016,0.01,79,-1.08e-04,2.94e-04
-Age,Mean Apparent Area mm²,0.936,0.059,8.8e-05,76,-7.84e-04,7.23e-04
-Age,Minimum Area mm²,0.031,0.231,0.06,76,-0.006,-3.08e-04
-Age,Mean Area Fraction -,0.076,0.044,0.04,76,-0.001,5.45e-05
-Age,Min Area Fraction -,0.026,0.069,0.07,76,-0.002,-1.27e-04
-Age,Mineral to Matrix Ratio -,0.999,0.04,2.4e-08,39,-7.52e-04,7.53e-04
-Bone Mineral Content mg HA,Stiffness Mineralized N/mm,9.9e-06,841.0,0.24,73,2.1,5.2
-Bone Mineral Density mg HA / cm³,Apparent Modulus Mineralized MPa,5.5e-06,1578.0,0.25,73,10.0,23.8
-Bone Mineral Density mg HA / cm³,Ultimate Stress MPa,0.527,4.8,5.9e-03,70,-0.014,0.028
-Bone Volume Fraction -,Apparent Modulus Mineralized MPa,5.3e-06,1577.0,0.25,73,12066,28468
-Bone Volume Fraction -,Ultimate Stress MPa,0.074,4.7,0.05,70,-2.3,47.1
-Apparent Modulus Mineralized MPa,Apparent Modulus Demineralized MPa,5.5e-05,34.3,0.21,70,0.005,0.014
-Mean Apparent Area mm²,Apparent Modulus Demineralized MPa,0.5,38.6,6.7e-03,70,-214,106
-Organic weight fraction -,Ultimate Stress MPa,0.622,4.8,3.6e-03,70,-102,169
-Organic weight fraction -,Stiffness Mineralized N/mm,0.285,958.0,0.02,73,-39998,11944
-Organic weight fraction -,Stiffness Demineralized N/mm,0.794,19.3,1.0e-03,70,-471,613
-Min Area Fraction -,Ultimate Stress MPa,0.02,4.6,0.08,70,2.9,33.3
-Mineral weight fraction -,Stiffness Demineralized N/mm,0.172,19.0,0.03,70,-600,109
-Mineral weight fraction -,Stiffness Mineralized N/mm,2.6e-05,852.0,0.22,73,19821,51345
-Mineral weight fraction -,Ultimate Stress MPa,0.75,4.8,1.5e-03,70,-104,75.3
-Bone Mineral Content mg HA,Mineral Weight g,8.7e-07,0.026,0.28,76,7.95e-05,1.73e-04
-Mean Apparent Area mm²,Ultimate Stress MPa,0.866,4.8,4.2e-04,70,-18.3,21.7
-Apparent Modulus Demineralized MPa,Ultimate Stress MPa,5.4e-14,3.2,0.57,70,0.074,0.114
-Mineral weight fraction -,Mineral to Matrix Ratio -,2.9e-04,0.033,0.3,39,1.2,3.7
-Mineral to Matrix Ratio -,Stiffness Demineralized N/mm,0.701,21.2,4.7e-03,34,-153,226
-Mineral to Matrix Ratio -,Stiffness Mineralized N/mm,0.016,870.0,0.16,35,1891,17044
-Mineral to Matrix Ratio -,Ultimate Stress MPa,0.356,4.5,0.03,34,-21.7,58.8
-Organic weight fraction -,Apparent Modulus Demineralized MPa,0.945,38.7,7.0e-05,70,-1051,1126
+Age / y,Apparent Modulus Demineralized / MPa,0.096,37.9,0.04,70,-0.912,0.076
+Age / y,Apparent Modulus Mineralized / MPa,0.005,1728.0,0.11,73,-54.8,-10.0
+Age / y,Bone Mineral Content / mg HA,0.078,125.0,0.04,76,-3.1,0.166
+Age / y,Bone Mineral Density / mg HA / cm³,0.07,52.4,0.04,76,-1.3,0.052
+Age / y,Bone Volume Fraction / -,0.076,0.044,0.04,76,-0.001,5.45e-05
+Age / y,Density / g/cm³,0.013,0.05,0.08,79,-0.001,-1.71e-04
+Age / y,Mineral Weight / g,0.09,0.031,0.04,79,-7.33e-04,5.47e-05
+Age / y,Mineral weight fraction / -,0.034,0.013,0.06,79,-3.30e-04,-1.28e-05
+Age / y,Organic Weight / g,0.37,0.018,0.01,79,-3.23e-04,1.22e-04
+Age / y,Organic weight fraction / -,0.149,0.009,0.03,79,-2.88e-05,1.86e-04
+Age / y,Stiffness Demineralized / N/mm,0.081,18.8,0.04,70,-0.464,0.028
+Age / y,Stiffness Mineralized / N/mm,0.01,922.0,0.09,73,-27.7,-3.8
+Age / y,Tissue Mineral Density / mg HA / cm³,0.488,18.7,6.5e-03,76,-0.325,0.157
+Age / y,Ultimate Force / N,0.1,15.4,0.04,70,-0.369,0.033
+Age / y,Ultimate Strain / -,0.585,0.012,4.4e-03,70,-1.95e-04,1.11e-04
+Age / y,Ultimate Stress / MPa,0.113,4.7,0.04,70,-0.111,0.012
+Age / y,Water Weight / g,0.626,0.007,3.1e-03,79,-6.65e-05,1.10e-04
+Age / y,Water weight fraction / -,0.361,0.016,0.01,79,-1.08e-04,2.94e-04
+Age / y,Mean Apparent Area / mm²,0.936,0.059,8.8e-05,76,-7.84e-04,7.23e-04
+Age / y,Minimum Area / mm²,0.031,0.231,0.06,76,-0.006,-3.08e-04
+Age / y,Mean Area Fraction / -,0.076,0.044,0.04,76,-0.001,5.45e-05
+Age / y,Min Area Fraction / -,0.026,0.069,0.07,76,-0.002,-1.27e-04
+Age / y,Mineral to Matrix Ratio / -,0.999,0.04,2.4e-08,39,-7.52e-04,7.53e-04
+Age / y,Apparent Modulus Mineralized uFE / MPa,0.01,720.0,0.08,78,-21.2,-3.0
+Age / y,Yield Stress uFE / MPa,0.005,5.8,0.1,79,-0.178,-0.033
+Age / y,Ultimate Stress uFE / MPa,0.008,7.0,0.09,79,-0.209,-0.033
+Bone Mineral Content / mg HA,Stiffness Mineralized / N/mm,9.9e-06,841.0,0.24,73,2.1,5.2
+Bone Mineral Density / mg HA / cm³,Apparent Modulus Mineralized / MPa,5.5e-06,1578.0,0.25,73,10.0,23.8
+Bone Mineral Density / mg HA / cm³,Ultimate Stress / MPa,0.527,4.8,5.9e-03,70,-0.014,0.028
+Bone Volume Fraction / -,Apparent Modulus Mineralized / MPa,5.3e-06,1577.0,0.25,73,12066,28468
+Bone Volume Fraction / -,Ultimate Stress / MPa,0.074,4.7,0.05,70,-2.3,47.1
+Apparent Modulus Mineralized / MPa,Apparent Modulus Demineralized / MPa,5.5e-05,34.3,0.21,70,0.005,0.014
+Mean Apparent Area / mm²,Apparent Modulus Demineralized / MPa,0.5,38.6,6.7e-03,70,-214,106
+Organic weight fraction / -,Ultimate Stress / MPa,0.622,4.8,3.6e-03,70,-102,169
+Organic weight fraction / -,Stiffness Mineralized / N/mm,0.285,958.0,0.02,73,-39998,11944
+Organic weight fraction / -,Stiffness Demineralized / N/mm,0.794,19.3,1.0e-03,70,-471,613
+Min Area Fraction / -,Ultimate Stress / MPa,0.02,4.6,0.08,70,2.9,33.3
+Mineral weight fraction / -,Stiffness Demineralized / N/mm,0.172,19.0,0.03,70,-600,109
+Mineral weight fraction / -,Stiffness Mineralized / N/mm,2.6e-05,852.0,0.22,73,19821,51345
+Mineral weight fraction / -,Ultimate Stress / MPa,0.75,4.8,1.5e-03,70,-104,75.3
+Bone Mineral Content / mg HA,Mineral Weight / g,8.7e-07,0.026,0.28,76,7.95e-05,1.73e-04
+Mean Apparent Area / mm²,Ultimate Stress / MPa,0.866,4.8,4.2e-04,70,-18.3,21.7
+Apparent Modulus Demineralized / MPa,Ultimate Stress / MPa,5.4e-14,3.2,0.57,70,0.074,0.114
+Mineral weight fraction / -,Mineral to Matrix Ratio / -,2.9e-04,0.033,0.3,39,1.2,3.7
+Mineral to Matrix Ratio / -,Stiffness Demineralized / N/mm,0.701,21.2,4.7e-03,34,-153,226
+Mineral to Matrix Ratio / -,Stiffness Mineralized / N/mm,0.016,870.0,0.16,35,1891,17044
+Mineral to Matrix Ratio / -,Ultimate Stress / MPa,0.356,4.5,0.03,34,-21.7,58.8
+Organic weight fraction / -,Apparent Modulus Demineralized / MPa,0.945,38.7,7.0e-05,70,-1051,1126

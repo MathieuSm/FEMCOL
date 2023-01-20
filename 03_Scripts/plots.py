@@ -25,123 +25,159 @@ SampleID = df['Sample ID'].values.tolist()
 # Create dataframe with variable names & respective abbreviations
 ColumnNames = pd.DataFrame()
 ColumnNames['Column Names'] = df.columns
-column_names_abbrev = ['SID', 'Age', 'G', 'Site', 'SM', 'AMM', 'UF', 'USTRE', 'USTRA', 'SD', 'AMD', 'D', 'OW', 'MW', 'WW',
+column_names_abbrev = ['SID', 'Age', 'G', 'Site', 'SM', 'EM', 'UF', 'USTRE', 'USTRA', 'SD', 'EC', 'D', 'OW', 'MW', 'WW',
                        'MWF', 'OWF', 'WWF', 'BVTV', 'BMD', 'TMD', 'BMC', 'MINA', 'MEANAA', 'MINED', 'MEANAD', 'MEANAF',
-                       'MINAF', 'MMR']
+                       'MINAF', 'MMR', 'EMFE', 'YSFE', 'USTREFE']
 ColumnNames['Abbreviations'] = column_names_abbrev
 
 Pair = pd.DataFrame([
-                     # ['Age',                                'Apparent Modulus Demineralized MPa'],
-                     # ['Age',                                'Apparent Modulus Mineralized MPa'],
-                     # ['Age',                                'Bone Mineral Content mg HA'],
-                     # ['Age',                                'Bone Mineral Density mg HA / cm³'],
-                     # ['Age',                                'Bone Volume Fraction -'],
-                     # ['Age',                                'Density g/cm³'],
-                     # ['Age',                                'Mineral Weight g'],
-                     # ['Age',                                'Mineral weight fraction -'],
-                     # ['Age',                                'Organic Weight g'],
-                     # ['Age',                                'Organic weight fraction -'],
-                     # ['Age',                                'Stiffness Demineralized N/mm'],
-                     # ['Age',                                'Stiffness Mineralized N/mm'],
-                     # ['Age',                                'Tissue Mineral Density mg HA / cm³'],
-                     # ['Age',                                'Ultimate Force N'],
-                     # ['Age',                                'Ultimate Strain -'],
-                     # ['Age',                                'Ultimate Stress MPa'],
-                     # ['Age',                                'Water Weight g'],
-                     # ['Age',                                'Water weight fraction -'],
-                     # ['Age',                                'Mean Apparent Area mm²'],
-                     # ['Age',                                'Minimum Area mm²'],
-                     # ['Age',                                'Mean Area Fraction -'],
-                     # ['Age',                                'Min Area Fraction -'],
-                     # ['Age',                                'Mineral to Matrix Ratio -'],
-                     # ['Bone Mineral Content mg HA',         'Stiffness Mineralized N/mm'],
-                     # ['Bone Mineral Density mg HA / cm³',   'Apparent Modulus Mineralized MPa'],
-                     # ['Bone Mineral Density mg HA / cm³',   'Ultimate Stress MPa'],
-                     # ['Bone Volume Fraction -',             'Apparent Modulus Mineralized MPa'],
-                     # ['Bone Volume Fraction -',             'Ultimate Stress MPa'],
-                     # ['Apparent Modulus Mineralized MPa',   'Apparent Modulus Demineralized MPa'],
-                     # ['Mean Apparent Area mm²',             'Apparent Modulus Demineralized MPa'],
-                     # # ['Mean Apparent Diameter mm',        'Apparent Modulus Mineralized MPa'],
-                     # ['Organic weight fraction -',          'Ultimate Stress MPa'],
-                     # # ['Organic Weight g',                 'Ultimate Stress MPa'],
-                     # ['Organic weight fraction -',          'Stiffness Mineralized N/mm'],
-                     # ['Organic weight fraction -',          'Stiffness Demineralized N/mm'],
-                     # ['Min Area Fraction -',                'Ultimate Stress MPa'],
-                     # ['Mineral weight fraction -',          'Stiffness Demineralized N/mm'],
-                     # ['Mineral weight fraction -',          'Stiffness Mineralized N/mm'],
-                     # ['Mineral weight fraction -',          'Ultimate Stress MPa'],
-                     # ['Bone Mineral Content mg HA',         'Mineral Weight g'],
-                     # ['Mean Apparent Area mm²',             'Ultimate Stress MPa'],
-                     # ['Apparent Modulus Demineralized MPa', 'Ultimate Stress MPa'],
-                     # ['Mineral weight fraction -',          'Mineral to Matrix Ratio -'],
-                     # ['Mineral to Matrix Ratio -',          'Stiffness Demineralized N/mm'],
-                     # ['Mineral to Matrix Ratio -',          'Stiffness Mineralized N/mm'],
-                     # ['Mineral to Matrix Ratio -',          'Ultimate Stress MPa'],
-                     # ['Organic weight fraction -',          'Apparent Modulus Demineralized MPa']
-                     ['Bone Volume Fraction -',             'Bone Mineral Density mg HA / cm³'],
-                     ['Bone Volume Fraction -',             'Tissue Mineral Density mg HA / cm³'],
-                     ['Bone Volume Fraction -',             'Mineral weight fraction -'],
-                     ['Bone Volume Fraction -',             'Organic weight fraction -'],
-                     ['Bone Volume Fraction -',             'Water weight fraction -'],
-                     ['Bone Volume Fraction -',             'Density g/cm³'],
-                     ['Bone Volume Fraction -',             'Apparent Modulus Mineralized MPa'],
-                     ['Bone Volume Fraction -',             'Apparent Modulus Demineralized MPa'],
-                     ['Bone Volume Fraction -',             'Ultimate Stress MPa'],
-                     ['Bone Volume Fraction -',             'Ultimate Strain -'],
-                     ['Bone Volume Fraction -',             'Mineral to Matrix Ratio -'],
-                     ['Bone Mineral Density mg HA / cm³',             'Tissue Mineral Density mg HA / cm³'],
-                     ['Bone Mineral Density mg HA / cm³',             'Mineral weight fraction -'],
-                     ['Bone Mineral Density mg HA / cm³',             'Organic weight fraction -'],
-                     ['Bone Mineral Density mg HA / cm³',             'Water weight fraction -'],
-                     ['Bone Mineral Density mg HA / cm³',             'Density g/cm³'],
-                     ['Bone Mineral Density mg HA / cm³',             'Apparent Modulus Mineralized MPa'],
-                     ['Bone Mineral Density mg HA / cm³',             'Apparent Modulus Demineralized MPa'],
-                     ['Bone Mineral Density mg HA / cm³',             'Ultimate Stress MPa'],
-                     ['Bone Mineral Density mg HA / cm³',             'Ultimate Strain -'],
-                     ['Bone Mineral Density mg HA / cm³',             'Mineral to Matrix Ratio -'],
-                     ['Tissue Mineral Density mg HA / cm³',             'Mineral weight fraction -'],
-                     ['Tissue Mineral Density mg HA / cm³',             'Organic weight fraction -'],
-                     ['Tissue Mineral Density mg HA / cm³',             'Water weight fraction -'],
-                     ['Tissue Mineral Density mg HA / cm³',             'Density g/cm³'],
-                     ['Tissue Mineral Density mg HA / cm³',             'Apparent Modulus Mineralized MPa'],
-                     ['Tissue Mineral Density mg HA / cm³',             'Apparent Modulus Demineralized MPa'],
-                     ['Tissue Mineral Density mg HA / cm³',             'Ultimate Stress MPa'],
-                     ['Tissue Mineral Density mg HA / cm³',             'Ultimate Strain -'],
-                     ['Tissue Mineral Density mg HA / cm³',             'Mineral to Matrix Ratio -'],
-                     ['Mineral weight fraction -',             'Organic weight fraction -'],
-                     ['Mineral weight fraction -',             'Water weight fraction -'],
-                     ['Mineral weight fraction -',             'Density g/cm³'],
-                     ['Mineral weight fraction -',             'Apparent Modulus Mineralized MPa'],
-                     ['Mineral weight fraction -',             'Apparent Modulus Demineralized MPa'],
-                     ['Mineral weight fraction -',             'Ultimate Stress MPa'],
-                     ['Mineral weight fraction -',             'Ultimate Strain -'],
-                     ['Mineral weight fraction -',             'Mineral to Matrix Ratio -'],
-                     ['Organic weight fraction -',             'Water weight fraction -'],
-                     ['Organic weight fraction -',             'Density g/cm³'],
-                     ['Organic weight fraction -',             'Apparent Modulus Mineralized MPa'],
-                     ['Organic weight fraction -',             'Apparent Modulus Demineralized MPa'],
-                     ['Organic weight fraction -',             'Ultimate Stress MPa'],
-                     ['Organic weight fraction -',             'Ultimate Strain -'],
-                     ['Organic weight fraction -',             'Mineral to Matrix Ratio -'],
-                     ['Water weight fraction -',             'Density g/cm³'],
-                     ['Water weight fraction -',             'Apparent Modulus Mineralized MPa'],
-                     ['Water weight fraction -',             'Apparent Modulus Demineralized MPa'],
-                     ['Water weight fraction -',             'Ultimate Stress MPa'],
-                     ['Water weight fraction -',             'Ultimate Strain -'],
-                     ['Water weight fraction -',             'Mineral to Matrix Ratio -'],
-                     ['Density g/cm³',             'Apparent Modulus Mineralized MPa'],
-                     ['Density g/cm³',             'Apparent Modulus Demineralized MPa'],
-                     ['Density g/cm³',             'Ultimate Stress MPa'],
-                     ['Density g/cm³',             'Ultimate Strain -'],
-                     ['Density g/cm³',             'Mineral to Matrix Ratio -'],
-                     ['Apparent Modulus Mineralized MPa',             'Apparent Modulus Demineralized MPa'],
-                     ['Apparent Modulus Mineralized MPa',             'Ultimate Stress MPa'],
-                     ['Apparent Modulus Mineralized MPa',             'Ultimate Strain -'],
-                     ['Apparent Modulus Demineralized MPa',             'Ultimate Stress MPa'],
-                     ['Apparent Modulus Demineralized MPa',             'Ultimate Strain -'],
-                     ['Apparent Modulus Demineralized MPa',             'Mineral to Matrix Ratio -'],
-                     ['Ultimate Stress MPa',                'Ultimate Strain -'],
-                     ['Ultimate Stress MPa',                'Mineral to Matrix Ratio -'],
+                     ['Age / y',                                  'Apparent Modulus Demineralized / MPa'],
+                     ['Age / y',                                  'Apparent Modulus Mineralized / MPa'],
+                     ['Age / y',                                  'Bone Mineral Content / mg HA'],
+                     ['Age / y',                                  'Bone Mineral Density / mg HA / cm³'],
+                     ['Age / y',                                  'Bone Volume Fraction / -'],
+                     ['Age / y',                                  'Density / g/cm³'],
+                     ['Age / y',                                  'Mineral Weight / g'],
+                     ['Age / y',                                  'Mineral weight fraction / -'],
+                     ['Age / y',                                  'Organic Weight / g'],
+                     ['Age / y',                                  'Organic weight fraction / -'],
+                     ['Age / y',                                  'Stiffness Demineralized / N/mm'],
+                     ['Age / y',                                  'Stiffness Mineralized / N/mm'],
+                     ['Age / y',                                  'Tissue Mineral Density / mg HA / cm³'],
+                     ['Age / y',                                  'Ultimate Force / N'],
+                     ['Age / y',                                  'Ultimate Strain / -'],
+                     ['Age / y',                                  'Ultimate Stress / MPa'],
+                     ['Age / y',                                  'Water Weight / g'],
+                     ['Age / y',                                  'Water weight fraction / -'],
+                     ['Age / y',                                  'Mean Apparent Area / mm²'],
+                     ['Age / y',                                  'Minimum Area / mm²'],
+                     ['Age / y',                                  'Mean Area Fraction / -'],
+                     ['Age / y',                                  'Min Area Fraction / -'],
+                     ['Age / y',                                  'Mineral to Matrix Ratio / -'],
+                     ['Age / y',                                  'Apparent Modulus Mineralized uFE / MPa'],
+                     ['Age / y',                                  'Yield Stress uFE / MPa'],
+                     ['Age / y',                                  'Ultimate Stress uFE / MPa'],
+                     ['Bone Mineral Content / mg HA',             'Stiffness Mineralized / N/mm'],
+                     ['Bone Mineral Density / mg HA / cm³',       'Apparent Modulus Mineralized / MPa'],
+                     ['Bone Mineral Density / mg HA / cm³',       'Ultimate Stress / MPa'],
+                     ['Bone Volume Fraction / -',                 'Apparent Modulus Mineralized / MPa'],
+                     ['Bone Volume Fraction / -',                 'Ultimate Stress / MPa'],
+                     ['Apparent Modulus Mineralized / MPa',       'Apparent Modulus Demineralized / MPa'],
+                     ['Mean Apparent Area / mm²',                 'Apparent Modulus Demineralized / MPa'],
+                     # ['Mean Apparent Diameter / mm',              'Apparent Modulus Mineralized / MPa'],
+                     ['Organic weight fraction / -',              'Ultimate Stress / MPa'],
+                     # ['Organic Weight / g',                       'Ultimate Stress / MPa'],
+                     ['Organic weight fraction / -',              'Stiffness Mineralized / N/mm'],
+                     ['Organic weight fraction / -',              'Stiffness Demineralized / N/mm'],
+                     ['Min Area Fraction / -',                    'Ultimate Stress / MPa'],
+                     ['Mineral weight fraction / -',              'Stiffness Demineralized / N/mm'],
+                     ['Mineral weight fraction / -',              'Stiffness Mineralized / N/mm'],
+                     ['Mineral weight fraction / -',              'Ultimate Stress / MPa'],
+                     ['Bone Mineral Content / mg HA',             'Mineral Weight / g'],
+                     ['Mean Apparent Area / mm²',                 'Ultimate Stress / MPa'],
+                     ['Apparent Modulus Demineralized / MPa',     'Ultimate Stress / MPa'],
+                     ['Mineral weight fraction / -',              'Mineral to Matrix Ratio / -'],
+                     ['Mineral to Matrix Ratio / -',              'Stiffness Demineralized / N/mm'],
+                     ['Mineral to Matrix Ratio / -',              'Stiffness Mineralized / N/mm'],
+                     ['Mineral to Matrix Ratio / -',              'Ultimate Stress / MPa'],
+                     ['Organic weight fraction / -',              'Apparent Modulus Demineralized / MPa'],
+                     # ['Bone Volume Fraction / -',                 'Bone Mineral Density / mg HA / cm³'],
+                     # ['Bone Volume Fraction / -',                 'Tissue Mineral Density / mg HA / cm³'],
+                     # ['Bone Volume Fraction / -',                 'Mineral weight fraction / -'],
+                     # ['Bone Volume Fraction / -',                 'Organic weight fraction / -'],
+                     # ['Bone Volume Fraction / -',                 'Water weight fraction / -'],
+                     # ['Bone Volume Fraction / -',                 'Density / g/cm³'],
+                     # ['Bone Volume Fraction / -',                 'Apparent Modulus Mineralized / MPa'],
+                     # ['Bone Volume Fraction / -',                 'Apparent Modulus Demineralized / MPa'],
+                     # ['Bone Volume Fraction / -',                 'Ultimate Stress / MPa'],
+                     # ['Bone Volume Fraction / -',                 'Ultimate Strain / -'],
+                     # ['Bone Volume Fraction / -',                 'Mineral to Matrix Ratio / -'],
+                     # ['Bone Volume Fraction / -',                 'Apparent Modulus Mineralized uFE / MPa'],
+                     # ['Bone Volume Fraction / -',                 'Yield Stress uFE / MPa'],
+                     # ['Bone Volume Fraction / -',                 'Ultimate Stress uFE / MPa'],
+                     # ['Bone Mineral Density / mg HA / cm³',       'Tissue Mineral Density / mg HA / cm³'],
+                     # ['Bone Mineral Density / mg HA / cm³',       'Mineral weight fraction / -'],
+                     # ['Bone Mineral Density / mg HA / cm³',       'Organic weight fraction / -'],
+                     # ['Bone Mineral Density / mg HA / cm³',       'Water weight fraction / -'],
+                     # ['Bone Mineral Density / mg HA / cm³',       'Density / g/cm³'],
+                     # ['Bone Mineral Density / mg HA / cm³',       'Apparent Modulus Mineralized / MPa'],
+                     # ['Bone Mineral Density / mg HA / cm³',       'Apparent Modulus Demineralized / MPa'],
+                     # ['Bone Mineral Density / mg HA / cm³',       'Ultimate Stress / MPa'],
+                     # ['Bone Mineral Density / mg HA / cm³',       'Ultimate Strain / -'],
+                     # ['Bone Mineral Density / mg HA / cm³',       'Mineral to Matrix Ratio / -'],
+                     # ['Bone Mineral Density / mg HA / cm³',       'Apparent Modulus Mineralized uFE / MPa'],
+                     # ['Bone Mineral Density / mg HA / cm³',       'Yield Stress uFE / MPa'],
+                     # ['Bone Mineral Density / mg HA / cm³',       'Ultimate Stress uFE / MPa'],
+                     # ['Tissue Mineral Density / mg HA / cm³',     'Mineral weight fraction / -'],
+                     # ['Tissue Mineral Density / mg HA / cm³',     'Organic weight fraction / -'],
+                     # ['Tissue Mineral Density / mg HA / cm³',     'Water weight fraction / -'],
+                     # ['Tissue Mineral Density / mg HA / cm³',     'Density / g/cm³'],
+                     # ['Tissue Mineral Density / mg HA / cm³',     'Apparent Modulus Mineralized / MPa'],
+                     # ['Tissue Mineral Density / mg HA / cm³',     'Apparent Modulus Demineralized / MPa'],
+                     # ['Tissue Mineral Density / mg HA / cm³',     'Ultimate Stress / MPa'],
+                     # ['Tissue Mineral Density / mg HA / cm³',     'Ultimate Strain / -'],
+                     # ['Tissue Mineral Density / mg HA / cm³',     'Mineral to Matrix Ratio / -'],
+                     # ['Tissue Mineral Density / mg HA / cm³',     'Apparent Modulus Mineralized uFE / MPa'],
+                     # ['Tissue Mineral Density / mg HA / cm³',     'Yield Stress uFE / MPa'],
+                     # ['Tissue Mineral Density / mg HA / cm³',     'Ultimate Stress uFE / MPa'],
+                     # ['Mineral weight fraction / -',              'Organic weight fraction / -'],
+                     # ['Mineral weight fraction / -',              'Water weight fraction / -'],
+                     # ['Mineral weight fraction / -',              'Density / g/cm³'],
+                     # ['Mineral weight fraction / -',              'Apparent Modulus Mineralized / MPa'],
+                     # ['Mineral weight fraction / -',              'Apparent Modulus Demineralized / MPa'],
+                     # ['Mineral weight fraction / -',              'Ultimate Stress / MPa'],
+                     # ['Mineral weight fraction / -',              'Ultimate Strain / -'],
+                     # ['Mineral weight fraction / -',              'Mineral to Matrix Ratio / -'],
+                     # ['Mineral weight fraction / -',              'Apparent Modulus Mineralized uFE / MPa'],
+                     # ['Mineral weight fraction / -',              'Yield Stress uFE / MPa'],
+                     # ['Mineral weight fraction / -',              'Ultimate Stress uFE / MPa'],
+                     # ['Organic weight fraction / -',              'Water weight fraction / -'],
+                     # ['Organic weight fraction / -',              'Density / g/cm³'],
+                     # ['Organic weight fraction / -',              'Apparent Modulus Mineralized / MPa'],
+                     # ['Organic weight fraction / -',              'Apparent Modulus Demineralized / MPa'],
+                     # ['Organic weight fraction / -',              'Ultimate Stress / MPa'],
+                     # ['Organic weight fraction / -',              'Ultimate Strain / -'],
+                     # ['Organic weight fraction / -',              'Mineral to Matrix Ratio / -'],
+                     # ['Organic weight fraction / -',              'Apparent Modulus Mineralized uFE / MPa'],
+                     # ['Organic weight fraction / -',              'Yield Stress uFE / MPa'],
+                     # ['Organic weight fraction / -',              'Ultimate Stress uFE / MPa'],
+                     # ['Water weight fraction / -',                'Density / g/cm³'],
+                     # ['Water weight fraction / -',                'Apparent Modulus Mineralized / MPa'],
+                     # ['Water weight fraction / -',                'Apparent Modulus Demineralized / MPa'],
+                     # ['Water weight fraction / -',                'Ultimate Stress / MPa'],
+                     # ['Water weight fraction / -',                'Ultimate Strain / -'],
+                     # ['Water weight fraction / -',                'Mineral to Matrix Ratio / -'],
+                     # ['Water weight fraction / -',                'Apparent Modulus Mineralized uFE / MPa'],
+                     # ['Water weight fraction / -',                'Yield Stress uFE / MPa'],
+                     # ['Water weight fraction / -',                'Ultimate Stress uFE / MPa'],
+                     # ['Density / g/cm³',                          'Apparent Modulus Mineralized / MPa'],
+                     # ['Density / g/cm³',                          'Apparent Modulus Demineralized / MPa'],
+                     # ['Density / g/cm³',                          'Ultimate Stress / MPa'],
+                     # ['Density / g/cm³',                          'Ultimate Strain / -'],
+                     # ['Density / g/cm³',                          'Mineral to Matrix Ratio / -'],
+                     # ['Density / g/cm³',                          'Apparent Modulus Mineralized uFE / MPa'],
+                     # ['Density / g/cm³',                          'Yield Stress uFE / MPa'],
+                     # ['Density / g/cm³',                          'Ultimate Stress uFE / MPa'],
+                     # ['Apparent Modulus Mineralized / MPa',       'Apparent Modulus Demineralized / MPa'],
+                     # ['Apparent Modulus Mineralized / MPa',       'Ultimate Stress / MPa'],
+                     # ['Apparent Modulus Mineralized / MPa',       'Ultimate Strain / -'],
+                     # ['Apparent Modulus Mineralized / MPa',       'Apparent Modulus Mineralized uFE / MPa'],
+                     # ['Apparent Modulus Mineralized / MPa',       'Yield Stress uFE / MPa'],
+                     # ['Apparent Modulus Mineralized / MPa',       'Ultimate Stress uFE / MPa'],
+                     # ['Apparent Modulus Demineralized / MPa',     'Ultimate Stress / MPa'],
+                     # ['Apparent Modulus Demineralized / MPa',     'Ultimate Strain / -'],
+                     # ['Apparent Modulus Demineralized / MPa',     'Mineral to Matrix Ratio / -'],
+                     # ['Apparent Modulus Demineralized / MPa',     'Apparent Modulus Mineralized uFE / MPa'],
+                     # ['Apparent Modulus Demineralized / MPa',     'Yield Stress uFE / MPa'],
+                     # ['Apparent Modulus Demineralized / MPa',     'Ultimate Stress uFE / MPa'],
+                     # ['Ultimate Stress / MPa',                    'Ultimate Strain / -'],
+                     # ['Ultimate Stress / MPa',                    'Mineral to Matrix Ratio / -'],
+                     # ['Ultimate Stress / MPa',                    'Apparent Modulus Mineralized uFE / MPa'],
+                     # ['Ultimate Stress / MPa',                    'Yield Stress uFE / MPa'],
+                     # ['Ultimate Stress / MPa',                    'Ultimate Stress uFE / MPa'],
+                     # ['Apparent Modulus Mineralized uFE / MPa',   'Yield Stress uFE / MPa'],
+                     # ['Apparent Modulus Mineralized uFE / MPa',   'Ultimate Stress uFE / MPa'],
+                     # ['Yield Stress uFE / MPa',                   'Ultimate Stress uFE / MPa'],
                      ])
 
 # assign abbreviations to above list of variables
@@ -171,26 +207,24 @@ for i in range(len(Pair)):
     y_axis = Pair[1][i]
     x_axis_abbrev = Pair_abbrev_df['Abbrev_x'][i]
     y_axis_abbrev = Pair_abbrev_df['Abbrev_y'][i]
-    Data = df.filter(['Sample ID', x_axis, y_axis, 'Gender', 'Age']).dropna()
+    Data = df.filter(['Sample ID', x_axis, y_axis, 'Gender', 'Age / y']).dropna()
     Data2Fit = Data.copy()
     Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
     Data2Fit = Data2Fit.set_index('SID')
     FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
 
-    # Manually check correlations
-    x_axis = 'Ultimate Stress MPa'
-    y_axis = 'Ultimate Strain -'
-    x_axis_abbrev = 'USTRE'
-    y_axis_abbrev = 'USTRA'
-    Data = df.filter(['Sample ID', x_axis, y_axis, 'Gender', 'Age']).dropna()
-    Data2Fit = Data.copy()
-    Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
-
-    FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
-    print(FitResults.summary())
-
-    testlin = linregress(Data2Fit['USTRE'], Data2Fit['USTRA'])
-    print(testlin)
+    # # Manually check correlations
+    # x_axis = 'Ultimate Stress MPa'
+    # y_axis = 'Ultimate Strain -'
+    # x_axis_abbrev = 'USTRE'
+    # y_axis_abbrev = 'USTRA'
+    # Data = df.filter(['Sample ID', x_axis, y_axis, 'Gender', 'Age']).dropna()
+    # Data2Fit = Data.copy()
+    # Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
+    # FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
+    # print(FitResults.summary())
+    # testlin = linregress(Data2Fit['USTRE'], Data2Fit['USTRA'])
+    # print(testlin)
 
     # Calculate R^2, p-value, 95% CI, SE, N
     Y_Obs = FitResults.model.endog
@@ -222,8 +256,8 @@ for i in range(len(Pair)):
     savepath = Cwd / '04_Results/04_Plots/'
     savepathCorrMat = Cwd / '04_Results/04_Plots/CorrelationMatrix'
     Figure, Axes = plt.subplots(1, 1, figsize=(5.5, 4.5), dpi=300, sharey=True, sharex=True)
-    male_age = Data[Data['Gender'] == 'M']['Age']
-    female_age = Data[Data['Gender'] == 'F']['Age']
+    male_age = Data[Data['Gender'] == 'M']['Age / y']
+    female_age = Data[Data['Gender'] == 'F']['Age / y']
     X_np = np.array(X)
     Y_Obs_np = np.array(Y_Obs)
 
@@ -281,22 +315,22 @@ for i in range(len(Pair)):
     # if p-value smaller than 0.05 create fit curve and if variable 'Age' should not be plotted on main axis, no
     # colormap will be used
     if float(p) <= 0.05:
-        if x_axis != 'Age':
+        if x_axis != 'Age / y':
             # sns.regplot(x=FitResults.model.exog[:, 1], y=Y_Obs, ax=Axes, scatter=False, color=(0, 0, 0),
             #             line_kws={'color': 'black'}) # this does not work in combination with color coding
             Axes.plot(X[:, 1], Y_Fit, color=(1, 0, 0), label='Fit', linewidth=1)
             # Axes.fill_between(X_Obs, Sorted_CI_o, Sorted_CI_u, color=(0, 0, 0), alpha=0.1,
             #                   label=str(int(Alpha * 100)) + '% CI')
             Axes.scatter(X_np[:, 1][Data['Gender'] == 'M'], Y_Obs_np[Data['Gender'] == 'M'],
-                         c=list(tuple(male_age.tolist())), cmap='plasma_r', vmin=Data['Age'].min(),
-                         vmax=Data['Age'].max(), label='male', marker='s')
+                         c=list(tuple(male_age.tolist())), cmap='plasma_r', vmin=Data['Age / y'].min(),
+                         vmax=Data['Age / y'].max(), label='male', marker='s')
             Axes.scatter(X_np[:, 1][Data['Gender'] == 'F'], Y_Obs_np[Data['Gender'] == 'F'],
-                         c=list(tuple(female_age.tolist())), cmap='plasma_r', vmin=Data['Age'].min(),
-                         vmax=Data['Age'].max(), label='female', marker='o')
+                         c=list(tuple(female_age.tolist())), cmap='plasma_r', vmin=Data['Age / y'].min(),
+                         vmax=Data['Age / y'].max(), label='female', marker='o')
             Regression_line = FitResults.params[1] * X_np[:, 1] + FitResults.params[0]
             ax = plt.gca()
             PCM = ax.get_children()[2]
-            plt.colorbar(PCM, ax=ax, label='Age y')
+            plt.colorbar(PCM, ax=ax, label='Age / y')
             Axes.annotate(r'$N$ : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
             Axes.annotate(r'$R^2$ : ' + str(R2), xy=(0.05, 0.25), xycoords='axes fraction')
             # Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
@@ -371,16 +405,16 @@ for i in range(len(Pair)):
             # plt.close(Figure)
     # if p-value greater than 0.05, no fit will be drawn & if age is contained on main axes, no colormap will be used
     else:
-        if x_axis != 'Age':
+        if x_axis != 'Age / y':
             Axes.scatter(X_np[:, 1][Data['Gender'] == 'M'], Y_Obs_np[Data['Gender'] == 'M'],
-                         c=list(tuple(male_age.tolist())), cmap='plasma_r', vmin=Data['Age'].min(),
-                         vmax=Data['Age'].max(), label='male', marker='s')
+                         c=list(tuple(male_age.tolist())), cmap='plasma_r', vmin=Data['Age / y'].min(),
+                         vmax=Data['Age / y'].max(), label='male', marker='s')
             Axes.scatter(X_np[:, 1][Data['Gender'] == 'F'], Y_Obs_np[Data['Gender'] == 'F'],
-                         c=list(tuple(female_age.tolist())), cmap='plasma_r', vmin=Data['Age'].min(),
-                         vmax=Data['Age'].max(), label='female', marker='o')
+                         c=list(tuple(female_age.tolist())), cmap='plasma_r', vmin=Data['Age / y'].min(),
+                         vmax=Data['Age / y'].max(), label='female', marker='o')
             ax = plt.gca()
             PCM = ax.get_children()[0]
-            plt.colorbar(PCM, ax=ax, label='Age y')
+            plt.colorbar(PCM, ax=ax, label='Age / y')
             Axes.annotate(r'$N$ : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
             Axes.annotate(r'$R^2$ : ' + str(R2), xy=(0.05, 0.25), xycoords='axes fraction')
             # Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
@@ -452,29 +486,27 @@ for i in range(len(Pair)):
     results.append(values)
 result_dir = pd.DataFrame(results, columns=['X-axis', 'Y-axis', 'p-value', '\u03C3\u2091\u209B\u209C', 'R\u00B2', 'N',
                                             'lower bound 95% CI', 'upper bound 95% CI'])
-# result_dir.to_csv(os.path.join(savepath, 'ResultsPlots.csv'), index=False)
-result_dir.to_csv(os.path.join(savepath, 'ResultsPlots_appendix.csv'), index=False)
+result_dir.to_csv(os.path.join(savepath, 'ResultsPlots.csv'), index=False)
+# result_dir.to_csv(os.path.join(savepath, 'ResultsPlots_appendix.csv'), index=False)
 
 # boxplots of specific component weights
-MWF = df['Mineral weight fraction -']
-OWF = df['Organic weight fraction -']
-WWF = df['Water weight fraction -']
+MWF = df['Mineral weight fraction / -']
+OWF = df['Organic weight fraction / -']
+WWF = df['Water weight fraction / -']
 WF = [MWF, OWF, WWF]
 
 fig = plt.figure(figsize=(5.5, 4.5))
 ax1 = fig.add_subplot(111)
 bp = ax1.boxplot(WF)
-ax1.set_ylabel('Weight Fraction -')
+ax1.set_ylabel('Weight Fraction / -')
 ax1.set_xticklabels(['Mineral', 'Organic', 'Water'])
 plt.ylim(ymin=0)
 plt.savefig(os.path.join(savepath, 'WF_boxplt.png'), dpi=300, bbox_inches='tight', format='png')
 plt.show()
 
-
-
 # boxplot of AMM/AMD
-AMM = df['Apparent Modulus Mineralized MPa'].dropna().reset_index(drop=True)
-AMD = df['Apparent Modulus Demineralized MPa'].dropna().reset_index(drop=True)
+AMM = df['Apparent Modulus Mineralized / MPa'].dropna().reset_index(drop=True)
+AMD = df['Apparent Modulus Demineralized / MPa'].dropna().reset_index(drop=True)
 AMM = AMM.values.tolist()
 AMD = AMD.values.tolist()
 # AMM = np.array(AMM)
@@ -502,7 +534,7 @@ ax2.tick_params(labeltop=False)
 ax2.xaxis.tick_bottom()
 ax2.set_xticklabels(['Mineralized', 'Demineralized'])
 
-ax.set_ylabel('Apparent Modulus MPa')
+ax.set_ylabel('Apparent Modulus / MPa')
 ax.yaxis.set_label_coords(-0.12, 0)
 
 # This looks pretty good, and was fairly painless, but you can get that
