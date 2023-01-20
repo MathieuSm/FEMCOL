@@ -47,8 +47,8 @@ results_merged['Mean Area Fraction / -'] = results_uCT['Mean Area Fraction -']
 results_merged['Min Area Fraction / -'] = results_uCT['Min Area Fraction -']
 results_merged['Mineral to Matrix Ratio / -'] = results_raman['M2M_ratio_mean']
 results_merged['Apparent Modulus Mineralized uFE / MPa'] = round(results_uFE['E_uFE_L'], 3)*1000
-results_merged['Yield Strength uFE/ MPa'] = round(results_uFE['yield_strength_uFE_with_non_broken'], 2)
-results_merged['Ultimate Stress uFE/ MPa'] = round(results_uFE['strength_uFE_with_non_broken'], 2)
+results_merged['Yield Stress uFE / MPa'] = round(results_uFE['yield_strength_uFE_with_non_broken'], 2)
+results_merged['Ultimate Stress uFE / MPa'] = round(results_uFE['strength_uFE_with_non_broken'], 2)
 results_merged.to_csv(os.path.join(Cwd / '04_Results/', 'ResultsOverview.csv'),
                       index=False)
 
