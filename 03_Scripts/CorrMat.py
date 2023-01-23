@@ -5,7 +5,10 @@ from pathlib import Path                 # Used to manage path variables in wind
 import numpy as np                       # Used to do arrays (matrices) computations namely
 import pandas as pd                      # Used to manage data frames
 import matplotlib.pyplot as plt          # Used to perform plots
+import statsmodels.formula.api as smf    # Used for statistical analysis (ols here)
 import os
+from scipy.stats.distributions import t  # Used to compute confidence intervals
+import sys
 import seaborn as sns
 from scipy.stats import linregress
 from matplotlib import cm
@@ -74,9 +77,15 @@ plt.rcParams["text.usetex"] = True
 plt.rcParams["font.family"] = "serif"
 plt.rcParams["font.size"] = "10"
 
-# Plotting of p-matrix
+## Added to "trick" the plot
+Trick = corr_matrix_p.copy()
+Steps = [0, 0.001, 0.01, 0.05, 1]
+for i, Step in enumerate(Steps):
+    Trick[Trick < Step] = i
+Trick = Trick / len(Steps)
+
 f, ax = plt.subplots(figsize=(11, 15))
-heatmap_p = sns.heatmap(corr_matrix_p,
+heatmap_p = sns.heatmap(Trick,
                         mask=mask_p,
                         square=True,
                         linewidths=.5,
@@ -85,7 +94,7 @@ heatmap_p = sns.heatmap(corr_matrix_p,
                                   'ticks': np.array([0, 1/4, 2/4, 3/4, 1])},
                         vmin=0,
                         vmax=1,
-                        annot=True,
+                        annot=corr_matrix_p,
                         annot_kws={'size': 12})
 
 # set ticklabels of colorbar
