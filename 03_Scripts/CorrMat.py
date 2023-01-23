@@ -72,8 +72,15 @@ plt.rcParams["text.usetex"] = True
 plt.rcParams["font.family"] = "serif"
 plt.rcParams["font.size"] = "10"
 
+## Added to "trick" the plot
+Trick = corr_matrix_p.copy()
+Steps = [0, 0.001, 0.01, 0.05, 1]
+for i, Step in enumerate(Steps):
+    Trick[Trick < Step] = i
+Trick = Trick / len(Steps)
+
 f, ax = plt.subplots(figsize=(11, 15))
-heatmap_p = sns.heatmap(corr_matrix_p,
+heatmap_p = sns.heatmap(Trick,
                         mask=mask_p,
                         square=True,
                         linewidths=.5,
@@ -82,7 +89,7 @@ heatmap_p = sns.heatmap(corr_matrix_p,
                                   'ticks': np.array([0, 1/4, 2/4, 3/4, 1])},
                         vmin=0,
                         vmax=1,
-                        annot=True,
+                        annot=corr_matrix_p,
                         annot_kws={'size': 12})
 
 ax.collections[0].colorbar.set_ticklabels([0, 0.001, 0.01, 0.05, 1])
