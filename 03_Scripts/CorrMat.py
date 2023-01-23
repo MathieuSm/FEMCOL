@@ -56,8 +56,8 @@ mask_p = np.zeros_like(corr_matrix_p, dtype=np.bool_)
 mask_p[np.triu_indices_from(mask_p)] = True
 
 # Colormap trick
-viridis_p = cm.get_cmap('plasma', 3)
-newcolors_p = viridis_p(np.linspace(0, 1, 3))
+viridis_p = cm.get_cmap('plasma', 4)
+newcolors_p = viridis_p(np.linspace(0, 1, 4))
 newcmp_p = ListedColormap(newcolors_p)
 
 viridis_r = cm.get_cmap('plasma', 8)
@@ -79,13 +79,13 @@ heatmap_p = sns.heatmap(corr_matrix_p,
                         linewidths=.5,
                         cmap=newcmp_p,
                         cbar_kws={'shrink': .5,
-                                  'ticks': np.array([1/6, 3/6, 5/6])},
+                                  'ticks': np.array([0, 1/4, 2/4, 3/4, 1])},
                         vmin=0,
                         vmax=1,
                         annot=True,
                         annot_kws={'size': 12})
 
-ax.collections[0].colorbar.set_ticklabels([0.001, 0.01, 0.05])
+ax.collections[0].colorbar.set_ticklabels([0, 0.001, 0.01, 0.05, 1])
 
 
 #add the column names as labels
