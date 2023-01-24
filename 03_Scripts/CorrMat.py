@@ -80,7 +80,7 @@ viridis_p = cm.get_cmap('plasma', 4)
 newcolors_p = viridis_p(np.linspace(0, 1, 4))
 newcmp_p = ListedColormap(newcolors_p)
 
-# Colormap trick for r-matrix
+# # Colormap trick for r-matrix
 # viridis_r = cm.get_cmap('plasma', 8)
 # newcolors_r = viridis_r(np.linspace(0, 1, 8))
 # newcmp_r = ListedColormap(newcolors_r)
