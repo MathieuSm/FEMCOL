@@ -346,7 +346,7 @@ for i in tqdm(range(len(Pair))):
             Axes.scatter(X_np[:, 1][Data['Gender'] == 'F'], Y_Obs_np[Data['Gender'] == 'F'],
                          c=list(tuple(female_age.tolist())), cmap='plasma_r', vmin=Data['Age / y'].min(),
                          vmax=Data['Age / y'].max(), label='female', marker='o')
-            Axes.scatter(X_np[:, 1][Data['Gender'] == 'NaN'], Y_Obs_np[Data['Gender'] == 'NaN'], color=(0, 0, 0),
+            Axes.scatter(X_np[:, 1][Data['Gender'].isnull()], Y_Obs_np[Data['Gender'].isnull()], color=(0, 0, 0),
                          label='unknown', marker='^')
             Regression_line = FitResults.params[1] * X_np[:, 1] + FitResults.params[0]
             ax = plt.gca()
@@ -433,7 +433,7 @@ for i in tqdm(range(len(Pair))):
             Axes.scatter(X_np[:, 1][Data['Gender'] == 'F'], Y_Obs_np[Data['Gender'] == 'F'],
                          c=list(tuple(female_age.tolist())), cmap='plasma_r', vmin=Data['Age / y'].min(),
                          vmax=Data['Age / y'].max(), label='female', marker='o')
-            Axes.scatter(X_np[:, 1][Data['Gender'] == 'NaN'], Y_Obs_np[Data['Gender'] == 'NaN'], color=(0, 0, 0),
+            Axes.scatter(X_np[:, 1][Data['Gender'].isnull()], Y_Obs_np[Data['Gender'].isnull()], color=(0, 0, 0),
                          label='unknown', marker='^')
             ax = plt.gca()
             PCM = ax.get_children()[0]
