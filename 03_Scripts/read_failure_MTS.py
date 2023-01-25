@@ -100,15 +100,15 @@ else:
 
         # calculate stress and strain, filter & put into dataframe
         l_initial = 6.5
-        min_area_wp = results_uCT['Min Area mm^2'][counter]
+        min_area_wp = results_uCT['Min Area mm^2'][counter]       # needed to calculate ultimate collagen stress
         mean_area_wop = results_uCT['Mean Apparent Area mm^2'][counter]
-        stress_wp = df['force_lc'] / min_area_wp
+        collagen_stress = df['force_lc'] / min_area_wp
         stress_wop = df['force_lc'] / mean_area_wop     # needed to calculate apparent modulus/ultimate stress
         strain = df['disp_ext'] / l_initial
-        df['stress_lc_wp'] = stress_wp
+        df['collagen_stress'] = collagen_stress
         df['stress_lc_wop'] = stress_wop
         df['strain_ext'] = strain
-        df['stress_lc_filtered_wp'] = butter_lowpass_filter(df['stress_lc_wp'], cutoff)
+        df['collagen_stress_filtered'] = butter_lowpass_filter(df['collagen_stress'], cutoff)
         df['stress_lc_filtered_wop'] = butter_lowpass_filter(df['stress_lc_wop'], cutoff)
         counter = counter + 1
 
@@ -118,10 +118,21 @@ else:
         row_max_stress = df.loc[df['stress_lc_wop'] == max_stress_raw]
         max_stress_index = row_max_stress.index
 
+        # find max value of stress_lc_wop column & locate index
+        column_cs = df['collagen_stress']
+        max_collagen_stress_raw = column_cs.max()
+        row_max_collagen_stress = df.loc[df['collagen_stress'] == max_collagen_stress_raw]
+        max_collagen_stress_index = row_max_collagen_stress.index
+
         # search for ultimate stress (filtered)
         row_max_stress_filtered = df.iloc[max_stress_index]
         ultimate_stress_filtered = np.round(row_max_stress_filtered['stress_lc_filtered_wop'].values, 2)
         ultimate_stress_filtered = ultimate_stress_filtered[0]
+
+        # search for ultimate collagen stress (filtered)
+        row_max_collagen_stress_filtered = df.iloc[max_collagen_stress_index]
+        ultimate_collagen_stress_filtered = np.round(row_max_collagen_stress_filtered['collagen_stress_filtered'].values, 2)
+        ultimate_collagen_stress_filtered = ultimate_collagen_stress_filtered[0]
 
         # search for ultimate strain
         row_max_strain = df.iloc[max_stress_index]
@@ -277,13 +288,14 @@ else:
         # plt.close()
 
         # collect all data in list
-        values = [sample_ID, ultimate_stress_filtered, ultimate_strain, ultimate_force_filtered, round(apparent_modulus, 1),
-                  round(stiffness, 1)]
+        values = [sample_ID, ultimate_stress_filtered, ultimate_collagen_stress_filtered, ultimate_strain,
+                  ultimate_force_filtered, round(apparent_modulus, 1), round(stiffness, 1)]
 
         # update list with each iteration's data & generate dataframe
         result.append(values)
-        result_dir = pd.DataFrame(result, columns=['Sample ID', 'Ultimate stress / MPa', 'Ultimate strain / -',
-                                                   'Ultimate Force / N', 'Apparent modulus / MPa', 'Stiffness / N/mm'])
+        result_dir = pd.DataFrame(result, columns=['Sample ID', 'Ultimate stress / MPa', 'Ultimate collagen stress / MPa',
+                                                   'Ultimate strain / -', 'Ultimate Force / N', 'Apparent modulus / MPa',
+                                                   'Stiffness / N/mm'])
 
         rcParams.update({'figure.autolayout': True})
         time = pd.DataFrame()
