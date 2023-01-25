@@ -11,6 +11,7 @@ import math
 import statistics
 from skimage import filters              # Used to perform filtering image operations (e.g. Otsu)
 from skimage import morphology, measure  # Used to fill pores and circle fitting
+from tqdm import tqdm
 
 # Set directories
 CurrentDirectory = Path.cwd()
@@ -29,7 +30,7 @@ results = list()
 Pi = 3.14159265
 
 # Select sample to analyze (numbering starting from 0)
-for x in range(0, len(Data), 1):
+for x in tqdm(range(0, len(Data), 1)):
     SampleNumber = x
     SampleID = Data.loc[SampleNumber, 'Sample']
     File = Data.loc[SampleNumber, 'uCT File']
@@ -55,10 +56,10 @@ for x in range(0, len(Data), 1):
     Axis.imshow(Scan[:, :, YMid], cmap='bone')
     Axis.axis('off')
     plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
-    plt.savefig(os.path.join('/home/stefan/Documents/FEMCOL/04_Results/03_uCT/', SampleID + '_' + 'YZ_Plane'),
-                dpi=300)
-    plt.show()
-    # plt.close()
+    # plt.savefig(os.path.join('/home/stefan/Documents/FEMCOL/04_Results/03_uCT/', SampleID + '_' + 'YZ_Plane'),
+    #             dpi=300)
+    # plt.show()
+    plt.close()
 
     # Segment scan using Otsu's threshold: mean threshold calculated with MeanOtsu.py --> 562.586
     Threshold = MeanOtsu.loc[0][0]
@@ -186,8 +187,6 @@ for x in range(0, len(Data), 1):
     values = [SampleID, BVTV, BMD, TMD, BMC, min_BoneArea_wp, min_Diam_wp, mean_Area_wop, mean_Diam_wop,
               mean_areas_fraction, min_areas_fraction, min_areas_fraction_new]
     results.append(values)
-
-    print('Progress: ' + str(x+1) + ' of ' + str(len(Data)))
 
 # Add missing samples
 missing_sample_IDs = pd.DataFrame({'Sample ID': ['390_R', '395_R', '402_L']})
