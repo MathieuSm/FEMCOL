@@ -25,6 +25,7 @@ results_merged['Stiffness Mineralized / N/mm'] = results_mineralized['Stiffness 
 results_merged['Apparent Modulus Mineralized / MPa'] = results_mineralized['Apparent modulus MPa']
 results_merged['Ultimate Force / N'] = results_demineralized['Ultimate Force / N']
 results_merged['Ultimate Stress / MPa'] = results_demineralized['Ultimate stress / MPa']
+results_merged['Ultimate Collagen Stress / MPa'] = results_demineralized['Ultimate collagen stress / MPa']
 results_merged['Ultimate Strain / -'] = results_demineralized['Ultimate strain / -']
 results_merged['Stiffness Demineralized / N/mm'] = results_demineralized['Stiffness / N/mm']
 results_merged['Apparent Modulus Demineralized / MPa'] = results_demineralized['Apparent modulus / MPa']
