@@ -219,7 +219,14 @@ for i in tqdm(range(len(Pair))):
     y_axis = Pair[1][i]
     x_axis_abbrev = Pair_abbrev_df['Abbrev_x'][i]
     y_axis_abbrev = Pair_abbrev_df['Abbrev_y'][i]
-    Data = df.filter(['Sample ID', x_axis, y_axis, 'Gender', 'Age / y']).dropna()
+    if x_axis == 'Age / y':
+        Data = df.filter(['Sample ID', x_axis, y_axis, 'Gender'])
+    else:
+        Data = df.filter(['Sample ID', x_axis, y_axis, 'Gender', 'Age / y'])
+
+    Data = Data[Data[x_axis].notna() & Data[y_axis].notna()]
+    Data = Data.reset_index(drop=True)
+    # Data = Data.fillna('U')
     Data2Fit = Data.copy()
     Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
     Data2Fit = Data2Fit.set_index('SID')
@@ -339,6 +346,8 @@ for i in tqdm(range(len(Pair))):
             Axes.scatter(X_np[:, 1][Data['Gender'] == 'F'], Y_Obs_np[Data['Gender'] == 'F'],
                          c=list(tuple(female_age.tolist())), cmap='plasma_r', vmin=Data['Age / y'].min(),
                          vmax=Data['Age / y'].max(), label='female', marker='o')
+            Axes.scatter(X_np[:, 1][Data['Gender'] == 'NaN'], Y_Obs_np[Data['Gender'] == 'NaN'], color=(0, 0, 0),
+                         label='unknown', marker='^')
             Regression_line = FitResults.params[1] * X_np[:, 1] + FitResults.params[0]
             ax = plt.gca()
             PCM = ax.get_children()[2]
@@ -424,6 +433,8 @@ for i in tqdm(range(len(Pair))):
             Axes.scatter(X_np[:, 1][Data['Gender'] == 'F'], Y_Obs_np[Data['Gender'] == 'F'],
                          c=list(tuple(female_age.tolist())), cmap='plasma_r', vmin=Data['Age / y'].min(),
                          vmax=Data['Age / y'].max(), label='female', marker='o')
+            Axes.scatter(X_np[:, 1][Data['Gender'] == 'NaN'], Y_Obs_np[Data['Gender'] == 'NaN'], color=(0, 0, 0),
+                         label='unknown', marker='^')
             ax = plt.gca()
             PCM = ax.get_children()[0]
             plt.colorbar(PCM, ax=ax, label='Age / y')

@@ -26,14 +26,15 @@ df = df.drop(columns=['Sample ID', 'Age / y', 'Gender', 'Ultimate Force / N', 'O
 df_new = df[['Bone Volume Fraction / -', 'Bone Mineral Density / mg HA / cm³', 'Tissue Mineral Density / mg HA / cm³',
              'Mineral to Matrix Ratio / -', 'Mineral weight fraction / -', 'Organic weight fraction / -',
              'Water weight fraction / -', 'Density / g/cm³', 'Apparent Modulus Mineralized / MPa',
-             'Apparent Modulus Demineralized / MPa', 'Ultimate Stress / MPa', 'Ultimate Strain / -',
-             'Apparent Modulus Mineralized uFE / MPa', 'Yield Stress uFE / MPa', 'Ultimate Stress uFE / MPa']]
+             'Apparent Modulus Demineralized / MPa', 'Ultimate Stress / MPa', 'Ultimate Collagen Stress / MPa',
+             'Ultimate Strain / -', 'Apparent Modulus Mineralized uFE / MPa', 'Yield Stress uFE / MPa',
+             'Ultimate Stress uFE / MPa']]
 # df_new.columns = ['Bone Volume Fraction', 'Bone Mineral Density', 'Tissue Mineral Density', 'Mineral to Matrix Ratio',
 #                   'Mineral Weight Fraction', 'Organic Weight Fraction', 'Water Weight Fraction', 'Bone Density',
 #                   'Apparent Modulus Mineralized', 'Apparent Modulus Demineralized', 'Ultimate Stress', 'Ultimate Strain',
 #                   'Apparent Modulus Mineralized uFE', 'Yield Stress uFE', 'Ultimate Stress uFE']
-df_new.columns = ['BVTV', 'BMD', 'TMD', 'MMR', 'WFM', 'WFO', 'WFW', 'D', 'AMM', 'AMD', 'USTRE', 'USTRA', 'AMMuFE',
-                  'YSTREuFE', 'USTREuFE']
+df_new.columns = ['BVTV', 'BMD', 'TMD', 'MMR', 'WFM', 'WFO', 'WFW', 'D', 'AMM', 'AMD', 'USTRE', 'UCSTRE', 'USTRA',
+                  'AMMuFE', 'YSTREuFE', 'USTREuFE']
 
 # Create empty dataframe for p-values and correlation matrix containing r values
 corr_matrix_p = pd.DataFrame()
@@ -91,7 +92,7 @@ newcmp_r = ListedColormap(newcolors_r)
 
 # Axis annotations
 abbreviations = ['BVTV', 'BMD', 'TMD', 'MMR', 'WF$_m$', 'WF$_o$', 'WF$_w$', 'd$_b$', 'E$_m$', 'E$_c$', '$\sigma_u$',
-                 '$\epsilon_u$', 'E$_{m, \mu FE}$', '$\sigma_{y, \mu FE}$', '$\sigma_{u, \mu FE}$']
+                 '$\sigma_c$', '$\epsilon_u$', 'E$_{m, \mu FE}$', '$\sigma_{y, \mu FE}$', '$\sigma_{u, \mu FE}$']
 
 # Font style and size
 plt.rcParams["text.usetex"] = True
@@ -116,7 +117,7 @@ heatmap_p = sns.heatmap(Trick,
                                   'label': 'p-value'},
                         vmin=0,
                         vmax=1,
-                        fmt='.2f',
+                        fmt='.3f',
                         annot=corr_matrix_p,
                         annot_kws={'size': 12})
 
