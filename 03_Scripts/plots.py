@@ -365,7 +365,7 @@ for i in tqdm(range(len(Pair))):
             # condition used for autoscaling
             if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
                 # plt.autoscale()
-                plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 2))
+                plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 # plt.legend(loc='upper center', ncol=2, bbox_to_anchor=(0.5, 1.15), prop={'size': 10})
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
@@ -375,7 +375,7 @@ for i in tqdm(range(len(Pair))):
                 j = j + 1
             else:
                 # plt.ylim(ymin=0)
-                plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 2))
+                plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
@@ -408,7 +408,7 @@ for i in tqdm(range(len(Pair))):
             if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
                 # plt.ylim(ymin=0, ymax=round(Y_Fit.max() * 1.2, 2))
                 # plt.autoscale()
-                plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 2))
+                plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
@@ -417,7 +417,7 @@ for i in tqdm(range(len(Pair))):
                 j = j + 1
             else:
                 # plt.ylim(ymin=0)
-                plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 2))
+                plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
@@ -451,7 +451,7 @@ for i in tqdm(range(len(Pair))):
             # condition used for autoscaling
             if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
                 # plt.autoscale()
-                plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 2))
+                plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
@@ -460,7 +460,7 @@ for i in tqdm(range(len(Pair))):
                 j = j + 1
             else:
                 # plt.ylim(ymin=0)
-                plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 2))
+                plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
@@ -487,7 +487,7 @@ for i in tqdm(range(len(Pair))):
             # condition for autoscaling
             if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
                 # plt.autoscale()
-                plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 2))
+                plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
@@ -496,7 +496,7 @@ for i in tqdm(range(len(Pair))):
                 j = j + 1
             else:
                 # plt.ylim(ymin=0)
-                plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 2))
+                plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
