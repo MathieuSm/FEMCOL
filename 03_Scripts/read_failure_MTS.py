@@ -100,16 +100,20 @@ else:
 
         # calculate stress and strain, filter & put into dataframe
         l_initial = 6.5
-        min_area_wp = results_uCT['Min Area mm^2'][counter]       # needed to calculate ultimate collagen stress
-        mean_area_wop = results_uCT['Mean Apparent Area mm^2'][counter]
+        min_area_wp = results_uCT['Min Area / mm^2'][counter]       # needed to calculate ultimate collagen stress
+        mean_bone_area_wp = results_uCT['Mean Bone Area / mm^2'][counter]
+        mean_area_wop = results_uCT['Mean Apparent Area / mm^2'][counter]
         collagen_stress = df['force_lc'] / min_area_wp
+        stress_bone_wp = df['force_lc'] / mean_bone_area_wp     # needed to calculate elastic modulus/ultimate stress
         stress_wop = df['force_lc'] / mean_area_wop     # needed to calculate apparent modulus/ultimate stress
         strain = df['disp_ext'] / l_initial
         df['collagen_stress'] = collagen_stress
         df['stress_lc_wop'] = stress_wop
+        df['stress_bone_wp'] = stress_bone_wp
         df['strain_ext'] = strain
         df['collagen_stress_filtered'] = butter_lowpass_filter(df['collagen_stress'], cutoff)
         df['stress_lc_filtered_wop'] = butter_lowpass_filter(df['stress_lc_wop'], cutoff)
+        df['stress_bone_wp_filtered'] = butter_lowpass_filter(df['stress_bone_wp'], cutoff)
         counter = counter + 1
 
         # find max value of stress_lc_wop column & locate index
@@ -118,13 +122,19 @@ else:
         row_max_stress = df.loc[df['stress_lc_wop'] == max_stress_raw]
         max_stress_index = row_max_stress.index
 
-        # find max value of stress_lc_wop column & locate index
+        # find max value of collagen_stress column & locate index
         column_cs = df['collagen_stress']
         max_collagen_stress_raw = column_cs.max()
         row_max_collagen_stress = df.loc[df['collagen_stress'] == max_collagen_stress_raw]
         max_collagen_stress_index = row_max_collagen_stress.index
 
-        # search for ultimate stress (filtered)
+        # find max value of stress_bone_wp column & locate index
+        column_b = df['stress_bone_wp']
+        max_stress_b_raw = column_b.max()
+        row_max_stress_b = df.loc[df['stress_bone_wp'] == max_stress_b_raw]
+        max_stress_b_index = row_max_stress_b.index
+
+        # search for apparent ultimate stress (filtered)
         row_max_stress_filtered = df.iloc[max_stress_index]
         ultimate_stress_filtered = np.round(row_max_stress_filtered['stress_lc_filtered_wop'].values, 2)
         ultimate_stress_filtered = ultimate_stress_filtered[0]
@@ -133,6 +143,11 @@ else:
         row_max_collagen_stress_filtered = df.iloc[max_collagen_stress_index]
         ultimate_collagen_stress_filtered = np.round(row_max_collagen_stress_filtered['collagen_stress_filtered'].values, 2)
         ultimate_collagen_stress_filtered = ultimate_collagen_stress_filtered[0]
+
+        # search for ultimate stress (filtered)
+        row_max_stress_b_filtered = df.iloc[max_stress_b_index]
+        ultimate_stress_b_filtered = np.round(row_max_stress_b_filtered['stress_bone_wp_filtered'].values, 2)
+        ultimate_stress_b_filtered = ultimate_stress_b_filtered[0]
 
         # search for ultimate strain
         row_max_strain = df.iloc[max_stress_index]
@@ -226,8 +241,8 @@ else:
         plt.rcParams.update({'font.size': 14})
         savepath_fd = Cwd / '04_Results/01_Demineralized/00_force_disp/'
         plt.savefig(os.path.join(savepath_fd, 'force_disp_fail_' + sample_ID + '.png'), dpi=300, bbox_inches='tight', format='png')
-        plt.show()
-        # plt.close()
+        # plt.show()
+        plt.close()
 
         ## calculate apparent modulus using last unloading cycle
         # create dataframe of final unloading cycle using start/end index (same as above)
@@ -236,26 +251,43 @@ else:
         last_cycle_strain = last_cycle_strain.dropna().reset_index(drop=True)
         last_cycle_stress = last_cycle_stress.dropna().reset_index(drop=True)
 
+        last_cycle_stress_b = df['stress_bone_wp_filtered'].iloc[start_index[0]:peaks_index[7]]
+        last_cycle_strain_b = df['strain_ext'].iloc[start_index[0]:peaks_index[7]]
+
         last_cycle_ss = pd.DataFrame()
         last_cycle_ss['last_cycle_strain'] = round(last_cycle_strain, 5)
         last_cycle_ss['last_cycle_stress'] = round(last_cycle_stress, 5)
+
+        last_cycle_sb = pd.DataFrame()
+        last_cycle_sb['last_cycle_strain'] = round(last_cycle_strain_b, 5)
+        last_cycle_sb['last_cycle_stress'] = round(last_cycle_stress_b, 5)
 
         # define window width (same as for force/disp) & initialize lists for slope/intercept value collection
         window_width = round(1 / 3 * len(last_cycle_ss))
         slope_values_app = list()
         intercept_values_app = list()
+        slope_values_b = list()
+        intercept_values_b = list()
 
         # rolling linear regression to calculate apparent modulus of last unloading cycle
         for k in range(len(last_cycle_ss) - 1 - window_width + 1):
             last_cycle_mod = last_cycle_ss[k:k + window_width]
+            last_cycle_mod_b = last_cycle_sb[k:k + window_width]
             slope_app, intercept_app, r_value, p_value, std_err = stats.linregress(last_cycle_mod['last_cycle_strain'],
                                                                                    last_cycle_mod['last_cycle_stress'])
+            slope_b, intercept_b, r_value_b, p_value_b, std_err_b = stats.linregress(last_cycle_mod_b['last_cycle_strain'],
+                                                                                     last_cycle_mod_b['last_cycle_stress'])
 
             # collect slope/intercept values & add to growing lists
             slope_value_app = slope_app
             slope_values_app.append(slope_value_app)
             intercept_value_app = intercept_app
             intercept_values_app.append(intercept_value_app)
+
+            slope_value_b = slope_b
+            slope_values_b.append(slope_value_b)
+            intercept_value_b = intercept_b
+            intercept_values_b.append(intercept_value_b)
 
         # Create DataFrames for slope/app. modulus to search for max. values & corresponding indices; create cycle for plot
         slope_value_app_df = pd.DataFrame(slope_values_app)
@@ -265,6 +297,14 @@ else:
         max_slope_index_app = max_slope_index_app.index
         intercept_value_max_app = intercept_values_app_df.loc[max_slope_index_app[0]].values[0]
         last_cycle_plot_ss = last_cycle_ss[max_slope_index_app[0]:max_slope_index_app[0] + window_width]
+
+        slope_value_b_df = pd.DataFrame(slope_values_b)
+        intercept_values_b_df = pd.DataFrame(intercept_values_b)
+        modulus_b = slope_value_b_df.max()[0]
+        max_slope_index_b = slope_value_b_df[slope_value_b_df == modulus_b].dropna()
+        max_slope_index_b = max_slope_index_b.index
+        intercept_value_max_b = intercept_values_b_df.loc[max_slope_index_b[0]].values[0]
+        last_cycle_plot_sb = last_cycle_sb[max_slope_index_b[0]:max_slope_index_b[0] + window_width]
 
         # generate plot
         # plt.figure(figsize=(6, 4))
@@ -284,18 +324,20 @@ else:
         plt.rcParams.update({'font.size': 14})
         savepath_ss = Cwd / '04_Results/01_Demineralized/01_stress_strain/'
         plt.savefig(os.path.join(savepath_ss, 'stress_strain_fail_' + sample_ID + '.png'), dpi=300, bbox_inches='tight', format='png')
-        plt.show()
-        # plt.close()
+        # plt.show()
+        plt.close()
 
         # collect all data in list
-        values = [sample_ID, ultimate_stress_filtered, ultimate_collagen_stress_filtered, ultimate_strain,
-                  ultimate_force_filtered, round(apparent_modulus, 1), round(stiffness, 1)]
+        values = [sample_ID, ultimate_stress_filtered, ultimate_collagen_stress_filtered, ultimate_stress_b_filtered,
+                  ultimate_strain, ultimate_force_filtered, round(apparent_modulus, 1), round(modulus_b, 1),
+                  round(stiffness, 1)]
 
         # update list with each iteration's data & generate dataframe
         result.append(values)
         result_dir = pd.DataFrame(result, columns=['Sample ID', 'Ultimate stress / MPa', 'Ultimate collagen stress / MPa',
-                                                   'Ultimate strain / -', 'Ultimate Force / N', 'Apparent modulus / MPa',
-                                                   'Stiffness / N/mm'])
+                                                   'Ultimate stress non-app / MPa', 'Ultimate strain / -',
+                                                   'Ultimate Force / N', 'Apparent modulus / MPa',
+                                                   'Modulus demineralized / MPa', 'Stiffness / N/mm'])
 
         rcParams.update({'figure.autolayout': True})
         time = pd.DataFrame()
@@ -314,7 +356,8 @@ else:
         plt.rcParams.update({'font.size': 14})
         savepath_dft = Cwd / '04_Results/01_Demineralized/02_disp_force_time/'
         plt.savefig(os.path.join(savepath_dft, 'disp_time_fail_' + sample_ID + '.png'), dpi=300, bbox_inches='tight', format='png')
-        plt.show()
+        # plt.show()
+        plt.close()
 
     # add missing samples to list
     # missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '396R', '400R', '402L', '403R', '410L', '410R', '422R',
