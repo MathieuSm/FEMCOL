@@ -1,167 +1,167 @@
 X-axis,Y-axis,p-value,σₑₛₜ,R²,N,lower bound 95% CI,upper bound 95% CI
-Age / y,Apparent Modulus Demineralized / MPa,0.02,37.3,0.08,68,-2.3,-0.201
-Age / y,Apparent Modulus Mineralized / MPa,0.006,1747.0,0.1,71,-119,-20.5
-Age / y,Modulus Mineralized / MPa,0.012,1659.0,0.09,71,-107,-13.6
-Age / y,Modulus Demineralized / MPa,0.062,42.3,0.05,68,-2.3,0.06
-Age / y,Bone Mineral Content / mg HA,0.125,127.0,0.03,74,-6.3,0.785
-Age / y,Bone Mineral Density / mg HA / cm³,0.227,52.6,0.02,74,-2.4,0.57
-Age / y,Bone Volume Fraction / -,0.147,0.045,0.03,74,-0.002,3.29e-04
-Age / y,Density / g/cm³,0.02,0.05,0.07,77,-0.003,-2.64e-04
-Age / y,Mineral Weight / g,0.139,0.032,0.03,77,-0.002,2.14e-04
-Age / y,Mineral weight fraction / -,0.084,0.013,0.04,77,-6.48e-04,4.19e-05
-Age / y,Organic Weight / g,0.318,0.018,0.01,77,-7.32e-04,2.41e-04
-Age / y,Organic weight fraction / -,0.511,0.008,5.8e-03,77,-1.53e-04,3.05e-04
-Age / y,Stiffness Demineralized / N/mm,0.013,18.4,0.09,68,-1.2,-0.142
-Age / y,Stiffness Mineralized / N/mm,0.011,933.0,0.09,71,-60.5,-8.1
-Age / y,Tissue Mineral Density / mg HA / cm³,0.827,18.3,6.7e-04,74,-0.453,0.565
-Age / y,Ultimate Force / N,0.002,14.0,0.14,68,-1.0,-0.249
-Age / y,Ultimate Strain / -,0.059,0.011,0.05,68,-6.06e-04,1.17e-05
-Age / y,Ultimate Apparent Stress / MPa,0.003,4.3,0.13,68,-0.315,-0.07
-Age / y,Ultimate Collagen Stress / MPa,0.007,4.5,0.1,68,-0.307,-0.05
-Age / y,Ultimate Stress / MPa,0.003,4.5,0.12,68,-0.318,-0.065
-Age / y,Water Weight / g,0.471,0.007,6.9e-03,77,-1.23e-04,2.63e-04
-Age / y,Water weight fraction / -,0.308,0.016,0.01,77,-2.13e-04,6.68e-04
-Age / y,Mean Apparent Area / mm²,0.482,0.058,6.9e-03,74,-0.002,0.001
-Age / y,Minimum Area / mm²,0.036,0.234,0.06,74,-0.014,-4.81e-04
-Age / y,Mean Area Fraction / -,0.147,0.045,0.03,74,-0.002,3.29e-04
-Age / y,Min Area Fraction / -,0.042,0.07,0.06,74,-0.004,-7.11e-05
+Age / y,Apparent Modulus Demineralized / MPa,0.096,37.9,0.04,70,-1.8,0.152
+Age / y,Apparent Modulus Mineralized / MPa,0.005,1728.0,0.11,73,-110,-20.1
+Age / y,Modulus Mineralized / MPa,0.016,1647.0,0.08,73,-95.4,-10.1
+Age / y,Modulus Demineralized / MPa,0.24,43.0,0.02,70,-1.8,0.455
+Age / y,Bone Mineral Content / mg HA,0.078,125.0,0.04,76,-6.1,0.333
+Age / y,Bone Mineral Density / mg HA / cm³,0.07,52.4,0.04,76,-2.6,0.103
+Age / y,Bone Volume Fraction / -,0.076,0.044,0.04,76,-0.002,1.09e-04
+Age / y,Density / g/cm³,0.013,0.05,0.08,79,-0.003,-3.43e-04
+Age / y,Mineral Weight / g,0.09,0.031,0.04,79,-0.001,1.09e-04
+Age / y,Mineral weight fraction / -,0.034,0.013,0.06,79,-6.60e-04,-2.57e-05
+Age / y,Organic Weight / g,0.37,0.018,0.01,79,-6.46e-04,2.43e-04
+Age / y,Organic weight fraction / -,0.149,0.009,0.03,79,-5.76e-05,3.72e-04
+Age / y,Stiffness Demineralized / N/mm,0.081,18.8,0.04,70,-0.928,0.055
+Age / y,Stiffness Mineralized / N/mm,0.01,922.0,0.09,73,-55.4,-7.6
+Age / y,Tissue Mineral Density / mg HA / cm³,0.488,18.7,6.5e-03,76,-0.65,0.313
+Age / y,Ultimate Force / N,0.1,15.4,0.04,70,-0.738,0.066
+Age / y,Ultimate Strain / -,0.585,0.012,4.4e-03,70,-3.89e-04,2.21e-04
+Age / y,Ultimate Apparent Stress / MPa,0.113,4.7,0.04,70,-0.222,0.024
+Age / y,Ultimate Collagen Stress / MPa,0.238,5.0,0.02,70,-0.207,0.052
+Age / y,Ultimate Stress / MPa,0.155,4.9,0.03,70,-0.22,0.036
+Age / y,Water Weight / g,0.626,0.007,3.1e-03,79,-1.33e-04,2.20e-04
+Age / y,Water weight fraction / -,0.361,0.016,0.01,79,-2.17e-04,5.88e-04
+Age / y,Mean Apparent Area / mm²,0.936,0.059,8.8e-05,76,-0.002,0.001
+Age / y,Minimum Area / mm²,0.031,0.231,0.06,76,-0.013,-6.16e-04
+Age / y,Mean Area Fraction / -,0.076,0.044,0.04,76,-0.002,1.09e-04
+Age / y,Min Area Fraction / -,0.026,0.069,0.07,76,-0.004,-2.53e-04
 Age / y,Mineral to Matrix Ratio / -,0.999,0.04,2.4e-08,39,-0.002,0.002
-Age / y,Apparent Modulus Mineralized uFE / MPa,0.048,721.0,0.05,76,-39.8,-0.169
-Age / y,Yield Stress uFE / MPa,0.032,5.8,0.06,77,-0.327,-0.015
-Age / y,Ultimate Stress uFE / MPa,0.033,7.0,0.06,77,-0.397,-0.018
-Age / y,Coefficient of Variance / -,0.008,0.017,0.09,74,1.79e-04,0.001
-Bone Mineral Content / mg HA,Stiffness Mineralized / N/mm,1.3e-06,847.0,0.29,72,2.3,5.1
-Bone Mineral Density / mg HA / cm³,Apparent Modulus Mineralized / MPa,5.3e-07,1583.0,0.3,72,11.2,23.9
-Bone Mineral Density / mg HA / cm³,Ultimate Stress / MPa,0.522,4.8,6.1e-03,69,-0.013,0.026
-Bone Volume Fraction / -,Apparent Modulus Mineralized / MPa,5.9e-07,1585.0,0.3,72,12707,27170
-Bone Volume Fraction / -,Ultimate Stress / MPa,0.135,4.7,0.03,69,-5.2,38.0
-Apparent Modulus Mineralized / MPa,Apparent Modulus Demineralized / MPa,1.0e-05,33.9,0.25,69,0.006,0.015
-Mean Apparent Area / mm²,Apparent Modulus Demineralized / MPa,0.37,39.0,0.01,69,-240,90.3
-Mean Apparent Diameter / mm,Apparent Modulus Mineralized / MPa,0.529,1891.0,5.7e-03,72,-32823,17018
-Organic weight fraction / -,Ultimate Stress / MPa,0.613,4.8,3.8e-03,69,-176,104
-Organic Weight / g,Ultimate Stress / MPa,0.362,4.7,0.01,69,-36.0,97.4
-Organic weight fraction / -,Stiffness Mineralized / N/mm,0.278,993.0,0.02,72,-43358,12644
-Organic weight fraction / -,Stiffness Demineralized / N/mm,0.876,19.5,3.6e-04,69,-617,527
-Min Area Fraction / -,Ultimate Stress / MPa,0.045,4.6,0.06,69,0.342,28.3
-Mineral weight fraction / -,Stiffness Demineralized / N/mm,0.363,19.4,0.01,69,-529,196
-Mineral weight fraction / -,Stiffness Mineralized / N/mm,9.0e-06,869.0,0.25,72,22613,54860
-Mineral weight fraction / -,Ultimate Stress / MPa,0.887,4.8,3.0e-04,69,-95.7,82.9
-Bone Mineral Content / mg HA,Mineral Weight / g,9.7e-07,0.026,0.28,75,7.24e-05,1.58e-04
-Mean Apparent Area / mm²,Ultimate Stress / MPa,0.766,4.8,1.3e-03,69,-23.2,17.2
-Apparent Modulus Demineralized / MPa,Ultimate Stress / MPa,4.4e-16,2.9,0.63,69,0.079,0.115
+Age / y,Apparent Modulus Mineralized uFE / MPa,0.01,720.0,0.08,78,-42.4,-5.9
+Age / y,Yield Stress uFE / MPa,0.005,5.8,0.1,79,-0.356,-0.066
+Age / y,Ultimate Stress uFE / MPa,0.008,7.0,0.09,79,-0.417,-0.066
+Age / y,Coefficient of Variance / -,0.008,0.017,0.09,76,1.63e-04,0.001
+Bone Mineral Content / mg HA,Stiffness Mineralized / N/mm,8.2e-07,835.0,0.29,74,2.4,5.1
+Bone Mineral Density / mg HA / cm³,Apparent Modulus Mineralized / MPa,3.8e-07,1568.0,0.3,74,11.1,23.4
+Bone Mineral Density / mg HA / cm³,Ultimate Stress / MPa,0.98,5.0,9.1e-06,71,-0.02,0.02
+Bone Volume Fraction / -,Apparent Modulus Mineralized / MPa,3.5e-07,1566.0,0.3,74,12856,27033
+Bone Volume Fraction / -,Ultimate Stress / MPa,0.288,4.9,0.02,71,-10.4,34.7
+Apparent Modulus Mineralized / MPa,Apparent Modulus Demineralized / MPa,1.8e-05,34.1,0.24,71,0.006,0.014
+Mean Apparent Area / mm²,Apparent Modulus Demineralized / MPa,0.487,38.9,7.0e-03,71,-218,105
+Mean Apparent Diameter / mm,Apparent Modulus Mineralized / MPa,0.476,1871.0,7.1e-03,74,-32908,15498
+Organic weight fraction / -,Ultimate Stress / MPa,0.765,5.0,1.3e-03,71,-119,161
+Organic Weight / g,Ultimate Stress / MPa,0.36,5.0,0.01,71,-37.4,102
+Organic weight fraction / -,Stiffness Mineralized / N/mm,0.241,981.0,0.02,74,-42250,10803
+Organic weight fraction / -,Stiffness Demineralized / N/mm,0.867,19.4,4.1e-04,71,-500,591
+Min Area Fraction / -,Ultimate Stress / MPa,0.11,4.9,0.04,71,-2.7,26.6
+Mineral weight fraction / -,Stiffness Demineralized / N/mm,0.285,19.3,0.02,71,-544,162
+Mineral weight fraction / -,Stiffness Mineralized / N/mm,7.8e-06,861.0,0.24,74,22191,53524
+Mineral weight fraction / -,Ultimate Stress / MPa,0.557,5.0,5.0e-03,71,-118,64.2
+Bone Mineral Content / mg HA,Mineral Weight / g,6.0e-07,0.026,0.28,77,7.39e-05,1.59e-04
+Mean Apparent Area / mm²,Ultimate Stress / MPa,0.815,5.0,8.0e-04,71,-18.2,23.1
+Apparent Modulus Demineralized / MPa,Ultimate Stress / MPa,5.0e-16,3.1,0.62,71,0.081,0.119
 Mineral weight fraction / -,Mineral to Matrix Ratio / -,4.9e-04,0.033,0.28,40,1.0,3.4
 Mineral to Matrix Ratio / -,Stiffness Demineralized / N/mm,0.699,21.4,4.6e-03,35,-154,227
 Mineral to Matrix Ratio / -,Stiffness Mineralized / N/mm,0.019,904.0,0.15,36,1676,17401
 Mineral to Matrix Ratio / -,Ultimate Stress / MPa,0.715,4.8,4.1e-03,35,-35.1,50.5
-Organic weight fraction / -,Apparent Modulus Demineralized / MPa,0.754,39.2,1.5e-03,69,-1331,969
-Bone Volume Fraction / -,Bone Mineral Density / mg HA / cm³,6.9e-41,17.0,0.92,75,1010,1164
-Bone Volume Fraction / -,Tissue Mineral Density / mg HA / cm³,0.028,17.6,0.06,75,9.9,169
-Bone Volume Fraction / -,Mineral weight fraction / -,1.7e-04,0.011,0.18,75,0.051,0.155
-Bone Volume Fraction / -,Organic weight fraction / -,0.515,0.008,5.8e-03,75,-0.025,0.05
-Bone Volume Fraction / -,Water weight fraction / -,6.8e-04,0.014,0.15,75,-0.181,-0.051
-Bone Volume Fraction / -,Density / g/cm³,1.2e-08,0.035,0.36,75,0.35,0.665
-Bone Volume Fraction / -,Apparent Modulus Mineralized / MPa,5.9e-07,1585.0,0.3,72,12707,27170
-Bone Volume Fraction / -,Apparent Modulus Demineralized / MPa,0.623,39.1,3.6e-03,69,-136,225
-Bone Volume Fraction / -,Ultimate Stress / MPa,0.135,4.7,0.03,69,-5.2,38.0
-Bone Volume Fraction / -,Ultimate Collagen Stress / MPa,0.459,4.8,8.2e-03,69,-13.8,30.1
-Bone Volume Fraction / -,Ultimate Strain / -,0.002,0.01,0.14,69,0.03,0.126
+Organic weight fraction / -,Apparent Modulus Demineralized / MPa,0.982,39.0,7.5e-06,71,-1107,1082
+Bone Volume Fraction / -,Bone Mineral Density / mg HA / cm³,3.8e-41,17.6,0.91,77,1020,1178
+Bone Volume Fraction / -,Tissue Mineral Density / mg HA / cm³,0.015,18.0,0.08,77,19.7,181
+Bone Volume Fraction / -,Mineral weight fraction / -,9.4e-05,0.011,0.19,77,0.055,0.158
+Bone Volume Fraction / -,Organic weight fraction / -,0.731,0.009,1.6e-03,77,-0.032,0.045
+Bone Volume Fraction / -,Water weight fraction / -,6.8e-04,0.014,0.14,77,-0.177,-0.05
+Bone Volume Fraction / -,Density / g/cm³,5.8e-09,0.034,0.37,77,0.356,0.666
+Bone Volume Fraction / -,Apparent Modulus Mineralized / MPa,3.5e-07,1566.0,0.3,74,12856,27033
+Bone Volume Fraction / -,Apparent Modulus Demineralized / MPa,0.726,39.0,1.8e-03,71,-146,209
+Bone Volume Fraction / -,Ultimate Stress / MPa,0.288,4.9,0.02,71,-10.4,34.7
+Bone Volume Fraction / -,Ultimate Collagen Stress / MPa,0.74,5.0,1.6e-03,71,-19.1,26.7
+Bone Volume Fraction / -,Ultimate Strain / -,0.011,0.011,0.09,71,0.016,0.118
 Bone Volume Fraction / -,Mineral to Matrix Ratio / -,0.007,0.036,0.18,38,0.077,0.463
-Bone Volume Fraction / -,Apparent Modulus Mineralized uFE / MPa,0.357,738.0,0.01,74,-4896,1790
-Bone Volume Fraction / -,Yield Stress uFE / MPa,0.525,5.9,5.5e-03,75,-35.5,18.3
-Bone Volume Fraction / -,Ultimate Stress uFE / MPa,0.503,7.2,6.2e-03,75,-43.7,21.6
-Bone Mineral Density / mg HA / cm³,Tissue Mineral Density / mg HA / cm³,5.7e-06,15.7,0.25,75,0.091,0.217
-Bone Mineral Density / mg HA / cm³,Mineral weight fraction / -,2.2e-06,0.011,0.27,75,6.81e-05,1.54e-04
-Bone Mineral Density / mg HA / cm³,Organic weight fraction / -,0.9,0.008,2.2e-04,75,-3.14e-05,3.56e-05
-Bone Mineral Density / mg HA / cm³,Water weight fraction / -,1.3e-04,0.014,0.18,75,-1.69e-04,-5.75e-05
-Bone Mineral Density / mg HA / cm³,Density / g/cm³,1.3e-10,0.033,0.43,75,3.59e-04,6.20e-04
-Bone Mineral Density / mg HA / cm³,Apparent Modulus Mineralized / MPa,5.3e-07,1583.0,0.3,72,11.2,23.9
-Bone Mineral Density / mg HA / cm³,Apparent Modulus Demineralized / MPa,0.704,39.2,2.2e-03,69,-0.19,0.129
-Bone Mineral Density / mg HA / cm³,Ultimate Stress / MPa,0.522,4.8,6.1e-03,69,-0.013,0.026
-Bone Mineral Density / mg HA / cm³,Ultimate Collagen Stress / MPa,0.914,4.8,1.7e-04,69,-0.021,0.018
-Bone Mineral Density / mg HA / cm³,Ultimate Strain / -,0.005,0.011,0.11,69,1.89e-05,1.05e-04
+Bone Volume Fraction / -,Apparent Modulus Mineralized uFE / MPa,0.51,751.0,5.9e-03,76,-4498,2254
+Bone Volume Fraction / -,Yield Stress uFE / MPa,0.734,6.1,1.5e-03,77,-32.1,22.7
+Bone Volume Fraction / -,Ultimate Stress uFE / MPa,0.674,7.3,2.4e-03,77,-40.0,26.0
+Bone Mineral Density / mg HA / cm³,Tissue Mineral Density / mg HA / cm³,1.0e-06,15.9,0.27,77,0.104,0.228
+Bone Mineral Density / mg HA / cm³,Mineral weight fraction / -,6.8e-07,0.011,0.28,77,7.23e-05,1.56e-04
+Bone Mineral Density / mg HA / cm³,Organic weight fraction / -,0.717,0.009,1.8e-03,77,-3.98e-05,2.75e-05
+Bone Mineral Density / mg HA / cm³,Water weight fraction / -,1.7e-04,0.014,0.17,77,-1.62e-04,-5.37e-05
+Bone Mineral Density / mg HA / cm³,Density / g/cm³,5.4e-11,0.032,0.44,77,3.59e-04,6.12e-04
+Bone Mineral Density / mg HA / cm³,Apparent Modulus Mineralized / MPa,3.8e-07,1568.0,0.3,74,11.1,23.4
+Bone Mineral Density / mg HA / cm³,Apparent Modulus Demineralized / MPa,0.553,38.9,5.1e-03,71,-0.201,0.108
+Bone Mineral Density / mg HA / cm³,Ultimate Stress / MPa,0.98,5.0,9.1e-06,71,-0.02,0.02
+Bone Mineral Density / mg HA / cm³,Ultimate Collagen Stress / MPa,0.483,5.0,7.1e-03,71,-0.027,0.013
+Bone Mineral Density / mg HA / cm³,Ultimate Strain / -,0.051,0.011,0.05,71,-1.29e-07,9.03e-05
 Bone Mineral Density / mg HA / cm³,Mineral to Matrix Ratio / -,0.002,0.035,0.24,38,1.08e-04,4.41e-04
-Bone Mineral Density / mg HA / cm³,Apparent Modulus Mineralized uFE / MPa,0.439,739.0,8.3e-03,74,-4.1,1.8
-Bone Mineral Density / mg HA / cm³,Yield Stress uFE / MPa,0.588,5.9,4.0e-03,75,-0.03,0.017
-Bone Mineral Density / mg HA / cm³,Ultimate Stress uFE / MPa,0.63,7.2,3.2e-03,75,-0.036,0.022
-Tissue Mineral Density / mg HA / cm³,Mineral weight fraction / -,1.3e-07,0.01,0.32,75,2.59e-04,5.27e-04
-Tissue Mineral Density / mg HA / cm³,Organic weight fraction / -,0.043,0.008,0.05,75,-2.14e-04,-3.59e-06
-Tissue Mineral Density / mg HA / cm³,Water weight fraction / -,0.004,0.015,0.11,75,-4.73e-04,-9.65e-05
-Tissue Mineral Density / mg HA / cm³,Density / g/cm³,6.9e-06,0.038,0.24,75,6.96e-04,0.002
-Tissue Mineral Density / mg HA / cm³,Apparent Modulus Mineralized / MPa,0.069,1852.0,0.05,72,-1.8,46.4
-Tissue Mineral Density / mg HA / cm³,Apparent Modulus Demineralized / MPa,0.003,36.7,0.13,69,-1.3,-0.275
-Tissue Mineral Density / mg HA / cm³,Ultimate Stress / MPa,0.014,4.6,0.09,69,-0.139,-0.016
-Tissue Mineral Density / mg HA / cm³,Ultimate Collagen Stress / MPa,0.007,4.5,0.1,69,-0.146,-0.024
-Tissue Mineral Density / mg HA / cm³,Ultimate Strain / -,0.879,0.011,3.5e-04,69,-1.62e-04,1.39e-04
+Bone Mineral Density / mg HA / cm³,Apparent Modulus Mineralized uFE / MPa,0.734,753.0,1.6e-03,76,-3.4,2.4
+Bone Mineral Density / mg HA / cm³,Yield Stress uFE / MPa,0.96,6.1,3.4e-05,77,-0.024,0.023
+Bone Mineral Density / mg HA / cm³,Ultimate Stress uFE / MPa,0.95,7.4,5.3e-05,77,-0.03,0.028
+Tissue Mineral Density / mg HA / cm³,Mineral weight fraction / -,2.5e-08,0.01,0.34,77,2.70e-04,5.23e-04
+Tissue Mineral Density / mg HA / cm³,Organic weight fraction / -,0.009,0.008,0.09,77,-2.38e-04,-3.50e-05
+Tissue Mineral Density / mg HA / cm³,Water weight fraction / -,0.005,0.015,0.1,77,-4.39e-04,-8.09e-05
+Tissue Mineral Density / mg HA / cm³,Density / g/cm³,3.3e-06,0.037,0.25,77,7.01e-04,0.002
+Tissue Mineral Density / mg HA / cm³,Apparent Modulus Mineralized / MPa,0.058,1831.0,0.05,74,-0.761,44.8
+Tissue Mineral Density / mg HA / cm³,Apparent Modulus Demineralized / MPa,0.002,36.2,0.14,71,-1.2,-0.306
+Tissue Mineral Density / mg HA / cm³,Ultimate Stress / MPa,0.002,4.6,0.13,71,-0.156,-0.037
+Tissue Mineral Density / mg HA / cm³,Ultimate Collagen Stress / MPa,8.2e-04,4.6,0.15,71,-0.164,-0.045
+Tissue Mineral Density / mg HA / cm³,Ultimate Strain / -,0.325,0.012,0.01,71,-2.23e-04,7.51e-05
 Tissue Mineral Density / mg HA / cm³,Mineral to Matrix Ratio / -,0.003,0.035,0.23,38,4.09e-04,0.002
-Tissue Mineral Density / mg HA / cm³,Apparent Modulus Mineralized uFE / MPa,0.24,735.0,0.02,74,-15.1,3.8
-Tissue Mineral Density / mg HA / cm³,Yield Stress uFE / MPa,0.234,5.9,0.02,75,-0.121,0.03
-Tissue Mineral Density / mg HA / cm³,Ultimate Stress uFE / MPa,0.378,7.2,0.01,75,-0.134,0.051
-Mineral weight fraction / -,Organic weight fraction / -,0.327,0.008,0.01,78,-0.074,0.219
-Mineral weight fraction / -,Water weight fraction / -,1.0e-23,0.008,0.74,78,-1.2,-0.926
-Mineral weight fraction / -,Density / g/cm³,7.7e-24,0.027,0.74,78,3.0,3.9
-Mineral weight fraction / -,Apparent Modulus Mineralized / MPa,3.2e-05,1675.0,0.22,72,38145,100267
-Mineral weight fraction / -,Apparent Modulus Demineralized / MPa,0.302,38.9,0.02,69,-1106,349
-Mineral weight fraction / -,Ultimate Stress / MPa,0.887,4.8,3.0e-04,69,-95.7,82.9
-Mineral weight fraction / -,Ultimate Collagen Stress / MPa,0.712,4.8,2.0e-03,69,-106,72.9
-Mineral weight fraction / -,Ultimate Strain / -,0.174,0.011,0.03,69,-0.064,0.348
+Tissue Mineral Density / mg HA / cm³,Apparent Modulus Mineralized uFE / MPa,0.598,752.0,3.8e-03,76,-11.7,6.8
+Tissue Mineral Density / mg HA / cm³,Yield Stress uFE / MPa,0.659,6.1,2.6e-03,77,-0.092,0.058
+Tissue Mineral Density / mg HA / cm³,Ultimate Stress uFE / MPa,0.81,7.4,7.8e-04,77,-0.102,0.08
+Mineral weight fraction / -,Organic weight fraction / -,0.609,0.009,3.4e-03,80,-0.11,0.186
+Mineral weight fraction / -,Water weight fraction / -,6.8e-23,0.009,0.71,80,-1.2,-0.89
+Mineral weight fraction / -,Density / g/cm³,1.7e-24,0.027,0.74,80,2.9,3.9
+Mineral weight fraction / -,Apparent Modulus Mineralized / MPa,2.9e-05,1662.0,0.22,74,37432,97911
+Mineral weight fraction / -,Apparent Modulus Demineralized / MPa,0.244,38.6,0.02,71,-1126,291
+Mineral weight fraction / -,Ultimate Stress / MPa,0.557,5.0,5.0e-03,71,-118,64.2
+Mineral weight fraction / -,Ultimate Collagen Stress / MPa,0.412,5.0,9.8e-03,71,-130,53.8
+Mineral weight fraction / -,Ultimate Strain / -,0.439,0.012,8.7e-03,71,-0.13,0.297
 Mineral weight fraction / -,Mineral to Matrix Ratio / -,4.9e-04,0.033,0.28,40,1.0,3.4
-Mineral weight fraction / -,Apparent Modulus Mineralized uFE / MPa,0.69,735.0,2.1e-03,77,-15413,10260
-Mineral weight fraction / -,Yield Stress uFE / MPa,0.773,5.9,1.1e-03,78,-118,88.0
-Mineral weight fraction / -,Ultimate Stress uFE / MPa,0.852,7.2,4.6e-04,78,-137,113
-Organic weight fraction / -,Water weight fraction / -,4.0e-09,0.013,0.37,78,-1.5,-0.822
-Organic weight fraction / -,Density / g/cm³,0.046,0.051,0.05,78,0.025,2.8
-Organic weight fraction / -,Apparent Modulus Mineralized / MPa,0.189,1873.0,0.02,72,-87877,17710
-Organic weight fraction / -,Apparent Modulus Demineralized / MPa,0.754,39.2,1.5e-03,69,-1331,969
-Organic weight fraction / -,Ultimate Stress / MPa,0.613,4.8,3.8e-03,69,-176,104
-Organic weight fraction / -,Ultimate Collagen Stress / MPa,0.488,4.8,7.2e-03,69,-189,91.1
-Organic weight fraction / -,Ultimate Strain / -,0.882,0.011,3.3e-04,69,-0.353,0.303
+Mineral weight fraction / -,Apparent Modulus Mineralized uFE / MPa,0.987,747.0,3.6e-06,79,-12928,12712
+Mineral weight fraction / -,Yield Stress uFE / MPa,0.879,6.1,3.0e-04,80,-95.8,112
+Mineral weight fraction / -,Ultimate Stress uFE / MPa,0.831,7.3,5.9e-04,80,-112,139
+Organic weight fraction / -,Water weight fraction / -,1.4e-08,0.013,0.34,80,-1.4,-0.746
+Organic weight fraction / -,Density / g/cm³,0.096,0.051,0.04,80,-0.205,2.5
+Organic weight fraction / -,Apparent Modulus Mineralized / MPa,0.16,1852.0,0.03,74,-85794,14391
+Organic weight fraction / -,Apparent Modulus Demineralized / MPa,0.982,39.0,7.5e-06,71,-1107,1082
+Organic weight fraction / -,Ultimate Stress / MPa,0.765,5.0,1.3e-03,71,-119,161
+Organic weight fraction / -,Ultimate Collagen Stress / MPa,0.869,5.0,4.0e-04,71,-129,153
+Organic weight fraction / -,Ultimate Strain / -,0.505,0.012,6.5e-03,71,-0.217,0.438
 Organic weight fraction / -,Mineral to Matrix Ratio / -,0.874,0.039,6.7e-04,40,-1.9,2.2
-Organic weight fraction / -,Apparent Modulus Mineralized uFE / MPa,0.554,734.0,4.7e-03,77,-13983,25869
-Organic weight fraction / -,Yield Stress uFE / MPa,0.684,5.9,2.2e-03,78,-127,192
-Organic weight fraction / -,Ultimate Stress uFE / MPa,0.799,7.2,8.6e-04,78,-169,219
-Water weight fraction / -,Density / g/cm³,7.0e-19,0.031,0.65,78,-3.0,-2.1
-Water weight fraction / -,Apparent Modulus Mineralized / MPa,0.011,1810.0,0.09,72,-63320,-8562
-Water weight fraction / -,Apparent Modulus Demineralized / MPa,0.317,38.9,0.01,69,-293,891
-Water weight fraction / -,Ultimate Stress / MPa,0.706,4.8,2.1e-03,69,-58.8,86.3
-Water weight fraction / -,Ultimate Collagen Stress / MPa,0.509,4.8,6.5e-03,69,-48.5,96.8
-Water weight fraction / -,Ultimate Strain / -,0.306,0.011,0.02,69,-0.256,0.081
+Organic weight fraction / -,Apparent Modulus Mineralized uFE / MPa,0.994,747.0,6.5e-07,79,-19461,19599
+Organic weight fraction / -,Yield Stress uFE / MPa,0.796,6.1,8.6e-04,80,-178,137
+Organic weight fraction / -,Ultimate Stress uFE / MPa,0.747,7.3,1.3e-03,80,-221,159
+Water weight fraction / -,Density / g/cm³,5.3e-19,0.031,0.64,80,-3.0,-2.1
+Water weight fraction / -,Apparent Modulus Mineralized / MPa,0.011,1794.0,0.09,74,-62618,-8400
+Water weight fraction / -,Apparent Modulus Demineralized / MPa,0.329,38.7,0.01,71,-298,879
+Water weight fraction / -,Ultimate Stress / MPa,0.746,5.0,1.5e-03,71,-63.4,88.0
+Water weight fraction / -,Ultimate Collagen Stress / MPa,0.555,5.0,5.1e-03,71,-53.6,98.8
+Water weight fraction / -,Ultimate Strain / -,0.315,0.012,0.01,71,-0.266,0.087
 Water weight fraction / -,Mineral to Matrix Ratio / -,0.004,0.035,0.2,40,-2.6,-0.518
-Water weight fraction / -,Apparent Modulus Mineralized uFE / MPa,0.988,736.0,2.8e-06,77,-10205,10354
-Water weight fraction / -,Yield Stress uFE / MPa,0.983,5.9,6.0e-06,78,-81.6,83.4
-Water weight fraction / -,Ultimate Stress uFE / MPa,0.986,7.2,4.3e-06,78,-99.4,101
-Density / g/cm³,Apparent Modulus Mineralized / MPa,3.4e-06,1624.0,0.27,72,13464,31036
-Density / g/cm³,Apparent Modulus Demineralized / MPa,0.538,39.1,5.7e-03,69,-280,147
-Density / g/cm³,Ultimate Stress / MPa,0.618,4.8,3.7e-03,69,-19.5,32.6
-Density / g/cm³,Ultimate Collagen Stress / MPa,0.905,4.8,2.1e-04,69,-24.6,27.7
-Density / g/cm³,Ultimate Strain / -,0.037,0.011,0.06,69,0.004,0.122
+Water weight fraction / -,Apparent Modulus Mineralized uFE / MPa,0.992,747.0,1.3e-06,79,-10376,10479
+Water weight fraction / -,Yield Stress uFE / MPa,0.989,6.1,2.5e-06,80,-83.9,85.1
+Water weight fraction / -,Ultimate Stress uFE / MPa,0.999,7.3,1.4e-08,80,-102,102
+Density / g/cm³,Apparent Modulus Mineralized / MPa,2.8e-06,1610.0,0.26,74,13404,30685
+Density / g/cm³,Apparent Modulus Demineralized / MPa,0.481,38.9,7.2e-03,71,-285,136
+Density / g/cm³,Ultimate Stress / MPa,0.854,5.0,5.0e-04,71,-24.5,29.5
+Density / g/cm³,Ultimate Collagen Stress / MPa,0.849,5.0,5.3e-04,71,-29.8,24.6
+Density / g/cm³,Ultimate Strain / -,0.101,0.011,0.04,71,-0.01,0.114
 Density / g/cm³,Mineral to Matrix Ratio / -,0.026,0.037,0.12,40,0.04,0.591
-Density / g/cm³,Apparent Modulus Mineralized uFE / MPa,0.656,735.0,2.7e-03,77,-3934,2492
-Density / g/cm³,Yield Stress uFE / MPa,0.897,5.9,2.2e-04,78,-27.5,24.1
-Density / g/cm³,Ultimate Stress uFE / MPa,0.883,7.2,2.9e-04,78,-33.7,29.0
-Apparent Modulus Mineralized / MPa,Apparent Modulus Demineralized / MPa,1.0e-05,33.9,0.25,69,0.006,0.015
-Apparent Modulus Mineralized / MPa,Ultimate Stress / MPa,1.9e-07,3.9,0.33,69,9.45e-04,0.002
-Apparent Modulus Mineralized / MPa,Ultimate Collagen Stress / MPa,3.7e-06,4.1,0.27,69,7.91e-04,0.002
-Apparent Modulus Mineralized / MPa,Ultimate Strain / -,1.9e-04,0.01,0.19,69,1.26e-06,3.82e-06
-Apparent Modulus Mineralized / MPa,Apparent Modulus Mineralized uFE / MPa,0.27,721.0,0.02,71,-0.04,0.141
-Apparent Modulus Mineralized / MPa,Yield Stress uFE / MPa,0.157,5.8,0.03,72,-2.05e-04,0.001
-Apparent Modulus Mineralized / MPa,Ultimate Stress uFE / MPa,0.145,7.0,0.03,72,-2.29e-04,0.002
-Apparent Modulus Demineralized / MPa,Ultimate Stress / MPa,4.4e-16,2.9,0.63,69,0.079,0.115
-Apparent Modulus Demineralized / MPa,Ultimate Collagen Stress / MPa,1.3e-16,2.9,0.64,69,0.08,0.116
-Apparent Modulus Demineralized / MPa,Ultimate Strain / -,0.187,0.011,0.03,69,-2.28e-05,1.14e-04
+Density / g/cm³,Apparent Modulus Mineralized uFE / MPa,0.832,747.0,5.9e-04,79,-3590,2898
+Density / g/cm³,Yield Stress uFE / MPa,0.891,6.1,2.4e-04,80,-24.5,28.1
+Density / g/cm³,Ultimate Stress uFE / MPa,0.922,7.3,1.2e-04,80,-30.1,33.2
+Apparent Modulus Mineralized / MPa,Apparent Modulus Demineralized / MPa,1.8e-05,34.1,0.24,71,0.006,0.014
+Apparent Modulus Mineralized / MPa,Ultimate Stress / MPa,3.3e-06,4.3,0.27,71,8.28e-04,0.002
+Apparent Modulus Mineralized / MPa,Ultimate Collagen Stress / MPa,4.3e-05,4.4,0.22,71,6.71e-04,0.002
+Apparent Modulus Mineralized / MPa,Ultimate Strain / -,9.0e-04,0.011,0.15,71,1.01e-06,3.75e-06
+Apparent Modulus Mineralized / MPa,Apparent Modulus Mineralized uFE / MPa,0.232,731.0,0.02,73,-0.036,0.147
+Apparent Modulus Mineralized / MPa,Yield Stress uFE / MPa,0.134,5.9,0.03,74,-1.76e-04,0.001
+Apparent Modulus Mineralized / MPa,Ultimate Stress uFE / MPa,0.131,7.1,0.03,74,-2.06e-04,0.002
+Apparent Modulus Demineralized / MPa,Ultimate Stress / MPa,5.0e-16,3.1,0.62,71,0.081,0.119
+Apparent Modulus Demineralized / MPa,Ultimate Collagen Stress / MPa,2.3e-16,3.1,0.63,71,0.083,0.121
+Apparent Modulus Demineralized / MPa,Ultimate Strain / -,0.106,0.011,0.04,71,-1.27e-05,1.29e-04
 Apparent Modulus Demineralized / MPa,Mineral to Matrix Ratio / -,0.619,0.04,7.6e-03,35,-2.45e-04,4.05e-04
-Apparent Modulus Demineralized / MPa,Apparent Modulus Mineralized uFE / MPa,0.027,674.0,0.07,68,0.565,9.1
-Apparent Modulus Demineralized / MPa,Yield Stress uFE / MPa,0.024,5.4,0.07,69,0.005,0.073
-Apparent Modulus Demineralized / MPa,Ultimate Stress uFE / MPa,0.038,6.6,0.06,69,0.002,0.085
-Ultimate Stress / MPa,Ultimate Collagen Stress / MPa,3.5e-61,0.621,0.98,69,0.963,1.0
-Ultimate Stress / MPa,Ultimate Strain / -,8.2e-10,0.008,0.43,69,0.001,0.002
+Apparent Modulus Demineralized / MPa,Apparent Modulus Mineralized uFE / MPa,0.055,692.0,0.05,70,-0.1,8.6
+Apparent Modulus Demineralized / MPa,Yield Stress uFE / MPa,0.058,5.6,0.05,71,-0.001,0.068
+Apparent Modulus Demineralized / MPa,Ultimate Stress uFE / MPa,0.071,6.8,0.05,71,-0.003,0.08
+Ultimate Stress / MPa,Ultimate Collagen Stress / MPa,1.5e-64,0.618,0.98,71,0.971,1.0
+Ultimate Stress / MPa,Ultimate Strain / -,1.7e-11,0.008,0.48,71,0.001,0.002
 Ultimate Stress / MPa,Mineral to Matrix Ratio / -,0.715,0.04,4.1e-03,35,-0.002,0.003
-Ultimate Stress / MPa,Apparent Modulus Mineralized uFE / MPa,0.024,673.0,0.08,68,5.5,74.4
-Ultimate Stress / MPa,Yield Stress uFE / MPa,0.017,5.4,0.08,69,0.062,0.615
-Ultimate Stress / MPa,Ultimate Stress uFE / MPa,0.025,6.6,0.07,69,0.049,0.72
-Ultimate Strain / -,Ultimate Collagen Stress / MPa,1.4e-08,3.8,0.38,69,183,347
-Ultimate Strain / -,Ultimate Stress uFE / MPa,0.362,6.8,0.01,69,-79.9,216
-Ultimate Strain / -,Yield Stress uFE / MPa,0.329,5.6,0.01,69,-62.1,183
-Ultimate Strain / -,Apparent Modulus Mineralized uFE / MPa,0.401,696.0,0.01,68,-8795,21707
-Apparent Modulus Mineralized uFE / MPa,Yield Stress uFE / MPa,2.7e-66,0.818,0.98,77,0.008,0.008
-Apparent Modulus Mineralized uFE / MPa,Ultimate Stress uFE / MPa,2.7e-61,1.2,0.97,77,0.009,0.01
-Yield Stress uFE / MPa,Ultimate Stress uFE / MPa,3.3e-69,0.93,0.98,78,1.2,1.2
+Ultimate Stress / MPa,Apparent Modulus Mineralized uFE / MPa,0.149,700.0,0.03,70,-9.1,58.5
+Ultimate Stress / MPa,Yield Stress uFE / MPa,0.152,5.7,0.03,71,-0.076,0.475
+Ultimate Stress / MPa,Ultimate Stress uFE / MPa,0.148,6.8,0.03,71,-0.088,0.571
+Ultimate Strain / -,Ultimate Collagen Stress / MPa,2.9e-10,3.8,0.44,71,208,362
+Ultimate Strain / -,Ultimate Stress uFE / MPa,0.847,6.9,5.4e-04,71,-129,156
+Ultimate Strain / -,Yield Stress uFE / MPa,0.901,5.8,2.3e-04,71,-111,126
+Ultimate Strain / -,Apparent Modulus Mineralized uFE / MPa,0.916,711.0,1.7e-04,70,-13852,15407
+Apparent Modulus Mineralized uFE / MPa,Yield Stress uFE / MPa,5.8e-68,0.84,0.98,79,0.008,0.008
+Apparent Modulus Mineralized uFE / MPa,Ultimate Stress uFE / MPa,2.1e-62,1.2,0.97,79,0.009,0.01
+Yield Stress uFE / MPa,Ultimate Stress uFE / MPa,1.6e-69,0.988,0.98,80,1.2,1.2

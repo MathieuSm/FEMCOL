@@ -18,8 +18,8 @@ from scipy.stats import linregress
 
 # Set directory & load data
 Cwd = Path.cwd()
-DataPath = Cwd / '04_Results/ResultsOverviewMod.csv'
-# DataPath = 'C:/Users/Stefan/Dropbox/02_MScThesis/09_Results/ResultsOverview.csv'
+# DataPath = Cwd / '04_Results/ResultsOverview.csv'
+DataPath = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/ResultsOverview.csv'
 df = pd.read_csv(str(DataPath), skiprows=0)
 SampleID = df['Sample ID'].values.tolist()
 
@@ -282,7 +282,7 @@ for i in tqdm(range(len(Pair))):
     cv = round(100*(RMSE/statistics.mean(Y_Obs))[0], 2)
 
     savepath = Cwd / '04_Results/04_Plots/'
-    savepathCorrMat = Cwd / '04_Results/04_Plots/'
+    savepath_windows = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/04_Plots'
     Figure, Axes = plt.subplots(1, 1, figsize=(5.5, 4.5), dpi=300, sharey=True, sharex=True)
     male_age = Data[Data['Gender'] == 'M']['Age / y']
     female_age = Data[Data['Gender'] == 'F']['Age / y']
@@ -378,7 +378,9 @@ for i in tqdm(range(len(Pair))):
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 # plt.legend(loc='upper center', ncol=2, bbox_to_anchor=(0.5, 1.15), prop={'size': 10})
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
-                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                # plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                #             dpi=300, bbox_inches='tight', format='png', )
+                plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
                 plt.close()
@@ -388,8 +390,10 @@ for i in tqdm(range(len(Pair))):
                 plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
-                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, bbox_inches='tight', format='png')
+                # plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                #             dpi=300, bbox_inches='tight', format='png')
+                plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                            dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
                 plt.close()
             # plt.close(Figure)
@@ -422,8 +426,10 @@ for i in tqdm(range(len(Pair))):
                 plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
-                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, bbox_inches='tight', format='png')
+                # plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                #             dpi=300, bbox_inches='tight', format='png')
+                plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                            dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
                 plt.close()
                 j = j + 1
@@ -432,8 +438,10 @@ for i in tqdm(range(len(Pair))):
                 plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
-                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, bbox_inches='tight', format='png')
+                # plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                #             dpi=300, bbox_inches='tight', format='png')
+                plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                            dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
                 plt.close()
             # plt.close(Figure)
@@ -467,8 +475,10 @@ for i in tqdm(range(len(Pair))):
                 plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
-                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, bbox_inches='tight', format='png')
+                # plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                #             dpi=300, bbox_inches='tight', format='png')
+                plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                            dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
                 plt.close()
                 j = j + 1
@@ -477,8 +487,10 @@ for i in tqdm(range(len(Pair))):
                 plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
-                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, bbox_inches='tight', format='png')
+                # plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                #             dpi=300, bbox_inches='tight', format='png')
+                plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                            dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
                 plt.close()
             # plt.close(Figure)
@@ -505,8 +517,10 @@ for i in tqdm(range(len(Pair))):
                 plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
-                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, bbox_inches='tight', format='png')
+                # plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                #             dpi=300, bbox_inches='tight', format='png')
+                plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                            dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
                 plt.close()
                 j = j + 1
@@ -515,8 +529,10 @@ for i in tqdm(range(len(Pair))):
                 plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
-                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, bbox_inches='tight', format='png')
+                # plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                #             dpi=300, bbox_inches='tight', format='png')
+                plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                            dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
                 plt.close()
             # plt.close(Figure)
@@ -526,7 +542,8 @@ for i in tqdm(range(len(Pair))):
     results.append(values)
 result_dir = pd.DataFrame(results, columns=['X-axis', 'Y-axis', 'p-value', '\u03C3\u2091\u209B\u209C', 'R\u00B2', 'N',
                                             'lower bound 95% CI', 'upper bound 95% CI'])
-result_dir.to_csv(os.path.join(savepath, 'ResultsPlots.csv'), index=False)
+# result_dir.to_csv(os.path.join(savepath, 'ResultsPlots.csv'), index=False)
+result_dir.to_csv(os.path.join(savepath_windows, 'ResultsPlots.csv'), index=False)
 # result_dir.to_csv(os.path.join(savepath, 'ResultsPlots_appendix.csv'), index=False)
 
 # boxplots of specific component weights
@@ -541,7 +558,8 @@ bp = ax1.boxplot(WF)
 ax1.set_ylabel('Weight Fraction / -')
 ax1.set_xticklabels(['Mineral', 'Organic', 'Water'])
 plt.ylim(ymin=0)
-plt.savefig(os.path.join(savepath, 'WF_boxplt.png'), dpi=300, bbox_inches='tight', format='png')
+# plt.savefig(os.path.join(savepath, 'WF_boxplt.png'), dpi=300, bbox_inches='tight', format='png')
+plt.savefig(os.path.join(savepath_windows, 'WF_boxplt.png'), dpi=300, bbox_inches='tight', format='png')
 plt.show()
 
 # boxplot of AMM/AMD
@@ -599,5 +617,6 @@ ax2.plot((1 - d, 1 + d), (1 - d, 1 + d), **kwargs)  # bottom-right diagonal
 # ax and ax2 via f.subplots_adjust(hspace=...) or plt.subplot_tool(),
 # the diagonal lines will move accordingly, and stay right at the tips
 # of the spines they are 'breaking'
-plt.savefig(os.path.join(savepath, 'AM_boxplt.png'), dpi=300, bbox_inches='tight', format='png')
+# plt.savefig(os.path.join(savepath, 'AM_boxplt.png'), dpi=300, bbox_inches='tight', format='png')
+plt.savefig(os.path.join(savepath_windows, 'AM_boxplt.png'), dpi=300, bbox_inches='tight', format='png')
 plt.show()
