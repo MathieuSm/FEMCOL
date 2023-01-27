@@ -30,7 +30,7 @@ filename_list = [File for File in os.listdir(DataPath) if File.endswith('.csv')]
 filename_list.sort()
 
 # load uCT results & remove naN entries; areas needed for stress calculations
-results_uCT = pd.read_csv(str('/home/stefan/Documents/FEMCOL/04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
+results_uCT = pd.read_csv(str(Cwd / '04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
 # results_uCT = pd.read_csv(str('C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
 # results_uCT = results_uCT.drop(index=[8, 14, 20, 24, 37], axis=0)
 test = results_uCT.drop(results_uCT.loc[results_uCT['Sample ID'] == '390_R'].index)
@@ -165,12 +165,16 @@ for filename in tqdm(filename_list):
 
     # calculate stress/strain, filter and put into dataframe
     l_initial = 6.5
-    mean_area_wop = results_uCT['Mean Apparent Area mm^2'][counter]
+    mean_area_wop = results_uCT['Mean Apparent Area / mm^2'][counter]
+    mean_bone_area_wp = results_uCT['Mean Bone Area / mm^2'][counter]
     stress_wop = df['force_lc'] / mean_area_wop
+    stress_bone_wp = df['force_lc'] / mean_bone_area_wp
     strain = df['disp_ext'] / l_initial
     df['stress_lc_wop'] = stress_wop
+    df['stress_bone_wp'] = stress_bone_wp
     df['strain_ext'] = strain
     df['stress_lc_filtered_wop'] = butter_lowpass_filter(df['stress_lc_wop'], cutoff)
+    df['stress_bone_wp_filtered'] = butter_lowpass_filter(df['stress_bone_wp'], cutoff)
     counter = counter + 1
 
     # plot stress/strain
@@ -192,6 +196,9 @@ for filename in tqdm(filename_list):
     last_cycle_strain = last_cycle_strain.dropna().reset_index(drop=True)
     last_cycle_stress = last_cycle_stress.dropna().reset_index(drop=True)
 
+    last_cycle_stress_bone = df['stress_bone_wp_filtered'][peaks_index[-1]:]
+    last_cycle_stress_bone = last_cycle_stress_bone.dropna().reset_index(drop=True)
+
     # plot last cycle of stress/strain curve
     plt.figure()
     plt.title(sample_ID)
@@ -204,8 +211,11 @@ for filename in tqdm(filename_list):
     ## calculate apparent modulus by using rolling regression
     # isolate stress/strain values of defined strain region
     last_cycle = pd.DataFrame()
+    last_cycle_sb = pd.DataFrame()
     last_cycle['last_cycle_strain'] = round(last_cycle_strain, 5)
     last_cycle['last_cycle_stress'] = round(last_cycle_stress, 5)
+    last_cycle_sb['last_cycle_strain_sb'] = round(last_cycle_strain, 5)
+    last_cycle_sb['last_cycle_stress_sb'] = round(last_cycle_stress_bone, 3)
 
     # identify index range of defined region, exact upper_strain value not found
     if 0.00250 in last_cycle['last_cycle_strain'].values:
@@ -225,21 +235,33 @@ for filename in tqdm(filename_list):
     max_strain_ind = min(upper_cond.index)
     min_strain_ind = min(lower_cond.index)
     last_cycle = last_cycle[max_strain_ind:min_strain_ind]
+    last_cycle_sb = last_cycle_sb[max_strain_ind:min_strain_ind]
 
     # initialize lists for slope/intercept value collection
     slope_values_app = list()
     intercept_values_app = list()
+    slope_values_sb = list()
+    intercept_values_sb = list()
 
     # rolling linear regression for apparent modulus calculation
     for x in range(max_strain_ind, min_strain_ind - window_width + 1, 1):
         last_cycle_mod = last_cycle[x:x+window_width]
+        last_cycle_mod_sb = last_cycle_sb[x:x+window_width]
         slope_app, intercept_app, r_value, p_value, std_err = stats.linregress(last_cycle_mod['last_cycle_strain'],
                                                                                last_cycle_mod['last_cycle_stress'])
+        slope_sb, intercept_sb, r_value_sb, p_value_sb, std_err_sb = stats.linregress(last_cycle_mod_sb['last_cycle_strain_sb'],
+                                                                                      last_cycle_mod_sb['last_cycle_stress_sb'])
         # collect slope value & add to growing list; same for intercept
         slope_value_app = slope_app
         slope_values_app.append(slope_value_app)
         intercept_value_app = intercept_app
         intercept_values_app.append(intercept_value_app)
+
+        slope_value_sb = slope_sb
+        slope_values_sb.append(slope_value_sb)
+        intercept_value_sb = intercept_sb
+        intercept_values_sb.append(intercept_value_sb)
+
 
     # Create DataFrames for slope or stiffness & intercept to search for max. values & indices; create cycle for plotting
     slope_value_app_df = pd.DataFrame(slope_values_app)
@@ -249,6 +271,14 @@ for filename in tqdm(filename_list):
     max_slope_index_app = max_slope_index_app.index
     intercept_value_max_app = intercept_values_app_df.loc[max_slope_index_app[0]].values[0]
     last_cycle_plot = last_cycle[max_slope_index_app[0]:max_slope_index_app[0] + window_width]
+
+    slope_value_sb_df = pd.DataFrame(slope_values_sb)
+    intercept_values_sb_df = pd.DataFrame(intercept_values_sb)
+    modulus_sb = slope_value_sb_df.max()[0]
+    max_slope_index_sb = slope_value_sb_df[slope_value_sb_df == modulus_sb].dropna()
+    max_slope_index_sb = max_slope_index_sb.index
+    intercept_value_max_sb = intercept_values_sb_df.loc[max_slope_index_sb[0]].values[0]
+    last_cycle_plot = last_cycle[max_slope_index_sb[0]:max_slope_index_sb[0] + window_width]
 
     # generate plot
     # plt.figure(figsize=(6, 4))
@@ -273,9 +303,9 @@ for filename in tqdm(filename_list):
 
     # create list with current values which are sample_ID, slope & apparent modulus & add them to result list which
     # is then converted to dataframe
-    values = [sample_ID, round(stiffness), round(apparent_modulus)]
+    values = [sample_ID, round(stiffness), round(apparent_modulus), round(modulus_sb)]
     result.append(values)
-    result_dir = pd.DataFrame(result, columns=['Sample ID', 'Stiffness N/mm', 'Apparent modulus MPa'])
+    result_dir = pd.DataFrame(result, columns=['Sample ID', 'Stiffness N/mm', 'Apparent modulus MPa', 'Modulus Mineralized MPa'])
 
     rcParams.update({'figure.autolayout': True})
     time = pd.DataFrame()
@@ -294,7 +324,7 @@ for filename in tqdm(filename_list):
     ax2.autoscale()
     plt.rcParams.update({'font.size': 14})
     # savepath_new = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/00_Mineralized/02_disp_force_time'
-    savepath_new = '/home/stefan/Documents/FEMCOL/04_Results/00_Mineralized/02_disp_force_time'
+    savepath_new = Cwd / '04_Results/00_Mineralized/02_disp_force_time'
     plt.savefig(os.path.join(savepath_new, 'disp_time_el_' + sample_ID + '.png'), dpi=300, bbox_inches='tight',
                 format='png')
     # plt.show()
@@ -305,7 +335,7 @@ missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '400R', '402L',
 result_dir = pd.concat([result_dir, missing_sample_IDs])
 result_dir_sorted = result_dir.sort_values(by=['Sample ID'], ascending=True)
 
-result_dir_sorted.to_csv(os.path.join('/home/stefan/Documents/FEMCOL/04_Results/00_Mineralized/',
+result_dir_sorted.to_csv(os.path.join('/home/stefan/PycharmProjects/FEMCOL/04_Results/00_Mineralized/',
                                       'ResultsElasticTesting.csv'), index=False)
 # result_dir_sorted.to_csv(os.path.join('C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/00_Mineralized',
 #                                       'ResultsElasticTesting.csv'), index=False)
