@@ -8,6 +8,7 @@ from skimage import filters             # Used to perform filtering image operat
 from skimage import morphology, measure # Used to fill pores and circle fitting
 import statistics                       # Used to perform statistics
 import os
+from tqdm import tqdm
 
 
 # Set directories
@@ -24,7 +25,7 @@ print(Data)
 ThresholdValues = list()
 
 # Select sample to analyze (numbering starting from 0)
-for x in range(0, len(Data), 1):
+for x in tqdm(range(0, len(Data), 1)):
     SampleNumber = x
     File = Data.loc[SampleNumber, 'uCT File']
 
@@ -39,7 +40,6 @@ for x in range(0, len(Data), 1):
     SampleID = Data.loc[SampleNumber, 'Sample']
     values = [SampleID, Threshold]
     ThresholdValues.append(values)
-    print(x)
 
 # Create dataframe with threshold values, take mean and put into new dataframe which is saved as .csv
 result_dir = pd.DataFrame(ThresholdValues, columns=['Sample ID', 'Otsu Threshold'])
@@ -47,4 +47,4 @@ mean_otsu = list()
 mean_otsu.append(round(statistics.mean(result_dir['Otsu Threshold']), 3))
 mean_otsu = pd.DataFrame(mean_otsu, columns=['Mean Otsu Threshold'])
 
-mean_otsu.to_csv(os.path.join('/home/stefan/Documents/FEMCOL/04_Results/03_uCT/', 'MeanOtsu.csv'), index=False)
+mean_otsu.to_csv(os.path.join('/home/stefan/PycharmProjects/FEMCOL/04_Results/03_uCT/', 'MeanOtsu.csv'), index=False)
