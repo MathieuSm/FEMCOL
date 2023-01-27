@@ -19,7 +19,7 @@ from scipy.stats import linregress
 # Set directory & load data
 Cwd = Path.cwd()
 # DataPath = Cwd / '04_Results/ResultsOverview.csv'
-DataPath = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/ResultsOverview.csv'
+DataPath = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/ResultsOverviewMod.csv'
 df = pd.read_csv(str(DataPath), skiprows=0)
 SampleID = df['Sample ID'].values.tolist()
 
