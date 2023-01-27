@@ -187,6 +187,10 @@ Pair = pd.DataFrame([
                      ['Ultimate Stress / MPa',                    'Apparent Modulus Mineralized uFE / MPa'],
                      ['Ultimate Stress / MPa',                    'Yield Stress uFE / MPa'],
                      ['Ultimate Stress / MPa',                    'Ultimate Stress uFE / MPa'],
+                     ['Ultimate Strain / -',                      'Ultimate Collagen Stress / MPa'],
+                     ['Ultimate Strain / -',                      'Ultimate Stress uFE / MPa'],
+                     ['Ultimate Strain / -',                      'Yield Stress uFE / MPa'],
+                     ['Ultimate Strain / -',                      'Apparent Modulus Mineralized uFE / MPa'],
                      ['Apparent Modulus Mineralized uFE / MPa',   'Yield Stress uFE / MPa'],
                      ['Apparent Modulus Mineralized uFE / MPa',   'Ultimate Stress uFE / MPa'],
                      ['Yield Stress uFE / MPa',                   'Ultimate Stress uFE / MPa'],
@@ -371,7 +375,8 @@ for i in tqdm(range(len(Pair))):
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, bbox_inches='tight', format='png', )
-                plt.show()
+                # plt.show()
+                plt.close()
                 j = j + 1
             else:
                 # plt.ylim(ymin=0)
@@ -380,7 +385,8 @@ for i in tqdm(range(len(Pair))):
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, bbox_inches='tight', format='png')
-                plt.show()
+                # plt.show()
+                plt.close()
             # plt.close(Figure)
 
         # don't use colormap if age is plotted on main axes
@@ -413,7 +419,8 @@ for i in tqdm(range(len(Pair))):
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, bbox_inches='tight', format='png')
-                plt.show()
+                # plt.show()
+                plt.close()
                 j = j + 1
             else:
                 # plt.ylim(ymin=0)
@@ -422,7 +429,8 @@ for i in tqdm(range(len(Pair))):
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, bbox_inches='tight', format='png')
-                plt.show()
+                # plt.show()
+                plt.close()
             # plt.close(Figure)
     # if p-value greater than 0.05, no fit will be drawn & if age is contained on main axes, no colormap will be used
     else:
@@ -456,7 +464,8 @@ for i in tqdm(range(len(Pair))):
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, bbox_inches='tight', format='png')
-                plt.show()
+                # plt.show()
+                plt.close()
                 j = j + 1
             else:
                 # plt.ylim(ymin=0)
@@ -465,7 +474,8 @@ for i in tqdm(range(len(Pair))):
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, bbox_inches='tight', format='png')
-                plt.show()
+                # plt.show()
+                plt.close()
             # plt.close(Figure)
 
         # use of colormap if age is not plotted on main axes
@@ -492,7 +502,8 @@ for i in tqdm(range(len(Pair))):
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, bbox_inches='tight', format='png')
-                plt.show()
+                # plt.show()
+                plt.close()
                 j = j + 1
             else:
                 # plt.ylim(ymin=0)
@@ -501,7 +512,8 @@ for i in tqdm(range(len(Pair))):
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, bbox_inches='tight', format='png')
-                plt.show()
+                # plt.show()
+                plt.close()
             # plt.close(Figure)
 
 # Put everything into growing list and convert to DataFrame that is saved as .csv file

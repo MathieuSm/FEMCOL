@@ -154,6 +154,10 @@ Ultimate Stress / MPa,Mineral to Matrix Ratio / -,0.358,0.039,0.03,35,-0.002,0.0
 Ultimate Stress / MPa,Apparent Modulus Mineralized uFE / MPa,0.034,676.0,0.07,68,3.0,73.4
 Ultimate Stress / MPa,Yield Stress uFE / MPa,0.022,5.4,0.08,69,0.05,0.614
 Ultimate Stress / MPa,Ultimate Stress uFE / MPa,0.032,6.6,0.07,69,0.034,0.719
+Ultimate Strain / -,Ultimate Collagen Stress / MPa,1.4e-08,3.8,0.38,69,183,347
+Ultimate Strain / -,Ultimate Stress uFE / MPa,0.362,6.8,0.01,69,-79.9,216
+Ultimate Strain / -,Yield Stress uFE / MPa,0.329,5.6,0.01,69,-62.1,183
+Ultimate Strain / -,Apparent Modulus Mineralized uFE / MPa,0.401,696.0,0.01,68,-8795,21707
 Apparent Modulus Mineralized uFE / MPa,Yield Stress uFE / MPa,2.7e-66,0.818,0.98,77,0.008,0.008
 Apparent Modulus Mineralized uFE / MPa,Ultimate Stress uFE / MPa,2.7e-61,1.2,0.97,77,0.009,0.01
 Yield Stress uFE / MPa,Ultimate Stress uFE / MPa,3.3e-69,0.93,0.98,78,1.2,1.2
