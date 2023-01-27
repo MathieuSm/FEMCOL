@@ -18,7 +18,7 @@ from scipy.stats import linregress
 
 # Set directory & load data
 Cwd = Path.cwd()
-DataPath = Cwd / '04_Results/ResultsOverview.csv'
+DataPath = Cwd / '04_Results/ResultsOverviewMod.csv'
 # DataPath = 'C:/Users/Stefan/Dropbox/02_MScThesis/09_Results/ResultsOverview.csv'
 df = pd.read_csv(str(DataPath), skiprows=0)
 SampleID = df['Sample ID'].values.tolist()
@@ -26,14 +26,17 @@ SampleID = df['Sample ID'].values.tolist()
 # Create dataframe with variable names & respective abbreviations
 ColumnNames = pd.DataFrame()
 ColumnNames['Column Names'] = df.columns
-column_names_abbrev = ['SID', 'Age', 'G', 'Site', 'SM', 'EM', 'UF', 'USTRE', 'UCSTRE', 'USTRA', 'SD', 'EC', 'D', 'OW',
-                       'MW', 'WW', 'MWF', 'OWF', 'WWF', 'BVTV', 'BMD', 'TMD', 'BMC', 'MINA', 'COVAR', 'MEANAA', 'MEANBA',
-                       'MINED', 'MEANAD', 'MEANAF', 'MINAF', 'MMR', 'EMFE', 'YSFE', 'USTREFE']
+column_names_abbrev = ['SID', 'Age', 'G', 'Site', 'SM', 'SD', 'EAPPM', 'EM', 'UF', 'UAPPSTRE', 'UCSTRE', 'USTRE',
+                       'USTRA', 'EAPPC', 'EC', 'D', 'OW', 'MW', 'WW', 'MWF', 'OWF', 'WWF', 'BVTV', 'BMD', 'TMD', 'BMC',
+                       'MINA', 'COVAR', 'MEANAA', 'MEANBA', 'MINED', 'MEANAD', 'MEANAF', 'MINAF', 'MMR', 'EAPPFE',
+                       'YSTREFE', 'USTREFE']
 ColumnNames['Abbreviations'] = column_names_abbrev
 
 Pair = pd.DataFrame([
                      ['Age / y',                                  'Apparent Modulus Demineralized / MPa'],
                      ['Age / y',                                  'Apparent Modulus Mineralized / MPa'],
+                     ['Age / y',                                  'Modulus Mineralized / MPa'],
+                     ['Age / y',                                  'Modulus Demineralized / MPa'],
                      ['Age / y',                                  'Bone Mineral Content / mg HA'],
                      ['Age / y',                                  'Bone Mineral Density / mg HA / cm³'],
                      ['Age / y',                                  'Bone Volume Fraction / -'],
@@ -47,8 +50,9 @@ Pair = pd.DataFrame([
                      ['Age / y',                                  'Tissue Mineral Density / mg HA / cm³'],
                      ['Age / y',                                  'Ultimate Force / N'],
                      ['Age / y',                                  'Ultimate Strain / -'],
-                     ['Age / y',                                  'Ultimate Stress / MPa'],
+                     ['Age / y',                                  'Ultimate Apparent Stress / MPa'],
                      ['Age / y',                                  'Ultimate Collagen Stress / MPa'],
+                     ['Age / y',                                  'Ultimate Stress / MPa'],
                      ['Age / y',                                  'Water Weight / g'],
                      ['Age / y',                                  'Water weight fraction / -'],
                      ['Age / y',                                  'Mean Apparent Area / mm²'],
