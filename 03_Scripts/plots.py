@@ -18,7 +18,7 @@ from scipy.stats import linregress
 
 # Set directory & load data
 Cwd = Path.cwd()
-DataPath = Cwd / '04_Results/ResultsOverviewMod.csv'
+DataPath = Cwd / '04_Results/ResultsOverview.csv'
 # DataPath = 'C:/Users/Stefan/Dropbox/02_MScThesis/09_Results/ResultsOverview.csv'
 df = pd.read_csv(str(DataPath), skiprows=0)
 SampleID = df['Sample ID'].values.tolist()
@@ -27,8 +27,8 @@ SampleID = df['Sample ID'].values.tolist()
 ColumnNames = pd.DataFrame()
 ColumnNames['Column Names'] = df.columns
 column_names_abbrev = ['SID', 'Age', 'G', 'Site', 'SM', 'EM', 'UF', 'USTRE', 'UCSTRE', 'USTRA', 'SD', 'EC', 'D', 'OW',
-                       'MW', 'WW', 'MWF', 'OWF', 'WWF', 'BVTV', 'BMD', 'TMD', 'BMC', 'MINA', 'MEANAA', 'MINED',
-                       'MEANAD', 'MEANAF', 'MINAF', 'MMR', 'EMFE', 'YSFE', 'USTREFE']
+                       'MW', 'WW', 'MWF', 'OWF', 'WWF', 'BVTV', 'BMD', 'TMD', 'BMC', 'MINA', 'COVAR', 'MEANAA', 'MEANBA',
+                       'MINED', 'MEANAD', 'MEANAF', 'MINAF', 'MMR', 'EMFE', 'YSFE', 'USTREFE']
 ColumnNames['Abbreviations'] = column_names_abbrev
 
 Pair = pd.DataFrame([
@@ -59,6 +59,7 @@ Pair = pd.DataFrame([
                      ['Age / y',                                  'Apparent Modulus Mineralized uFE / MPa'],
                      ['Age / y',                                  'Yield Stress uFE / MPa'],
                      ['Age / y',                                  'Ultimate Stress uFE / MPa'],
+                     ['Age / y',                                  'Coefficient of Variance / -'],
                      ['Bone Mineral Content / mg HA',             'Stiffness Mineralized / N/mm'],
                      ['Bone Mineral Density / mg HA / cm³',       'Apparent Modulus Mineralized / MPa'],
                      ['Bone Mineral Density / mg HA / cm³',       'Ultimate Stress / MPa'],
