@@ -18,8 +18,8 @@ from scipy.stats import linregress
 
 # Set directory & load data
 Cwd = Path.cwd()
-# DataPath = Cwd / '04_Results/ResultsOverview.csv'
-DataPath = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/ResultsOverviewMod.csv'
+DataPath = Cwd / '04_Results/ResultsOverview.csv'
+# DataPath = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/ResultsOverviewMod.csv'
 df = pd.read_csv(str(DataPath), skiprows=0)
 SampleID = df['Sample ID'].values.tolist()
 
@@ -28,7 +28,7 @@ ColumnNames = pd.DataFrame()
 ColumnNames['Column Names'] = df.columns
 column_names_abbrev = ['SID', 'Age', 'G', 'Site', 'SM', 'SD', 'EAPPM', 'EM', 'UF', 'UAPPSTRE', 'UCSTRE', 'USTRE',
                        'USTRA', 'EAPPC', 'EC', 'D', 'OW', 'MW', 'WW', 'MWF', 'OWF', 'WWF', 'BVTV', 'BMD', 'TMD', 'BMC',
-                       'MINA', 'COVAR', 'MEANAA', 'MEANBA', 'MINED', 'MEANAD', 'MEANAF', 'MINAF', 'MMR', 'EAPPFE',
+                       'MINECMA', 'COVAR', 'MEANAA', 'MEANBA', 'MINED', 'MEANAD', 'MEANAF', 'MINAF', 'MMR', 'EAPPFE',
                        'YSTREFE', 'USTREFE']
 ColumnNames['Abbreviations'] = column_names_abbrev
 
@@ -65,6 +65,7 @@ Pair = pd.DataFrame([
                      ['Age / y',                                  'Ultimate Stress uFE / MPa'],
                      ['Age / y',                                  'Coefficient of Variance / -'],
                      ['Bone Mineral Content / mg HA',             'Stiffness Mineralized / N/mm'],
+                     ['Bone Mineral Content / mg HA',             'Min ECM Area / mm²'],
                      ['Bone Mineral Density / mg HA / cm³',       'Apparent Modulus Mineralized / MPa'],
                      ['Bone Mineral Density / mg HA / cm³',       'Ultimate Stress / MPa'],
                      ['Bone Volume Fraction / -',                 'Apparent Modulus Mineralized / MPa'],
@@ -103,6 +104,7 @@ Pair = pd.DataFrame([
                      ['Bone Volume Fraction / -',                 'Apparent Modulus Mineralized uFE / MPa'],
                      ['Bone Volume Fraction / -',                 'Yield Stress uFE / MPa'],
                      ['Bone Volume Fraction / -',                 'Ultimate Stress uFE / MPa'],
+                     ['Bone Volume Fraction / -',                 'Min ECM Area / mm²'],
                      ['Bone Mineral Density / mg HA / cm³',       'Tissue Mineral Density / mg HA / cm³'],
                      ['Bone Mineral Density / mg HA / cm³',       'Mineral weight fraction / -'],
                      ['Bone Mineral Density / mg HA / cm³',       'Organic weight fraction / -'],
@@ -117,6 +119,7 @@ Pair = pd.DataFrame([
                      ['Bone Mineral Density / mg HA / cm³',       'Apparent Modulus Mineralized uFE / MPa'],
                      ['Bone Mineral Density / mg HA / cm³',       'Yield Stress uFE / MPa'],
                      ['Bone Mineral Density / mg HA / cm³',       'Ultimate Stress uFE / MPa'],
+                     ['Bone Mineral Density / mg HA / cm³',       'Min ECM Area / mm²'],
                      ['Tissue Mineral Density / mg HA / cm³',     'Mineral weight fraction / -'],
                      ['Tissue Mineral Density / mg HA / cm³',     'Organic weight fraction / -'],
                      ['Tissue Mineral Density / mg HA / cm³',     'Water weight fraction / -'],
@@ -130,6 +133,7 @@ Pair = pd.DataFrame([
                      ['Tissue Mineral Density / mg HA / cm³',     'Apparent Modulus Mineralized uFE / MPa'],
                      ['Tissue Mineral Density / mg HA / cm³',     'Yield Stress uFE / MPa'],
                      ['Tissue Mineral Density / mg HA / cm³',     'Ultimate Stress uFE / MPa'],
+                     ['Tissue Mineral Density / mg HA / cm³',       'Min ECM Area / mm²'],
                      ['Mineral weight fraction / -',              'Organic weight fraction / -'],
                      ['Mineral weight fraction / -',              'Water weight fraction / -'],
                      ['Mineral weight fraction / -',              'Density / g/cm³'],
@@ -142,6 +146,7 @@ Pair = pd.DataFrame([
                      ['Mineral weight fraction / -',              'Apparent Modulus Mineralized uFE / MPa'],
                      ['Mineral weight fraction / -',              'Yield Stress uFE / MPa'],
                      ['Mineral weight fraction / -',              'Ultimate Stress uFE / MPa'],
+                     ['Mineral weight fraction / -',              'Min ECM Area / mm²'],
                      ['Organic weight fraction / -',              'Water weight fraction / -'],
                      ['Organic weight fraction / -',              'Density / g/cm³'],
                      ['Organic weight fraction / -',              'Apparent Modulus Mineralized / MPa'],
@@ -153,6 +158,7 @@ Pair = pd.DataFrame([
                      ['Organic weight fraction / -',              'Apparent Modulus Mineralized uFE / MPa'],
                      ['Organic weight fraction / -',              'Yield Stress uFE / MPa'],
                      ['Organic weight fraction / -',              'Ultimate Stress uFE / MPa'],
+                     ['Organic weight fraction / -',              'Min ECM Area / mm²'],
                      ['Water weight fraction / -',                'Density / g/cm³'],
                      ['Water weight fraction / -',                'Apparent Modulus Mineralized / MPa'],
                      ['Water weight fraction / -',                'Apparent Modulus Demineralized / MPa'],
@@ -163,6 +169,7 @@ Pair = pd.DataFrame([
                      ['Water weight fraction / -',                'Apparent Modulus Mineralized uFE / MPa'],
                      ['Water weight fraction / -',                'Yield Stress uFE / MPa'],
                      ['Water weight fraction / -',                'Ultimate Stress uFE / MPa'],
+                     ['Water weight fraction / -',                'Min ECM Area / mm²'],
                      ['Density / g/cm³',                          'Apparent Modulus Mineralized / MPa'],
                      ['Density / g/cm³',                          'Apparent Modulus Demineralized / MPa'],
                      ['Density / g/cm³',                          'Ultimate Stress / MPa'],
@@ -172,6 +179,7 @@ Pair = pd.DataFrame([
                      ['Density / g/cm³',                          'Apparent Modulus Mineralized uFE / MPa'],
                      ['Density / g/cm³',                          'Yield Stress uFE / MPa'],
                      ['Density / g/cm³',                          'Ultimate Stress uFE / MPa'],
+                     ['Density / g/cm³',                          'Min ECM Area / mm²'],
                      ['Apparent Modulus Mineralized / MPa',       'Apparent Modulus Demineralized / MPa'],
                      ['Apparent Modulus Mineralized / MPa',       'Ultimate Stress / MPa'],
                      ['Apparent Modulus Mineralized / MPa',       'Ultimate Collagen Stress / MPa'],
@@ -179,6 +187,7 @@ Pair = pd.DataFrame([
                      ['Apparent Modulus Mineralized / MPa',       'Apparent Modulus Mineralized uFE / MPa'],
                      ['Apparent Modulus Mineralized / MPa',       'Yield Stress uFE / MPa'],
                      ['Apparent Modulus Mineralized / MPa',       'Ultimate Stress uFE / MPa'],
+                     ['Apparent Modulus Mineralized / MPa',       'Min ECM Area / mm²'],
                      ['Apparent Modulus Demineralized / MPa',     'Ultimate Stress / MPa'],
                      ['Apparent Modulus Demineralized / MPa',     'Ultimate Collagen Stress / MPa'],
                      ['Apparent Modulus Demineralized / MPa',     'Ultimate Strain / -'],
@@ -186,20 +195,24 @@ Pair = pd.DataFrame([
                      ['Apparent Modulus Demineralized / MPa',     'Apparent Modulus Mineralized uFE / MPa'],
                      ['Apparent Modulus Demineralized / MPa',     'Yield Stress uFE / MPa'],
                      ['Apparent Modulus Demineralized / MPa',     'Ultimate Stress uFE / MPa'],
+                     ['Apparent Modulus Demineralized / MPa',     'Min ECM Area / mm²'],
                      ['Ultimate Stress / MPa',                    'Ultimate Collagen Stress / MPa'],
                      ['Ultimate Stress / MPa',                    'Ultimate Strain / -'],
                      ['Ultimate Stress / MPa',                    'Mineral to Matrix Ratio / -'],
                      ['Ultimate Stress / MPa',                    'Apparent Modulus Mineralized uFE / MPa'],
                      ['Ultimate Stress / MPa',                    'Yield Stress uFE / MPa'],
                      ['Ultimate Stress / MPa',                    'Ultimate Stress uFE / MPa'],
-                     ['Ultimate Collagen Stress / MPa',           'Min ECM Area / mm²'],
+                     ['Ultimate Stress / MPa',                    'Min ECM Area / mm²'],
                      ['Ultimate Strain / -',                      'Ultimate Collagen Stress / MPa'],
                      ['Ultimate Strain / -',                      'Ultimate Stress uFE / MPa'],
                      ['Ultimate Strain / -',                      'Yield Stress uFE / MPa'],
                      ['Ultimate Strain / -',                      'Apparent Modulus Mineralized uFE / MPa'],
+                     ['Ultimate Strain / -',                      'Min ECM Area / mm²'],
                      ['Apparent Modulus Mineralized uFE / MPa',   'Yield Stress uFE / MPa'],
                      ['Apparent Modulus Mineralized uFE / MPa',   'Ultimate Stress uFE / MPa'],
+                     ['Apparent Modulus Mineralized uFE / MPa',   'Min ECM Area / mm²'],
                      ['Yield Stress uFE / MPa',                   'Ultimate Stress uFE / MPa'],
+                     ['Yield Stress uFE / MPa',                   'Min ECM Area / mm²'],
                      ])
 
 # assign abbreviations to above list of variables
@@ -379,10 +392,10 @@ for i in tqdm(range(len(Pair))):
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 # plt.legend(loc='upper center', ncol=2, bbox_to_anchor=(0.5, 1.15), prop={'size': 10})
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
-                # plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                #             dpi=300, bbox_inches='tight', format='png', )
-                plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, bbox_inches='tight', format='png', )
+                # plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                #             dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
                 plt.close()
                 j = j + 1
@@ -391,10 +404,10 @@ for i in tqdm(range(len(Pair))):
                 plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
-                # plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                #             dpi=300, bbox_inches='tight', format='png')
-                plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, bbox_inches='tight', format='png', )
+                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                            dpi=300, bbox_inches='tight', format='png')
+                # plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                #             dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
                 plt.close()
             # plt.close(Figure)
@@ -427,10 +440,10 @@ for i in tqdm(range(len(Pair))):
                 plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
-                # plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                #             dpi=300, bbox_inches='tight', format='png')
-                plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, bbox_inches='tight', format='png', )
+                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                            dpi=300, bbox_inches='tight', format='png')
+                # plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                #             dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
                 plt.close()
                 j = j + 1
@@ -439,10 +452,10 @@ for i in tqdm(range(len(Pair))):
                 plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
-                # plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                #             dpi=300, bbox_inches='tight', format='png')
-                plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, bbox_inches='tight', format='png', )
+                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                            dpi=300, bbox_inches='tight', format='png')
+                # plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                #             dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
                 plt.close()
             # plt.close(Figure)
@@ -476,10 +489,10 @@ for i in tqdm(range(len(Pair))):
                 plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
-                # plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                #             dpi=300, bbox_inches='tight', format='png')
-                plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, bbox_inches='tight', format='png', )
+                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                            dpi=300, bbox_inches='tight', format='png')
+                # plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                #             dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
                 plt.close()
                 j = j + 1
@@ -488,10 +501,10 @@ for i in tqdm(range(len(Pair))):
                 plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
-                # plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                #             dpi=300, bbox_inches='tight', format='png')
-                plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, bbox_inches='tight', format='png', )
+                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                            dpi=300, bbox_inches='tight', format='png')
+                # plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                #             dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
                 plt.close()
             # plt.close(Figure)
@@ -518,10 +531,10 @@ for i in tqdm(range(len(Pair))):
                 plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
-                # plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                #             dpi=300, bbox_inches='tight', format='png')
-                plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, bbox_inches='tight', format='png', )
+                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                            dpi=300, bbox_inches='tight', format='png')
+                # plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                #             dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
                 plt.close()
                 j = j + 1
@@ -530,10 +543,10 @@ for i in tqdm(range(len(Pair))):
                 plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
-                # plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                #             dpi=300, bbox_inches='tight', format='png')
-                plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, bbox_inches='tight', format='png', )
+                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                            dpi=300, bbox_inches='tight', format='png')
+                # plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                #             dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
                 plt.close()
             # plt.close(Figure)
@@ -543,9 +556,8 @@ for i in tqdm(range(len(Pair))):
     results.append(values)
 result_dir = pd.DataFrame(results, columns=['X-axis', 'Y-axis', 'p-value', '\u03C3\u2091\u209B\u209C', 'R\u00B2', 'N',
                                             'lower bound 95% CI', 'upper bound 95% CI'])
-# result_dir.to_csv(os.path.join(savepath, 'ResultsPlots.csv'), index=False)
-result_dir.to_csv(os.path.join(savepath_windows, 'ResultsPlots.csv'), index=False)
-# result_dir.to_csv(os.path.join(savepath, 'ResultsPlots_appendix.csv'), index=False)
+result_dir.to_csv(os.path.join(savepath, 'ResultsPlots.csv'), index=False)
+# result_dir.to_csv(os.path.join(savepath_windows, 'ResultsPlots.csv'), index=False)
 
 # boxplots of specific component weights
 MWF = df['Mineral weight fraction / -']
@@ -559,8 +571,8 @@ bp = ax1.boxplot(WF)
 ax1.set_ylabel('Weight Fraction / -')
 ax1.set_xticklabels(['Mineral', 'Organic', 'Water'])
 plt.ylim(ymin=0)
-# plt.savefig(os.path.join(savepath, 'WF_boxplt.png'), dpi=300, bbox_inches='tight', format='png')
-plt.savefig(os.path.join(savepath_windows, 'WF_boxplt.png'), dpi=300, bbox_inches='tight', format='png')
+plt.savefig(os.path.join(savepath, 'WF_boxplt.png'), dpi=300, bbox_inches='tight', format='png')
+# plt.savefig(os.path.join(savepath_windows, 'WF_boxplt.png'), dpi=300, bbox_inches='tight', format='png')
 plt.show()
 
 # boxplot of AMM/AMD
@@ -618,6 +630,7 @@ ax2.plot((1 - d, 1 + d), (1 - d, 1 + d), **kwargs)  # bottom-right diagonal
 # ax and ax2 via f.subplots_adjust(hspace=...) or plt.subplot_tool(),
 # the diagonal lines will move accordingly, and stay right at the tips
 # of the spines they are 'breaking'
-# plt.savefig(os.path.join(savepath, 'AM_boxplt.png'), dpi=300, bbox_inches='tight', format='png')
-plt.savefig(os.path.join(savepath_windows, 'AM_boxplt.png'), dpi=300, bbox_inches='tight', format='png')
+plt.savefig(os.path.join(savepath, 'AM_boxplt.png'), dpi=300, bbox_inches='tight', format='png')
+# plt.savefig(os.path.join(savepath_windows, 'AM_boxplt.png'), dpi=300, bbox_inches='tight', format='png')
 plt.show()
+
