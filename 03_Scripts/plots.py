@@ -203,6 +203,7 @@ Pair = pd.DataFrame([
                      ['Ultimate Stress / MPa',                    'Yield Stress uFE / MPa'],
                      ['Ultimate Stress / MPa',                    'Ultimate Stress uFE / MPa'],
                      ['Ultimate Stress / MPa',                    'Min ECM Area / mm²'],
+                     ['Ultimate Stress / MPa',                    'Coefficient of Variance / -'],
                      ['Ultimate Strain / -',                      'Ultimate Collagen Stress / MPa'],
                      ['Ultimate Strain / -',                      'Ultimate Stress uFE / MPa'],
                      ['Ultimate Strain / -',                      'Yield Stress uFE / MPa'],
