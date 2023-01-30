@@ -167,7 +167,7 @@ plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_rvalues.png'), dp
 plt.show()
 
 # Plotting of r-values containing p-value asterisk
-f, ax = plt.subplots(figsize=(13, 17))
+f, ax = plt.subplots(figsize=(15, 19))
 heatmap_r = sns.heatmap(corr_matrix_r,
                         mask=mask_r,
                         square=True,
