@@ -174,8 +174,8 @@ for x in tqdm(range(0, len(Data), 1)):
     min_BoneArea_wp = round(BoneAreas.min(), 3)
 
     stderr_BoneArea_wp = round(statistics.stdev(BoneAreas), 8)
-    mean_BoneArea_wp = round(statistics.mean(BoneAreas), 8)
-    coeff_var_BoneArea_wp = round(stderr_BoneArea_wp/mean_BoneArea_wp, 8)
+    mean_BoneArea_wp = round(statistics.mean(BoneAreas), 3)
+    coeff_var_BoneArea_wp = round(stderr_BoneArea_wp/mean_BoneArea_wp, 3)
 
     mean_Area_wop = round(statistics.mean(TotalAreas), 3)
     min_Diam_wp = round(math.sqrt(min_BoneArea_wp/Pi*4), 3)
@@ -199,10 +199,10 @@ missing_sample_IDs = pd.DataFrame({'Sample ID': ['390_R', '395_R', '402_L']})
 # convert list to dataframe
 result_dir = pd.DataFrame(results, columns=['Sample ID', 'Bone Volume Fraction / -', 'Bone Mineral Density mg HA / cm3',
                                             'Tissue Mineral Density mg HA / cm^3', 'Bone Mineral Content / mg HA',
-                                            'Min Area / mm^2', 'Min Diameter / mm', 'Mean Apparent Area / mm^2',
+                                            'Min ECM Area / mm^2', 'Min Diameter / mm', 'Mean Apparent Area / mm^2',
                                             'Mean Apparent Diameter / mm', 'Mean Area Fraction / -',
                                             'Min Area Fraction / -', 'Min Area Fraction Adjusted / -',
-                                            'Coefficient of Variance / -', 'Mean Bone Area / mm^2'])
+                                            'Coefficient of Variance / -', 'Mean ECM Area / mm^2'])
 result_dir = pd.concat([result_dir, missing_sample_IDs])
 result_dir_sorted = result_dir.sort_values(by=['Sample ID'], ascending=True)
 result_dir_sorted = result_dir_sorted.reset_index(drop=True)
