@@ -26,6 +26,13 @@ SampleID = df['Sample ID'].values.tolist()
 # Create dataframe with variable names & respective abbreviations
 ColumnNames = pd.DataFrame()
 ColumnNames['Column Names'] = df.columns
+# colnames_new = ColumnNames.replace({'Apparent Modulus Mineralized / MPa': 'Apparent Modulus Mineralized E\u2090\u209A\u209A / MPa',
+#                                     'Modulus Mineralized / MPa': 'Modulus Mineralized E\u2098',
+#                                     'Ultimate Apparent Stress / MPa': 'Ultimate Apparent Stress \u03C3\u2090\u209A\u209A / MPa',
+#                                     'Ultimate Collagen Stress / MPa': 'Ultimate Collagen Stress  / MPa',
+#                                     '': '',
+#                                     '': '',
+#                                     })
 column_names_abbrev = ['SID', 'Age', 'G', 'Site', 'SM', 'SD', 'EAPPM', 'EM', 'UF', 'UAPPSTRE', 'UCSTRE', 'USTRE',
                        'USTRA', 'EAPPC', 'EC', 'D', 'OW', 'MW', 'WW', 'MWF', 'OWF', 'WWF', 'BVTV', 'BMD', 'TMD', 'BMC',
                        'MINECMA', 'COVAR', 'MEANAA', 'MEANBA', 'MINED', 'MEANAD', 'MEANAF', 'MINAF', 'MMR', 'EAPPFE',
