@@ -202,7 +202,7 @@ result_dir = pd.DataFrame(results, columns=['Sample ID', 'Bone Volume Fraction /
                                             'Min ECM Area / mm^2', 'Min Diameter / mm', 'Mean Apparent Area / mm^2',
                                             'Mean Apparent Diameter / mm', 'Mean Area Fraction / -',
                                             'Min Area Fraction / -', 'Min Area Fraction Adjusted / -',
-                                            'Coefficient of Variance / -', 'Mean ECM Area / mm^2'])
+                                            'Coefficient of Variation / -', 'Mean ECM Area / mm^2'])
 result_dir = pd.concat([result_dir, missing_sample_IDs])
 result_dir_sorted = result_dir.sort_values(by=['Sample ID'], ascending=True)
 result_dir_sorted = result_dir_sorted.reset_index(drop=True)
