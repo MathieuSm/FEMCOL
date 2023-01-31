@@ -1,4 +1,4 @@
-Sample ID,Bone Volume Fraction / -,Bone Mineral Density mg HA / cm3,Tissue Mineral Density mg HA / cm^3,Bone Mineral Content / mg HA,Min ECM Area / mm^2,Min Diameter / mm,Mean Apparent Area / mm^2,Mean Apparent Diameter / mm,Mean Area Fraction / -,Min Area Fraction / -,Min Area Fraction Adjusted / -,Coefficient of Variance / -,Mean ECM Area / mm^2
+Sample ID,Bone Volume Fraction / -,Bone Mineral Density mg HA / cm3,Tissue Mineral Density mg HA / cm^3,Bone Mineral Content / mg HA,Min ECM Area / mm^2,Min Diameter / mm,Mean Apparent Area / mm^2,Mean Apparent Diameter / mm,Mean Area Fraction / -,Min Area Fraction / -,Min Area Fraction Adjusted / -,Coefficient of Variation / -,Mean ECM Area / mm^2
 385_L,0.868,978.528,1096.432,1134.004,2.739,1.867,3.369,2.071,0.868,0.813,0.905,0.028,2.924
 385_R,0.908,1034.003,1125.016,1203.266,2.813,1.893,3.275,2.042,0.908,0.859,0.988,0.021,2.974
 386_L,0.954,1046.653,1097.323,1223.126,2.975,1.946,3.181,2.013,0.954,0.935,1.004,0.009,3.036
