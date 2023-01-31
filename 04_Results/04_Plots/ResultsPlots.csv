@@ -29,7 +29,7 @@ Age / y,Mineral to Matrix Ratio / -,0.999,0.04,2.4e-08,39,-0.002,0.002
 Age / y,Apparent Modulus Mineralized uFE / MPa,0.01,720.0,0.08,78,-42.4,-5.9
 Age / y,Yield Stress uFE / MPa,0.005,5.8,0.1,79,-0.356,-0.066
 Age / y,Ultimate Stress uFE / MPa,0.008,7.0,0.09,79,-0.417,-0.066
-Age / y,Coefficient of Variance / -,0.008,0.017,0.09,76,1.63e-04,0.001
+Age / y,Coefficient of Variation / -,0.008,0.017,0.09,76,1.63e-04,0.001
 Bone Mineral Content / mg HA,Stiffness Mineralized / N/mm,8.2e-07,835.0,0.29,74,2.4,5.1
 Bone Mineral Content / mg HA,Min ECM Area / mm²,8.3e-36,0.091,0.88,77,0.002,0.002
 Bone Mineral Density / mg HA / cm³,Apparent Modulus Mineralized / MPa,3.8e-07,1568.0,0.3,74,11.1,23.4
@@ -169,7 +169,7 @@ Ultimate Stress / MPa,Apparent Modulus Mineralized uFE / MPa,0.149,700.0,0.03,70
 Ultimate Stress / MPa,Yield Stress uFE / MPa,0.152,5.7,0.03,71,-0.076,0.475
 Ultimate Stress / MPa,Ultimate Stress uFE / MPa,0.148,6.8,0.03,71,-0.088,0.571
 Ultimate Stress / MPa,Min ECM Area / mm²,0.109,0.263,0.04,71,-0.002,0.023
-Ultimate Stress / MPa,Coefficient of Variance / -,0.034,0.018,0.06,71,-0.002,-7.43e-05
+Ultimate Stress / MPa,Coefficient of Variation / -,0.034,0.018,0.06,71,-0.002,-7.43e-05
 Ultimate Strain / -,Ultimate Collagen Stress / MPa,2.9e-10,3.8,0.44,71,208,362
 Ultimate Strain / -,Ultimate Stress uFE / MPa,0.847,6.9,5.4e-04,71,-129,156
 Ultimate Strain / -,Yield Stress uFE / MPa,0.901,5.8,2.3e-04,71,-111,126
