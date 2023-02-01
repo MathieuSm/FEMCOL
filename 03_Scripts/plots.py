@@ -36,7 +36,7 @@ AxisLabels = ColumnNames.replace({'Apparent Modulus Mineralized / MPa': 'Apparen
                                   'Ultimate Strain / -': 'Ultimate Strain $\epsilon_{u}$',
                                   'Apparent Modulus Demineralized / MPa': 'Apparent Modulus Demineralized E$_{app, c}$ / MPa',
                                   'Modulus Demineralized / MPa': 'Modulus Demineralized E$_c$',
-                                  'Density / g/cm³': 'Density \u03C1 / g/cm³',
+                                  'Density / g/cm³': 'Density $\u03C1$ / g/cm³',
                                   'Organic Weight / g': 'Organic Weight m$_{o}$ / g',
                                   'Mineral Weight / g': 'Mineral Weight m$_{m}$ / g',
                                   'Water Weight / g': 'Water Weight m$_{w}$ / g',
@@ -391,13 +391,20 @@ for i in tqdm(range(len(Pair))):
                                                         'Age',   'Age', 'Age', 'BMC', 'MWF', ''],
                                    'y_axis_abbrev': ['BMD', 'BVTV',   'D', 'MWF', 'OWF', 'TMD', 'MEANAA', 'MINA',
                                                      'MEANAF', 'MINAF', 'MMR',  'MW', 'MMR', '']})
+    # Positions of annotations
+    YposCI = 0.025
+    YposCV = YposCI + 0.075
+    YposN = YposCV + 0.075
+    XposN = 0.05
+
+
     # if p-value smaller than 0.05 create fit curve and if variable 'Age' should not be plotted on main axis, no
     # colormap will be used
     if float(p) <= 0.05:
         if x_axis != 'Age / y':
             # sns.regplot(x=FitResults.model.exog[:, 1], y=Y_Obs, ax=Axes, scatter=False, color=(0, 0, 0),
             #             line_kws={'color': 'black'}) # this does not work in combination with color coding
-            Axes.plot(X[:, 1], Y_Fit, color=(1, 0, 0), label='Fit', linewidth=1)
+            Axes.plot(X[:, 1], Y_Fit, color=(1, 0, 0), linewidth=1)
             # Axes.fill_between(X_Obs, Sorted_CI_o, Sorted_CI_u, color=(0, 0, 0), alpha=0.1,
             #                   label=str(int(Alpha * 100)) + '% CI')
             Axes.scatter(X_np[:, 1][Data['Gender'] == 'M'], Y_Obs_np[Data['Gender'] == 'M'],
@@ -407,17 +414,23 @@ for i in tqdm(range(len(Pair))):
                          c=list(tuple(female_age.tolist())), cmap='plasma_r', vmin=Data['Age / y'].min(),
                          vmax=Data['Age / y'].max(), label='female', marker='o')
             Axes.scatter(X_np[:, 1][Data['Gender'].isnull()], Y_Obs_np[Data['Gender'].isnull()], color=(0, 0, 0),
-                         label='unknown', marker='^')
+                         label='N/A', marker='^')
             Regression_line = FitResults.params[1] * X_np[:, 1] + FitResults.params[0]
             ax = plt.gca()
             PCM = ax.get_children()[2]
             plt.colorbar(PCM, ax=ax, label='Age / y')
-            Axes.annotate(r'$N$ : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
-            Axes.annotate(r'$R^2$ : ' + str(R2), xy=(0.05, 0.25), xycoords='axes fraction')
-            # Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
-            Axes.annotate(r'$CV$ : ' + str(cv), xy=(0.05, 0.175), xycoords='axes fraction')
-            Axes.annotate(r'$p$ : ' + str(p), xy=(0.05, 0.1), xycoords='axes fraction')
-            Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025), xycoords='axes fraction')
+
+            # Axes.annotate(r'$N$ : ' + str(N), xy=(0.05, YposN), xycoords='axes fraction')
+            # Axes.annotate(r'$R^2$ : ' + str(R2), xy=(0.05, YposR2), xycoords='axes fraction')
+            # # Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
+            # Axes.annotate(r'$CV$ : ' + str(cv), xy=(0.05, YposCV), xycoords='axes fraction')
+            # Axes.annotate(r'$p$ : ' + str(p), xy=(0.05, YposP), xycoords='axes fraction')
+            # Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, YposCI), xycoords='axes fraction')
+
+            Axes.annotate(r'$N$ = ' + str(N) + ', 'r'$R^2$ = ' + str(R2), xy=(0.05, YposN), xycoords='axes fraction')
+            Axes.annotate(r'$CV$ = ' + str(cv) + ', 'r'$p$ = ' + str(p), xy=(0.05, YposCV), xycoords='axes fraction')
+            Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, YposCI),
+                          xycoords='axes fraction')
 
             # # Annotation settings for ESB abstract graph (ultimate stress vs CV): statistics shifted to top right corner
             # Axes.annotate(r'$N$ : ' + str(N), xy=(0.98, 0.925), xycoords='axes fraction', horizontalalignment='right')
@@ -441,8 +454,9 @@ for i in tqdm(range(len(Pair))):
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 # plt.legend(loc='upper center', ncol=2, bbox_to_anchor=(0.5, 1.15), prop={'size': 10})
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
+                plt.rcParams['figure.figsize'] = (5, 5)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, bbox_inches='tight', format='png', )
+                            dpi=300, format='png', )
                 # plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                 #             dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
@@ -453,8 +467,9 @@ for i in tqdm(range(len(Pair))):
                 plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
+                plt.rcParams['figure.figsize'] = (5, 5)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, bbox_inches='tight', format='png')
+                            dpi=300, format='png')
                 # plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                 #             dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
@@ -465,20 +480,26 @@ for i in tqdm(range(len(Pair))):
         else:
             sns.regplot(x=FitResults.model.exog[:, 1], y=Y_Obs, ax=Axes, scatter=False, color=(1, 0, 0),
                         line_kws={'color': 'black', 'linewidth': 1}, )
-            Axes.plot(X[:, 1], Y_Fit, color=(1, 0, 0), label='Fit', linewidth=1)
+            Axes.plot(X[:, 1], Y_Fit, color=(1, 0, 0), linewidth=1)
             # Axes.fill_between(X_Obs, Sorted_CI_o, Sorted_CI_u, color=(0, 0, 0), alpha=0.1,
             #                   label=str(int(Alpha * 100)) + '% CI')
             Axes.plot(X[:, 1][Data['Gender'] == 'M'], Y_Obs[Data['Gender'] == 'M'], linestyle='none', marker='s',
                       color=(0, 0, 0), fillstyle='none', label='male')
             Axes.plot(X[:, 1][Data['Gender'] == 'F'], Y_Obs[Data['Gender'] == 'F'], linestyle='none', marker='o',
                       color=(0, 0, 0), fillstyle='none', label='female')
-            Axes.annotate(r'$N$ : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
-            Axes.annotate(r'$R^2$ : ' + str(R2), xy=(0.05, 0.25), xycoords='axes fraction')
-            # Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
-            Axes.annotate(r'$CV$ : ' + str(cv), xy=(0.05, 0.175), xycoords='axes fraction')
-            Axes.annotate(r'$p$ : ' + str(p), xy=(0.05, 0.1), xycoords='axes fraction')
-            Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025),
+            Axes.annotate(r'$N$ = ' + str(N) + ', 'r'$R^2$ = ' + str(R2), xy=(0.05, YposN), xycoords='axes fraction')
+            Axes.annotate(r'$CV$ = ' + str(cv) + ', 'r'$p$ = ' + str(p), xy=(0.05, YposCV), xycoords='axes fraction')
+            Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, YposCI),
                           xycoords='axes fraction')
+            plt.xlim(xmin=55, xmax=95)
+
+            # Axes.annotate(r'$N$ : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
+            # Axes.annotate(r'$R^2$ : ' + str(R2), xy=(0.05, 0.25), xycoords='axes fraction')
+            # # Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
+            # Axes.annotate(r'$CV$ : ' + str(cv), xy=(0.05, 0.175), xycoords='axes fraction')
+            # Axes.annotate(r'$p$ : ' + str(p), xy=(0.05, 0.1), xycoords='axes fraction')
+            # Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025),
+            #               xycoords='axes fraction')
             # Axes.set_ylabel(Data.columns[2])
             # Axes.set_xlabel(Data.columns[1])
 
@@ -490,10 +511,12 @@ for i in tqdm(range(len(Pair))):
                 # plt.ylim(ymin=0, ymax=round(Y_Fit.max() * 1.2, 2))
                 # plt.autoscale()
                 plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
+                plt.xlim(xmin=55, xmax=95)
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
+                plt.rcParams['figure.figsize'] = (5, 5)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, bbox_inches='tight', format='png')
+                            dpi=300, format='png')
                 # plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                 #             dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
@@ -502,10 +525,12 @@ for i in tqdm(range(len(Pair))):
             else:
                 # plt.ylim(ymin=0)
                 plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
+                plt.xlim(xmin=55, xmax=95)
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
+                plt.rcParams['figure.figsize'] = (5, 5)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, bbox_inches='tight', format='png')
+                            dpi=300, format='png')
                 # plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                 #             dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
@@ -521,17 +546,22 @@ for i in tqdm(range(len(Pair))):
                          c=list(tuple(female_age.tolist())), cmap='plasma_r', vmin=Data['Age / y'].min(),
                          vmax=Data['Age / y'].max(), label='female', marker='o')
             Axes.scatter(X_np[:, 1][Data['Gender'].isnull()], Y_Obs_np[Data['Gender'].isnull()], color=(0, 0, 0),
-                         label='unknown', marker='^')
+                         label='N/A', marker='^')
             ax = plt.gca()
             PCM = ax.get_children()[0]
             plt.colorbar(PCM, ax=ax, label='Age / y')
-            Axes.annotate(r'$N$ : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
-            Axes.annotate(r'$R^2$ : ' + str(R2), xy=(0.05, 0.25), xycoords='axes fraction')
-            # Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
-            Axes.annotate(r'$CV$ : ' + str(cv), xy=(0.05, 0.175), xycoords='axes fraction')
-            Axes.annotate(r'$p$ : ' + format(round(p, 3), '.3f'), xy=(0.05, 0.1), xycoords='axes fraction')
-            Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025),
+            Axes.annotate(r'$N$ = ' + str(N) + ', 'r'$R^2$ = ' + str(R2), xy=(0.05, YposN), xycoords='axes fraction')
+            Axes.annotate(r'$CV$ = ' + str(cv) + ', 'r'$p$ = ' + str(p), xy=(0.05, YposCV), xycoords='axes fraction')
+            Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, YposCI),
                           xycoords='axes fraction')
+
+            # Axes.annotate(r'$N$ : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
+            # Axes.annotate(r'$R^2$ : ' + str(R2), xy=(0.05, 0.25), xycoords='axes fraction')
+            # # Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
+            # Axes.annotate(r'$CV$ : ' + str(cv), xy=(0.05, 0.175), xycoords='axes fraction')
+            # Axes.annotate(r'$p$ : ' + format(round(p, 3), '.3f'), xy=(0.05, 0.1), xycoords='axes fraction')
+            # Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025),
+            #               xycoords='axes fraction')
             # Axes.set_ylabel(Data.columns[2])
             # Axes.set_xlabel(Data.columns[1])
 
@@ -544,8 +574,9 @@ for i in tqdm(range(len(Pair))):
                 plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
+                plt.rcParams['figure.figsize'] = (5, 5)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, bbox_inches='tight', format='png')
+                            dpi=300, format='png')
                 # plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                 #             dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
@@ -556,27 +587,34 @@ for i in tqdm(range(len(Pair))):
                 plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
+                plt.rcParams['figure.figsize'] = (5, 5)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, bbox_inches='tight', format='png')
+                            dpi=300, format='png')
                 # plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                 #             dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
                 plt.close()
             # plt.close(Figure)
 
-        # use of colormap if age is not plotted on main axes
+        # don't use colormap if age is plotted on main axes
         else:
             Axes.plot(X[:, 1][Data['Gender'] == 'M'], Y_Obs[Data['Gender'] == 'M'], linestyle='none', marker='s',
                       color=(0, 0, 0), fillstyle='none', label='male')
             Axes.plot(X[:, 1][Data['Gender'] == 'F'], Y_Obs[Data['Gender'] == 'F'], linestyle='none', marker='o',
                       color=(0, 0, 0), fillstyle='none', label='female')
-            Axes.annotate(r'$N$ : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
-            Axes.annotate(r'$R^2$ : ' + str(R2), xy=(0.05, 0.25), xycoords='axes fraction')
-            # Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
-            Axes.annotate(r'$CV$ : ' + str(cv), xy=(0.05, 0.175), xycoords='axes fraction')
-            Axes.annotate(r'$p$ : ' + str(p), xy=(0.05, 0.1), xycoords='axes fraction')
-            Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025),
+            Axes.annotate(r'$N$ = ' + str(N) + ', 'r'$R^2$ = ' + str(R2), xy=(0.05, YposN), xycoords='axes fraction')
+            Axes.annotate(r'$CV$ = ' + str(cv) + ', 'r'$p$ = ' + str(p), xy=(0.05, YposCV), xycoords='axes fraction')
+            Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, YposCI),
                           xycoords='axes fraction')
+            plt.xlim(xmin=55, xmax=95)
+            #
+            # Axes.annotate(r'$N$ : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
+            # Axes.annotate(r'$R^2$ : ' + str(R2), xy=(0.05, 0.25), xycoords='axes fraction')
+            # # Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
+            # Axes.annotate(r'$CV$ : ' + str(cv), xy=(0.05, 0.175), xycoords='axes fraction')
+            # Axes.annotate(r'$p$ : ' + str(p), xy=(0.05, 0.1), xycoords='axes fraction')
+            # Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025),
+            #               xycoords='axes fraction')
             # Axes.set_ylabel(Data.columns[2])
             # Axes.set_xlabel(Data.columns[1])
 
@@ -586,11 +624,13 @@ for i in tqdm(range(len(Pair))):
             # condition for autoscaling
             if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
                 # plt.autoscale()
+                plt.xlim(xmin=55, xmax=95)
                 plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
+                plt.rcParams['figure.figsize'] = (5, 5)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, bbox_inches='tight', format='png')
+                            dpi=300, format='png')
                 # plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                 #             dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
@@ -601,8 +641,9 @@ for i in tqdm(range(len(Pair))):
                 plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
+                plt.rcParams['figure.figsize'] = (5, 5)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, bbox_inches='tight', format='png')
+                            dpi=300, format='png')
                 # plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                 #             dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
