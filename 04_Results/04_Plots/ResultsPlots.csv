@@ -169,7 +169,7 @@ Ultimate Stress / MPa,Apparent Modulus Mineralized uFE / MPa,0.149,700.0,0.03,70
 Ultimate Stress / MPa,Yield Stress uFE / MPa,0.152,5.7,0.03,71,-0.076,0.475
 Ultimate Stress / MPa,Ultimate Stress uFE / MPa,0.148,6.8,0.03,71,-0.088,0.571
 Ultimate Stress / MPa,Min ECM Area / mm²,0.109,0.263,0.04,71,-0.002,0.023
-Ultimate Stress / MPa,Coefficient of Variation / -,0.034,0.018,0.06,71,-0.002,-7.43e-05
+Coefficient of Variation / -,Ultimate Stress / MPa,0.034,4.8,0.06,71,-127,-5.1
 Ultimate Strain / -,Ultimate Collagen Stress / MPa,2.9e-10,3.8,0.44,71,208,362
 Ultimate Strain / -,Ultimate Stress uFE / MPa,0.847,6.9,5.4e-04,71,-129,156
 Ultimate Strain / -,Yield Stress uFE / MPa,0.901,5.8,2.3e-04,71,-111,126

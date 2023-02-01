@@ -26,18 +26,44 @@ SampleID = df['Sample ID'].values.tolist()
 # Create dataframe with variable names & respective abbreviations
 ColumnNames = pd.DataFrame()
 ColumnNames['Column Names'] = df.columns
-# colnames_new = ColumnNames.replace({'Apparent Modulus Mineralized / MPa': 'Apparent Modulus Mineralized E\u2090\u209A\u209A / MPa',
-#                                     'Modulus Mineralized / MPa': 'Modulus Mineralized E\u2098',
-#                                     'Ultimate Apparent Stress / MPa': 'Ultimate Apparent Stress \u03C3\u2090\u209A\u209A / MPa',
-#                                     'Ultimate Collagen Stress / MPa': 'Ultimate Collagen Stress  / MPa',
-#                                     '': '',
-#                                     '': '',
-#                                     })
+
+AxisLabels = ColumnNames.replace({'Apparent Modulus Mineralized / MPa': 'Apparent Modulus Mineralized E$_{app, m}$ / MPa',
+                                  'Modulus Mineralized / MPa': 'Modulus Mineralized E$_{m}$ / MPa',
+                                  'Ultimate Apparent Stress / MPa': 'Ultimate Apparent Stress $\sigma_{app}$ / MPa',
+                                  'Ultimate Collagen Stress / MPa': 'Ultimate Collagen Stress $\sigma_{c}$ / MPa',
+                                  'Ultimate Stress / MPa': 'Ultimate Stress $\sigma_{b}$ / MPa',
+                                  'Coefficient of Variation / -': 'Coefficient of Variation CV / -',
+                                  'Ultimate Strain / -': 'Ultimate Strain $\epsilon_{u}$',
+                                  'Apparent Modulus Demineralized / MPa': 'Apparent Modulus Demineralized E$_{app, c}$ / MPa',
+                                  'Modulus Demineralized / MPa': 'Modulus Demineralized E$_c$',
+                                  'Density / g/cm³': 'Density \u03C1 / g/cm³',
+                                  'Organic Weight / g': 'Organic Weight m$_{o}$ / g',
+                                  'Mineral Weight / g': 'Mineral Weight m$_{m}$ / g',
+                                  'Water Weight / g': 'Water Weight m$_{w}$ / g',
+                                  'Mineral weight fraction / -': 'Mineral Weight Fraction WF$_{m}$ / -',
+                                  'Organic weight fraction / -': 'Organic Weight Fraction WF$_{o}$ / -',
+                                  'Water weight fraction / -': 'Water Weight Fraction WF$_{w}$ / -',
+                                  'Bone Volume Fraction / -': 'Bone Volume Fraction BVTV / -',
+                                  'Bone Mineral Density / mg HA / cm³': 'Bone Mineral Density BMD / mg HA / cm³',
+                                  'Tissue Mineral Density / mg HA / cm³': 'Tissue Mineral Density TMD / mg HA / cm³',
+                                  'Bone Mineral Content / mg HA': 'Bone Mineral Content BMC / mg HA',
+                                  'Min ECM Area / mm²': 'Min ECM Area A$_{F, min}$ / mm²',
+                                  'Mean Apparent Area / mm²': 'Mean Apparent Area A$_{app, mean}$ / mm²',
+                                  'Mean ECM Area / mm²': 'Mean ECM Area A$_{F, mean}$ / mm²',
+                                  'Mean Area Fraction / -': 'Mean Area Fraction BATA$_{mean}$ / -',
+                                  'Min Area Fraction / -': 'Min Area Fraction BATA$_{min}$ / -',
+                                  'Mineral to Matrix Ratio / -': 'Mineral to Matrix Ratio MMR / -',
+                                  'Apparent Modulus Mineralized uFE / MPa':
+                                      'Apparent Modulus Mineralized $\mu$FE E$^{\mu FE}_{app, m}$ / MPa',
+                                  'Yield Stress uFE / MPa': 'Yield Stress $\mu$FE $\sigma^{\mu FE}_{y}$ / MPa',
+                                  'Ultimate Stress uFE / MPa': 'Ultimate Stress $\mu$FE $\sigma^{\mu FE}_{app}$ / MPa'})
+
 column_names_abbrev = ['SID', 'Age', 'G', 'Site', 'SM', 'SD', 'EAPPM', 'EM', 'UF', 'UAPPSTRE', 'UCSTRE', 'USTRE',
                        'USTRA', 'EAPPC', 'EC', 'D', 'OW', 'MW', 'WW', 'MWF', 'OWF', 'WWF', 'BVTV', 'BMD', 'TMD', 'BMC',
-                       'MINECMA', 'COVAR', 'MEANAA', 'MEANBA', 'MINED', 'MEANAD', 'MEANAF', 'MINAF', 'MMR', 'EAPPFE',
+                       'MINECMA', 'COVAR', 'MEANAA', 'MEANECMA', 'MINED', 'MEANAD', 'MEANAF', 'MINAF', 'MMR', 'EAPPFE',
                        'YSTREFE', 'USTREFE']
 ColumnNames['Abbreviations'] = column_names_abbrev
+AxisLabels['Abbreviations'] = column_names_abbrev
 
 Pair = pd.DataFrame([
                      ['Age / y',                                  'Apparent Modulus Demineralized / MPa'],
@@ -210,7 +236,7 @@ Pair = pd.DataFrame([
                      ['Ultimate Stress / MPa',                    'Yield Stress uFE / MPa'],
                      ['Ultimate Stress / MPa',                    'Ultimate Stress uFE / MPa'],
                      ['Ultimate Stress / MPa',                    'Min ECM Area / mm²'],
-                     ['Ultimate Stress / MPa',                    'Coefficient of Variation / -'],
+                     ['Coefficient of Variation / -',             'Ultimate Stress / MPa'],
                      ['Ultimate Strain / -',                      'Ultimate Collagen Stress / MPa'],
                      ['Ultimate Strain / -',                      'Ultimate Stress uFE / MPa'],
                      ['Ultimate Strain / -',                      'Yield Stress uFE / MPa'],
@@ -250,6 +276,8 @@ for i in tqdm(range(len(Pair))):
     y_axis = Pair[1][i]
     x_axis_abbrev = Pair_abbrev_df['Abbrev_x'][i]
     y_axis_abbrev = Pair_abbrev_df['Abbrev_y'][i]
+    x_axis_label = AxisLabels.loc[AxisLabels['Abbreviations'] == x_axis_abbrev].iloc[0][0]
+    y_axis_label = AxisLabels.loc[AxisLabels['Abbreviations'] == y_axis_abbrev].iloc[0][0]
     if x_axis == 'Age / y':
         Data = df.filter(['Sample ID', x_axis, y_axis, 'Gender'])
     else:
@@ -257,6 +285,7 @@ for i in tqdm(range(len(Pair))):
 
     Data = Data[Data[x_axis].notna() & Data[y_axis].notna()]
     Data = Data.reset_index(drop=True)
+
     # Data = Data.fillna('U')
     Data2Fit = Data.copy()
     Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
@@ -388,10 +417,22 @@ for i in tqdm(range(len(Pair))):
             # Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
             Axes.annotate(r'$CV$ : ' + str(cv), xy=(0.05, 0.175), xycoords='axes fraction')
             Axes.annotate(r'$p$ : ' + str(p), xy=(0.05, 0.1), xycoords='axes fraction')
-            Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025),
-                          xycoords='axes fraction')
-            Axes.set_ylabel(Data.columns[2])
-            Axes.set_xlabel(Data.columns[1])
+            Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025), xycoords='axes fraction')
+
+            # # Annotation settings for ESB abstract graph (ultimate stress vs CV): statistics shifted to top right corner
+            # Axes.annotate(r'$N$ : ' + str(N), xy=(0.98, 0.925), xycoords='axes fraction', horizontalalignment='right')
+            # Axes.annotate(r'$R^2$ : ' + str(R2), xy=(0.98, 0.85), xycoords='axes fraction', horizontalalignment='right')
+            # # Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
+            # Axes.annotate(r'$CV$ : ' + str(cv), xy=(0.98, 0.775), xycoords='axes fraction', horizontalalignment='right')
+            # Axes.annotate(r'$p$ : ' + str(p), xy=(0.98, 0.7), xycoords='axes fraction', horizontalalignment='right')
+            # Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.98, 0.625),
+            #               xycoords='axes fraction', horizontalalignment='right')
+
+            # Axes.set_ylabel(Data.columns[2])
+            # Axes.set_xlabel(Data.columns[1])
+
+            Axes.set_ylabel(y_axis_label)
+            Axes.set_xlabel(x_axis_label)
 
             # condition used for autoscaling
             if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
@@ -438,8 +479,11 @@ for i in tqdm(range(len(Pair))):
             Axes.annotate(r'$p$ : ' + str(p), xy=(0.05, 0.1), xycoords='axes fraction')
             Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025),
                           xycoords='axes fraction')
-            Axes.set_ylabel(Data.columns[2])
-            Axes.set_xlabel(Data.columns[1])
+            # Axes.set_ylabel(Data.columns[2])
+            # Axes.set_xlabel(Data.columns[1])
+
+            Axes.set_ylabel(y_axis_label)
+            Axes.set_xlabel(x_axis_label)
 
             # condition used for autoscaling
             if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
@@ -488,8 +532,11 @@ for i in tqdm(range(len(Pair))):
             Axes.annotate(r'$p$ : ' + format(round(p, 3), '.3f'), xy=(0.05, 0.1), xycoords='axes fraction')
             Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025),
                           xycoords='axes fraction')
-            Axes.set_ylabel(Data.columns[2])
-            Axes.set_xlabel(Data.columns[1])
+            # Axes.set_ylabel(Data.columns[2])
+            # Axes.set_xlabel(Data.columns[1])
+
+            Axes.set_ylabel(y_axis_label)
+            Axes.set_xlabel(x_axis_label)
 
             # condition used for autoscaling
             if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
@@ -530,8 +577,11 @@ for i in tqdm(range(len(Pair))):
             Axes.annotate(r'$p$ : ' + str(p), xy=(0.05, 0.1), xycoords='axes fraction')
             Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025),
                           xycoords='axes fraction')
-            Axes.set_ylabel(Data.columns[2])
-            Axes.set_xlabel(Data.columns[1])
+            # Axes.set_ylabel(Data.columns[2])
+            # Axes.set_xlabel(Data.columns[1])
+
+            Axes.set_ylabel(y_axis_label)
+            Axes.set_xlabel(x_axis_label)
 
             # condition for autoscaling
             if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
@@ -581,7 +631,8 @@ ax1.set_xticklabels(['Mineral', 'Organic', 'Water'])
 plt.ylim(ymin=0)
 plt.savefig(os.path.join(savepath, 'WF_boxplt.png'), dpi=300, bbox_inches='tight', format='png')
 # plt.savefig(os.path.join(savepath_windows, 'WF_boxplt.png'), dpi=300, bbox_inches='tight', format='png')
-plt.show()
+# plt.show()
+plt.close()
 
 # boxplot of AMM/AMD
 AMM = df['Apparent Modulus Mineralized / MPa'].dropna().reset_index(drop=True)
@@ -640,5 +691,6 @@ ax2.plot((1 - d, 1 + d), (1 - d, 1 + d), **kwargs)  # bottom-right diagonal
 # of the spines they are 'breaking'
 plt.savefig(os.path.join(savepath, 'AM_boxplt.png'), dpi=300, bbox_inches='tight', format='png')
 # plt.savefig(os.path.join(savepath_windows, 'AM_boxplt.png'), dpi=300, bbox_inches='tight', format='png')
-plt.show()
+# plt.show()
+plt.close()
 
