@@ -21,6 +21,7 @@ Cwd = Path.cwd()
 DataPath = Cwd / '04_Results/ResultsOverview.csv'
 # DataPath = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/ResultsOverviewMod.csv'
 df = pd.read_csv(str(DataPath), skiprows=0)
+df = df.drop(columns={'Min Equivalent Diameter / mm', 'Mean Apparent Diameter / mm'})
 SampleID = df['Sample ID'].values.tolist()
 
 # Create dataframe with variable names & respective abbreviations
@@ -50,17 +51,17 @@ AxisLabels = ColumnNames.replace({'Apparent Modulus Mineralized / MPa': 'Apparen
                                   'Min ECM Area / mm²': 'Min ECM Area A$_{F, min}$ / mm²',
                                   'Mean Apparent Area / mm²': 'Mean Apparent Area A$_{app, mean}$ / mm²',
                                   'Mean ECM Area / mm²': 'Mean ECM Area A$_{F, mean}$ / mm²',
-                                  'Mean Area Fraction / -': 'Mean Area Fraction BATA$_{mean}$ / -',
-                                  'Min Area Fraction / -': 'Min Area Fraction BATA$_{min}$ / -',
+                                  'Mean ECM Area Fraction / -': 'Mean ECM Area Fraction BATA$_{mean}$ / -',
+                                  'Min ECM Area Fraction / -': 'Min ECM Area Fraction BATA$_{min}$ / -',
                                   'Mineral to Matrix Ratio / -': 'Mineral to Matrix Ratio MMR / -',
                                   'Apparent Modulus Mineralized uFE / MPa':
-                                      'Apparent Modulus Mineralized $\mu$FE E$^{\mu FE}_{app, m}$ / MPa',
+                                  'Apparent Modulus Mineralized $\mu$FE E$^{\mu FE}_{app, m}$ / MPa',
                                   'Yield Stress uFE / MPa': 'Yield Stress $\mu$FE $\sigma^{\mu FE}_{y}$ / MPa',
                                   'Ultimate Stress uFE / MPa': 'Ultimate Stress $\mu$FE $\sigma^{\mu FE}_{app}$ / MPa'})
 
 column_names_abbrev = ['SID', 'Age', 'G', 'Site', 'SM', 'SD', 'EAPPM', 'EM', 'UF', 'UAPPSTRE', 'UCSTRE', 'USTRE',
                        'USTRA', 'EAPPC', 'EC', 'D', 'OW', 'MW', 'WW', 'MWF', 'OWF', 'WWF', 'BVTV', 'BMD', 'TMD', 'BMC',
-                       'MINECMA', 'COVAR', 'MEANAA', 'MEANECMA', 'MINED', 'MEANAD', 'MEANAF', 'MINAF', 'MMR', 'EAPPFE',
+                       'MINECMA', 'COVAR', 'MEANAA', 'MEANECMA', 'MEANECMAF', 'MINECMAF', 'MMR', 'EAPPFE',
                        'YSTREFE', 'USTREFE']
 ColumnNames['Abbreviations'] = column_names_abbrev
 AxisLabels['Abbreviations'] = column_names_abbrev
@@ -90,163 +91,242 @@ Pair = pd.DataFrame([
                      ['Age / y',                                  'Water weight fraction / -'],
                      ['Age / y',                                  'Mean Apparent Area / mm²'],
                      ['Age / y',                                  'Min ECM Area / mm²'],
-                     ['Age / y',                                  'Mean Area Fraction / -'],
-                     ['Age / y',                                  'Min Area Fraction / -'],
+                     ['Age / y',                                  'Mean ECM Area Fraction / -'],
+                     ['Age / y',                                  'Min ECM Area Fraction / -'],
                      ['Age / y',                                  'Mineral to Matrix Ratio / -'],
-                     ['Age / y',                                  'Apparent Modulus Mineralized uFE / MPa'],
-                     ['Age / y',                                  'Yield Stress uFE / MPa'],
-                     ['Age / y',                                  'Ultimate Stress uFE / MPa'],
                      ['Age / y',                                  'Coefficient of Variation / -'],
-                     ['Bone Mineral Content / mg HA',             'Stiffness Mineralized / N/mm'],
-                     ['Bone Mineral Content / mg HA',             'Min ECM Area / mm²'],
-                     ['Bone Mineral Density / mg HA / cm³',       'Apparent Modulus Mineralized / MPa'],
-                     ['Bone Mineral Density / mg HA / cm³',       'Ultimate Stress / MPa'],
-                     ['Bone Volume Fraction / -',                 'Apparent Modulus Mineralized / MPa'],
-                     ['Bone Volume Fraction / -',                 'Ultimate Stress / MPa'],
+                     ['Age / y',                                  'Mean ECM Area / mm²'],
+                     ['Apparent Modulus Mineralized / MPa',       'Modulus Mineralized / MPa'],
+                     ['Apparent Modulus Mineralized / MPa',       'Ultimate Apparent Stress / MPa'],
+                     ['Apparent Modulus Mineralized / MPa',       'Ultimate Collagen Stress / MPa'],
+                     ['Apparent Modulus Mineralized / MPa',       'Ultimate Stress / MPa'],
+                     ['Apparent Modulus Mineralized / MPa',       'Ultimate Strain / -'],
                      ['Apparent Modulus Mineralized / MPa',       'Apparent Modulus Demineralized / MPa'],
-                     ['Mean Apparent Area / mm²',                 'Apparent Modulus Demineralized / MPa'],
-                     ['Mean Apparent Diameter / mm',              'Apparent Modulus Mineralized / MPa'],
-                     ['Organic weight fraction / -',              'Ultimate Stress / MPa'],
-                     ['Organic Weight / g',                       'Ultimate Stress / MPa'],
-                     ['Organic weight fraction / -',              'Stiffness Mineralized / N/mm'],
-                     ['Organic weight fraction / -',              'Stiffness Demineralized / N/mm'],
-                     ['Min Area Fraction / -',                    'Ultimate Stress / MPa'],
-                     ['Mineral weight fraction / -',              'Stiffness Demineralized / N/mm'],
-                     ['Mineral weight fraction / -',              'Stiffness Mineralized / N/mm'],
-                     ['Mineral weight fraction / -',              'Ultimate Stress / MPa'],
-                     ['Bone Mineral Content / mg HA',             'Mineral Weight / g'],
-                     ['Mean Apparent Area / mm²',                 'Ultimate Stress / MPa'],
-                     ['Apparent Modulus Demineralized / MPa',     'Ultimate Stress / MPa'],
-                     ['Mineral weight fraction / -',              'Mineral to Matrix Ratio / -'],
-                     ['Mineral to Matrix Ratio / -',              'Stiffness Demineralized / N/mm'],
-                     ['Mineral to Matrix Ratio / -',              'Stiffness Mineralized / N/mm'],
-                     ['Mineral to Matrix Ratio / -',              'Ultimate Stress / MPa'],
-                     ['Organic weight fraction / -',              'Apparent Modulus Demineralized / MPa'],
-                     ['Bone Volume Fraction / -',                 'Bone Mineral Density / mg HA / cm³'],
-                     ['Bone Volume Fraction / -',                 'Tissue Mineral Density / mg HA / cm³'],
-                     ['Bone Volume Fraction / -',                 'Mineral weight fraction / -'],
-                     ['Bone Volume Fraction / -',                 'Organic weight fraction / -'],
-                     ['Bone Volume Fraction / -',                 'Water weight fraction / -'],
-                     ['Bone Volume Fraction / -',                 'Density / g/cm³'],
-                     ['Bone Volume Fraction / -',                 'Apparent Modulus Mineralized / MPa'],
-                     ['Bone Volume Fraction / -',                 'Apparent Modulus Demineralized / MPa'],
-                     ['Bone Volume Fraction / -',                 'Ultimate Stress / MPa'],
-                     ['Bone Volume Fraction / -',                 'Ultimate Collagen Stress / MPa'],
-                     ['Bone Volume Fraction / -',                 'Ultimate Strain / -'],
-                     ['Bone Volume Fraction / -',                 'Mineral to Matrix Ratio / -'],
-                     ['Bone Volume Fraction / -',                 'Apparent Modulus Mineralized uFE / MPa'],
-                     ['Bone Volume Fraction / -',                 'Yield Stress uFE / MPa'],
-                     ['Bone Volume Fraction / -',                 'Ultimate Stress uFE / MPa'],
-                     ['Bone Volume Fraction / -',                 'Min ECM Area / mm²'],
-                     ['Bone Mineral Density / mg HA / cm³',       'Tissue Mineral Density / mg HA / cm³'],
-                     ['Bone Mineral Density / mg HA / cm³',       'Mineral weight fraction / -'],
-                     ['Bone Mineral Density / mg HA / cm³',       'Organic weight fraction / -'],
-                     ['Bone Mineral Density / mg HA / cm³',       'Water weight fraction / -'],
-                     ['Bone Mineral Density / mg HA / cm³',       'Density / g/cm³'],
-                     ['Bone Mineral Density / mg HA / cm³',       'Apparent Modulus Mineralized / MPa'],
-                     ['Bone Mineral Density / mg HA / cm³',       'Apparent Modulus Demineralized / MPa'],
-                     ['Bone Mineral Density / mg HA / cm³',       'Ultimate Stress / MPa'],
-                     ['Bone Mineral Density / mg HA / cm³',       'Ultimate Collagen Stress / MPa'],
-                     ['Bone Mineral Density / mg HA / cm³',       'Ultimate Strain / -'],
-                     ['Bone Mineral Density / mg HA / cm³',       'Mineral to Matrix Ratio / -'],
-                     ['Bone Mineral Density / mg HA / cm³',       'Apparent Modulus Mineralized uFE / MPa'],
-                     ['Bone Mineral Density / mg HA / cm³',       'Yield Stress uFE / MPa'],
-                     ['Bone Mineral Density / mg HA / cm³',       'Ultimate Stress uFE / MPa'],
-                     ['Bone Mineral Density / mg HA / cm³',       'Min ECM Area / mm²'],
-                     ['Tissue Mineral Density / mg HA / cm³',     'Mineral weight fraction / -'],
-                     ['Tissue Mineral Density / mg HA / cm³',     'Organic weight fraction / -'],
-                     ['Tissue Mineral Density / mg HA / cm³',     'Water weight fraction / -'],
-                     ['Tissue Mineral Density / mg HA / cm³',     'Density / g/cm³'],
-                     ['Tissue Mineral Density / mg HA / cm³',     'Apparent Modulus Mineralized / MPa'],
-                     ['Tissue Mineral Density / mg HA / cm³',     'Apparent Modulus Demineralized / MPa'],
-                     ['Tissue Mineral Density / mg HA / cm³',     'Ultimate Stress / MPa'],
-                     ['Tissue Mineral Density / mg HA / cm³',     'Ultimate Collagen Stress / MPa'],
-                     ['Tissue Mineral Density / mg HA / cm³',     'Ultimate Strain / -'],
-                     ['Tissue Mineral Density / mg HA / cm³',     'Mineral to Matrix Ratio / -'],
-                     ['Tissue Mineral Density / mg HA / cm³',     'Apparent Modulus Mineralized uFE / MPa'],
-                     ['Tissue Mineral Density / mg HA / cm³',     'Yield Stress uFE / MPa'],
-                     ['Tissue Mineral Density / mg HA / cm³',     'Ultimate Stress uFE / MPa'],
-                     ['Tissue Mineral Density / mg HA / cm³',       'Min ECM Area / mm²'],
+                     ['Apparent Modulus Mineralized / MPa',       'Modulus Demineralized / MPa'],
+                     ['Apparent Modulus Mineralized / MPa',       'Density / g/cm³'],
+                     ['Apparent Modulus Mineralized / MPa',       'Mineral weight fraction / -'],
+                     ['Apparent Modulus Mineralized / MPa',       'Organic weight fraction / -'],
+                     ['Apparent Modulus Mineralized / MPa',       'Water weight fraction / -'],
+                     ['Apparent Modulus Mineralized / MPa',       'Bone Volume Fraction / -'],
+                     ['Apparent Modulus Mineralized / MPa',       'Bone Mineral Density / mg HA / cm³'],
+                     ['Apparent Modulus Mineralized / MPa',       'Tissue Mineral Density / mg HA / cm³'],
+                     ['Apparent Modulus Mineralized / MPa',       'Min ECM Area / mm²'],
+                     ['Apparent Modulus Mineralized / MPa',       'Coefficient of Variation / -'],
+                     ['Apparent Modulus Mineralized / MPa',       'Mean Apparent Area / mm²'],
+                     ['Apparent Modulus Mineralized / MPa',       'Mean ECM Area / mm²'],
+                     ['Apparent Modulus Mineralized / MPa',       'Mean ECM Area Fraction / -'],
+                     ['Apparent Modulus Mineralized / MPa',       'Min ECM Area Fraction / -'],
+                     ['Apparent Modulus Mineralized / MPa',       'Mineral to Matrix Ratio / -'],
+                     ['Modulus Mineralized / MPa',                'Ultimate Apparent Stress / MPa'],
+                     ['Modulus Mineralized / MPa',                'Ultimate Collagen Stress / MPa'],
+                     ['Modulus Mineralized / MPa',                'Ultimate Stress / MPa'],
+                     ['Modulus Mineralized / MPa',                'Ultimate Strain / -'],
+                     ['Modulus Mineralized / MPa',                'Apparent Modulus Demineralized / MPa'],
+                     ['Modulus Mineralized / MPa',                'Modulus Demineralized / MPa'],
+                     ['Modulus Mineralized / MPa',                'Density / g/cm³'],
+                     ['Modulus Mineralized / MPa',                'Mineral weight fraction / -'],
+                     ['Modulus Mineralized / MPa',                'Organic weight fraction / -'],
+                     ['Modulus Mineralized / MPa',                'Water weight fraction / -'],
+                     ['Modulus Mineralized / MPa',                'Bone Volume Fraction / -'],
+                     ['Modulus Mineralized / MPa',                'Bone Mineral Density / mg HA / cm³'],
+                     ['Modulus Mineralized / MPa',                'Tissue Mineral Density / mg HA / cm³'],
+                     ['Modulus Mineralized / MPa',                'Min ECM Area / mm²'],
+                     ['Modulus Mineralized / MPa',                'Coefficient of Variation / -'],
+                     ['Modulus Mineralized / MPa',                'Mean Apparent Area / mm²'],
+                     ['Modulus Mineralized / MPa',                'Mean ECM Area / mm²'],
+                     ['Modulus Mineralized / MPa',                'Mean ECM Area Fraction / -'],
+                     ['Modulus Mineralized / MPa',                'Min ECM Area Fraction / -'],
+                     ['Modulus Mineralized / MPa',                'Mineral to Matrix Ratio / -'],
+                     ['Ultimate Apparent Stress / MPa',           'Ultimate Collagen Stress / MPa'],
+                     ['Ultimate Apparent Stress / MPa',           'Ultimate Stress / MPa'],
+                     ['Ultimate Apparent Stress / MPa',           'Ultimate Strain / -'],
+                     ['Ultimate Apparent Stress / MPa',           'Apparent Modulus Demineralized / MPa'],
+                     ['Ultimate Apparent Stress / MPa',           'Modulus Demineralized / MPa'],
+                     ['Ultimate Apparent Stress / MPa',           'Density / g/cm³'],
+                     ['Ultimate Apparent Stress / MPa',           'Mineral weight fraction / -'],
+                     ['Ultimate Apparent Stress / MPa',           'Organic weight fraction / -'],
+                     ['Ultimate Apparent Stress / MPa',           'Water weight fraction / -'],
+                     ['Ultimate Apparent Stress / MPa',           'Bone Volume Fraction / -'],
+                     ['Ultimate Apparent Stress / MPa',           'Bone Mineral Density / mg HA / cm³'],
+                     ['Ultimate Apparent Stress / MPa',           'Tissue Mineral Density / mg HA / cm³'],
+                     ['Ultimate Apparent Stress / MPa',           'Min ECM Area / mm²'],
+                     ['Ultimate Apparent Stress / MPa',           'Coefficient of Variation / -'],
+                     ['Ultimate Apparent Stress / MPa',           'Mean Apparent Area / mm²'],
+                     ['Ultimate Apparent Stress / MPa',           'Mean ECM Area / mm²'],
+                     ['Ultimate Apparent Stress / MPa',           'Mean ECM Area Fraction / -'],
+                     ['Ultimate Apparent Stress / MPa',           'Min ECM Area Fraction / -'],
+                     ['Ultimate Apparent Stress / MPa',           'Mineral to Matrix Ratio / -'],
+                     ['Ultimate Collagen Stress / MPa',           'Ultimate Stress / MPa'],
+                     ['Ultimate Collagen Stress / MPa',           'Ultimate Strain / -'],
+                     ['Ultimate Collagen Stress / MPa',           'Apparent Modulus Demineralized / MPa'],
+                     ['Ultimate Collagen Stress / MPa',           'Modulus Demineralized / MPa'],
+                     ['Ultimate Collagen Stress / MPa',           'Density / g/cm³'],
+                     ['Ultimate Collagen Stress / MPa',           'Mineral weight fraction / -'],
+                     ['Ultimate Collagen Stress / MPa',           'Organic weight fraction / -'],
+                     ['Ultimate Collagen Stress / MPa',           'Water weight fraction / -'],
+                     ['Ultimate Collagen Stress / MPa',           'Bone Volume Fraction / -'],
+                     ['Ultimate Collagen Stress / MPa',           'Bone Mineral Density / mg HA / cm³'],
+                     ['Ultimate Collagen Stress / MPa',           'Tissue Mineral Density / mg HA / cm³'],
+                     ['Ultimate Collagen Stress / MPa',           'Min ECM Area / mm²'],
+                     ['Ultimate Collagen Stress / MPa',           'Coefficient of Variation / -'],
+                     ['Ultimate Collagen Stress / MPa',           'Mean Apparent Area / mm²'],
+                     ['Ultimate Collagen Stress / MPa',           'Mean ECM Area / mm²'],
+                     ['Ultimate Collagen Stress / MPa',           'Mean ECM Area Fraction / -'],
+                     ['Ultimate Collagen Stress / MPa',           'Min ECM Area Fraction / -'],
+                     ['Ultimate Collagen Stress / MPa',           'Mineral to Matrix Ratio / -'],
+                     ['Ultimate Stress / MPa',                    'Ultimate Strain / -'],
+                     ['Ultimate Stress / MPa',                    'Apparent Modulus Demineralized / MPa'],
+                     ['Ultimate Stress / MPa',                    'Modulus Demineralized / MPa'],
+                     ['Ultimate Stress / MPa',                    'Density / g/cm³'],
+                     ['Ultimate Stress / MPa',                    'Mineral weight fraction / -'],
+                     ['Ultimate Stress / MPa',                    'Organic weight fraction / -'],
+                     ['Ultimate Stress / MPa',                    'Water weight fraction / -'],
+                     ['Ultimate Stress / MPa',                    'Bone Volume Fraction / -'],
+                     ['Ultimate Stress / MPa',                    'Bone Mineral Density / mg HA / cm³'],
+                     ['Ultimate Stress / MPa',                    'Tissue Mineral Density / mg HA / cm³'],
+                     ['Ultimate Stress / MPa',                    'Min ECM Area / mm²'],
+                     ['Ultimate Stress / MPa',                    'Coefficient of Variation / -'],
+                     ['Ultimate Stress / MPa',                    'Mean Apparent Area / mm²'],
+                     ['Ultimate Stress / MPa',                    'Mean ECM Area / mm²'],
+                     ['Ultimate Stress / MPa',                    'Mean ECM Area Fraction / -'],
+                     ['Ultimate Stress / MPa',                    'Min ECM Area Fraction / -'],
+                     ['Ultimate Stress / MPa',                    'Mineral to Matrix Ratio / -'],
+                     ['Ultimate Strain / -',                      'Apparent Modulus Demineralized / MPa'],
+                     ['Ultimate Strain / -',                      'Modulus Demineralized / MPa'],
+                     ['Ultimate Strain / -',                      'Density / g/cm³'],
+                     ['Ultimate Strain / -',                      'Mineral weight fraction / -'],
+                     ['Ultimate Strain / -',                      'Organic weight fraction / -'],
+                     ['Ultimate Strain / -',                      'Water weight fraction / -'],
+                     ['Ultimate Strain / -',                      'Bone Volume Fraction / -'],
+                     ['Ultimate Strain / -',                      'Bone Mineral Density / mg HA / cm³'],
+                     ['Ultimate Strain / -',                      'Tissue Mineral Density / mg HA / cm³'],
+                     ['Ultimate Strain / -',                      'Min ECM Area / mm²'],
+                     ['Ultimate Strain / -',                      'Coefficient of Variation / -'],
+                     ['Ultimate Strain / -',                      'Mean Apparent Area / mm²'],
+                     ['Ultimate Strain / -',                      'Mean ECM Area / mm²'],
+                     ['Ultimate Strain / -',                      'Mean ECM Area Fraction / -'],
+                     ['Ultimate Strain / -',                      'Min ECM Area Fraction / -'],
+                     ['Ultimate Strain / -',                      'Mineral to Matrix Ratio / -'],
+                     ['Apparent Modulus Demineralized / MPa',     'Modulus Demineralized / MPa'],
+                     ['Apparent Modulus Demineralized / MPa',     'Density / g/cm³'],
+                     ['Apparent Modulus Demineralized / MPa',     'Mineral weight fraction / -'],
+                     ['Apparent Modulus Demineralized / MPa',     'Organic weight fraction / -'],
+                     ['Apparent Modulus Demineralized / MPa',     'Water weight fraction / -'],
+                     ['Apparent Modulus Demineralized / MPa',     'Bone Volume Fraction / -'],
+                     ['Apparent Modulus Demineralized / MPa',     'Bone Mineral Density / mg HA / cm³'],
+                     ['Apparent Modulus Demineralized / MPa',     'Tissue Mineral Density / mg HA / cm³'],
+                     ['Apparent Modulus Demineralized / MPa',     'Min ECM Area / mm²'],
+                     ['Apparent Modulus Demineralized / MPa',     'Coefficient of Variation / -'],
+                     ['Apparent Modulus Demineralized / MPa',     'Mean Apparent Area / mm²'],
+                     ['Apparent Modulus Demineralized / MPa',     'Mean ECM Area / mm²'],
+                     ['Apparent Modulus Demineralized / MPa',     'Mean ECM Area Fraction / -'],
+                     ['Apparent Modulus Demineralized / MPa',     'Min ECM Area Fraction / -'],
+                     ['Apparent Modulus Demineralized / MPa',     'Mineral to Matrix Ratio / -'],
+                     ['Modulus Demineralized / MPa',              'Density / g/cm³'],
+                     ['Modulus Demineralized / MPa',              'Mineral weight fraction / -'],
+                     ['Modulus Demineralized / MPa',              'Organic weight fraction / -'],
+                     ['Modulus Demineralized / MPa',              'Water weight fraction / -'],
+                     ['Modulus Demineralized / MPa',              'Bone Volume Fraction / -'],
+                     ['Modulus Demineralized / MPa',              'Bone Mineral Density / mg HA / cm³'],
+                     ['Modulus Demineralized / MPa',              'Tissue Mineral Density / mg HA / cm³'],
+                     ['Modulus Demineralized / MPa',              'Min ECM Area / mm²'],
+                     ['Modulus Demineralized / MPa',              'Coefficient of Variation / -'],
+                     ['Modulus Demineralized / MPa',              'Mean Apparent Area / mm²'],
+                     ['Modulus Demineralized / MPa',              'Mean ECM Area / mm²'],
+                     ['Modulus Demineralized / MPa',              'Mean ECM Area Fraction / -'],
+                     ['Modulus Demineralized / MPa',              'Min ECM Area Fraction / -'],
+                     ['Modulus Demineralized / MPa',              'Mineral to Matrix Ratio / -'],
+                     ['Density / g/cm³',                          'Mineral weight fraction / -'],
+                     ['Density / g/cm³',                          'Organic weight fraction / -'],
+                     ['Density / g/cm³',                          'Water weight fraction / -'],
+                     ['Density / g/cm³',                          'Bone Volume Fraction / -'],
+                     ['Density / g/cm³',                          'Bone Mineral Density / mg HA / cm³'],
+                     ['Density / g/cm³',                          'Tissue Mineral Density / mg HA / cm³'],
+                     ['Density / g/cm³',                          'Min ECM Area / mm²'],
+                     ['Density / g/cm³',                          'Coefficient of Variation / -'],
+                     ['Density / g/cm³',                          'Mean Apparent Area / mm²'],
+                     ['Density / g/cm³',                          'Mean ECM Area / mm²'],
+                     ['Density / g/cm³',                          'Mean ECM Area Fraction / -'],
+                     ['Density / g/cm³',                          'Min ECM Area Fraction / -'],
+                     ['Density / g/cm³',                          'Mineral to Matrix Ratio / -'],
                      ['Mineral weight fraction / -',              'Organic weight fraction / -'],
                      ['Mineral weight fraction / -',              'Water weight fraction / -'],
-                     ['Mineral weight fraction / -',              'Density / g/cm³'],
-                     ['Mineral weight fraction / -',              'Apparent Modulus Mineralized / MPa'],
-                     ['Mineral weight fraction / -',              'Apparent Modulus Demineralized / MPa'],
-                     ['Mineral weight fraction / -',              'Ultimate Stress / MPa'],
-                     ['Mineral weight fraction / -',              'Ultimate Collagen Stress / MPa'],
-                     ['Mineral weight fraction / -',              'Ultimate Strain / -'],
-                     ['Mineral weight fraction / -',              'Mineral to Matrix Ratio / -'],
-                     ['Mineral weight fraction / -',              'Apparent Modulus Mineralized uFE / MPa'],
-                     ['Mineral weight fraction / -',              'Yield Stress uFE / MPa'],
-                     ['Mineral weight fraction / -',              'Ultimate Stress uFE / MPa'],
+                     ['Mineral weight fraction / -',              'Bone Volume Fraction / -'],
+                     ['Mineral weight fraction / -',              'Bone Mineral Density / mg HA / cm³'],
+                     ['Mineral weight fraction / -',              'Tissue Mineral Density / mg HA / cm³'],
                      ['Mineral weight fraction / -',              'Min ECM Area / mm²'],
+                     ['Mineral weight fraction / -',              'Coefficient of Variation / -'],
+                     ['Mineral weight fraction / -',              'Mean Apparent Area / mm²'],
+                     ['Mineral weight fraction / -',              'Mean ECM Area / mm²'],
+                     ['Mineral weight fraction / -',              'Mean ECM Area Fraction / -'],
+                     ['Mineral weight fraction / -',              'Min ECM Area Fraction / -'],
+                     ['Mineral weight fraction / -',              'Mineral to Matrix Ratio / -'],
                      ['Organic weight fraction / -',              'Water weight fraction / -'],
-                     ['Organic weight fraction / -',              'Density / g/cm³'],
-                     ['Organic weight fraction / -',              'Apparent Modulus Mineralized / MPa'],
-                     ['Organic weight fraction / -',              'Apparent Modulus Demineralized / MPa'],
-                     ['Organic weight fraction / -',              'Ultimate Stress / MPa'],
-                     ['Organic weight fraction / -',              'Ultimate Collagen Stress / MPa'],
-                     ['Organic weight fraction / -',              'Ultimate Strain / -'],
-                     ['Organic weight fraction / -',              'Mineral to Matrix Ratio / -'],
-                     ['Organic weight fraction / -',              'Apparent Modulus Mineralized uFE / MPa'],
-                     ['Organic weight fraction / -',              'Yield Stress uFE / MPa'],
-                     ['Organic weight fraction / -',              'Ultimate Stress uFE / MPa'],
+                     ['Organic weight fraction / -',              'Bone Volume Fraction / -'],
+                     ['Organic weight fraction / -',              'Bone Mineral Density / mg HA / cm³'],
+                     ['Organic weight fraction / -',              'Tissue Mineral Density / mg HA / cm³'],
                      ['Organic weight fraction / -',              'Min ECM Area / mm²'],
-                     ['Water weight fraction / -',                'Density / g/cm³'],
-                     ['Water weight fraction / -',                'Apparent Modulus Mineralized / MPa'],
-                     ['Water weight fraction / -',                'Apparent Modulus Demineralized / MPa'],
-                     ['Water weight fraction / -',                'Ultimate Stress / MPa'],
-                     ['Water weight fraction / -',                'Ultimate Collagen Stress / MPa'],
-                     ['Water weight fraction / -',                'Ultimate Strain / -'],
-                     ['Water weight fraction / -',                'Mineral to Matrix Ratio / -'],
-                     ['Water weight fraction / -',                'Apparent Modulus Mineralized uFE / MPa'],
-                     ['Water weight fraction / -',                'Yield Stress uFE / MPa'],
-                     ['Water weight fraction / -',                'Ultimate Stress uFE / MPa'],
+                     ['Organic weight fraction / -',              'Coefficient of Variation / -'],
+                     ['Organic weight fraction / -',              'Mean Apparent Area / mm²'],
+                     ['Organic weight fraction / -',              'Mean ECM Area / mm²'],
+                     ['Organic weight fraction / -',              'Mean ECM Area Fraction / -'],
+                     ['Organic weight fraction / -',              'Min ECM Area Fraction / -'],
+                     ['Organic weight fraction / -',              'Mineral to Matrix Ratio / -'],
+                     ['Water weight fraction / -',                'Bone Volume Fraction / -'],
+                     ['Water weight fraction / -',                'Bone Mineral Density / mg HA / cm³'],
+                     ['Water weight fraction / -',                'Tissue Mineral Density / mg HA / cm³'],
                      ['Water weight fraction / -',                'Min ECM Area / mm²'],
-                     ['Density / g/cm³',                          'Apparent Modulus Mineralized / MPa'],
-                     ['Density / g/cm³',                          'Apparent Modulus Demineralized / MPa'],
-                     ['Density / g/cm³',                          'Ultimate Stress / MPa'],
-                     ['Density / g/cm³',                          'Ultimate Collagen Stress / MPa'],
-                     ['Density / g/cm³',                          'Ultimate Strain / -'],
-                     ['Density / g/cm³',                          'Mineral to Matrix Ratio / -'],
-                     ['Density / g/cm³',                          'Apparent Modulus Mineralized uFE / MPa'],
-                     ['Density / g/cm³',                          'Yield Stress uFE / MPa'],
-                     ['Density / g/cm³',                          'Ultimate Stress uFE / MPa'],
-                     ['Density / g/cm³',                          'Min ECM Area / mm²'],
-                     ['Apparent Modulus Mineralized / MPa',       'Apparent Modulus Demineralized / MPa'],
-                     ['Apparent Modulus Mineralized / MPa',       'Ultimate Stress / MPa'],
-                     ['Apparent Modulus Mineralized / MPa',       'Ultimate Collagen Stress / MPa'],
-                     ['Apparent Modulus Mineralized / MPa',       'Ultimate Strain / -'],
-                     ['Apparent Modulus Mineralized / MPa',       'Apparent Modulus Mineralized uFE / MPa'],
-                     ['Apparent Modulus Mineralized / MPa',       'Yield Stress uFE / MPa'],
-                     ['Apparent Modulus Mineralized / MPa',       'Ultimate Stress uFE / MPa'],
-                     ['Apparent Modulus Mineralized / MPa',       'Min ECM Area / mm²'],
-                     ['Apparent Modulus Demineralized / MPa',     'Ultimate Stress / MPa'],
-                     ['Apparent Modulus Demineralized / MPa',     'Ultimate Collagen Stress / MPa'],
-                     ['Apparent Modulus Demineralized / MPa',     'Ultimate Strain / -'],
-                     ['Apparent Modulus Demineralized / MPa',     'Mineral to Matrix Ratio / -'],
-                     ['Apparent Modulus Demineralized / MPa',     'Apparent Modulus Mineralized uFE / MPa'],
-                     ['Apparent Modulus Demineralized / MPa',     'Yield Stress uFE / MPa'],
-                     ['Apparent Modulus Demineralized / MPa',     'Ultimate Stress uFE / MPa'],
-                     ['Apparent Modulus Demineralized / MPa',     'Min ECM Area / mm²'],
-                     ['Ultimate Stress / MPa',                    'Ultimate Collagen Stress / MPa'],
-                     ['Ultimate Stress / MPa',                    'Ultimate Strain / -'],
-                     ['Ultimate Stress / MPa',                    'Mineral to Matrix Ratio / -'],
-                     ['Ultimate Stress / MPa',                    'Apparent Modulus Mineralized uFE / MPa'],
-                     ['Ultimate Stress / MPa',                    'Yield Stress uFE / MPa'],
-                     ['Ultimate Stress / MPa',                    'Ultimate Stress uFE / MPa'],
-                     ['Ultimate Stress / MPa',                    'Min ECM Area / mm²'],
-                     ['Coefficient of Variation / -',             'Ultimate Stress / MPa'],
-                     ['Ultimate Strain / -',                      'Ultimate Collagen Stress / MPa'],
-                     ['Ultimate Strain / -',                      'Ultimate Stress uFE / MPa'],
-                     ['Ultimate Strain / -',                      'Yield Stress uFE / MPa'],
-                     ['Ultimate Strain / -',                      'Apparent Modulus Mineralized uFE / MPa'],
-                     ['Ultimate Strain / -',                      'Min ECM Area / mm²'],
-                     ['Apparent Modulus Mineralized uFE / MPa',   'Yield Stress uFE / MPa'],
-                     ['Apparent Modulus Mineralized uFE / MPa',   'Ultimate Stress uFE / MPa'],
-                     ['Apparent Modulus Mineralized uFE / MPa',   'Min ECM Area / mm²'],
-                     ['Yield Stress uFE / MPa',                   'Ultimate Stress uFE / MPa'],
-                     ['Yield Stress uFE / MPa',                   'Min ECM Area / mm²'],
+                     ['Water weight fraction / -',                'Coefficient of Variation / -'],
+                     ['Water weight fraction / -',                'Mean Apparent Area / mm²'],
+                     ['Water weight fraction / -',                'Mean ECM Area / mm²'],
+                     ['Water weight fraction / -',                'Mean ECM Area Fraction / -'],
+                     ['Water weight fraction / -',                'Min ECM Area Fraction / -'],
+                     ['Water weight fraction / -',                'Mineral to Matrix Ratio / -'],
+                     ['Bone Volume Fraction / -',                 'Bone Mineral Density / mg HA / cm³'],
+                     ['Bone Volume Fraction / -',                 'Tissue Mineral Density / mg HA / cm³'],
+                     ['Bone Volume Fraction / -',                 'Min ECM Area / mm²'],
+                     ['Bone Volume Fraction / -',                 'Coefficient of Variation / -'],
+                     ['Bone Volume Fraction / -',                 'Mean Apparent Area / mm²'],
+                     ['Bone Volume Fraction / -',                 'Mean ECM Area / mm²'],
+                     ['Bone Volume Fraction / -',                 'Mean ECM Area Fraction / -'],
+                     ['Bone Volume Fraction / -',                 'Min ECM Area Fraction / -'],
+                     ['Bone Volume Fraction / -',                 'Mineral to Matrix Ratio / -'],
+                     ['Bone Mineral Density / mg HA / cm³',       'Tissue Mineral Density / mg HA / cm³'],
+                     ['Bone Mineral Density / mg HA / cm³',       'Min ECM Area / mm²'],
+                     ['Bone Mineral Density / mg HA / cm³',       'Coefficient of Variation / -'],
+                     ['Bone Mineral Density / mg HA / cm³',       'Mean Apparent Area / mm²'],
+                     ['Bone Mineral Density / mg HA / cm³',       'Mean ECM Area / mm²'],
+                     ['Bone Mineral Density / mg HA / cm³',       'Mean ECM Area Fraction / -'],
+                     ['Bone Mineral Density / mg HA / cm³',       'Min ECM Area Fraction / -'],
+                     ['Bone Mineral Density / mg HA / cm³',       'Mineral to Matrix Ratio / -'],
+                     ['Tissue Mineral Density / mg HA / cm³',     'Min ECM Area / mm²'],
+                     ['Tissue Mineral Density / mg HA / cm³',     'Coefficient of Variation / -'],
+                     ['Tissue Mineral Density / mg HA / cm³',     'Mean Apparent Area / mm²'],
+                     ['Tissue Mineral Density / mg HA / cm³',     'Mean ECM Area / mm²'],
+                     ['Tissue Mineral Density / mg HA / cm³',     'Mean ECM Area Fraction / -'],
+                     ['Tissue Mineral Density / mg HA / cm³',     'Min ECM Area Fraction / -'],
+                     ['Tissue Mineral Density / mg HA / cm³',     'Mineral to Matrix Ratio / -'],
+                     ['Min ECM Area / mm²',                       'Coefficient of Variation / -'],
+                     ['Min ECM Area / mm²',                       'Mean Apparent Area / mm²'],
+                     ['Min ECM Area / mm²',                       'Mean ECM Area / mm²'],
+                     ['Min ECM Area / mm²',                       'Mean ECM Area Fraction / -'],
+                     ['Min ECM Area / mm²',                       'Min ECM Area Fraction / -'],
+                     ['Min ECM Area / mm²',                       'Mineral to Matrix Ratio / -'],
+                     ['Coefficient of Variation / -',             'Mean Apparent Area / mm²'],
+                     ['Coefficient of Variation / -',             'Mean ECM Area / mm²'],
+                     ['Coefficient of Variation / -',             'Mean ECM Area Fraction / -'],
+                     ['Coefficient of Variation / -',             'Min ECM Area Fraction / -'],
+                     ['Coefficient of Variation / -',             'Mineral to Matrix Ratio / -'],
+                     ['Mean Apparent Area / mm²',                 'Mean ECM Area / mm²'],
+                     ['Mean Apparent Area / mm²',                 'Mean ECM Area Fraction / -'],
+                     ['Mean Apparent Area / mm²',                 'Min ECM Area Fraction / -'],
+                     ['Mean Apparent Area / mm²',                 'Mineral to Matrix Ratio / -'],
+                     ['Mean ECM Area / mm²',                      'Mean ECM Area Fraction / -'],
+                     ['Mean ECM Area / mm²',                      'Min ECM Area Fraction / -'],
+                     ['Mean ECM Area / mm²',                      'Mineral to Matrix Ratio / -'],
+                     ['Mean ECM Area Fraction / -',                   'Min ECM Area Fraction / -'],
+                     ['Mean ECM Area Fraction / -',                   'Mineral to Matrix Ratio / -'],
+                     ['Min ECM Area Fraction / -',                    'Mineral to Matrix Ratio / -'],
                      ])
 
 # assign abbreviations to above list of variables
@@ -389,24 +469,18 @@ for i in tqdm(range(len(Pair))):
     # list of plots which need autoscaling, has to be ordered manually
     autoscale_list = pd.DataFrame({'x_axis_abbrev': ['Age',  'Age', 'Age', 'Age', 'Age', 'Age',    'Age',  'Age',
                                                         'Age',   'Age', 'Age', 'BMC', 'MWF', ''],
-                                   'y_axis_abbrev': ['BMD', 'BVTV',   'D', 'MWF', 'OWF', 'TMD', 'MEANAA', 'MINA',
-                                                     'MEANAF', 'MINAF', 'MMR',  'MW', 'MMR', '']})
+                                   'y_axis_abbrev': ['BMD', 'BVTV',   'D', 'MWF', 'OWF', 'TMD', 'MEANAA', 'MINECMA',
+                                                     'MEANECMAF', 'MINECMAF', 'MMR',  'MW', 'MMR', '']})
     # Positions of annotations
     YposCI = 0.025
     YposCV = YposCI + 0.075
     YposN = YposCV + 0.075
-    XposN = 0.05
-
 
     # if p-value smaller than 0.05 create fit curve and if variable 'Age' should not be plotted on main axis, no
     # colormap will be used
     if float(p) <= 0.05:
         if x_axis != 'Age / y':
-            # sns.regplot(x=FitResults.model.exog[:, 1], y=Y_Obs, ax=Axes, scatter=False, color=(0, 0, 0),
-            #             line_kws={'color': 'black'}) # this does not work in combination with color coding
             Axes.plot(X[:, 1], Y_Fit, color=(1, 0, 0), linewidth=1)
-            # Axes.fill_between(X_Obs, Sorted_CI_o, Sorted_CI_u, color=(0, 0, 0), alpha=0.1,
-            #                   label=str(int(Alpha * 100)) + '% CI')
             Axes.scatter(X_np[:, 1][Data['Gender'] == 'M'], Y_Obs_np[Data['Gender'] == 'M'],
                          c=list(tuple(male_age.tolist())), cmap='plasma_r', vmin=Data['Age / y'].min(),
                          vmax=Data['Age / y'].max(), label='male', marker='s')
@@ -420,29 +494,10 @@ for i in tqdm(range(len(Pair))):
             PCM = ax.get_children()[2]
             plt.colorbar(PCM, ax=ax, label='Age / y')
 
-            # Axes.annotate(r'$N$ : ' + str(N), xy=(0.05, YposN), xycoords='axes fraction')
-            # Axes.annotate(r'$R^2$ : ' + str(R2), xy=(0.05, YposR2), xycoords='axes fraction')
-            # # Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
-            # Axes.annotate(r'$CV$ : ' + str(cv), xy=(0.05, YposCV), xycoords='axes fraction')
-            # Axes.annotate(r'$p$ : ' + str(p), xy=(0.05, YposP), xycoords='axes fraction')
-            # Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, YposCI), xycoords='axes fraction')
-
             Axes.annotate(r'$N$ = ' + str(N) + ', 'r'$R^2$ = ' + str(R2), xy=(0.05, YposN), xycoords='axes fraction')
             Axes.annotate(r'$CV$ = ' + str(cv) + ', 'r'$p$ = ' + str(p), xy=(0.05, YposCV), xycoords='axes fraction')
             Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, YposCI),
                           xycoords='axes fraction')
-
-            # # Annotation settings for ESB abstract graph (ultimate stress vs CV): statistics shifted to top right corner
-            # Axes.annotate(r'$N$ : ' + str(N), xy=(0.98, 0.925), xycoords='axes fraction', horizontalalignment='right')
-            # Axes.annotate(r'$R^2$ : ' + str(R2), xy=(0.98, 0.85), xycoords='axes fraction', horizontalalignment='right')
-            # # Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
-            # Axes.annotate(r'$CV$ : ' + str(cv), xy=(0.98, 0.775), xycoords='axes fraction', horizontalalignment='right')
-            # Axes.annotate(r'$p$ : ' + str(p), xy=(0.98, 0.7), xycoords='axes fraction', horizontalalignment='right')
-            # Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.98, 0.625),
-            #               xycoords='axes fraction', horizontalalignment='right')
-
-            # Axes.set_ylabel(Data.columns[2])
-            # Axes.set_xlabel(Data.columns[1])
 
             Axes.set_ylabel(y_axis_label)
             Axes.set_xlabel(x_axis_label)
@@ -474,9 +529,8 @@ for i in tqdm(range(len(Pair))):
                 #             dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
                 plt.close()
-            # plt.close(Figure)
 
-        # don't use colormap if age is plotted on main axes
+        # use colormap if age is not plotted on main axes
         else:
             sns.regplot(x=FitResults.model.exog[:, 1], y=Y_Obs, ax=Axes, scatter=False, color=(1, 0, 0),
                         line_kws={'color': 'black', 'linewidth': 1}, )
@@ -492,16 +546,6 @@ for i in tqdm(range(len(Pair))):
             Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, YposCI),
                           xycoords='axes fraction')
             plt.xlim(xmin=55, xmax=95)
-
-            # Axes.annotate(r'$N$ : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
-            # Axes.annotate(r'$R^2$ : ' + str(R2), xy=(0.05, 0.25), xycoords='axes fraction')
-            # # Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
-            # Axes.annotate(r'$CV$ : ' + str(cv), xy=(0.05, 0.175), xycoords='axes fraction')
-            # Axes.annotate(r'$p$ : ' + str(p), xy=(0.05, 0.1), xycoords='axes fraction')
-            # Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025),
-            #               xycoords='axes fraction')
-            # Axes.set_ylabel(Data.columns[2])
-            # Axes.set_xlabel(Data.columns[1])
 
             Axes.set_ylabel(y_axis_label)
             Axes.set_xlabel(x_axis_label)
@@ -535,7 +579,7 @@ for i in tqdm(range(len(Pair))):
                 #             dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
                 plt.close()
-            # plt.close(Figure)
+
     # if p-value greater than 0.05, no fit will be drawn & if age is contained on main axes, no colormap will be used
     else:
         if x_axis != 'Age / y':
@@ -554,16 +598,6 @@ for i in tqdm(range(len(Pair))):
             Axes.annotate(r'$CV$ = ' + str(cv) + ', 'r'$p$ = ' + str(p), xy=(0.05, YposCV), xycoords='axes fraction')
             Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, YposCI),
                           xycoords='axes fraction')
-
-            # Axes.annotate(r'$N$ : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
-            # Axes.annotate(r'$R^2$ : ' + str(R2), xy=(0.05, 0.25), xycoords='axes fraction')
-            # # Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
-            # Axes.annotate(r'$CV$ : ' + str(cv), xy=(0.05, 0.175), xycoords='axes fraction')
-            # Axes.annotate(r'$p$ : ' + format(round(p, 3), '.3f'), xy=(0.05, 0.1), xycoords='axes fraction')
-            # Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025),
-            #               xycoords='axes fraction')
-            # Axes.set_ylabel(Data.columns[2])
-            # Axes.set_xlabel(Data.columns[1])
 
             Axes.set_ylabel(y_axis_label)
             Axes.set_xlabel(x_axis_label)
@@ -594,7 +628,6 @@ for i in tqdm(range(len(Pair))):
                 #             dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
                 plt.close()
-            # plt.close(Figure)
 
         # don't use colormap if age is plotted on main axes
         else:
@@ -607,16 +640,6 @@ for i in tqdm(range(len(Pair))):
             Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, YposCI),
                           xycoords='axes fraction')
             plt.xlim(xmin=55, xmax=95)
-            #
-            # Axes.annotate(r'$N$ : ' + str(N), xy=(0.05, 0.325), xycoords='axes fraction')
-            # Axes.annotate(r'$R^2$ : ' + str(R2), xy=(0.05, 0.25), xycoords='axes fraction')
-            # # Axes.annotate(r'$\sigma_{est}$ : ' + str(SE), xy=(0.05, 0.175), xycoords='axes fraction')
-            # Axes.annotate(r'$CV$ : ' + str(cv), xy=(0.05, 0.175), xycoords='axes fraction')
-            # Axes.annotate(r'$p$ : ' + str(p), xy=(0.05, 0.1), xycoords='axes fraction')
-            # Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, 0.025),
-            #               xycoords='axes fraction')
-            # Axes.set_ylabel(Data.columns[2])
-            # Axes.set_xlabel(Data.columns[1])
 
             Axes.set_ylabel(y_axis_label)
             Axes.set_xlabel(x_axis_label)
@@ -648,11 +671,11 @@ for i in tqdm(range(len(Pair))):
                 #             dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
                 plt.close()
-            # plt.close(Figure)
 
 # Put everything into growing list and convert to DataFrame that is saved as .csv file
     values = [x_axis, y_axis, p, SE, R2, N, CI_l, CI_r]
     results.append(values)
+
 result_dir = pd.DataFrame(results, columns=['X-axis', 'Y-axis', 'p-value', '\u03C3\u2091\u209B\u209C', 'R\u00B2', 'N',
                                             'lower bound 95% CI', 'upper bound 95% CI'])
 result_dir.to_csv(os.path.join(savepath, 'ResultsPlots.csv'), index=False)
@@ -680,8 +703,6 @@ AMM = df['Apparent Modulus Mineralized / MPa'].dropna().reset_index(drop=True)
 AMD = df['Apparent Modulus Demineralized / MPa'].dropna().reset_index(drop=True)
 AMM = AMM.values.tolist()
 AMD = AMD.values.tolist()
-# AMM = np.array(AMM)
-# AMD = np.array(AMD)
 
 # If we were to simply plot pts, we'd lose most of the interesting
 # details due to the outliers. So let's 'break' or 'cut-out' the y-axis
@@ -734,4 +755,3 @@ plt.savefig(os.path.join(savepath, 'AM_boxplt.png'), dpi=300, bbox_inches='tight
 # plt.savefig(os.path.join(savepath_windows, 'AM_boxplt.png'), dpi=300, bbox_inches='tight', format='png')
 # plt.show()
 plt.close()
-
