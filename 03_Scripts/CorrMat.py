@@ -29,7 +29,7 @@ df_new = df[['Bone Volume Fraction / -', 'Bone Mineral Density / mg HA / cm³', 
              'Modulus Mineralized / MPa', 'Apparent Modulus Demineralized / MPa', 'Modulus Demineralized / MPa',
              'Ultimate Apparent Stress / MPa', 'Ultimate Collagen Stress / MPa', 'Ultimate Stress / MPa',
              'Ultimate Strain / -', 'Apparent Modulus Mineralized uFE / MPa', 'Yield Stress uFE / MPa',
-             'Ultimate Stress uFE / MPa', 'Min ECM Area / mm²', 'Coefficient of Variance / -']]
+             'Ultimate Stress uFE / MPa', 'Min ECM Area / mm²', 'Coefficient of Variation / -']]
 # df_new.columns = ['Bone Volume Fraction', 'Bone Mineral Density', 'Tissue Mineral Density', 'Mineral to Matrix Ratio',
 #                   'Mineral Weight Fraction', 'Organic Weight Fraction', 'Water Weight Fraction', 'Bone Density',
 #                   'Apparent Modulus Mineralized', 'Apparent Modulus Demineralized', 'Ultimate Stress', 'Ultimate Strain',
@@ -92,7 +92,7 @@ newcolors_r = twilight(np.linspace(0, 1, 8))
 newcmp_r = ListedColormap(newcolors_r)
 
 # Axis annotations
-abbreviations = ['BVTV', 'BMD', 'TMD', 'MMR', 'WF$_m$', 'WF$_o$', 'WF$_w$', 'd$_b$', 'E$_{app, m}$', 'E$_m$',
+abbreviations = ['BVTV', 'BMD', 'TMD', 'MMR', 'WF$_m$', 'WF$_o$', 'WF$_w$', r'$\rho_{b}$', 'E$_{app, m}$', 'E$_m$',
                  'E$_{app, c}$', 'E$_c$', '$\sigma_{app}$', '$\sigma_c$', '$\sigma_b$','$\epsilon_c$',
                  'E$_{m, \mu FE}$', '$\sigma_{y, \mu FE}$', '$\sigma_{u, \mu FE}$', '$AF_{min}$', '$CV_{AF_{min}}$']
 

@@ -36,7 +36,7 @@ AxisLabels = ColumnNames.replace({'Apparent Modulus Mineralized / MPa': 'Apparen
                                   'Ultimate Strain / -': 'Ultimate Strain $\epsilon_{u}$',
                                   'Apparent Modulus Demineralized / MPa': 'Apparent Modulus Demineralized E$_{app, c}$ / MPa',
                                   'Modulus Demineralized / MPa': 'Modulus Demineralized E$_c$',
-                                  'Density / g/cm³': 'Density $\u03C1$ / g/cm³',
+                                  'Density / g/cm³': 'Density ' + r'$\rho_{b}$ / g / cm³',
                                   'Organic Weight / g': 'Organic Weight m$_{o}$ / g',
                                   'Mineral Weight / g': 'Mineral Weight m$_{m}$ / g',
                                   'Water Weight / g': 'Water Weight m$_{w}$ / g',
