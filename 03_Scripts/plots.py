@@ -1,19 +1,17 @@
 # This script plots various variables against each other, Data is retrieved from ResultsOverview.csv file
 
 # Import standard packages
-from pathlib import Path                 # Used to manage path variables in windows or linux
-import numpy as np                       # Used to do arrays (matrices) computations namely
-import pandas as pd                      # Used to manage data frames
-import matplotlib.pyplot as plt          # Used to perform plots
-import statsmodels.formula.api as smf    # Used for statistical analysis (ols here)
-import os
-from scipy.stats.distributions import t  # Used to compute confidence intervals
-import sys
-import seaborn as sns
-import statistics
-from statsmodels.tools.eval_measures import rmse
-from tqdm import tqdm
-from scipy.stats import linregress
+from pathlib import Path                            # Used to manage path variables in windows or linux
+import numpy as np                                  # Used to do arrays (matrices) computations namely
+import pandas as pd                                 # Used to manage data frames
+import matplotlib.pyplot as plt                     # Used to perform plots
+import statsmodels.formula.api as smf               # Used for statistical analysis (ols here)
+import os                                           # Used to manage path variables
+from scipy.stats.distributions import t             # Used to compute confidence intervals
+import seaborn as sns                               # Used to create regression lines with confidence bands
+import statistics                                   # Used to calculate statistical measures
+from statsmodels.tools.eval_measures import rmse    # Used to evaluate rmse
+from tqdm import tqdm                               # Used to track script progression while running
 
 
 # Set directory & load data
@@ -509,7 +507,7 @@ for i in tqdm(range(len(Pair))):
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 # plt.legend(loc='upper center', ncol=2, bbox_to_anchor=(0.5, 1.15), prop={'size': 10})
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
-                plt.rcParams['figure.figsize'] = (5, 5)
+                plt.rcParams['figure.figsize'] = (5.5, 4.5)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, format='png', )
                 # plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
@@ -522,7 +520,7 @@ for i in tqdm(range(len(Pair))):
                 plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
-                plt.rcParams['figure.figsize'] = (5, 5)
+                plt.rcParams['figure.figsize'] = (5.5, 4.5)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, format='png')
                 # plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
@@ -558,7 +556,7 @@ for i in tqdm(range(len(Pair))):
                 plt.xlim(xmin=55, xmax=95)
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
-                plt.rcParams['figure.figsize'] = (5, 5)
+                plt.rcParams['figure.figsize'] = (5.5, 4.5)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, format='png')
                 # plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
@@ -572,7 +570,7 @@ for i in tqdm(range(len(Pair))):
                 plt.xlim(xmin=55, xmax=95)
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
-                plt.rcParams['figure.figsize'] = (5, 5)
+                plt.rcParams['figure.figsize'] = (5.5, 4.5)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, format='png')
                 # plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
@@ -608,7 +606,7 @@ for i in tqdm(range(len(Pair))):
                 plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
-                plt.rcParams['figure.figsize'] = (5, 5)
+                plt.rcParams['figure.figsize'] = (5.5, 4.5)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, format='png')
                 # plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
@@ -621,7 +619,7 @@ for i in tqdm(range(len(Pair))):
                 plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
-                plt.rcParams['figure.figsize'] = (5, 5)
+                plt.rcParams['figure.figsize'] = (5.5, 4.5)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, format='png')
                 # plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
@@ -651,7 +649,7 @@ for i in tqdm(range(len(Pair))):
                 plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
-                plt.rcParams['figure.figsize'] = (5, 5)
+                plt.rcParams['figure.figsize'] = (5.5, 4.5)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, format='png')
                 # plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
@@ -664,7 +662,7 @@ for i in tqdm(range(len(Pair))):
                 plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
-                plt.rcParams['figure.figsize'] = (5, 5)
+                plt.rcParams['figure.figsize'] = (5.5, 4.5)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, format='png')
                 # plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
@@ -673,11 +671,12 @@ for i in tqdm(range(len(Pair))):
                 plt.close()
 
 # Put everything into growing list and convert to DataFrame that is saved as .csv file
-    values = [x_axis, y_axis, p, SE, R2, N, CI_l, CI_r]
+    values = [x_axis, y_axis, p, SE, R2, N, CI_l, CI_r, SE, RMSE]
     results.append(values)
 
 result_dir = pd.DataFrame(results, columns=['X-axis', 'Y-axis', 'p-value', '\u03C3\u2091\u209B\u209C', 'R\u00B2', 'N',
-                                            'lower bound 95% CI', 'upper bound 95% CI'])
+                                            'lower bound 95% CI', 'upper bound 95% CI', 'Standard error',
+                                            'Root mean square error'])
 result_dir.to_csv(os.path.join(savepath, 'ResultsPlots.csv'), index=False)
 # result_dir.to_csv(os.path.join(savepath_windows, 'ResultsPlots.csv'), index=False)
 
