@@ -5,6 +5,8 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import os
 from scipy.stats.distributions import norm
+import statsmodels.api as sm
+import pylab
 
 desired_width = 500
 pd.set_option('display.max_rows', 100)
@@ -17,13 +19,13 @@ Cwd = Path.cwd()
 DataPath = Cwd / '04_Results/ResultsOverview.csv'
 savepath = Cwd / '04_Results/04_Plots'
 df = pd.read_csv(str(DataPath), skiprows=0)
-df = df[df['Age'].notna()].reset_index(drop=True)
+df = df[df['Age / y'].notna()].reset_index(drop=True)
 
 Data = pd.DataFrame()
-Data['Age'] = df['Age']
+Data['Age / y'] = df['Age / y']
 
 # 01 Get data attributes
-X = Data['Age']
+X = Data['Age / y']
 SortedValues = np.sort(X.values)
 N = len(X)
 X_Bar = np.mean(X)
@@ -51,10 +53,6 @@ plt.legend(loc='upper left')
 plt.savefig(os.path.join(savepath, 'AgeDistribution.eps'), dpi=300, bbox_inches='tight', format='eps')
 plt.show()
 
-
-import statsmodels.api as sm
-from scipy.stats import norm
-import pylab
 Figure, Axes = plt.subplots(1, 1, figsize=(5.5, 4.5), dpi=300)
 sm.qqplot(X, line='s')
 plt.savefig(os.path.join(savepath, 'AgeDistribution_qqplot.png'), dpi=300, bbox_inches='tight', format='png')
