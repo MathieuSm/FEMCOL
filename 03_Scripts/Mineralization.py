@@ -56,8 +56,8 @@ for x in tqdm(range(0, len(Data), 1)):
     Axis.imshow(Scan[:, :, YMid], cmap='bone')
     Axis.axis('off')
     plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
-    # plt.savefig(os.path.join('/home/stefan/Documents/FEMCOL/04_Results/03_uCT/', SampleID + '_' + 'YZ_Plane'),
-    #             dpi=300)
+    plt.savefig(os.path.join('/home/stefan/PycharmProjects/FEMCOL/04_Results/03_uCT/', SampleID + '_' + 'YZ_Plane'),
+                dpi=300)
     # plt.show()
     plt.close()
 
@@ -65,6 +65,11 @@ for x in tqdm(range(0, len(Data), 1)):
     Threshold = MeanOtsu.loc[0][0]
     BinaryScan = np.zeros(Scan.shape)
     BinaryScan[Scan > Threshold] = 1
+    SegmentedImage = sitk.GetImageFromArray(BinaryScan)
+    SegmentedImage.SetSpacing(Image.GetSpacing())
+    SegmentedImage.SetOrigin(Image.GetOrigin())
+    SegmentedImage.SetDirection(Image.GetDirection())
+    sitk.WriteImage(SegmentedImage, '/home/stefan/PycharmProjects/FEMCOL/04_Results/03_uCT/SegmentedImage_' + SampleID + '.mhd')
 
     # Plot segmented image
     Figure, Axis = plt.subplots(1,1, figsize=(Size[1], Size[0]))
