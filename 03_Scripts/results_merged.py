@@ -20,6 +20,7 @@ results_merged['Stiffness Demineralized / N/mm'] = results_demineralized['Stiffn
 results_merged['Apparent Modulus Mineralized / MPa'] = results_mineralized['Apparent modulus MPa']
 results_merged['Modulus Mineralized / MPa'] = results_mineralized['Modulus Mineralized MPa']
 results_merged['Ultimate Force / N'] = results_demineralized['Ultimate Force / N']
+
 results_merged['Ultimate Apparent Stress / MPa'] = results_demineralized['Ultimate stress / MPa']
 results_merged['Ultimate Collagen Stress / MPa'] = results_demineralized['Ultimate collagen stress / MPa']
 results_merged['Ultimate Stress / MPa'] = results_demineralized['Ultimate stress non-app / MPa']
@@ -54,5 +55,3 @@ results_merged['Yield Stress uFE / MPa'] = round(results_uFE['yield_strength_uFE
 results_merged['Ultimate Stress uFE / MPa'] = round(results_uFE['strength_uFE_with_non_broken'], 2)
 results_merged.to_csv(os.path.join(Cwd / '04_Results/', 'ResultsOverview.csv'),
                       index=False)
-
-
