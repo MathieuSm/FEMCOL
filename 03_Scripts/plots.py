@@ -387,13 +387,19 @@ Pair = pd.DataFrame([
                      ['Mean ECM Area / mm²',                      'Matrix maturity / -'],
                      ['Mean ECM Area Fraction / -',               'Min ECM Area Fraction / -'],
                      ['Mean ECM Area Fraction / -',               'Mineral to Matrix Ratio / -'],
-                     ['Mean ECM Area Fraction / -',                   'Crystallinity / -'],
-                     ['Mean ECM Area Fraction / -',                   'Collagen dis/order / -'],
-                     ['Mean ECM Area Fraction / -',                   'Matrix maturity / -'],
+                     ['Mean ECM Area Fraction / -',               'Crystallinity / -'],
+                     ['Mean ECM Area Fraction / -',               'Collagen dis/order / -'],
+                     ['Mean ECM Area Fraction / -',               'Matrix maturity / -'],
                      ['Min ECM Area Fraction / -',                'Mineral to Matrix Ratio / -'],
-                     ['Min ECM Area Fraction / -',                    'Crystallinity / -'],
-                     ['Min ECM Area Fraction / -',                    'Collagen dis/order / -'],
-                     ['Min ECM Area Fraction / -',                    'Matrix maturity / -'],
+                     ['Min ECM Area Fraction / -',                'Crystallinity / -'],
+                     ['Min ECM Area Fraction / -',                'Collagen dis/order / -'],
+                     ['Min ECM Area Fraction / -',                'Matrix maturity / -'],
+                     ['Mineral to Matrix Ratio / -',              'Crystallinity / -'],
+                     ['Mineral to Matrix Ratio / -',              'Collagen dis/order / -'],
+                     ['Mineral to Matrix Ratio / -',              'Matrix maturity / -'],
+                     ['Crystallinity / -',                        'Collagen dis/order / -'],
+                     ['Crystallinity / -',                        'Matrix maturity / -'],
+                     ['Collagen dis/order / -',                   'Matrix maturity / -'],
                      ])
 
 # assign abbreviations to above list of variables
@@ -571,8 +577,14 @@ for i in tqdm(range(len(Pair))):
 
             # condition used for autoscaling
             if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
-                # plt.autoscale()
-                plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
+                if Y_Obs.min() >= 0.1:
+                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
+                if Y_Obs.min() >= 0.01 and Y_Obs.min() < 0.1:
+                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 2), ymax=round(Y_Obs.max()*1.02, 4))
+                if Y_Obs.min() >= 0.001 and Y_Obs.min() < 0.01:
+                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 3), ymax=round(Y_Obs.max()*1.02, 4))
+                else:
+                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 4), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 # plt.legend(loc='upper center', ncol=2, bbox_to_anchor=(0.5, 1.15), prop={'size': 10})
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
@@ -585,8 +597,14 @@ for i in tqdm(range(len(Pair))):
                 plt.close()
                 j = j + 1
             else:
-                # plt.ylim(ymin=0)
-                plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
+                if Y_Obs.min() >= 0.1:
+                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
+                if Y_Obs.min() >= 0.01 and Y_Obs.min() < 0.1:
+                    plt.ylim(ymin=round(Y_Obs.min()*0.9, 2), ymax=round(Y_Obs.max()*1.02, 4))
+                if Y_Obs.min() >= 0.001 and Y_Obs.min() < 0.01:
+                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 3), ymax=round(Y_Obs.max()*1.02, 4))
+                else:
+                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 4), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
                 plt.rcParams['figure.figsize'] = (5.5, 4.5)
@@ -599,11 +617,9 @@ for i in tqdm(range(len(Pair))):
 
         # use colormap if age is not plotted on main axes
         else:
-            sns.regplot(x=FitResults.model.exog[:, 1], y=Y_Obs, ax=Axes, scatter=False, color=(1, 0, 0),
-                        line_kws={'color': 'black', 'linewidth': 1}, )
-            Axes.plot(X[:, 1], Y_Fit, color=(1, 0, 0), linewidth=1)
-            # Axes.fill_between(X_Obs, Sorted_CI_o, Sorted_CI_u, color=(0, 0, 0), alpha=0.1,
-            #                   label=str(int(Alpha * 100)) + '% CI')
+            sns.regplot(x=FitResults.model.exog[:, 1], y=Y_Obs, ax=Axes, scatter=False, color=(0, 1, 0),
+                        line_kws={'color': 'red', 'linewidth': 1}, )  # set background color of confidence interval here
+            # Axes.plot(X[:, 1], Y_Fit, color=(0, 0, 0), linewidth=1)  # set color of regression line here
             Axes.plot(X[:, 1][Data['Gender'] == 'M'], Y_Obs[Data['Gender'] == 'M'], linestyle='none', marker='s',
                       color=(0, 0, 0), fillstyle='none', label='male')
             Axes.plot(X[:, 1][Data['Gender'] == 'F'], Y_Obs[Data['Gender'] == 'F'], linestyle='none', marker='o',
@@ -620,8 +636,14 @@ for i in tqdm(range(len(Pair))):
             # condition used for autoscaling
             if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
                 # plt.ylim(ymin=0, ymax=round(Y_Fit.max() * 1.2, 2))
-                # plt.autoscale()
-                plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
+                if Y_Obs.min() >= 0.1:
+                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
+                if Y_Obs.min() >= 0.01 and Y_Obs.min() < 0.1:
+                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 2), ymax=round(Y_Obs.max()*1.02, 4))
+                if Y_Obs.min() >= 0.001 and Y_Obs.min() < 0.01:
+                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 3), ymax=round(Y_Obs.max()*1.02, 4))
+                else:
+                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 4), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.xlim(xmin=55, xmax=95)
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
@@ -634,8 +656,14 @@ for i in tqdm(range(len(Pair))):
                 plt.close()
                 j = j + 1
             else:
-                # plt.ylim(ymin=0)
-                plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
+                if Y_Obs.min() >= 0.1:
+                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
+                if Y_Obs.min() >= 0.01 and Y_Obs.min() < 0.1:
+                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 2), ymax=round(Y_Obs.max()*1.02, 4))
+                if Y_Obs.min() >= 0.001 and Y_Obs.min() < 0.01:
+                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 3), ymax=round(Y_Obs.max()*1.02, 4))
+                else:
+                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 4), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.xlim(xmin=55, xmax=95)
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
@@ -671,8 +699,14 @@ for i in tqdm(range(len(Pair))):
 
             # condition used for autoscaling
             if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
-                # plt.autoscale()
-                plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
+                if Y_Obs.min() >= 0.1:
+                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
+                if Y_Obs.min() >= 0.01 and Y_Obs.min() < 0.1:
+                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 2), ymax=round(Y_Obs.max()*1.02, 4))
+                if Y_Obs.min() >= 0.001 and Y_Obs.min() < 0.01:
+                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 3), ymax=round(Y_Obs.max()*1.02, 4))
+                else:
+                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 4), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
                 plt.rcParams['figure.figsize'] = (5.5, 4.5)
@@ -684,8 +718,14 @@ for i in tqdm(range(len(Pair))):
                 plt.close()
                 j = j + 1
             else:
-                # plt.ylim(ymin=0)
-                plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
+                if Y_Obs.min() >= 0.1:
+                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
+                if Y_Obs.min() >= 0.01 and Y_Obs.min() < 0.1:
+                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 2), ymax=round(Y_Obs.max()*1.02, 4))
+                if Y_Obs.min() >= 0.001 and Y_Obs.min() < 0.01:
+                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 3), ymax=round(Y_Obs.max()*1.02, 4))
+                else:
+                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 4), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
                 plt.rcParams['figure.figsize'] = (5.5, 4.5)
@@ -713,9 +753,15 @@ for i in tqdm(range(len(Pair))):
 
             # condition for autoscaling
             if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
-                # plt.autoscale()
                 plt.xlim(xmin=55, xmax=95)
-                plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
+                if Y_Obs.min() >= 0.1:
+                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
+                if Y_Obs.min() >= 0.01 and Y_Obs.min() < 0.1:
+                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 2), ymax=round(Y_Obs.max()*1.02, 4))
+                if Y_Obs.min() >= 0.001 and Y_Obs.min() < 0.01:
+                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 3), ymax=round(Y_Obs.max()*1.02, 4))
+                else:
+                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 4), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
                 plt.rcParams['figure.figsize'] = (5.5, 4.5)
@@ -727,8 +773,14 @@ for i in tqdm(range(len(Pair))):
                 plt.close()
                 j = j + 1
             else:
-                # plt.ylim(ymin=0)
-                plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
+                if Y_Obs.min() >= 0.1:
+                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
+                if Y_Obs.min() >= 0.01 and Y_Obs.min() < 0.1:
+                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 2), ymax=round(Y_Obs.max()*1.02, 4))
+                if Y_Obs.min() >= 0.001 and Y_Obs.min() < 0.01:
+                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 3), ymax=round(Y_Obs.max()*1.02, 4))
+                else:
+                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 4), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
                 plt.rcParams['figure.figsize'] = (5.5, 4.5)
@@ -746,7 +798,7 @@ for i in tqdm(range(len(Pair))):
 result_dir = pd.DataFrame(results, columns=['X-axis', 'Y-axis', 'p-value', '\u03C3\u2091\u209B\u209C', 'R\u00B2', 'N',
                                             'lower bound 95% CI', 'upper bound 95% CI', 'Standard error',
                                             'Root mean square error'])
-result_dir.to_csv(os.path.join(savepath, 'ResultsPlots.csv'), index=False)
+result_dir.to_csv(os.path.join('/home/stefan/PycharmProjects/FEMCOL/04_Results/04_Plots/', 'ResultsPlots.csv'), index=False)
 # result_dir.to_csv(os.path.join(savepath_windows, 'ResultsPlots.csv'), index=False)
 
 # boxplots of specific component weights
@@ -761,7 +813,7 @@ bp = ax1.boxplot(WF)
 ax1.set_ylabel('Weight Fraction / -')
 ax1.set_xticklabels(['Mineral', 'Organic', 'Water'])
 plt.ylim(ymin=0)
-plt.savefig(os.path.join(savepath, 'WF_boxplt.png'), dpi=300, bbox_inches='tight', format='png')
+plt.savefig(os.path.join('/home/stefan/PycharmProjects/FEMCOL/04_Results/04_Plots/', 'WF_boxplt.png'), dpi=300, bbox_inches='tight', format='png')
 # plt.savefig(os.path.join(savepath_windows, 'WF_boxplt.png'), dpi=300, bbox_inches='tight', format='png')
 # plt.show()
 plt.close()
@@ -819,7 +871,8 @@ ax2.plot((1 - d, 1 + d), (1 - d, 1 + d), **kwargs)  # bottom-right diagonal
 # ax and ax2 via f.subplots_adjust(hspace=...) or plt.subplot_tool(),
 # the diagonal lines will move accordingly, and stay right at the tips
 # of the spines they are 'breaking'
-plt.savefig(os.path.join(savepath, 'AM_boxplt.png'), dpi=300, bbox_inches='tight', format='png')
+plt.savefig(os.path.join('/home/stefan/PycharmProjects/FEMCOL/04_Results/04_Plots/', 'AM_boxplt.png'),
+            dpi=300, bbox_inches='tight', format='png')
 # plt.savefig(os.path.join(savepath_windows, 'AM_boxplt.png'), dpi=300, bbox_inches='tight', format='png')
 # plt.show()
 plt.close()

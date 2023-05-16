@@ -141,8 +141,8 @@ ax.set_xticklabels(abbreviations, fontsize=14)
 
 sns.set_style({'xtick.bottom': True}, {'ytick.left': True})
 
-plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_pvalues.eps'), dpi=600, bbox_inches='tight', format='eps')
-plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_pvalues.png'), dpi=600, bbox_inches='tight', format='png')
+plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_pvalues.eps'), dpi=1200, bbox_inches='tight', format='eps')
+plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_pvalues.png'), dpi=1200, bbox_inches='tight', format='png')
 
 plt.show()
 
@@ -170,8 +170,8 @@ ax.set_yticklabels(abbreviations, rotation=0, fontsize=14)
 ax.set_xticklabels(abbreviations, fontsize=14)
 
 sns.set_style({'xtick.bottom': True}, {'ytick.left': True})
-plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_rvalues.eps'), dpi=600, bbox_inches='tight', format='eps')
-plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_rvalues.png'), dpi=600, bbox_inches='tight', format='png')
+plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_rvalues.eps'), dpi=1200, bbox_inches='tight', format='eps')
+plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_rvalues.png'), dpi=1200, bbox_inches='tight', format='png')
 
 plt.show()
 
@@ -201,7 +201,7 @@ ax.set_xticklabels(abbreviations, fontsize=14)
 
 sns.set_style({'xtick.bottom': True}, {'ytick.left': True})
 
-plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_rvalues_asterisk.eps'), dpi=600, bbox_inches='tight', format='eps')
-plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_rvalues_asterisk.png'), dpi=600, bbox_inches='tight', format='png')
+plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_rvalues_asterisk.eps'), dpi=1200, bbox_inches='tight', format='eps')
+plt.savefig(os.path.join(savepath, 'correlation_matrix_heatmap_rvalues_asterisk.png'), dpi=1200, bbox_inches='tight', format='png')
 
 plt.show()
