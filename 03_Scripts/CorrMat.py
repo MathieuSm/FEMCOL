@@ -20,22 +20,26 @@ DataPath = Cwd / '04_Results/ResultsOverview.csv'
 savepath = Cwd / '04_Results/04_Plots/'
 
 df = pd.read_csv(str(DataPath), skiprows=0)
-df = df.drop(columns=['Sample ID', 'Age / y', 'Gender', 'Ultimate Force / N', 'Organic Weight / g', 'Mineral Weight / g',
-                      'Water Weight / g', 'Min Equivalent Diameter / mm', 'Mean Apparent Diameter / mm',
-                      'Mean Area Fraction / -', 'Min Area Fraction / -', 'Mean Apparent Area / mm²'])
+df = df.drop(columns=['Sample ID', 'Age / y', 'Gender', 'Site', 'Stiffness Mineralized / N/mm',
+                      'Stiffness Demineralized / N/mm', 'Ultimate Force / N', 'Organic Weight / g', 'Mineral Weight / g',
+                      'Water Weight / g', 'Bone Mineral Content / mg HA', 'Min Equivalent Diameter / mm',
+                      'Mean Apparent Diameter / mm', 'Mean Apparent Area / mm²', 'Bone Mineral Content / mg HA',
+                      'Min ECM Area / mm²', 'Mean ECM Area / mm²'])
 df_new = df[['Bone Volume Fraction / -', 'Bone Mineral Density / mg HA / cm³', 'Tissue Mineral Density / mg HA / cm³',
-             'Mineral to Matrix Ratio / -', 'Mineral weight fraction / -', 'Organic weight fraction / -',
-             'Water weight fraction / -', 'Density / g/cm³', 'Apparent Modulus Mineralized / MPa',
-             'Modulus Mineralized / MPa', 'Apparent Modulus Demineralized / MPa', 'Modulus Demineralized / MPa',
-             'Ultimate Apparent Stress / MPa', 'Ultimate Collagen Stress / MPa', 'Ultimate Stress / MPa',
-             'Ultimate Strain / -', 'Apparent Modulus Mineralized uFE / MPa', 'Yield Stress uFE / MPa',
-             'Ultimate Stress uFE / MPa', 'Min ECM Area / mm²', 'Coefficient of Variation / -']]
+             'Mineral to Matrix Ratio / -', 'Crystallinity / -', 'Collagen dis/order / -', 'Matrix maturity / -',
+             'Mineral weight fraction / -', 'Organic weight fraction / -', 'Water weight fraction / -', 'Density / g/cm³',
+             'Apparent Modulus Mineralized / MPa', 'Modulus Mineralized / MPa', 'Apparent Modulus Demineralized / MPa',
+             'Modulus Demineralized / MPa', 'Ultimate Apparent Stress / MPa', 'Ultimate Collagen Stress / MPa',
+             'Ultimate Stress / MPa', 'Ultimate Strain / -', 'Apparent Modulus Mineralized uFE / MPa',
+             'Yield Stress uFE / MPa', 'Ultimate Stress uFE / MPa', 'Mean ECM Area Fraction / -',
+             'Min ECM Area Fraction / -', 'Coefficient of Variation / -']]
 # df_new.columns = ['Bone Volume Fraction', 'Bone Mineral Density', 'Tissue Mineral Density', 'Mineral to Matrix Ratio',
 #                   'Mineral Weight Fraction', 'Organic Weight Fraction', 'Water Weight Fraction', 'Bone Density',
 #                   'Apparent Modulus Mineralized', 'Apparent Modulus Demineralized', 'Ultimate Stress', 'Ultimate Strain',
 #                   'Apparent Modulus Mineralized uFE', 'Yield Stress uFE', 'Ultimate Stress uFE']
-df_new.columns = ['BVTV', 'BMD', 'TMD', 'MMR', 'WFM', 'WFO', 'WFW', 'D', 'AMM', 'MM', 'AMD', 'MD', 'UAPPSTRE', 'UCSTRE',
-                  'USTRE', 'USTRA', 'AMMuFE', 'YSTREuFE', 'USTREuFE', 'MINECMA', 'COFVAR']
+df_new.columns = ['BVTV', 'BMD', 'TMD', 'MMR', 'XC', 'CDO', 'MMAT', 'WFM', 'WFO', 'WFW', 'D', 'AMM', 'MM', 'AMD', 'MD',
+                  'UAPPSTRE', 'UCSTRE', 'USTRE', 'USTRA', 'AMMuFE', 'YSTREuFE', 'USTREuFE', 'MEANECMAF', 'MINECMAF',
+                  'COFVAR']
 
 # Create empty dataframe for p-values and correlation matrix containing r values
 corr_matrix_p = pd.DataFrame()
@@ -92,9 +96,14 @@ newcolors_r = twilight(np.linspace(0, 1, 8))
 newcmp_r = ListedColormap(newcolors_r)
 
 # Axis annotations
-abbreviations = ['BVTV', 'BMD', 'TMD', 'MMR', 'WF$_m$', 'WF$_o$', 'WF$_w$', r'$\rho_{b}$', 'E$_{app, m}$', 'E$_m$',
-                 'E$_{app, c}$', 'E$_c$', '$\sigma_{app}$', '$\sigma_c$', '$\sigma_b$','$\epsilon_c$',
-                 'E$_{m, \mu FE}$', '$\sigma_{y, \mu FE}$', '$\sigma_{u, \mu FE}$', '$AF_{min}$', '$CV_{AF_{min}}$']
+abbreviations = ['BVTV', 'BMD', 'TMD', 'MMR', 'X$_c$', 'CDO', 'MMAT', 'WF$_m$', 'WF$_o$', 'WF$_w$', r'$\rho_{b}$',
+                 'E$_{app, m}$', 'E$_m$', 'E$_{app, c}$', 'E$_c$', '$\sigma_{app}$', '$\sigma_c$', '$\sigma_b$',
+                 '$\epsilon_c$', 'E$_{m, \mu FE}$', '$\sigma_{y, \mu FE}$', '$\sigma_{u, \mu FE}$', '$ECM_{AF_{mean}}$',
+                 '$ECM_{AF_{min}}$', '$CV_{AF_{min}}$']
+
+# df_new.columns = ['BVTV', 'BMD', 'TMD', 'MMR', 'XC', 'CDO', 'MMAT', 'WFM', 'WFO', 'WFW', 'D', 'AMM', 'MM', 'AMD', 'MD',
+#                   'UAPPSTRE', 'UCSTRE', 'USTRE', 'USTRA', 'AMMuFE', 'YSTREuFE', 'USTREuFE', 'MEANECMAF', 'MINECMAF',
+#                   'COFVAR']
 
 # Font style and size
 plt.rcParams["text.usetex"] = True
