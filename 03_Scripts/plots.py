@@ -479,8 +479,8 @@ for i in tqdm(range(len(Pair))):
     RMSE = rmse(Y_Obs_df, Y_Fit_df)
     cv = round(100*(RMSE/statistics.mean(Y_Obs))[0], 2)
 
-    savepath = Cwd / '04_Results/04_Plots/'
-    savepath_windows = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/04_Plots'
+    savepath = Cwd / '04_Results/04_Plots/Individual'
+    savepath_windows = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/04_Plots/Individual'
     Figure, Axes = plt.subplots(1, 1, figsize=(5.5, 4.5), dpi=300, sharey=True, sharex=True)
     male_age = Data[Data['Gender'] == 'M']['Age / y']
     female_age = Data[Data['Gender'] == 'F']['Age / y']
