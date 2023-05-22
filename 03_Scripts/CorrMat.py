@@ -100,7 +100,7 @@ newcmp_r = ListedColormap(newcolors_r)
 abbreviations = ['BVTV', 'BMD', 'TMD', 'MMRv2a3', 'MMRv1a1', 'X$_c$', 'CDO', 'MMAT', 'WF$_m$', 'WF$_o$', 'WF$_w$',
                  r'$\rho_{b}$', 'E$_{app, m}$', 'E$_m$', 'E$_{app, c}$', 'E$_c$', '$\sigma_{app}$', '$\sigma_c$',
                  '$\sigma_b$', '$\epsilon_c$', 'E$_{m, \mu FE}$', '$\sigma_{y, \mu FE}$', '$\sigma_{u, \mu FE}$',
-                 '$ECM_{AF_{mean}}$', '$ECM_{AF_{min}}$', '$CV_{AF_{min}}$']
+                 '$ECM_{AF_{mean}}$', '$ECM_{AF_{min}}$', '$ECM_{A_{CV}}$']
 
 # Font style and size
 plt.rcParams["text.usetex"] = True
