@@ -166,7 +166,6 @@ for x in tqdm(range(0, len(Data), 1)):
     BoneAreas_new = np.zeros(Scan.shape[0])
     TotalAreas = np.zeros(Scan.shape[0])
     Areas_fraction = np.zeros(Scan.shape[0])
-    Areas_fraction_new = np.zeros(Scan.shape[0])
     BoneVolumes = np.zeros(Scan.shape[0])
 
     for i in range(Scan.shape[0]):
@@ -174,28 +173,26 @@ for x in tqdm(range(0, len(Data), 1)):
         BoneAreas_new[i] = Sample[i].sum() * Area * 1e03
         TotalAreas[i] = Cylinder[i].sum() * Area * 1e06
         Areas_fraction[i] = BoneAreas[i] / TotalAreas[i]
-        Areas_fraction_new[i] = BoneAreas_new[i] / TotalAreas[i]
         # BoneVolumes[i] = BoneAreas[i] * Voxel_Dimensions[2] * 1e03
     min_BoneArea_wp = round(BoneAreas.min(), 3)
 
     stderr_BoneArea_wp = round(statistics.stdev(BoneAreas), 8)
-    mean_BoneArea_wp = round(statistics.mean(BoneAreas), 3)
-    coeff_var_BoneArea_wp = round(stderr_BoneArea_wp/mean_BoneArea_wp, 3)
+    mean_BoneArea_wp = round(statistics.mean(BoneAreas), 8)
+    stderr_Areas_fraction_wp = round(statistics.stdev(Areas_fraction), 8)
+    coeff_var_BoneArea_wp = round(stderr_BoneArea_wp/mean_BoneArea_wp, 8)
 
     mean_Area_wop = round(statistics.mean(TotalAreas), 3)
-    min_Diam_wp = round(math.sqrt(min_BoneArea_wp/Pi*4), 3)
-    mean_Diam_wop = round(math.sqrt(mean_Area_wop/Pi*4), 3)
     min_areas_fraction = round(Areas_fraction.min(), 3)
-    min_areas_fraction_new = round(Areas_fraction_new.min(), 3)
     mean_areas_fraction = round(statistics.mean(Areas_fraction), 3)
+    coeff_var_Areas_fraction_wp = round(stderr_Areas_fraction_wp/mean_areas_fraction, 10)
 
     # TotalVolume_mean = mean_Area_wop * 946 * Voxel_Dimensions[0] * 1e03
     # TotalVolume_filled = RegionProperties.area
     # BVTV_new = round(BoneVolumes.sum() / TotalVolume_mean, 3)
 
     # Collect data into filling list
-    values = [SampleID, BVTV, BMD, TMD, BMC, min_BoneArea_wp, min_Diam_wp, mean_Area_wop, mean_Diam_wop,
-              mean_areas_fraction, min_areas_fraction, min_areas_fraction_new, coeff_var_BoneArea_wp, mean_BoneArea_wp]
+    values = [SampleID, BVTV, BMD, TMD, BMC, min_BoneArea_wp, mean_Area_wop, mean_areas_fraction, min_areas_fraction,
+              coeff_var_BoneArea_wp, mean_BoneArea_wp]
     results.append(values)
 
 # Add missing samples
@@ -204,10 +201,8 @@ missing_sample_IDs = pd.DataFrame({'Sample ID': ['390_R', '395_R', '402_L']})
 # convert list to dataframe
 result_dir = pd.DataFrame(results, columns=['Sample ID', 'Bone Volume Fraction / -', 'Bone Mineral Density mg HA / cm3',
                                             'Tissue Mineral Density mg HA / cm^3', 'Bone Mineral Content / mg HA',
-                                            'Min ECM Area / mm^2', 'Min Diameter / mm', 'Mean Apparent Area / mm^2',
-                                            'Mean Apparent Diameter / mm', 'Mean Area Fraction / -',
-                                            'Min Area Fraction / -', 'Min Area Fraction Adjusted / -',
-                                            'Coefficient of Variation / -', 'Mean ECM Area / mm^2'])
+                                            'Min ECM Area / mm^2', 'Mean Apparent Area / mm^2', 'Mean Area Fraction / -',
+                                            'Min Area Fraction / -', 'Coefficient of Variation / -', 'Mean ECM Area / mm^2'])
 result_dir = pd.concat([result_dir, missing_sample_IDs])
 result_dir_sorted = result_dir.sort_values(by=['Sample ID'], ascending=True)
 result_dir_sorted = result_dir_sorted.reset_index(drop=True)
