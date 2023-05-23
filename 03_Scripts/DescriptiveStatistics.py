@@ -18,7 +18,6 @@ from tqdm import tqdm                               # Used to track script progr
 Cwd = Path.cwd()
 DataPath = Cwd / '04_Results/ResultsOverview.csv'
 SavePath = Cwd / '04_Results/04_Plots'
-# DataPath = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/ResultsOverviewMod.csv'
 df = pd.read_csv(str(DataPath), skiprows=0)
 df = df.drop(columns={'Min Equivalent Diameter / mm', 'Mean Apparent Diameter / mm'})
 
@@ -73,7 +72,6 @@ Xc = df['Crystallinity / -'].dropna().reset_index(drop=True)
 COLDIS = df['Collagen dis/order / -'].dropna().reset_index(drop=True)
 
 MATMAT = df['Matrix maturity / -'].dropna().reset_index(drop=True)
-
 
 
 columns1 = [E_m, E_app_m]
@@ -147,13 +145,6 @@ for patch, color in zip(box['boxes'], colors):
     patch.set_facecolor(color)
 # ax.set_title('Example Boxplot')
 plt.ylabel('MPa')
-
-# min = columns[0].min()
-# max = columns[0].max()
-# mean = stats.mean(columns[0])
-# median = stats.median(columns[0])
-# std = stats.stdev(columns[0])
-# cv = std/mean
 
 plt.subplot(5, 4, 3)
 box = plt.boxplot(columns3, patch_artist=True, showmeans=True, meanline=True, flierprops={'markersize': 1},
@@ -351,7 +342,3 @@ plt.ylabel('-')
 
 plt.savefig(os.path.join(SavePath, 'Overview_Boxplots.png'), dpi=1200, format='png')
 plt.show()
-
-
-
-
