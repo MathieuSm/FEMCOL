@@ -22,7 +22,7 @@ savepath_full = Cwd / '04_Results/04_Plots/CorrelationMatrix_Full/'
 savepath_compact = Cwd / '04_Results/04_Plots/CorrelationMatrix_Compact/'
 
 df = pd.read_csv(str(DataPath), skiprows=0)
-df = df.drop(columns=['Sample ID', 'Age / y', 'Gender', 'Site', 'Stiffness Mineralized / N/mm',
+df = df.drop(columns=['Sample ID', 'Gender', 'Site', 'Stiffness Mineralized / N/mm',
                       'Stiffness Demineralized / N/mm', 'Ultimate Force / N', 'Organic Weight / g', 'Mineral Weight / g',
                       'Water Weight / g', 'Bone Mineral Content / mg HA', 'Min Equivalent Diameter / mm',
                       'Mean Apparent Diameter / mm', 'Mean Apparent Area / mm²', 'Bone Mineral Content / mg HA',
@@ -37,7 +37,7 @@ df = df.drop(columns=['Sample ID', 'Age / y', 'Gender', 'Site', 'Stiffness Miner
 #              'Ultimate Stress / MPa', 'Ultimate Strain / -', 'Apparent Modulus Mineralized uFE / MPa',
 #              'Yield Stress uFE / MPa', 'Ultimate Stress uFE / MPa', 'Mean ECM Area Fraction / -',
 #              'Min ECM Area Fraction / -', 'Coefficient of Variation / -']]
-df_new = df[['Mineral weight fraction / -', 'Organic weight fraction / -', 'Water weight fraction / -',
+df_new = df[['Age / y', 'Mineral weight fraction / -', 'Organic weight fraction / -', 'Water weight fraction / -',
              'Bone Volume Fraction / -', 'Tissue Mineral Density / mg HA / cm³',
              'Mineral to Matrix Ratio v1/a1 / -', 'Mineral to Matrix Ratio v2/a3 / -', 'Crystallinity / -',
              'Collagen dis/order / -', 'Matrix maturity / -',
@@ -45,10 +45,10 @@ df_new = df[['Mineral weight fraction / -', 'Organic weight fraction / -', 'Wate
              'Modulus Demineralized / MPa', 'Apparent Modulus Demineralized / MPa', 'Ultimate Apparent Stress / MPa',
              'Ultimate Strain / -']]
 # Abbreviations of complete Matrix including all variables (has to be in similar order as df_new)
-# df_new.columns = ['BVTV', 'BMD', 'TMD', 'MMRv2a3', 'MMRv1a1', 'XC', 'CDO', 'MMAT', 'WFM', 'WFO', 'WFW', 'D', 'AMM',
-#                   'MM', 'AMD', 'MD', 'UAPPSTRE', 'UCSTRE', 'USTRE', 'USTRA', 'AMMuFE', 'YSTREuFE', 'USTREuFE',
+# df_new.columns = ['Age', 'BVTV', 'BMD', 'TMD', 'MMRv2a3', 'MMRv1a1', 'XC', 'CDO', 'MMAT', 'WFM', 'WFO', 'WFW', 'D',
+#                   'AMM', 'MM', 'AMD', 'MD', 'UAPPSTRE', 'UCSTRE', 'USTRE', 'USTRA', 'AMMuFE', 'YSTREuFE', 'USTREuFE',
 #                   'MEANECMAF', 'MINECMAF', 'COFVAR']
-df_new.columns = ['WFM', 'WFO', 'WFW',
+df_new.columns = ['Age', 'WFM', 'WFO', 'WFW',
                   'BVTV', 'TMD',
                   'MMRv1a1', 'MMRv2a3', 'XC', 'CDO', 'MMAT',
                   'MM', 'AMM',
@@ -109,12 +109,12 @@ newcolors_r = twilight(np.linspace(0, 1, 8))
 newcmp_r = ListedColormap(newcolors_r)
 
 # Axis annotations of complete correlation matrix (need to be in the same order as in df_new)
-# abbreviations = ['BVTV', 'BMD', 'TMD', 'MMRv2a3', 'MMRv1a1', 'X$_c$', 'CDO', 'MMAT', 'WF$_m$', 'WF$_o$', 'WF$_w$',
-#                  r'$\rho_{b}$', 'E$_{app, m}$', 'E$_m$', 'E$_{app, c}$', 'E$_c$', '$\sigma_{app}$', '$\sigma_c$',
-#                  '$\sigma_b$', '$\epsilon_c$', 'E$_{m, \mu FE}$', '$\sigma_{y, \mu FE}$', '$\sigma_{u, \mu FE}$',
-#                  '$ECM_{AF_{mean}}$', '$ECM_{AF_{min}}$', '$ECM_{A_{CV}}$']
+# abbreviations = ['Age', 'BVTV', 'BMD', 'TMD', 'MMRv2a3', 'MMRv1a1', 'X$_c$', 'CDO', 'MMAT', 'WF$_m$', 'WF$_o$',
+#                  'WF$_w$', r'$\rho_{b}$', 'E$_{app, m}$', 'E$_m$', 'E$_{app, c}$', 'E$_c$', '$\sigma_{app}$',
+#                  '$\sigma_c$', '$\sigma_b$', '$\epsilon_c$', 'E$_{m, \mu FE}$', '$\sigma_{y, \mu FE}$',
+#                  '$\sigma_{u, \mu FE}$', '$ECM_{AF_{mean}}$', '$ECM_{AF_{min}}$', '$ECM_{A_{CV}}$']
 
-abbreviations = ['WF$_m$', 'WF$_o$', 'WF$_w$',
+abbreviations = ['Age', 'WF$_m$', 'WF$_o$', 'WF$_w$',
                  'BVTV', 'TMD',
                  r'MMR$\nu_{1}a_{1}$', r'MMR$\nu_{2}a_{3}$', 'X$_c$', 'CDO', 'MMAT',
                  'E$_m$', 'E$_{app, m}$',
