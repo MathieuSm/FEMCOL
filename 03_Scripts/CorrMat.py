@@ -158,8 +158,12 @@ sns.set_style({'xtick.bottom': True}, {'ytick.left': True})
 
 plt.savefig(os.path.join(savepath_compact, 'correlation_matrix_heatmap_pvalues_compact.eps'), dpi=1200,
             bbox_inches='tight', format='eps')
+# plt.savefig(os.path.join(savepath_compact, 'correlation_matrix_heatmap_pvalues_full.eps'), dpi=1200,
+#             bbox_inches='tight', format='eps')
 plt.savefig(os.path.join(savepath_compact, 'correlation_matrix_heatmap_pvalues_compact.png'), dpi=1200,
             bbox_inches='tight', format='png')
+# plt.savefig(os.path.join(savepath_compact, 'correlation_matrix_heatmap_pvalues_full.png'), dpi=1200,
+#             bbox_inches='tight', format='png')
 
 plt.show()
 
@@ -189,8 +193,12 @@ ax.set_xticklabels(abbreviations, fontsize=14)
 sns.set_style({'xtick.bottom': True}, {'ytick.left': True})
 plt.savefig(os.path.join(savepath_compact, 'correlation_matrix_heatmap_rvalues_compact.eps'), dpi=1200,
             bbox_inches='tight', format='eps')
+# plt.savefig(os.path.join(savepath_compact, 'correlation_matrix_heatmap_rvalues_full.eps'), dpi=1200,
+#             bbox_inches='tight', format='eps')
 plt.savefig(os.path.join(savepath_compact, 'correlation_matrix_heatmap_rvalues_compact.png'), dpi=1200,
             bbox_inches='tight', format='png')
+# plt.savefig(os.path.join(savepath_compact, 'correlation_matrix_heatmap_rvalues_full.png'), dpi=1200,
+#             bbox_inches='tight', format='png')
 
 plt.show()
 
@@ -222,7 +230,11 @@ sns.set_style({'xtick.bottom': True}, {'ytick.left': True})
 
 plt.savefig(os.path.join(savepath_compact, 'correlation_matrix_heatmap_rvalues_asterisk_compact.eps'), dpi=1200,
             bbox_inches='tight', format='eps')
+# plt.savefig(os.path.join(savepath_compact, 'correlation_matrix_heatmap_rvalues_asterisk_full.eps'), dpi=1200,
+#             bbox_inches='tight', format='eps')
 plt.savefig(os.path.join(savepath_compact, 'correlation_matrix_heatmap_rvalues_asterisk_compact.png'), dpi=1200,
             bbox_inches='tight', format='png')
+# plt.savefig(os.path.join(savepath_compact, 'correlation_matrix_heatmap_rvalues_asterisk_full.png'), dpi=1200,
+#             bbox_inches='tight', format='png')
 
 plt.show()
