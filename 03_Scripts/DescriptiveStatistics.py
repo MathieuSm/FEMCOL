@@ -21,14 +21,14 @@ SavePath = Cwd / '04_Results/04_Plots'
 df = pd.read_csv(str(DataPath), skiprows=0)
 df = df.drop(columns={'Min Equivalent Diameter / mm', 'Mean Apparent Diameter / mm'})
 
-E_m = df['Modulus Mineralized / MPa'].dropna().reset_index(drop=True)
-E_app_m = df['Apparent Modulus Mineralized / MPa'].dropna().reset_index(drop=True)
+E_m = (df['Modulus Mineralized / MPa'].dropna().reset_index(drop=True))/1000
+E_app_m = (df['Apparent Modulus Mineralized / MPa'].dropna().reset_index(drop=True))/1000
 
 E_c = df['Modulus Demineralized / MPa'].dropna().reset_index(drop=True)
 E_app_c = df['Apparent Modulus Demineralized / MPa'].dropna().reset_index(drop=True)
 
-k_m = df['Stiffness Mineralized / N/mm'].dropna().reset_index(drop=True)
-k_c = df['Stiffness Demineralized / N/mm'].dropna().reset_index(drop=True)
+k_m = (df['Stiffness Mineralized / N/mm'].dropna().reset_index(drop=True))/1000
+k_c = (df['Stiffness Demineralized / N/mm'].dropna().reset_index(drop=True))/1000
 
 sigma_u = df['Ultimate Stress / MPa'].dropna().reset_index(drop=True)
 sigma_app_u = df['Ultimate Apparent Stress / MPa'].dropna().reset_index(drop=True)
@@ -92,6 +92,7 @@ columns15 = [MMRV2A3, MMRV1A1]
 columns16 = [Xc]
 columns17 = [COLDIS]
 columns18 = [MATMAT]
+columns19 = [WFo, WFm, WFw]
 
 
 YposCI = 0.025
@@ -120,7 +121,7 @@ colors = ['lightblue', 'lightgreen']
 for patch, color in zip(box['boxes'], colors):
     patch.set_facecolor(color)
 # ax.set_title('Example Boxplot')
-plt.ylabel('MPa')
+plt.ylabel('GPa')
 
 # min = columns1[0].min()
 # max = columns1[0].max()
@@ -156,7 +157,7 @@ colors = ['lightblue', 'lightgreen']
 for patch, color in zip(box['boxes'], colors):
     patch.set_facecolor(color)
 # ax.set_title('Example Boxplot')
-plt.ylabel('N/mm')
+plt.ylabel('kN/mm')
 
 plt.subplot(5, 4, 4)
 box = plt.boxplot(columns4, patch_artist=True, showmeans=True, meanline=True, flierprops={'markersize': 1},
@@ -339,6 +340,17 @@ for patch, color in zip(box['boxes'], colors):
 # ax.set_title('Example Boxplot')
 plt.ylabel('-')
 
+plt.subplot(5, 4, 19)
+box = plt.boxplot(columns19, patch_artist=True, showmeans=True, meanline=True, flierprops={'markersize': 1},
+                  boxprops=boxprops, whiskerprops=whiskerprops, capprops=capprops, meanprops=meanprops,
+                  medianprops=medianprops)
+plt.tight_layout()
+plt.xticks([1, 2, 3], ['WF$_o$', 'WF$_m$', 'WF$_w$'])
+colors = ['lightblue', 'lightgreen', 'lightpink']
+for patch, color in zip(box['boxes'], colors):
+    patch.set_facecolor(color)
+# ax.set_title('Example Boxplot')
+plt.ylabel('-')
 
 plt.savefig(os.path.join(SavePath, 'Overview_Boxplots.png'), dpi=1200, format='png')
 plt.show()
