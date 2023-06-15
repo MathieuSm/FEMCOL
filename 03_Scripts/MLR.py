@@ -32,3 +32,7 @@ predictions = model.predict(x)
 
 print_model = model.summary()
 print(print_model)
+
+mls_results = open('/home/stefan/PycharmProjects/FEMCOL/04_Results/04_Plots/mls_results.csv', 'w')
+n = mls_results.write(print_model.as_csv())
+mls_results.close()
