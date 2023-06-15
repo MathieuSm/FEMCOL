@@ -39,8 +39,7 @@ df = df.drop(columns=['Sample ID', 'Gender', 'Site', 'Stiffness Mineralized / N/
 #              'Min ECM Area Fraction / -', 'Coefficient of Variation / -']]
 df_new = df[['Age / y', 'Mineral weight fraction / -', 'Organic weight fraction / -', 'Water weight fraction / -',
              'Bone Volume Fraction / -', 'Tissue Mineral Density / mg HA / cm³',
-             'Mineral to Matrix Ratio v1/a1 / -', 'Mineral to Matrix Ratio v2/a3 / -', 'Crystallinity / -',
-             'Collagen dis/order / -', 'Matrix maturity / -',
+             'Mineral to Matrix Ratio v2/a3 / -', 'Crystallinity / -', 'Collagen dis/order / -', 'Matrix maturity / -',
              'Modulus Mineralized / MPa', 'Apparent Modulus Mineralized / MPa',
              'Modulus Demineralized / MPa', 'Apparent Modulus Demineralized / MPa', 'Ultimate Apparent Stress / MPa',
              'Ultimate Strain / -']]
@@ -50,7 +49,7 @@ df_new = df[['Age / y', 'Mineral weight fraction / -', 'Organic weight fraction 
 #                   'MEANECMAF', 'MINECMAF', 'COFVAR']
 df_new.columns = ['Age', 'WFM', 'WFO', 'WFW',
                   'BVTV', 'TMD',
-                  'MMRv1a1', 'MMRv2a3', 'XC', 'CDO', 'MMAT',
+                  'MMRv2a3', 'XC', 'CDO', 'MMAT',
                   'MM', 'AMM',
                   'MD', 'AMD', 'UAPPSTRE', 'USTRA']
 
@@ -109,14 +108,14 @@ newcolors_r = twilight(np.linspace(0, 1, 8))
 newcmp_r = ListedColormap(newcolors_r)
 
 # Axis annotations of complete correlation matrix (need to be in the same order as in df_new)
-# abbreviations = ['Age', 'BVTV', 'BMD', 'TMD', 'MMRv2a3', 'MMRv1a1', 'X$_c$', 'CDO', 'MMAT', 'WF$_m$', 'WF$_o$',
-#                  'WF$_w$', r'$\rho_{b}$', 'E$_{app, m}$', 'E$_m$', 'E$_{app, c}$', 'E$_c$', '$\sigma_{app}$',
-#                  '$\sigma_c$', '$\sigma_b$', '$\epsilon_c$', 'E$_{m, \mu FE}$', '$\sigma_{y, \mu FE}$',
+# abbreviations = ['Age', 'BVTV', 'BMD', 'TMD', r'MMR$\nu_{2}a_{3}$', r'MMR$\nu_{1}a_{1}$', 'X$_c$', 'CDO', 'MMAT',
+#                  'WF$_m$', 'WF$_o$', 'WF$_w$', r'$\rho_{b}$', 'E$_{app, m}$', 'E$_m$', 'E$_{app, c}$', 'E$_c$',
+#                  '$\sigma_{app}$', '$\sigma_c$', '$\sigma_b$', '$\epsilon_c$', 'E$_{m, \mu FE}$', '$\sigma_{y, \mu FE}$',
 #                  '$\sigma_{u, \mu FE}$', '$ECM_{AF_{mean}}$', '$ECM_{AF_{min}}$', '$ECM_{A_{CV}}$']
 
 abbreviations = ['Age', 'WF$_m$', 'WF$_o$', 'WF$_w$',
                  'BVTV', 'TMD',
-                 r'MMR$\nu_{1}a_{1}$', r'MMR$\nu_{2}a_{3}$', 'X$_c$', 'CDO', 'MMAT',
+                 r'MMR$\nu_{2}a_{3}$', 'X$_c$', 'CDO', 'MMAT',
                  'E$_m$', 'E$_{app, m}$',
                  'E$_c$', 'E$_{app, c}$', '$\sigma_{app}$', '$\epsilon_c$']
 
