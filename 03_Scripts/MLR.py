@@ -34,6 +34,20 @@ data['Em'] = y_abbrev['Em']
 data['Age'] = x_abbrev['Age']
 data['mwf'] = x_abbrev['mwf']
 
+bvtv_eappm = df[['Bone Volume Fraction / -', 'Apparent Modulus Mineralized / MPa', 'Age / y', 'Mineral weight fraction / -']]
+bvtv_eappm = bvtv_eappm.dropna()
+bvtv_eappm = bvtv_eappm.reset_index(drop=True)
+bvtv_eappm = bvtv_eappm.rename(columns={'Bone Volume Fraction / -': 'bvtv', 'Apparent Modulus Mineralized / MPa': 'eappm',
+                                        'Age / y': 'age', 'Mineral weight fraction / -': 'mwf'})
+
+eappm = df[['Apparent Modulus Mineralized / MPa', 'Age / y', 'Mineral weight fraction / -']]
+eappm = eappm.dropna()
+eappm = eappm.reset_index(drop=True)
+eappm = eappm.rename(columns={'Apparent Modulus Mineralized / MPa': 'eappm', 'Age / y': 'age',
+                                   'Mineral weight fraction / -': 'mwf'})
+
+
+data_eappm = pd.DataFrame()
 
 # with statsmodels
 x = sm.add_constant(x) # adding a constant
@@ -59,3 +73,10 @@ mls_results_interaction.close()
 X = sm.add_constant(data)
 vif = pd.Series([variance_inflation_factor(X.values, i) for i in range(X.shape[1])], index=X.columns)
 print(vif)
+
+model_app = smf.ols(formula='eappm ~ age + mwf', data=eappm).fit()
+summary_app = model_app.summary()
+
+model_app_bvtv = smf.ols(formula='eappm ~ age + mwf + bvtv', data=bvtv_eappm).fit()
+summary_app_bvtv = model_app_bvtv.summary()
+
