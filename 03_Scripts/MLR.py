@@ -79,4 +79,3 @@ summary_app = model_app.summary()
 
 model_app_bvtv = smf.ols(formula='eappm ~ age + mwf + bvtv', data=bvtv_eappm).fit()
 summary_app_bvtv = model_app_bvtv.summary()
-
