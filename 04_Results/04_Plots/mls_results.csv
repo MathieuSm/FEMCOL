@@ -2,8 +2,8 @@
 Dep. Variable:   ,Modulus Mineralized / MPa,  R-squared:         ,   0.166
 Model:           ,OLS                      ,  Adj. R-squared:    ,   0.141
 Method:          ,Least Squares            ,  F-statistic:       ,   6.568
-Date:            ,Thu, 15 Jun 2023         ,  Prob (F-statistic):,0.00250 
-Time:            ,12:19:59                 ,  Log-Likelihood:    , -604.86
+Date:            ,Mon, 26 Jun 2023         ,  Prob (F-statistic):,0.00250 
+Time:            ,15:06:41                 ,  Log-Likelihood:    , -604.86
 No. Observations:,    69                   ,  AIC:               ,   1216.
 Df Residuals:    ,    66                   ,  BIC:               ,   1222.
 Df Model:        ,     2                   ,                     ,        

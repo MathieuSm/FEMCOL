@@ -46,9 +46,6 @@ eappm = eappm.reset_index(drop=True)
 eappm = eappm.rename(columns={'Apparent Modulus Mineralized / MPa': 'eappm', 'Age / y': 'age',
                                    'Mineral weight fraction / -': 'mwf'})
 
-
-data_eappm = pd.DataFrame()
-
 # with statsmodels
 x = sm.add_constant(x) # adding a constant
 
@@ -79,3 +76,16 @@ summary_app = model_app.summary()
 
 model_app_bvtv = smf.ols(formula='eappm ~ age + mwf + bvtv', data=bvtv_eappm).fit()
 summary_app_bvtv = model_app_bvtv.summary()
+
+x_tmd_em = df[['Modulus Mineralized / MPa']]
+y_tmd_em = df[['Tissue Mineral Density / mg HA / cm³']]
+x_tmd_em = x_tmd_em.copy()
+x_tmd_em = x_tmd_em.rename(columns={'Modulus Mineralized / MPa': 'Em'})
+y_tmd_em = y_tmd_em.copy()
+y_tmd_em = y_tmd_em.rename(columns={'Tissue Mineral Density / mg HA / cm³': 'TMD'})
+data_tmd_em = pd.DataFrame()
+data_tmd_em['Em'] = x_tmd_em['Em']
+data_tmd_em['TMD'] = y_tmd_em['TMD']
+
+model_tmd_em = smf.ols(formula='Em ~ TMD', data=data_tmd_em).fit()
+model_tmd_em.summary()

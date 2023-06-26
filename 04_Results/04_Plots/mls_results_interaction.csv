@@ -2,8 +2,8 @@
 Dep. Variable:   ,Em              ,  R-squared:         ,   0.168
 Model:           ,OLS             ,  Adj. R-squared:    ,   0.129
 Method:          ,Least Squares   ,  F-statistic:       ,   4.372
-Date:            ,Tue, 20 Jun 2023,  Prob (F-statistic):,0.00726 
-Time:            ,10:03:12        ,  Log-Likelihood:    , -604.78
+Date:            ,Mon, 26 Jun 2023,  Prob (F-statistic):,0.00726 
+Time:            ,15:06:41        ,  Log-Likelihood:    , -604.78
 No. Observations:,    69          ,  AIC:               ,   1218.
 Df Residuals:    ,    65          ,  BIC:               ,   1227.
 Df Model:        ,     3          ,                     ,        
