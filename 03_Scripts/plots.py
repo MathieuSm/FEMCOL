@@ -582,7 +582,7 @@ for i in tqdm(range(len(Pair))):
             Axes.plot(X[:, 1], Y_Fit, color=(1, 0, 0), linewidth=1)
             Axes.scatter(X_np[:, 1][Data['Gender'] == 'M'], Y_Obs_np[Data['Gender'] == 'M'],
                          c=list(tuple(male_age.tolist())), cmap='plasma_r', vmin=Data['Age / y'].min(),
-                         vmax=Data['Age / y'].max(), label='male', marker='s')
+                         vmax=Data['Age / y'].max(), label='male', marker='x')
             Axes.scatter(X_np[:, 1][Data['Gender'] == 'F'], Y_Obs_np[Data['Gender'] == 'F'],
                          c=list(tuple(female_age.tolist())), cmap='plasma_r', vmin=Data['Age / y'].min(),
                          vmax=Data['Age / y'].max(), label='female', marker='o')
@@ -654,7 +654,7 @@ for i in tqdm(range(len(Pair))):
             sns.regplot(x=FitResults.model.exog[:, 1], y=Y_Obs, ax=Axes, scatter=False, color=(0, 1, 0),
                         line_kws={'color': 'red', 'linewidth': 1}, )  # set background color of confidence interval here
             # Axes.plot(X[:, 1], Y_Fit, color=(0, 0, 0), linewidth=1)  # set color of regression line here
-            Axes.plot(X[:, 1][Data['Gender'] == 'M'], Y_Obs[Data['Gender'] == 'M'], linestyle='none', marker='s',
+            Axes.plot(X[:, 1][Data['Gender'] == 'M'], Y_Obs[Data['Gender'] == 'M'], linestyle='none', marker='x',
                       color=(0, 0, 0), fillstyle='none', label='male')
             Axes.plot(X[:, 1][Data['Gender'] == 'F'], Y_Obs[Data['Gender'] == 'F'], linestyle='none', marker='o',
                       color=(0, 0, 0), fillstyle='none', label='female')
@@ -722,7 +722,7 @@ for i in tqdm(range(len(Pair))):
         if x_axis != 'Age / y':
             Axes.scatter(X_np[:, 1][Data['Gender'] == 'M'], Y_Obs_np[Data['Gender'] == 'M'],
                          c=list(tuple(male_age.tolist())), cmap='plasma_r', vmin=Data['Age / y'].min(),
-                         vmax=Data['Age / y'].max(), label='male', marker='s')
+                         vmax=Data['Age / y'].max(), label='male', marker='x')
             Axes.scatter(X_np[:, 1][Data['Gender'] == 'F'], Y_Obs_np[Data['Gender'] == 'F'],
                          c=list(tuple(female_age.tolist())), cmap='plasma_r', vmin=Data['Age / y'].min(),
                          vmax=Data['Age / y'].max(), label='female', marker='o')
@@ -788,7 +788,7 @@ for i in tqdm(range(len(Pair))):
 
         # don't use colormap if age is plotted on main axes
         else:
-            Axes.plot(X[:, 1][Data['Gender'] == 'M'], Y_Obs[Data['Gender'] == 'M'], linestyle='none', marker='s',
+            Axes.plot(X[:, 1][Data['Gender'] == 'M'], Y_Obs[Data['Gender'] == 'M'], linestyle='none', marker='x',
                       color=(0, 0, 0), fillstyle='none', label='male')
             Axes.plot(X[:, 1][Data['Gender'] == 'F'], Y_Obs[Data['Gender'] == 'F'], linestyle='none', marker='o',
                       color=(0, 0, 0), fillstyle='none', label='female')
