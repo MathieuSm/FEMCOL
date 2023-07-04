@@ -604,14 +604,18 @@ for i in tqdm(range(len(Pair))):
 
             # condition used for autoscaling
             if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
+                if Y_Obs.min() >= 1000:
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 1), ymax=round(Y_Obs.max() * 1.02, 4))
+                if Y_Obs.min() >= 1:
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 1), ymax=round(Y_Obs.max() * 1.02, 4))
                 if Y_Obs.min() >= 0.1:
-                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.7, 1), ymax=round(Y_Obs.max() * 1.02, 4))
                 if Y_Obs.min() >= 0.01 and Y_Obs.min() < 0.1:
-                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 2), ymax=round(Y_Obs.max()*1.02, 4))
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 3), ymax=round(Y_Obs.max() * 1.02, 4))
                 if Y_Obs.min() >= 0.001 and Y_Obs.min() < 0.01:
-                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 3), ymax=round(Y_Obs.max()*1.02, 4))
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.7, 3), ymax=round(Y_Obs.max() * 1.02, 4))
                 else:
-                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 4), ymax=round(Y_Obs.max()*1.02, 4))
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.8, 4), ymax=round(Y_Obs.max() * 1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 # plt.legend(loc='upper center', ncol=2, bbox_to_anchor=(0.5, 1.15), prop={'size': 10})
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
@@ -624,14 +628,18 @@ for i in tqdm(range(len(Pair))):
                 plt.close()
                 j = j + 1
             else:
+                if Y_Obs.min() >= 1000:
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 1), ymax=round(Y_Obs.max() * 1.02, 4))
+                if Y_Obs.min() >= 1:
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 1), ymax=round(Y_Obs.max() * 1.02, 4))
                 if Y_Obs.min() >= 0.1:
-                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.7, 1), ymax=round(Y_Obs.max() * 1.02, 4))
                 if Y_Obs.min() >= 0.01 and Y_Obs.min() < 0.1:
-                    plt.ylim(ymin=round(Y_Obs.min()*0.9, 2), ymax=round(Y_Obs.max()*1.02, 4))
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 3), ymax=round(Y_Obs.max() * 1.02, 4))
                 if Y_Obs.min() >= 0.001 and Y_Obs.min() < 0.01:
-                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 3), ymax=round(Y_Obs.max()*1.02, 4))
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.7, 3), ymax=round(Y_Obs.max() * 1.02, 4))
                 else:
-                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 4), ymax=round(Y_Obs.max()*1.02, 4))
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.8, 4), ymax=round(Y_Obs.max() * 1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
                 plt.rcParams['figure.figsize'] = (5.5, 4.5)
@@ -663,14 +671,18 @@ for i in tqdm(range(len(Pair))):
             # condition used for autoscaling
             if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
                 # plt.ylim(ymin=0, ymax=round(Y_Fit.max() * 1.2, 2))
+                if Y_Obs.min() >= 1000:
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 1), ymax=round(Y_Obs.max() * 1.02, 4))
+                if Y_Obs.min() >= 1:
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 1), ymax=round(Y_Obs.max() * 1.02, 4))
                 if Y_Obs.min() >= 0.1:
-                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.7, 1), ymax=round(Y_Obs.max() * 1.02, 4))
                 if Y_Obs.min() >= 0.01 and Y_Obs.min() < 0.1:
-                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 2), ymax=round(Y_Obs.max()*1.02, 4))
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 3), ymax=round(Y_Obs.max() * 1.02, 4))
                 if Y_Obs.min() >= 0.001 and Y_Obs.min() < 0.01:
-                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 3), ymax=round(Y_Obs.max()*1.02, 4))
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.7, 3), ymax=round(Y_Obs.max() * 1.02, 4))
                 else:
-                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 4), ymax=round(Y_Obs.max()*1.02, 4))
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.8, 4), ymax=round(Y_Obs.max() * 1.02, 4))
                 plt.xlim(xmin=55, xmax=95)
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
@@ -683,14 +695,18 @@ for i in tqdm(range(len(Pair))):
                 plt.close()
                 j = j + 1
             else:
+                if Y_Obs.min() >= 1000:
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 1), ymax=round(Y_Obs.max() * 1.02, 4))
+                if Y_Obs.min() >= 1:
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 1), ymax=round(Y_Obs.max() * 1.02, 4))
                 if Y_Obs.min() >= 0.1:
                     plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
                 if Y_Obs.min() >= 0.01 and Y_Obs.min() < 0.1:
-                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 2), ymax=round(Y_Obs.max()*1.02, 4))
+                    plt.ylim(ymin=round(Y_Obs.min()*0.9, 3), ymax=round(Y_Obs.max()*1.02, 4))
                 if Y_Obs.min() >= 0.001 and Y_Obs.min() < 0.01:
                     plt.ylim(ymin=round(Y_Obs.min()*0.7, 3), ymax=round(Y_Obs.max()*1.02, 4))
                 else:
-                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 4), ymax=round(Y_Obs.max()*1.02, 4))
+                    plt.ylim(ymin=round(Y_Obs.min()*0.8, 4), ymax=round(Y_Obs.max()*1.02, 4))
                 plt.xlim(xmin=55, xmax=95)
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
@@ -726,14 +742,18 @@ for i in tqdm(range(len(Pair))):
 
             # condition used for autoscaling
             if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
+                if Y_Obs.min() >= 1000:
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 1), ymax=round(Y_Obs.max() * 1.02, 4))
+                if Y_Obs.min() >= 1:
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 1), ymax=round(Y_Obs.max() * 1.02, 4))
                 if Y_Obs.min() >= 0.1:
-                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.7, 1), ymax=round(Y_Obs.max() * 1.02, 4))
                 if Y_Obs.min() >= 0.01 and Y_Obs.min() < 0.1:
-                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 2), ymax=round(Y_Obs.max()*1.02, 4))
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 3), ymax=round(Y_Obs.max() * 1.02, 4))
                 if Y_Obs.min() >= 0.001 and Y_Obs.min() < 0.01:
-                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 3), ymax=round(Y_Obs.max()*1.02, 4))
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.7, 3), ymax=round(Y_Obs.max() * 1.02, 4))
                 else:
-                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 4), ymax=round(Y_Obs.max()*1.02, 4))
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.8, 4), ymax=round(Y_Obs.max() * 1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
                 plt.rcParams['figure.figsize'] = (5.5, 4.5)
@@ -745,14 +765,18 @@ for i in tqdm(range(len(Pair))):
                 plt.close()
                 j = j + 1
             else:
+                if Y_Obs.min() >= 1000:
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 1), ymax=round(Y_Obs.max() * 1.02, 4))
+                if Y_Obs.min() >= 1:
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 1), ymax=round(Y_Obs.max() * 1.02, 4))
                 if Y_Obs.min() >= 0.1:
-                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.7, 1), ymax=round(Y_Obs.max() * 1.02, 4))
                 if Y_Obs.min() >= 0.01 and Y_Obs.min() < 0.1:
-                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 2), ymax=round(Y_Obs.max()*1.02, 4))
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 3), ymax=round(Y_Obs.max() * 1.02, 4))
                 if Y_Obs.min() >= 0.001 and Y_Obs.min() < 0.01:
-                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 3), ymax=round(Y_Obs.max()*1.02, 4))
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.7, 3), ymax=round(Y_Obs.max() * 1.02, 4))
                 else:
-                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 4), ymax=round(Y_Obs.max()*1.02, 4))
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.8, 4), ymax=round(Y_Obs.max() * 1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
                 plt.rcParams['figure.figsize'] = (5.5, 4.5)
@@ -781,14 +805,18 @@ for i in tqdm(range(len(Pair))):
             # condition for autoscaling
             if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
                 plt.xlim(xmin=55, xmax=95)
+                if Y_Obs.min() >= 1000:
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 1), ymax=round(Y_Obs.max() * 1.02, 4))
+                if Y_Obs.min() >= 1:
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 1), ymax=round(Y_Obs.max() * 1.02, 4))
                 if Y_Obs.min() >= 0.1:
-                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.7, 1), ymax=round(Y_Obs.max() * 1.02, 4))
                 if Y_Obs.min() >= 0.01 and Y_Obs.min() < 0.1:
-                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 2), ymax=round(Y_Obs.max()*1.02, 4))
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 3), ymax=round(Y_Obs.max() * 1.02, 4))
                 if Y_Obs.min() >= 0.001 and Y_Obs.min() < 0.01:
-                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 3), ymax=round(Y_Obs.max()*1.02, 4))
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.7, 3), ymax=round(Y_Obs.max() * 1.02, 4))
                 else:
-                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 4), ymax=round(Y_Obs.max()*1.02, 4))
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.8, 4), ymax=round(Y_Obs.max() * 1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
                 plt.rcParams['figure.figsize'] = (5.5, 4.5)
@@ -800,14 +828,18 @@ for i in tqdm(range(len(Pair))):
                 plt.close()
                 j = j + 1
             else:
+                if Y_Obs.min() >= 1000:
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 1), ymax=round(Y_Obs.max() * 1.02, 4))
+                if Y_Obs.min() >= 1:
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 1), ymax=round(Y_Obs.max() * 1.02, 4))
                 if Y_Obs.min() >= 0.1:
-                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 1), ymax=round(Y_Obs.max()*1.02, 4))
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.7, 1), ymax=round(Y_Obs.max() * 1.02, 4))
                 if Y_Obs.min() >= 0.01 and Y_Obs.min() < 0.1:
-                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 2), ymax=round(Y_Obs.max()*1.02, 4))
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 3), ymax=round(Y_Obs.max() * 1.02, 4))
                 if Y_Obs.min() >= 0.001 and Y_Obs.min() < 0.01:
-                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 3), ymax=round(Y_Obs.max()*1.02, 4))
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.7, 3), ymax=round(Y_Obs.max() * 1.02, 4))
                 else:
-                    plt.ylim(ymin=round(Y_Obs.min()*0.7, 4), ymax=round(Y_Obs.max()*1.02, 4))
+                    plt.ylim(ymin=round(Y_Obs.min() * 0.8, 4), ymax=round(Y_Obs.max() * 1.02, 4))
                 plt.subplots_adjust(left=0.15, bottom=0.15)
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
                 plt.rcParams['figure.figsize'] = (5.5, 4.5)
