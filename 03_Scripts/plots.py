@@ -34,7 +34,7 @@ AxisLabels = ColumnNames.replace({'Apparent Modulus Mineralized / MPa': 'Apparen
                                   'Coefficient of Variation / -': 'Coefficient of Variation CV / -',
                                   'Ultimate Strain / -': 'Ultimate Strain $\epsilon_{u}$',
                                   'Apparent Modulus Demineralized / MPa': 'Apparent Modulus Demineralized E$_{app, c}$ / MPa',
-                                  'Modulus Demineralized / MPa': 'Modulus Demineralized E$_c$',
+                                  'Modulus Demineralized / MPa': 'Modulus Demineralized E$_c$ / MPa',
                                   'Density / g/cm³': 'Density ' + r'$\rho_{b}$ / g / cm³',
                                   'Organic Weight / g': 'Organic Weight m$_{o}$ / g',
                                   'Mineral Weight / g': 'Mineral Weight m$_{m}$ / g',
@@ -582,7 +582,7 @@ for i in tqdm(range(len(Pair))):
             Axes.plot(X[:, 1], Y_Fit, color=(1, 0, 0), linewidth=1)
             Axes.scatter(X_np[:, 1][Data['Gender'] == 'M'], Y_Obs_np[Data['Gender'] == 'M'],
                          c=list(tuple(male_age.tolist())), cmap='plasma_r', vmin=Data['Age / y'].min(),
-                         vmax=Data['Age / y'].max(), label='male', marker='x')
+                         vmax=Data['Age / y'].max(), label='male', marker='s')
             Axes.scatter(X_np[:, 1][Data['Gender'] == 'F'], Y_Obs_np[Data['Gender'] == 'F'],
                          c=list(tuple(female_age.tolist())), cmap='plasma_r', vmin=Data['Age / y'].min(),
                          vmax=Data['Age / y'].max(), label='female', marker='o')
@@ -722,7 +722,7 @@ for i in tqdm(range(len(Pair))):
         if x_axis != 'Age / y':
             Axes.scatter(X_np[:, 1][Data['Gender'] == 'M'], Y_Obs_np[Data['Gender'] == 'M'],
                          c=list(tuple(male_age.tolist())), cmap='plasma_r', vmin=Data['Age / y'].min(),
-                         vmax=Data['Age / y'].max(), label='male', marker='x')
+                         vmax=Data['Age / y'].max(), label='male', marker='s')
             Axes.scatter(X_np[:, 1][Data['Gender'] == 'F'], Y_Obs_np[Data['Gender'] == 'F'],
                          c=list(tuple(female_age.tolist())), cmap='plasma_r', vmin=Data['Age / y'].min(),
                          vmax=Data['Age / y'].max(), label='female', marker='o')
