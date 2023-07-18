@@ -101,7 +101,7 @@ for filename in tqdm(filename_list):
     last_cycle_disp = last_cycle_disp.dropna().reset_index(drop=True)
     last_cycle_force = last_cycle_force.dropna().reset_index(drop=True)
 
-    # isolate stress/strain values
+    # isolate force/displacement values
     last_cycle = pd.DataFrame()
     last_cycle['last_cycle_force'] = round(last_cycle_force, 5)
     last_cycle['last_cycle_disp'] = round(last_cycle_disp, 5)
