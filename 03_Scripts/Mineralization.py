@@ -7,22 +7,20 @@ import pandas as pd                      # Used to manage data frames
 import SimpleITK as sitk                 # Used to read images
 import matplotlib.pyplot as plt          # Used to perform plots
 import os
-import math
 import statistics
-from skimage import filters              # Used to perform filtering image operations (e.g. Otsu)
 from skimage import morphology, measure  # Used to fill pores and circle fitting
 from tqdm import tqdm
 
 # Set directories
-CurrentDirectory = Path.cwd()
-ScriptsDirectory = CurrentDirectory / '03_Scripts'
-DataDirectory = CurrentDirectory / '02_Data/01_uCT'
+Cwd = os.getcwd()
+DataDirectory = str(os.path.dirname(Cwd) + '/02_Data/01_uCT')
+ResultsDirectory = str(os.path.dirname(Cwd) + '/04_Results/03_uCT/')
 
 # Read data list and print it into console
-Data = pd.read_csv(str(DataDirectory / 'SampleList.csv'))
+Data = pd.read_csv(str(DataDirectory + '/SampleList.csv'))
 Data = Data.drop('Remark', axis=1)
 Data = Data.dropna().reset_index(drop=True)
-MeanOtsu = pd.read_csv(CurrentDirectory / '04_Results/03_uCT/MeanOtsu.csv')
+MeanOtsu = pd.read_csv(ResultsDirectory + '/MeanOtsu.csv')
 print(Data)
 print('Mean Otsu Threshold = ' + str(MeanOtsu.loc[0][0]))
 
@@ -56,7 +54,7 @@ for x in tqdm(range(0, len(Data), 1)):
     Axis.imshow(Scan[:, :, YMid], cmap='bone')
     Axis.axis('off')
     plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
-    plt.savefig(os.path.join('/home/stefan/PycharmProjects/FEMCOL/04_Results/03_uCT/', SampleID + '_' + 'YZ_Plane'),
+    plt.savefig(os.path.join(ResultsDirectory, SampleID + '_' + 'YZ_Plane'),
                 dpi=300)
     # plt.show()
     plt.close()
@@ -69,7 +67,7 @@ for x in tqdm(range(0, len(Data), 1)):
     SegmentedImage.SetSpacing(Image.GetSpacing())
     SegmentedImage.SetOrigin(Image.GetOrigin())
     SegmentedImage.SetDirection(Image.GetDirection())
-    sitk.WriteImage(SegmentedImage, '/home/stefan/PycharmProjects/FEMCOL/04_Results/03_uCT/SegmentedImage_' + SampleID + '.mhd')
+    sitk.WriteImage(SegmentedImage, ResultsDirectory + '/SegmentedImages/' + SampleID + '.mhd')
 
     # Plot segmented image
     Figure, Axis = plt.subplots(1,1, figsize=(Size[1], Size[0]))
@@ -206,6 +204,5 @@ result_dir = pd.DataFrame(results, columns=['Sample ID', 'Bone Volume Fraction /
 result_dir = pd.concat([result_dir, missing_sample_IDs])
 result_dir_sorted = result_dir.sort_values(by=['Sample ID'], ascending=True)
 result_dir_sorted = result_dir_sorted.reset_index(drop=True)
-result_dir_sorted.to_csv(os.path.join('/home/stefan/PycharmProjects/FEMCOL/04_Results/03_uCT/', 'ResultsUCT.csv'),
-                         index=False)
+result_dir_sorted.to_csv(os.path.join(ResultsDirectory, 'ResultsUCT.csv'), index=False)
 print(result_dir_sorted)
