@@ -1,7 +1,6 @@
 # This script plots various variables against each other, Data is retrieved from ResultsOverview.csv file
 
 # Import standard packages
-from pathlib import Path                            # Used to manage path variables in windows or linux
 import numpy as np                                  # Used to do arrays (matrices) computations namely
 import pandas as pd                                 # Used to manage data frames
 import matplotlib.pyplot as plt                     # Used to perform plots
@@ -15,11 +14,10 @@ from tqdm import tqdm                               # Used to track script progr
 
 
 # Set directory & load data
-Cwd = Path.cwd()
-DataPath = Cwd / '04_Results/ResultsOverview.csv'
-# DataPath = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/ResultsOverviewMod.csv'
-df = pd.read_csv(str(DataPath), skiprows=0)
-df = df.drop(columns={'Min Equivalent Diameter / mm', 'Mean Apparent Diameter / mm'})
+Cwd = os.getcwd()
+Results_path = str(os.path.dirname(Cwd) + '/04_Results')
+results_overview = str(os.path.dirname(Cwd) + '/04_Results/ResultsOverview.csv')
+df = pd.read_csv(str(results_overview), skiprows=0)
 SampleID = df['Sample ID'].values.tolist()
 
 # Create dataframe with variable names & respective abbreviations
@@ -56,6 +54,9 @@ AxisLabels = ColumnNames.replace({'Apparent Modulus Mineralized / MPa': 'Apparen
                                   'Crystallinity / -': 'Crystallinity X$_{c}$ / -',
                                   'Collagen dis/order / -': 'Collagen dis/order / -',
                                   'Matrix maturity / -': 'Matrix maturity / -',
+                                  'Relative Pyridinoline Content / -': 'Relative Pyridinoline Content / -',
+                                  'Relative Proteoglycan Content / -': 'Relative Proteoglycan Content / -',
+                                  'Relative Lipid Content / -': 'Relative Lipid Content / -',
                                   'Apparent Modulus Mineralized uFE / MPa':
                                   'Apparent Modulus Mineralized $\mu$FE E$^{\mu FE}_{app, m}$ / MPa',
                                   'Yield Stress uFE / MPa': 'Yield Stress $\mu$FE $\sigma^{\mu FE}_{y}$ / MPa',
@@ -63,8 +64,8 @@ AxisLabels = ColumnNames.replace({'Apparent Modulus Mineralized / MPa': 'Apparen
 
 column_names_abbrev = ['SID', 'Age', 'G', 'Site', 'SM', 'SD', 'EAPPM', 'EM', 'UF', 'UAPPSTRE', 'UCSTRE', 'USTRE',
                        'USTRA', 'EAPPC', 'EC', 'D', 'OW', 'MW', 'WW', 'MWF', 'OWF', 'WWF', 'BVTV', 'BMD', 'TMD', 'BMC',
-                       'MINECMA', 'COVAR', 'MEANAA', 'MEANECMA', 'MEANECMAF', 'MINECMAF', 'MMRv2a3', 'MMRv1a1', 'CRY', 'COLDIS',
-                       'MATMAT', 'EAPPFE', 'YSTREFE', 'USTREFE']
+                       'MMRv2a3', 'MMRv1a1', 'CRY', 'COLDIS', 'MATMAT', 'RPyC', 'RProC', 'RLC', 'EAPPFE', 'YSTREFE',
+                       'USTREFE']
 ColumnNames['Abbreviations'] = column_names_abbrev
 AxisLabels['Abbreviations'] = column_names_abbrev
 
@@ -91,17 +92,14 @@ Pair = pd.DataFrame([
                      ['Age / y',                                  'Ultimate Stress / MPa'],
                      ['Age / y',                                  'Water Weight / g'],
                      ['Age / y',                                  'Water weight fraction / -'],
-                     ['Age / y',                                  'Mean Apparent Area / mm²'],
-                     ['Age / y',                                  'Min ECM Area / mm²'],
-                     ['Age / y',                                  'Mean ECM Area Fraction / -'],
-                     ['Age / y',                                  'Min ECM Area Fraction / -'],
                      ['Age / y',                                  'Mineral to Matrix Ratio v2/a3 / -'],
                      ['Age / y',                                  'Mineral to Matrix Ratio v1/a1 / -'],
-                     ['Age / y',                                  'Coefficient of Variation / -'],
-                     ['Age / y',                                  'Mean ECM Area / mm²'],
                      ['Age / y',                                  'Crystallinity / -'],
                      ['Age / y',                                  'Collagen dis/order / -'],
                      ['Age / y',                                  'Matrix maturity / -'],
+                     ['Age / y',                                  'Relative Pyridinoline Content / -'],
+                     ['Age / y',                                  'Relative Proteoglycan Content / -'],
+                     ['Age / y',                                  'Relative Lipid Content / -'],
                      ['Apparent Modulus Mineralized / MPa',       'Modulus Mineralized / MPa'],
                      ['Apparent Modulus Mineralized / MPa',       'Ultimate Apparent Stress / MPa'],
                      ['Apparent Modulus Mineralized / MPa',       'Ultimate Collagen Stress / MPa'],
@@ -116,17 +114,14 @@ Pair = pd.DataFrame([
                      ['Apparent Modulus Mineralized / MPa',       'Bone Volume Fraction / -'],
                      ['Apparent Modulus Mineralized / MPa',       'Bone Mineral Density / mg HA / cm³'],
                      ['Apparent Modulus Mineralized / MPa',       'Tissue Mineral Density / mg HA / cm³'],
-                     ['Apparent Modulus Mineralized / MPa',       'Min ECM Area / mm²'],
-                     ['Apparent Modulus Mineralized / MPa',       'Coefficient of Variation / -'],
-                     ['Apparent Modulus Mineralized / MPa',       'Mean Apparent Area / mm²'],
-                     ['Apparent Modulus Mineralized / MPa',       'Mean ECM Area / mm²'],
-                     ['Apparent Modulus Mineralized / MPa',       'Mean ECM Area Fraction / -'],
-                     ['Apparent Modulus Mineralized / MPa',       'Min ECM Area Fraction / -'],
                      ['Apparent Modulus Mineralized / MPa',       'Mineral to Matrix Ratio v2/a3 / -'],
                      ['Apparent Modulus Mineralized / MPa',       'Mineral to Matrix Ratio v1/a1 / -'],
                      ['Apparent Modulus Mineralized / MPa',       'Crystallinity / -'],
                      ['Apparent Modulus Mineralized / MPa',       'Collagen dis/order / -'],
                      ['Apparent Modulus Mineralized / MPa',       'Matrix maturity / -'],
+                     ['Apparent Modulus Mineralized / MPa',       'Relative Pyridinoline Content / -'],
+                     ['Apparent Modulus Mineralized / MPa',       'Relative Proteoglycan Content / -'],
+                     ['Apparent Modulus Mineralized / MPa',       'Relative Lipid Content / -'],
                      ['Modulus Mineralized / MPa',                'Ultimate Apparent Stress / MPa'],
                      ['Modulus Mineralized / MPa',                'Ultimate Collagen Stress / MPa'],
                      ['Modulus Mineralized / MPa',                'Ultimate Stress / MPa'],
@@ -140,17 +135,14 @@ Pair = pd.DataFrame([
                      ['Modulus Mineralized / MPa',                'Bone Volume Fraction / -'],
                      ['Modulus Mineralized / MPa',                'Bone Mineral Density / mg HA / cm³'],
                      ['Modulus Mineralized / MPa',                'Tissue Mineral Density / mg HA / cm³'],
-                     ['Modulus Mineralized / MPa',                'Min ECM Area / mm²'],
-                     ['Modulus Mineralized / MPa',                'Coefficient of Variation / -'],
-                     ['Modulus Mineralized / MPa',                'Mean Apparent Area / mm²'],
-                     ['Modulus Mineralized / MPa',                'Mean ECM Area / mm²'],
-                     ['Modulus Mineralized / MPa',                'Mean ECM Area Fraction / -'],
-                     ['Modulus Mineralized / MPa',                'Min ECM Area Fraction / -'],
                      ['Modulus Mineralized / MPa',                'Mineral to Matrix Ratio v2/a3 / -'],
                      ['Modulus Mineralized / MPa',                'Mineral to Matrix Ratio v1/a1 / -'],
                      ['Modulus Mineralized / MPa',                'Crystallinity / -'],
                      ['Modulus Mineralized / MPa',                'Collagen dis/order / -'],
                      ['Modulus Mineralized / MPa',                'Matrix maturity / -'],
+                     ['Modulus Mineralized / MPa',                'Relative Pyridinoline Content / -'],
+                     ['Modulus Mineralized / MPa',                'Relative Proteoglycan Content / -'],
+                     ['Modulus Mineralized / MPa',                'Relative Lipid Content / -'],
                      ['Ultimate Apparent Stress / MPa',           'Ultimate Collagen Stress / MPa'],
                      ['Ultimate Apparent Stress / MPa',           'Ultimate Stress / MPa'],
                      ['Ultimate Apparent Stress / MPa',           'Ultimate Strain / -'],
@@ -163,17 +155,14 @@ Pair = pd.DataFrame([
                      ['Ultimate Apparent Stress / MPa',           'Bone Volume Fraction / -'],
                      ['Ultimate Apparent Stress / MPa',           'Bone Mineral Density / mg HA / cm³'],
                      ['Ultimate Apparent Stress / MPa',           'Tissue Mineral Density / mg HA / cm³'],
-                     ['Ultimate Apparent Stress / MPa',           'Min ECM Area / mm²'],
-                     ['Ultimate Apparent Stress / MPa',           'Coefficient of Variation / -'],
-                     ['Ultimate Apparent Stress / MPa',           'Mean Apparent Area / mm²'],
-                     ['Ultimate Apparent Stress / MPa',           'Mean ECM Area / mm²'],
-                     ['Ultimate Apparent Stress / MPa',           'Mean ECM Area Fraction / -'],
-                     ['Ultimate Apparent Stress / MPa',           'Min ECM Area Fraction / -'],
                      ['Ultimate Apparent Stress / MPa',           'Mineral to Matrix Ratio v2/a3 / -'],
                      ['Ultimate Apparent Stress / MPa',           'Mineral to Matrix Ratio v1/a1 / -'],
                      ['Ultimate Apparent Stress / MPa',           'Crystallinity / -'],
                      ['Ultimate Apparent Stress / MPa',           'Collagen dis/order / -'],
                      ['Ultimate Apparent Stress / MPa',           'Matrix maturity / -'],
+                     ['Ultimate Apparent Stress / MPa',           'Relative Pyridinoline Content / -'],
+                     ['Ultimate Apparent Stress / MPa',           'Relative Proteoglycan Content / -'],
+                     ['Ultimate Apparent Stress / MPa',           'Relative Lipid Content / -'],
                      ['Ultimate Collagen Stress / MPa',           'Ultimate Stress / MPa'],
                      ['Ultimate Collagen Stress / MPa',           'Ultimate Strain / -'],
                      ['Ultimate Collagen Stress / MPa',           'Apparent Modulus Demineralized / MPa'],
@@ -185,17 +174,14 @@ Pair = pd.DataFrame([
                      ['Ultimate Collagen Stress / MPa',           'Bone Volume Fraction / -'],
                      ['Ultimate Collagen Stress / MPa',           'Bone Mineral Density / mg HA / cm³'],
                      ['Ultimate Collagen Stress / MPa',           'Tissue Mineral Density / mg HA / cm³'],
-                     ['Ultimate Collagen Stress / MPa',           'Min ECM Area / mm²'],
-                     ['Ultimate Collagen Stress / MPa',           'Coefficient of Variation / -'],
-                     ['Ultimate Collagen Stress / MPa',           'Mean Apparent Area / mm²'],
-                     ['Ultimate Collagen Stress / MPa',           'Mean ECM Area / mm²'],
-                     ['Ultimate Collagen Stress / MPa',           'Mean ECM Area Fraction / -'],
-                     ['Ultimate Collagen Stress / MPa',           'Min ECM Area Fraction / -'],
                      ['Ultimate Collagen Stress / MPa',           'Mineral to Matrix Ratio v2/a3 / -'],
                      ['Ultimate Collagen Stress / MPa',           'Mineral to Matrix Ratio v1/a1 / -'],
                      ['Ultimate Collagen Stress / MPa',           'Crystallinity / -'],
                      ['Ultimate Collagen Stress / MPa',           'Collagen dis/order / -'],
                      ['Ultimate Collagen Stress / MPa',           'Matrix maturity / -'],
+                     ['Ultimate Collagen Stress / MPa',           'Relative Pyridinoline Content / -'],
+                     ['Ultimate Collagen Stress / MPa',           'Relative Proteoglycan Content / -'],
+                     ['Ultimate Collagen Stress / MPa',           'Relative Lipid Content / -'],
                      ['Ultimate Stress / MPa',                    'Ultimate Strain / -'],
                      ['Ultimate Stress / MPa',                    'Apparent Modulus Demineralized / MPa'],
                      ['Ultimate Stress / MPa',                    'Modulus Demineralized / MPa'],
@@ -206,17 +192,14 @@ Pair = pd.DataFrame([
                      ['Ultimate Stress / MPa',                    'Bone Volume Fraction / -'],
                      ['Ultimate Stress / MPa',                    'Bone Mineral Density / mg HA / cm³'],
                      ['Ultimate Stress / MPa',                    'Tissue Mineral Density / mg HA / cm³'],
-                     ['Ultimate Stress / MPa',                    'Min ECM Area / mm²'],
-                     ['Ultimate Stress / MPa',                    'Coefficient of Variation / -'],
-                     ['Ultimate Stress / MPa',                    'Mean Apparent Area / mm²'],
-                     ['Ultimate Stress / MPa',                    'Mean ECM Area / mm²'],
-                     ['Ultimate Stress / MPa',                    'Mean ECM Area Fraction / -'],
-                     ['Ultimate Stress / MPa',                    'Min ECM Area Fraction / -'],
                      ['Ultimate Stress / MPa',                    'Mineral to Matrix Ratio v2/a3 / -'],
                      ['Ultimate Stress / MPa',                    'Mineral to Matrix Ratio v1/a1 / -'],
                      ['Ultimate Stress / MPa',                    'Crystallinity / -'],
                      ['Ultimate Stress / MPa',                    'Collagen dis/order / -'],
                      ['Ultimate Stress / MPa',                    'Matrix maturity / -'],
+                     ['Ultimate Stress / MPa',                    'Relative Pyridinoline Content / -'],
+                     ['Ultimate Stress / MPa',                    'Relative Proteoglycan Content / -'],
+                     ['Ultimate Stress / MPa',                    'Relative Lipid Content / -'],
                      ['Ultimate Strain / -',                      'Apparent Modulus Demineralized / MPa'],
                      ['Ultimate Strain / -',                      'Modulus Demineralized / MPa'],
                      ['Ultimate Strain / -',                      'Density / g/cm³'],
@@ -226,17 +209,14 @@ Pair = pd.DataFrame([
                      ['Ultimate Strain / -',                      'Bone Volume Fraction / -'],
                      ['Ultimate Strain / -',                      'Bone Mineral Density / mg HA / cm³'],
                      ['Ultimate Strain / -',                      'Tissue Mineral Density / mg HA / cm³'],
-                     ['Ultimate Strain / -',                      'Min ECM Area / mm²'],
-                     ['Ultimate Strain / -',                      'Coefficient of Variation / -'],
-                     ['Ultimate Strain / -',                      'Mean Apparent Area / mm²'],
-                     ['Ultimate Strain / -',                      'Mean ECM Area / mm²'],
-                     ['Ultimate Strain / -',                      'Mean ECM Area Fraction / -'],
-                     ['Ultimate Strain / -',                      'Min ECM Area Fraction / -'],
                      ['Ultimate Strain / -',                      'Mineral to Matrix Ratio v2/a3 / -'],
                      ['Ultimate Strain / -',                      'Mineral to Matrix Ratio v1/a1 / -'],
                      ['Ultimate Strain / -',                      'Crystallinity / -'],
                      ['Ultimate Strain / -',                      'Collagen dis/order / -'],
                      ['Ultimate Strain / -',                      'Matrix maturity / -'],
+                     ['Ultimate Strain / -',                      'Relative Pyridinoline Content / -'],
+                     ['Ultimate Strain / -',                      'Relative Proteoglycan Content / -'],
+                     ['Ultimate Strain / -',                      'Relative Lipid Content / -'],
                      ['Apparent Modulus Demineralized / MPa',     'Modulus Demineralized / MPa'],
                      ['Apparent Modulus Demineralized / MPa',     'Density / g/cm³'],
                      ['Apparent Modulus Demineralized / MPa',     'Mineral weight fraction / -'],
@@ -245,17 +225,14 @@ Pair = pd.DataFrame([
                      ['Apparent Modulus Demineralized / MPa',     'Bone Volume Fraction / -'],
                      ['Apparent Modulus Demineralized / MPa',     'Bone Mineral Density / mg HA / cm³'],
                      ['Apparent Modulus Demineralized / MPa',     'Tissue Mineral Density / mg HA / cm³'],
-                     ['Apparent Modulus Demineralized / MPa',     'Min ECM Area / mm²'],
-                     ['Apparent Modulus Demineralized / MPa',     'Coefficient of Variation / -'],
-                     ['Apparent Modulus Demineralized / MPa',     'Mean Apparent Area / mm²'],
-                     ['Apparent Modulus Demineralized / MPa',     'Mean ECM Area / mm²'],
-                     ['Apparent Modulus Demineralized / MPa',     'Mean ECM Area Fraction / -'],
-                     ['Apparent Modulus Demineralized / MPa',     'Min ECM Area Fraction / -'],
                      ['Apparent Modulus Demineralized / MPa',     'Mineral to Matrix Ratio v2/a3 / -'],
                      ['Apparent Modulus Demineralized / MPa',     'Mineral to Matrix Ratio v1/a1 / -'],
-                     ['Apparent Modulus Demineralized / MPa',    'Crystallinity / -'],
+                     ['Apparent Modulus Demineralized / MPa',     'Crystallinity / -'],
                      ['Apparent Modulus Demineralized / MPa',     'Collagen dis/order / -'],
                      ['Apparent Modulus Demineralized / MPa',     'Matrix maturity / -'],
+                     ['Apparent Modulus Demineralized / MPa',     'Relative Pyridinoline Content / -'],
+                     ['Apparent Modulus Demineralized / MPa',     'Relative Proteoglycan Content / -'],
+                     ['Apparent Modulus Demineralized / MPa',     'Relative Lipid Content / -'],
                      ['Modulus Demineralized / MPa',              'Density / g/cm³'],
                      ['Modulus Demineralized / MPa',              'Mineral weight fraction / -'],
                      ['Modulus Demineralized / MPa',              'Organic weight fraction / -'],
@@ -263,171 +240,117 @@ Pair = pd.DataFrame([
                      ['Modulus Demineralized / MPa',              'Bone Volume Fraction / -'],
                      ['Modulus Demineralized / MPa',              'Bone Mineral Density / mg HA / cm³'],
                      ['Modulus Demineralized / MPa',              'Tissue Mineral Density / mg HA / cm³'],
-                     ['Modulus Demineralized / MPa',              'Min ECM Area / mm²'],
-                     ['Modulus Demineralized / MPa',              'Coefficient of Variation / -'],
-                     ['Modulus Demineralized / MPa',              'Mean Apparent Area / mm²'],
-                     ['Modulus Demineralized / MPa',              'Mean ECM Area / mm²'],
-                     ['Modulus Demineralized / MPa',              'Mean ECM Area Fraction / -'],
-                     ['Modulus Demineralized / MPa',              'Min ECM Area Fraction / -'],
                      ['Modulus Demineralized / MPa',              'Mineral to Matrix Ratio v2/a3 / -'],
                      ['Modulus Demineralized / MPa',              'Mineral to Matrix Ratio v1/a1 / -'],
                      ['Modulus Demineralized / MPa',              'Crystallinity / -'],
                      ['Modulus Demineralized / MPa',              'Collagen dis/order / -'],
                      ['Modulus Demineralized / MPa',              'Matrix maturity / -'],
+                     ['Modulus Demineralized / MPa',              'Relative Pyridinoline Content / -'],
+                     ['Modulus Demineralized / MPa',              'Relative Proteoglycan Content / -'],
+                     ['Modulus Demineralized / MPa',              'Relative Lipid Content / -'],
                      ['Density / g/cm³',                          'Mineral weight fraction / -'],
                      ['Density / g/cm³',                          'Organic weight fraction / -'],
                      ['Density / g/cm³',                          'Water weight fraction / -'],
                      ['Density / g/cm³',                          'Bone Volume Fraction / -'],
                      ['Density / g/cm³',                          'Bone Mineral Density / mg HA / cm³'],
                      ['Density / g/cm³',                          'Tissue Mineral Density / mg HA / cm³'],
-                     ['Density / g/cm³',                          'Min ECM Area / mm²'],
-                     ['Density / g/cm³',                          'Coefficient of Variation / -'],
-                     ['Density / g/cm³',                          'Mean Apparent Area / mm²'],
-                     ['Density / g/cm³',                          'Mean ECM Area / mm²'],
-                     ['Density / g/cm³',                          'Mean ECM Area Fraction / -'],
-                     ['Density / g/cm³',                          'Min ECM Area Fraction / -'],
                      ['Density / g/cm³',                          'Mineral to Matrix Ratio v2/a3 / -'],
                      ['Density / g/cm³',                          'Mineral to Matrix Ratio v1/a1 / -'],
                      ['Density / g/cm³',                          'Crystallinity / -'],
                      ['Density / g/cm³',                          'Collagen dis/order / -'],
                      ['Density / g/cm³',                          'Matrix maturity / -'],
+                     ['Density / g/cm³',                          'Relative Pyridinoline Content / -'],
+                     ['Density / g/cm³',                          'Relative Proteoglycan Content / -'],
+                     ['Density / g/cm³',                          'Relative Lipid Content / -'],
                      ['Mineral weight fraction / -',              'Organic weight fraction / -'],
                      ['Mineral weight fraction / -',              'Water weight fraction / -'],
                      ['Mineral weight fraction / -',              'Bone Volume Fraction / -'],
                      ['Mineral weight fraction / -',              'Bone Mineral Density / mg HA / cm³'],
                      ['Mineral weight fraction / -',              'Tissue Mineral Density / mg HA / cm³'],
-                     ['Mineral weight fraction / -',              'Min ECM Area / mm²'],
-                     ['Mineral weight fraction / -',              'Coefficient of Variation / -'],
-                     ['Mineral weight fraction / -',              'Mean Apparent Area / mm²'],
-                     ['Mineral weight fraction / -',              'Mean ECM Area / mm²'],
-                     ['Mineral weight fraction / -',              'Mean ECM Area Fraction / -'],
-                     ['Mineral weight fraction / -',              'Min ECM Area Fraction / -'],
                      ['Mineral weight fraction / -',              'Mineral to Matrix Ratio v2/a3 / -'],
                      ['Mineral weight fraction / -',              'Mineral to Matrix Ratio v1/a1 / -'],
                      ['Mineral weight fraction / -',              'Crystallinity / -'],
                      ['Mineral weight fraction / -',              'Collagen dis/order / -'],
                      ['Mineral weight fraction / -',              'Matrix maturity / -'],
+                     ['Mineral weight fraction / -',              'Relative Pyridinoline Content / -'],
+                     ['Mineral weight fraction / -',              'Relative Proteoglycan Content / -'],
+                     ['Mineral weight fraction / -',              'Relative Lipid Content / -'],
                      ['Organic weight fraction / -',              'Water weight fraction / -'],
                      ['Organic weight fraction / -',              'Bone Volume Fraction / -'],
                      ['Organic weight fraction / -',              'Bone Mineral Density / mg HA / cm³'],
                      ['Organic weight fraction / -',              'Tissue Mineral Density / mg HA / cm³'],
-                     ['Organic weight fraction / -',              'Min ECM Area / mm²'],
-                     ['Organic weight fraction / -',              'Coefficient of Variation / -'],
-                     ['Organic weight fraction / -',              'Mean Apparent Area / mm²'],
-                     ['Organic weight fraction / -',              'Mean ECM Area / mm²'],
-                     ['Organic weight fraction / -',              'Mean ECM Area Fraction / -'],
-                     ['Organic weight fraction / -',              'Min ECM Area Fraction / -'],
                      ['Organic weight fraction / -',              'Mineral to Matrix Ratio v2/a3 / -'],
                      ['Organic weight fraction / -',              'Mineral to Matrix Ratio v1/a1 / -'],
                      ['Organic weight fraction / -',              'Crystallinity / -'],
                      ['Organic weight fraction / -',              'Collagen dis/order / -'],
                      ['Organic weight fraction / -',              'Matrix maturity / -'],
+                     ['Organic weight fraction / -',              'Relative Pyridinoline Content / -'],
+                     ['Organic weight fraction / -',              'Relative Proteoglycan Content / -'],
+                     ['Organic weight fraction / -',              'Relative Lipid Content / -'],
                      ['Water weight fraction / -',                'Bone Volume Fraction / -'],
                      ['Water weight fraction / -',                'Bone Mineral Density / mg HA / cm³'],
                      ['Water weight fraction / -',                'Tissue Mineral Density / mg HA / cm³'],
-                     ['Water weight fraction / -',                'Min ECM Area / mm²'],
-                     ['Water weight fraction / -',                'Coefficient of Variation / -'],
-                     ['Water weight fraction / -',                'Mean Apparent Area / mm²'],
-                     ['Water weight fraction / -',                'Mean ECM Area / mm²'],
-                     ['Water weight fraction / -',                'Mean ECM Area Fraction / -'],
-                     ['Water weight fraction / -',                'Min ECM Area Fraction / -'],
                      ['Water weight fraction / -',                'Mineral to Matrix Ratio v2/a3 / -'],
                      ['Water weight fraction / -',                'Mineral to Matrix Ratio v1/a1 / -'],
                      ['Water weight fraction / -',                'Crystallinity / -'],
                      ['Water weight fraction / -',                'Collagen dis/order / -'],
                      ['Water weight fraction / -',                'Matrix maturity / -'],
+                     ['Water weight fraction / -',                'Relative Pyridinoline Content / -'],
+                     ['Water weight fraction / -',                'Relative Proteoglycan Content / -'],
+                     ['Water weight fraction / -',                'Relative Lipid Content / -'],
                      ['Bone Volume Fraction / -',                 'Bone Mineral Density / mg HA / cm³'],
                      ['Bone Volume Fraction / -',                 'Tissue Mineral Density / mg HA / cm³'],
-                     ['Bone Volume Fraction / -',                 'Min ECM Area / mm²'],
-                     ['Bone Volume Fraction / -',                 'Coefficient of Variation / -'],
-                     ['Bone Volume Fraction / -',                 'Mean Apparent Area / mm²'],
-                     ['Bone Volume Fraction / -',                 'Mean ECM Area / mm²'],
-                     ['Bone Volume Fraction / -',                 'Mean ECM Area Fraction / -'],
-                     ['Bone Volume Fraction / -',                 'Min ECM Area Fraction / -'],
                      ['Bone Volume Fraction / -',                 'Mineral to Matrix Ratio v2/a3 / -'],
                      ['Bone Volume Fraction / -',                 'Mineral to Matrix Ratio v1/a1 / -'],
                      ['Bone Volume Fraction / -',                 'Crystallinity / -'],
                      ['Bone Volume Fraction / -',                 'Collagen dis/order / -'],
                      ['Bone Volume Fraction / -',                 'Matrix maturity / -'],
+                     ['Bone Volume Fraction / -',                 'Relative Pyridinoline Content / -'],
+                     ['Bone Volume Fraction / -',                 'Relative Proteoglycan Content / -'],
+                     ['Bone Volume Fraction / -',                 'Relative Lipid Content / -'],
                      ['Bone Mineral Density / mg HA / cm³',       'Tissue Mineral Density / mg HA / cm³'],
-                     ['Bone Mineral Density / mg HA / cm³',       'Min ECM Area / mm²'],
-                     ['Bone Mineral Density / mg HA / cm³',       'Coefficient of Variation / -'],
-                     ['Bone Mineral Density / mg HA / cm³',       'Mean Apparent Area / mm²'],
-                     ['Bone Mineral Density / mg HA / cm³',       'Mean ECM Area / mm²'],
-                     ['Bone Mineral Density / mg HA / cm³',       'Mean ECM Area Fraction / -'],
-                     ['Bone Mineral Density / mg HA / cm³',       'Min ECM Area Fraction / -'],
                      ['Bone Mineral Density / mg HA / cm³',       'Mineral to Matrix Ratio v2/a3 / -'],
                      ['Bone Mineral Density / mg HA / cm³',       'Mineral to Matrix Ratio v1/a1 / -'],
                      ['Bone Mineral Density / mg HA / cm³',       'Crystallinity / -'],
                      ['Bone Mineral Density / mg HA / cm³',       'Collagen dis/order / -'],
                      ['Bone Mineral Density / mg HA / cm³',       'Matrix maturity / -'],
-                     ['Tissue Mineral Density / mg HA / cm³',     'Min ECM Area / mm²'],
-                     ['Tissue Mineral Density / mg HA / cm³',     'Coefficient of Variation / -'],
-                     ['Tissue Mineral Density / mg HA / cm³',     'Mean Apparent Area / mm²'],
-                     ['Tissue Mineral Density / mg HA / cm³',     'Mean ECM Area / mm²'],
-                     ['Tissue Mineral Density / mg HA / cm³',     'Mean ECM Area Fraction / -'],
-                     ['Tissue Mineral Density / mg HA / cm³',     'Min ECM Area Fraction / -'],
+                     ['Bone Mineral Density / mg HA / cm³',       'Relative Pyridinoline Content / -'],
+                     ['Bone Mineral Density / mg HA / cm³',       'Relative Proteoglycan Content / -'],
+                     ['Bone Mineral Density / mg HA / cm³',       'Relative Lipid Content / -'],
                      ['Tissue Mineral Density / mg HA / cm³',     'Mineral to Matrix Ratio v2/a3 / -'],
                      ['Tissue Mineral Density / mg HA / cm³',     'Mineral to Matrix Ratio v1/a1 / -'],
                      ['Tissue Mineral Density / mg HA / cm³',     'Crystallinity / -'],
                      ['Tissue Mineral Density / mg HA / cm³',     'Collagen dis/order / -'],
                      ['Tissue Mineral Density / mg HA / cm³',     'Matrix maturity / -'],
-                     ['Min ECM Area / mm²',                       'Coefficient of Variation / -'],
-                     ['Min ECM Area / mm²',                       'Mean Apparent Area / mm²'],
-                     ['Min ECM Area / mm²',                       'Mean ECM Area / mm²'],
-                     ['Min ECM Area / mm²',                       'Mean ECM Area Fraction / -'],
-                     ['Min ECM Area / mm²',                       'Min ECM Area Fraction / -'],
-                     ['Min ECM Area / mm²',                       'Mineral to Matrix Ratio v2/a3 / -'],
-                     ['Min ECM Area / mm²',                       'Mineral to Matrix Ratio v1/a1 / -'],
-                     ['Min ECM Area / mm²',                       'Crystallinity / -'],
-                     ['Min ECM Area / mm²',                       'Collagen dis/order / -'],
-                     ['Min ECM Area / mm²',                       'Matrix maturity / -'],
-                     ['Coefficient of Variation / -',             'Mean Apparent Area / mm²'],
-                     ['Coefficient of Variation / -',             'Mean ECM Area / mm²'],
-                     ['Coefficient of Variation / -',             'Mean ECM Area Fraction / -'],
-                     ['Coefficient of Variation / -',             'Min ECM Area Fraction / -'],
-                     ['Coefficient of Variation / -',             'Mineral to Matrix Ratio v2/a3 / -'],
-                     ['Coefficient of Variation / -',             'Mineral to Matrix Ratio v1/a1 / -'],
-                     ['Coefficient of Variation / -',             'Crystallinity / -'],
-                     ['Coefficient of Variation / -',             'Collagen dis/order / -'],
-                     ['Coefficient of Variation / -',             'Matrix maturity / -'],
-                     ['Mean Apparent Area / mm²',                 'Mean ECM Area / mm²'],
-                     ['Mean Apparent Area / mm²',                 'Mean ECM Area Fraction / -'],
-                     ['Mean Apparent Area / mm²',                 'Min ECM Area Fraction / -'],
-                     ['Mean Apparent Area / mm²',                 'Mineral to Matrix Ratio v2/a3 / -'],
-                     ['Mean Apparent Area / mm²',                 'Mineral to Matrix Ratio v1/a1 / -'],
-                     ['Mean Apparent Area / mm²',                 'Crystallinity / -'],
-                     ['Mean Apparent Area / mm²',                 'Collagen dis/order / -'],
-                     ['Mean Apparent Area / mm²',                 'Matrix maturity / -'],
-                     ['Mean ECM Area / mm²',                      'Mean ECM Area Fraction / -'],
-                     ['Mean ECM Area / mm²',                      'Min ECM Area Fraction / -'],
-                     ['Mean ECM Area / mm²',                      'Mineral to Matrix Ratio v2/a3 / -'],
-                     ['Mean ECM Area / mm²',                      'Mineral to Matrix Ratio v1/a1 / -'],
-                     ['Mean ECM Area / mm²',                      'Crystallinity / -'],
-                     ['Mean ECM Area / mm²',                      'Collagen dis/order / -'],
-                     ['Mean ECM Area / mm²',                      'Matrix maturity / -'],
-                     ['Mean ECM Area Fraction / -',               'Min ECM Area Fraction / -'],
-                     ['Mean ECM Area Fraction / -',               'Mineral to Matrix Ratio v2/a3 / -'],
-                     ['Mean ECM Area Fraction / -',               'Mineral to Matrix Ratio v1/a1 / -'],
-                     ['Mean ECM Area Fraction / -',               'Crystallinity / -'],
-                     ['Mean ECM Area Fraction / -',               'Collagen dis/order / -'],
-                     ['Mean ECM Area Fraction / -',               'Matrix maturity / -'],
-                     ['Min ECM Area Fraction / -',                'Mineral to Matrix Ratio v2/a3 / -'],
-                     ['Min ECM Area Fraction / -',                'Mineral to Matrix Ratio v1/a1 / -'],
-                     ['Min ECM Area Fraction / -',                'Crystallinity / -'],
-                     ['Min ECM Area Fraction / -',                'Collagen dis/order / -'],
-                     ['Min ECM Area Fraction / -',                'Matrix maturity / -'],
+                     ['Tissue Mineral Density / mg HA / cm³',     'Relative Pyridinoline Content / -'],
+                     ['Tissue Mineral Density / mg HA / cm³',     'Relative Proteoglycan Content / -'],
+                     ['Tissue Mineral Density / mg HA / cm³',     'Relative Lipid Content / -'],
                      ['Mineral to Matrix Ratio v2/a3 / -',        'Crystallinity / -'],
                      ['Mineral to Matrix Ratio v2/a3 / -',        'Collagen dis/order / -'],
                      ['Mineral to Matrix Ratio v2/a3 / -',        'Matrix maturity / -'],
+                     ['Mineral to Matrix Ratio v2/a3 / -',        'Relative Pyridinoline Content / -'],
+                     ['Mineral to Matrix Ratio v2/a3 / -',        'Relative Proteoglycan Content / -'],
+                     ['Mineral to Matrix Ratio v2/a3 / -',        'Relative Lipid Content / -'],
                      ['Mineral to Matrix Ratio v1/a1 / -',        'Crystallinity / -'],
                      ['Mineral to Matrix Ratio v1/a1 / -',        'Mineral to Matrix Ratio v2/a3 / -'],
                      ['Mineral to Matrix Ratio v1/a1 / -',        'Collagen dis/order / -'],
                      ['Mineral to Matrix Ratio v1/a1 / -',        'Matrix maturity / -'],
+                     ['Mineral to Matrix Ratio v1/a1 / -',        'Relative Pyridinoline Content / -'],
+                     ['Mineral to Matrix Ratio v1/a1 / -',        'Relative Proteoglycan Content / -'],
+                     ['Mineral to Matrix Ratio v1/a1 / -',        'Relative Lipid Content / -'],
                      ['Crystallinity / -',                        'Collagen dis/order / -'],
                      ['Crystallinity / -',                        'Matrix maturity / -'],
+                     ['Crystallinity / -',                        'Relative Pyridinoline Content / -'],
+                     ['Crystallinity / -',                        'Relative Proteoglycan Content / -'],
+                     ['Crystallinity / -',                        'Relative Lipid Content / -'],
                      ['Collagen dis/order / -',                   'Matrix maturity / -'],
-                     ])
+                     ['Collagen dis/order / -',                   'Relative Pyridinoline Content / -'],
+                     ['Collagen dis/order / -',                   'Relative Proteoglycan Content / -'],
+                     ['Collagen dis/order / -',                   'Relative Lipid Content / -'],
+                     ['Relative Pyridinoline Content / -',        'Relative Proteoglycan Content / -'],
+                     ['Relative Pyridinoline Content / -',        'Relative Lipid Content / -'],
+                     ['Relative Proteoglycan Content / -',        'Relative Lipid Content / -']
+])
 
 # assign abbreviations to above list of variables
 Pair_abbrev1 = list()
@@ -511,8 +434,7 @@ for i in tqdm(range(len(Pair))):
     RMSE = rmse(Y_Obs_df, Y_Fit_df)
     cv = round(100*(RMSE/statistics.mean(Y_Obs))[0], 2)
 
-    savepath = Cwd / '04_Results/04_Plots/Individual'
-    savepath_windows = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/04_Plots/Individual'
+    savepath = Results_path + '/04_Plots/Individual'
     Figure, Axes = plt.subplots(1, 1, figsize=(5.5, 4.5), dpi=300, sharey=True, sharex=True)
     male_age = Data[Data['Gender'] == 'M']['Age / y']
     female_age = Data[Data['Gender'] == 'F']['Age / y']
@@ -620,9 +542,7 @@ for i in tqdm(range(len(Pair))):
                 plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
                 plt.rcParams['figure.figsize'] = (5.5, 4.5)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, format='png', )
-                # plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                #             dpi=300, bbox_inches='tight', format='png', )
+                            dpi=300, format='png')
                 # plt.show()
                 plt.close()
                 j = j + 1
@@ -644,8 +564,6 @@ for i in tqdm(range(len(Pair))):
                 plt.rcParams['figure.figsize'] = (5.5, 4.5)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, format='png')
-                # plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                #             dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
                 plt.close()
 
@@ -688,8 +606,6 @@ for i in tqdm(range(len(Pair))):
                 plt.rcParams['figure.figsize'] = (5.5, 4.5)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, format='png')
-                # plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                #             dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
                 plt.close()
                 j = j + 1
@@ -712,8 +628,6 @@ for i in tqdm(range(len(Pair))):
                 plt.rcParams['figure.figsize'] = (5.5, 4.5)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, format='png')
-                # plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                #             dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
                 plt.close()
 
@@ -758,8 +672,6 @@ for i in tqdm(range(len(Pair))):
                 plt.rcParams['figure.figsize'] = (5.5, 4.5)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, format='png')
-                # plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                #             dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
                 plt.close()
                 j = j + 1
@@ -781,8 +693,6 @@ for i in tqdm(range(len(Pair))):
                 plt.rcParams['figure.figsize'] = (5.5, 4.5)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, format='png')
-                # plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                #             dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
                 plt.close()
 
@@ -821,8 +731,6 @@ for i in tqdm(range(len(Pair))):
                 plt.rcParams['figure.figsize'] = (5.5, 4.5)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, format='png')
-                # plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                #             dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
                 plt.close()
                 j = j + 1
@@ -844,8 +752,6 @@ for i in tqdm(range(len(Pair))):
                 plt.rcParams['figure.figsize'] = (5.5, 4.5)
                 plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                             dpi=300, format='png')
-                # plt.savefig(os.path.join(savepath_windows, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                #             dpi=300, bbox_inches='tight', format='png', )
                 # plt.show()
                 plt.close()
 
@@ -856,8 +762,7 @@ for i in tqdm(range(len(Pair))):
 result_dir = pd.DataFrame(results, columns=['X-axis', 'Y-axis', 'p-value', '\u03C3\u2091\u209B\u209C', 'R\u00B2', 'N',
                                             'lower bound 95% CI', 'upper bound 95% CI', 'Standard error',
                                             'Root mean square error'])
-result_dir.to_csv(os.path.join('/home/stefan/PycharmProjects/FEMCOL/04_Results/04_Plots/', 'ResultsPlots.csv'), index=False)
-# result_dir.to_csv(os.path.join(savepath_windows, 'ResultsPlots.csv'), index=False)
+result_dir.to_csv(Results_path + '/04_Plots/ResultsPlots.csv', index=False)
 
 # boxplots of specific component weights
 MWF = df['Mineral weight fraction / -']
@@ -871,8 +776,7 @@ bp = ax1.boxplot(WF)
 ax1.set_ylabel('Weight Fraction / -')
 ax1.set_xticklabels(['Mineral', 'Organic', 'Water'])
 plt.ylim(ymin=0)
-plt.savefig(os.path.join('/home/stefan/PycharmProjects/FEMCOL/04_Results/04_Plots/', 'WF_boxplt.png'), dpi=300, bbox_inches='tight', format='png')
-# plt.savefig(os.path.join(savepath_windows, 'WF_boxplt.png'), dpi=300, bbox_inches='tight', format='png')
+plt.savefig(os.path.join(Results_path + '/04_Plots/WF_boxplt.png'), dpi=300, bbox_inches='tight', format='png')
 # plt.show()
 plt.close()
 
@@ -929,8 +833,6 @@ ax2.plot((1 - d, 1 + d), (1 - d, 1 + d), **kwargs)  # bottom-right diagonal
 # ax and ax2 via f.subplots_adjust(hspace=...) or plt.subplot_tool(),
 # the diagonal lines will move accordingly, and stay right at the tips
 # of the spines they are 'breaking'
-plt.savefig(os.path.join('/home/stefan/PycharmProjects/FEMCOL/04_Results/04_Plots/', 'AM_boxplt.png'),
-            dpi=300, bbox_inches='tight', format='png')
-# plt.savefig(os.path.join(savepath_windows, 'AM_boxplt.png'), dpi=300, bbox_inches='tight', format='png')
+plt.savefig(os.path.join(Results_path + '/04_Plots/AM_boxplt.png'), dpi=300, bbox_inches='tight', format='png')
 # plt.show()
 plt.close()

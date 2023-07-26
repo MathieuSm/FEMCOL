@@ -50,7 +50,7 @@ results_merged['Collagen dis/order / -'] = results_raman['coll_dis/order_1670/16
 results_merged['Matrix maturity / -'] = results_raman['matrix_maturity_1660/1683_mean']
 results_merged['Relative Pyridinoline Content / -'] = results_raman['Pyd/matrix_1660/amideI_mean']
 results_merged['Relative Proteoglycan Content / -'] = results_raman['PG_amideIII_mean']
-results_merged['Relative Lipid Content'] = results_raman['lipid_amideIII_mean']
+results_merged['Relative Lipid Content / -'] = results_raman['lipid_amideIII_mean']
 
 results_merged['Apparent Modulus Mineralized uFE / MPa'] = round(results_uFE['E_uFE_L'], 3)*1000
 results_merged['Yield Stress uFE / MPa'] = round(results_uFE['yield_strength_uFE_with_non_broken'], 2)
