@@ -7,16 +7,16 @@ import pandas as pd                         # Used to manage data frames
 import matplotlib.pyplot as plt             # Used to perform plots
 import statsmodels.formula.api as smf       # Used for statistical analysis (ols here)
 from scipy.stats.distributions import t     # Used to compute confidence intervals
+import os
 
 
 # Set directories
-CurrentDirectory = Path.cwd()
-ScriptsDirectory = CurrentDirectory / '03_Scripts'
-DataDirectory = CurrentDirectory / '02_Data/01_uCT'
+Cwd = os.getcwd()
+DataDirectory = str(os.path.dirname(Cwd) + '/02_Data/01_uCT')
 
 # Import self-written script
 import sys
-sys.path.append(str(ScriptsDirectory))
+sys.path.append(str(Cwd))
 import ISQReader
 
 # Create class for ISQReader script input
