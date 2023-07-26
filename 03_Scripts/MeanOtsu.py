@@ -1,23 +1,19 @@
 # Import standard packages
-from pathlib import Path                # Used to manage path variables in windows or linux
-import numpy as np                      # Used to do arrays (matrices) computations namely
 import pandas as pd                     # Used to manage data frames
 import SimpleITK as sitk                # Used to read images
-import matplotlib.pyplot as plt         # Used to perform plots
 from skimage import filters             # Used to perform filtering image operations (e.g. Otsu)
-from skimage import morphology, measure # Used to fill pores and circle fitting
 import statistics                       # Used to perform statistics
 import os
 from tqdm import tqdm
 
 
 # Set directories
-CurrentDirectory = Path.cwd()
-ScriptsDirectory = CurrentDirectory / '03_Scripts'
-DataDirectory = CurrentDirectory / '02_Data/01_uCT'
+Cwd = os.getcwd()
+DataDirectory = str(os.path.dirname(Cwd) + '/02_Data/01_uCT')
+ResultsDirectory = str(os.path.dirname(Cwd) + '/04_Results/03_uCT/')
 
 # Read data list and print it into console
-Data = pd.read_csv(str(DataDirectory / 'SampleList.csv'))
+Data = pd.read_csv(str(DataDirectory + '/SampleList.csv'))
 Data = Data.drop('Remark', axis=1)
 Data = Data.dropna().reset_index(drop=True)
 print(Data)
@@ -47,4 +43,4 @@ mean_otsu = list()
 mean_otsu.append(round(statistics.mean(result_dir['Otsu Threshold']), 3))
 mean_otsu = pd.DataFrame(mean_otsu, columns=['Mean Otsu Threshold'])
 
-mean_otsu.to_csv(os.path.join('/home/stefan/PycharmProjects/FEMCOL/04_Results/03_uCT/', 'MeanOtsu.csv'), index=False)
+mean_otsu.to_csv(os.path.join(ResultsDirectory, 'MeanOtsu.csv'), index=False)
