@@ -1,32 +1,27 @@
 # This script plots various variables against each other, Data is retrieved from ResultsOverview.csv file
 
 # Import standard packages
-from pathlib import Path                 # Used to manage path variables in windows or linux
-import numpy as np                       # Used to do arrays (matrices) computations namely
-import pandas as pd                      # Used to manage data frames
-import matplotlib.pyplot as plt          # Used to perform plots
-import statsmodels.formula.api as smf    # Used for statistical analysis (ols here)
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
 import os
-from scipy.stats.distributions import t  # Used to compute confidence intervals
-import sys
 import seaborn as sns
 from scipy.stats import linregress
 from matplotlib import cm
 from matplotlib.colors import ListedColormap
-from tqdm import tqdm
+
 
 # Set directory & load data. Remove unwanted columns and rename the remaining ones
-Cwd = Path.cwd()
-DataPath = Cwd / '04_Results/ResultsOverview.csv'
-savepath_full = Cwd / '04_Results/04_Plots/CorrelationMatrix_Full/'
-savepath_compact = Cwd / '04_Results/04_Plots/CorrelationMatrix_Compact/'
+Cwd = os.getcwd()
+results_path = str(os.path.dirname(Cwd) + '/04_Results')
+results_overview = str(os.path.dirname(Cwd) + '/04_Results/ResultsOverview.csv')
+savepath_full = results_path + '/04_Plots/CorrelationMatrix_Full/'
+savepath_compact = results_path + '/04_Plots/CorrelationMatrix_Compact/'
 
-df = pd.read_csv(str(DataPath), skiprows=0)
+df = pd.read_csv(str(results_overview), skiprows=0)
 df = df.drop(columns=['Sample ID', 'Gender', 'Site', 'Stiffness Mineralized / N/mm',
                       'Stiffness Demineralized / N/mm', 'Ultimate Force / N', 'Organic Weight / g', 'Mineral Weight / g',
-                      'Water Weight / g', 'Bone Mineral Content / mg HA', 'Min Equivalent Diameter / mm',
-                      'Mean Apparent Diameter / mm', 'Mean Apparent Area / mm²', 'Bone Mineral Content / mg HA',
-                      'Min ECM Area / mm²', 'Mean ECM Area / mm²'])
+                      'Water Weight / g', 'Bone Mineral Content / mg HA'])
 # Complete Matrix including all variables
 # df_new = df[['Bone Volume Fraction / -', 'Bone Mineral Density / mg HA / cm³', 'Tissue Mineral Density / mg HA / cm³',
 #              'Mineral to Matrix Ratio v2/a3 / -', 'Mineral to Matrix Ratio v1/a1 / -', 'Crystallinity / -',
@@ -35,11 +30,11 @@ df = df.drop(columns=['Sample ID', 'Gender', 'Site', 'Stiffness Mineralized / N/
 #              'Apparent Modulus Mineralized / MPa', 'Modulus Mineralized / MPa', 'Apparent Modulus Demineralized / MPa',
 #              'Modulus Demineralized / MPa', 'Ultimate Apparent Stress / MPa', 'Ultimate Collagen Stress / MPa',
 #              'Ultimate Stress / MPa', 'Ultimate Strain / -', 'Apparent Modulus Mineralized uFE / MPa',
-#              'Yield Stress uFE / MPa', 'Ultimate Stress uFE / MPa', 'Mean ECM Area Fraction / -',
-#              'Min ECM Area Fraction / -', 'Coefficient of Variation / -']]
+#              'Yield Stress uFE / MPa', 'Ultimate Stress uFE / MPa']]
 df_new = df[['Age / y', 'Mineral weight fraction / -', 'Organic weight fraction / -', 'Water weight fraction / -',
              'Bone Volume Fraction / -', 'Tissue Mineral Density / mg HA / cm³',
              'Mineral to Matrix Ratio v2/a3 / -', 'Crystallinity / -', 'Collagen dis/order / -', 'Matrix maturity / -',
+             'Relative Pyridinoline Content / -', 'Relative Proteoglycan Content / -', 'Relative Lipid Content / -',
              'Modulus Mineralized / MPa', 'Apparent Modulus Mineralized / MPa',
              'Modulus Demineralized / MPa', 'Apparent Modulus Demineralized / MPa', 'Ultimate Apparent Stress / MPa',
              'Ultimate Strain / -']]
@@ -50,6 +45,7 @@ df_new = df[['Age / y', 'Mineral weight fraction / -', 'Organic weight fraction 
 df_new.columns = ['Age', 'WFM', 'WFO', 'WFW',
                   'BVTV', 'TMD',
                   'MMRv2a3', 'XC', 'CDO', 'MMAT',
+                  'RPyC', 'RPrC', 'RLC',
                   'MM', 'AMM',
                   'MD', 'AMD', 'UAPPSTRE', 'USTRA']
 
@@ -116,6 +112,7 @@ newcmp_r = ListedColormap(newcolors_r)
 abbreviations = ['Age', 'WF$_m$', 'WF$_o$', 'WF$_w$',
                  'BVTV', 'TMD',
                  r'MMR$\nu_{2}a_{3}$', 'X$_c$', 'CDO', 'MMAT',
+                 'RPyC', 'RPrC', 'RLC',
                  'E$_m$', 'E$_{app, m}$',
                  'E$_c$', 'E$_{app, c}$', '$\sigma_{app}$', '$\epsilon_c$']
 
