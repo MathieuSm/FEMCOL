@@ -1,25 +1,17 @@
 # This script plots various variables against each other, Data is retrieved from ResultsOverview.csv file
 
 # Import standard packages
-from pathlib import Path                            # Used to manage path variables in windows or linux
-import numpy as np                                  # Used to do arrays (matrices) computations namely
 import pandas as pd                                 # Used to manage data frames
 import matplotlib.pyplot as plt                     # Used to perform plots
-import statsmodels.formula.api as smf               # Used for statistical analysis (ols here)
 import os                                           # Used to manage path variables
-from scipy.stats.distributions import t             # Used to compute confidence intervals
-import seaborn as sns                               # Used to create regression lines with confidence bands
-import statistics as stats                          # Used to calculate statistical measures
-from statsmodels.tools.eval_measures import rmse    # Used to evaluate rmse
-from tqdm import tqdm                               # Used to track script progression while running
 
 
 # Set directory & load data
-Cwd = Path.cwd()
-DataPath = Cwd / '04_Results/ResultsOverview.csv'
-SavePath = Cwd / '04_Results/04_Plots'
-df = pd.read_csv(str(DataPath), skiprows=0)
-df = df.drop(columns={'Min Equivalent Diameter / mm', 'Mean Apparent Diameter / mm'})
+Cwd = os.getcwd()
+results_path = str(os.path.dirname(Cwd) + '/04_Results')
+results_overview = str(os.path.dirname(Cwd) + '/04_Results/ResultsOverview.csv')
+SavePath = results_path + '/04_Plots'
+df = pd.read_csv(str(results_overview), skiprows=0)
 
 E_m = (df['Modulus Mineralized / MPa'].dropna().reset_index(drop=True))/1000
 E_app_m = (df['Apparent Modulus Mineralized / MPa'].dropna().reset_index(drop=True))/1000
@@ -55,19 +47,13 @@ TMD = df['Tissue Mineral Density / mg HA / cm³'].dropna().reset_index(drop=True
 
 BMC = df['Bone Mineral Content / mg HA'].dropna().reset_index(drop=True)
 
-CVECMA = df['Coefficient of Variation / -'].dropna().reset_index(drop=True)
-
-MinECMA = df['Min ECM Area / mm²'].dropna().reset_index(drop=True)
-MEANAPPA = df['Mean Apparent Area / mm²'].dropna().reset_index(drop=True)
-MEANECMA = df['Mean ECM Area / mm²'].dropna().reset_index(drop=True)
-
-MEANECMAF = df['Mean ECM Area Fraction / -'].dropna().reset_index(drop=True)
-MINECMAF = df['Min ECM Area Fraction / -'].dropna().reset_index(drop=True)
-
 MMRV2A3 = df['Mineral to Matrix Ratio v2/a3 / -'].dropna().reset_index(drop=True)
 MMRV1A1 = df['Mineral to Matrix Ratio v1/a1 / -'].dropna().reset_index(drop=True)
 
 Xc = df['Crystallinity / -'].dropna().reset_index(drop=True)
+RPyC = df['Relative Pyridinoline Content / -'].dropna().reset_index(drop=True)
+RPrC = df['Relative Proteoglycan Content / -'].dropna().reset_index(drop=True)
+RLC = df['Relative Lipid Content / -'].dropna().reset_index(drop=True)
 
 COLDIS = df['Collagen dis/order / -'].dropna().reset_index(drop=True)
 
@@ -85,14 +71,11 @@ columns8 = [Wo, Wm, Ww]
 columns9 = [BVTV]
 columns10 = [BMD, TMD]
 columns11 = [BMC]
-columns12 = [CVECMA]
-columns13 = [MinECMA, MEANAPPA, MEANECMA]
-columns14 = [MEANECMAF, MINECMAF]
-columns15 = [MMRV2A3, MMRV1A1]
-columns16 = [Xc]
-columns17 = [COLDIS]
-columns18 = [MATMAT]
-columns19 = [WFo, WFm, WFw]
+columns12 = [MMRV2A3, MMRV1A1]
+columns13 = [Xc, RPyC, RPrC, RLC]
+columns14 = [COLDIS]
+columns15 = [MATMAT]
+columns16 = [WFo, WFm, WFw]
 
 
 YposCI = 0.025
@@ -111,7 +94,7 @@ medianprops={'linewidth': 0.5}
 
 # fist subplot
 plt.figure()
-plt.subplot(5, 4, 1)
+plt.subplot(4, 4, 1)
 box = plt.boxplot(columns1, patch_artist=True, showmeans=True, meanline=True, flierprops=flierprops,
                   boxprops=boxprops, whiskerprops=whiskerprops, capprops=capprops, meanprops=meanprops,
                   medianprops=medianprops)
@@ -135,7 +118,7 @@ plt.ylabel('GPa')
 # plt.annotate(r'$CV$ : ' + str(round(cv, 3)), xy=(0.05, YposCI), xycoords='axes fraction', fontsize=5)
 
 # second subplot
-plt.subplot(5, 4, 2)
+plt.subplot(4, 4, 2)
 box = plt.boxplot(columns2, patch_artist=True, showmeans=True, meanline=True, flierprops={'markersize': 1},
                   boxprops=boxprops, whiskerprops=whiskerprops, capprops=capprops, meanprops=meanprops,
                   medianprops=medianprops)
@@ -147,7 +130,7 @@ for patch, color in zip(box['boxes'], colors):
 # ax.set_title('Example Boxplot')
 plt.ylabel('MPa')
 
-plt.subplot(5, 4, 3)
+plt.subplot(4, 4, 3)
 box = plt.boxplot(columns3, patch_artist=True, showmeans=True, meanline=True, flierprops={'markersize': 1},
                   boxprops=boxprops, whiskerprops=whiskerprops, capprops=capprops, meanprops=meanprops,
                   medianprops=medianprops)
@@ -159,7 +142,7 @@ for patch, color in zip(box['boxes'], colors):
 # ax.set_title('Example Boxplot')
 plt.ylabel('kN/mm')
 
-plt.subplot(5, 4, 4)
+plt.subplot(4, 4, 4)
 box = plt.boxplot(columns4, patch_artist=True, showmeans=True, meanline=True, flierprops={'markersize': 1},
                   boxprops=boxprops, whiskerprops=whiskerprops, capprops=capprops, meanprops=meanprops,
                   medianprops=medianprops)
@@ -171,7 +154,7 @@ for patch, color in zip(box['boxes'], colors):
 # ax.set_title('Example Boxplot')
 plt.ylabel('MPa')
 
-plt.subplot(5, 4, 5)
+plt.subplot(4, 4, 5)
 box = plt.boxplot(columns5, patch_artist=True, showmeans=True, meanline=True, flierprops={'markersize': 1},
                   boxprops=boxprops, whiskerprops=whiskerprops, capprops=capprops, meanprops=meanprops,
                   medianprops=medianprops)
@@ -183,7 +166,7 @@ for patch, color in zip(box['boxes'], colors):
 # ax.set_title('Example Boxplot')
 plt.ylabel('N')
 
-plt.subplot(5, 4, 6)
+plt.subplot(4, 4, 6)
 box = plt.boxplot(columns6, patch_artist=True, showmeans=True, meanline=True, flierprops={'markersize': 1},
                   boxprops=boxprops, whiskerprops=whiskerprops, capprops=capprops, meanprops=meanprops,
                   medianprops=medianprops)
@@ -195,7 +178,7 @@ for patch, color in zip(box['boxes'], colors):
 # ax.set_title('Example Boxplot')
 plt.ylabel('-')
 
-plt.subplot(5, 4, 7)
+plt.subplot(4, 4, 7)
 box = plt.boxplot(columns7, patch_artist=True, showmeans=True, meanline=True, flierprops={'markersize': 1},
                   boxprops=boxprops, whiskerprops=whiskerprops, capprops=capprops, meanprops=meanprops,
                   medianprops=medianprops)
@@ -207,7 +190,7 @@ for patch, color in zip(box['boxes'], colors):
 # ax.set_title('Example Boxplot')
 plt.ylabel('g / cm³')
 
-plt.subplot(5, 4, 8)
+plt.subplot(4, 4, 8)
 box = plt.boxplot(columns8, patch_artist=True, showmeans=True, meanline=True, flierprops={'markersize': 1},
                   boxprops=boxprops, whiskerprops=whiskerprops, capprops=capprops, meanprops=meanprops,
                   medianprops=medianprops)
@@ -219,7 +202,7 @@ for patch, color in zip(box['boxes'], colors):
 # ax.set_title('Example Boxplot')
 plt.ylabel('g')
 
-plt.subplot(5, 4, 9)
+plt.subplot(4, 4, 9)
 box = plt.boxplot(columns9, patch_artist=True, showmeans=True, meanline=True, flierprops={'markersize': 1},
                   boxprops=boxprops, whiskerprops=whiskerprops, capprops=capprops, meanprops=meanprops,
                   medianprops=medianprops)
@@ -231,7 +214,7 @@ for patch, color in zip(box['boxes'], colors):
 # ax.set_title('Example Boxplot')
 plt.ylabel('-')
 
-plt.subplot(5, 4, 10)
+plt.subplot(4, 4, 10)
 box = plt.boxplot(columns10, patch_artist=True, showmeans=True, meanline=True, flierprops={'markersize': 1},
                   boxprops=boxprops, whiskerprops=whiskerprops, capprops=capprops, meanprops=meanprops,
                   medianprops=medianprops)
@@ -243,7 +226,7 @@ for patch, color in zip(box['boxes'], colors):
 # ax.set_title('Example Boxplot')
 plt.ylabel('mg HA / cm³')
 
-plt.subplot(5, 4, 11)
+plt.subplot(4, 4, 11)
 box = plt.boxplot(columns11, patch_artist=True, showmeans=True, meanline=True, flierprops={'markersize': 1},
                   boxprops=boxprops, whiskerprops=whiskerprops, capprops=capprops, meanprops=meanprops,
                   medianprops=medianprops)
@@ -255,48 +238,11 @@ for patch, color in zip(box['boxes'], colors):
 # ax.set_title('Example Boxplot')
 plt.ylabel('mg HA')
 
-plt.subplot(5, 4, 12)
+plt.subplot(4, 4, 12)
 box = plt.boxplot(columns12, patch_artist=True, showmeans=True, meanline=True, flierprops={'markersize': 1},
                   boxprops=boxprops, whiskerprops=whiskerprops, capprops=capprops, meanprops=meanprops,
                   medianprops=medianprops)
 plt.tight_layout()
-plt.xticks([1], ['CV$_{ECM_{A}}$'])
-colors = ['lightblue']
-for patch, color in zip(box['boxes'], colors):
-    patch.set_facecolor(color)
-# ax.set_title('Example Boxplot')
-plt.ylabel('-')
-
-plt.subplot(5, 4, 13)
-box = plt.boxplot(columns13, patch_artist=True, showmeans=True, meanline=True, flierprops={'markersize': 1},
-                  boxprops=boxprops, whiskerprops=whiskerprops, capprops=capprops, meanprops=meanprops,
-                  medianprops=medianprops)
-plt.tight_layout()
-plt.xticks([1, 2, 3], ['ECM$_{A_{min}}$', 'A$_{app_{mean}}$', 'ECM$_{A_{mean}}$'])
-colors = ['lightblue', 'lightgreen', 'lightpink']
-for patch, color in zip(box['boxes'], colors):
-    patch.set_facecolor(color)
-# ax.set_title('Example Boxplot')
-plt.ylabel('mm²')
-
-plt.subplot(5, 4, 14)
-box = plt.boxplot(columns14, patch_artist=True, showmeans=True, meanline=True, flierprops={'markersize': 1},
-                  boxprops=boxprops, whiskerprops=whiskerprops, capprops=capprops, meanprops=meanprops,
-                  medianprops=medianprops)
-plt.tight_layout()
-plt.xticks([1, 2], ['ECM$_{AF_{mean}}$', 'ECM$_{AF_{min}}$'])
-colors = ['lightblue', 'lightgreen']
-for patch, color in zip(box['boxes'], colors):
-    patch.set_facecolor(color)
-# ax.set_title('Example Boxplot')
-plt.ylabel('-')
-
-plt.subplot(5, 4, 15)
-box = plt.boxplot(columns15, patch_artist=True, showmeans=True, meanline=True, flierprops={'markersize': 1},
-                  boxprops=boxprops, whiskerprops=whiskerprops, capprops=capprops, meanprops=meanprops,
-                  medianprops=medianprops)
-plt.tight_layout()
-MMRV2A3, MMRV1A1
 plt.xticks([1, 2], [r'$MMR_{\nu_{2}a_{3}}$', r'$MMR_{\nu_{1}a_{1}}$'])
 colors = ['lightblue', 'lightgreen']
 for patch, color in zip(box['boxes'], colors):
@@ -304,20 +250,20 @@ for patch, color in zip(box['boxes'], colors):
 # ax.set_title('Example Boxplot')
 plt.ylabel('-')
 
-plt.subplot(5, 4, 16)
-box = plt.boxplot(columns16, patch_artist=True, showmeans=True, meanline=True, flierprops={'markersize': 1},
+plt.subplot(4, 4, 13)
+box = plt.boxplot(columns13, patch_artist=True, showmeans=True, meanline=True, flierprops={'markersize': 1},
                   boxprops=boxprops, whiskerprops=whiskerprops, capprops=capprops, meanprops=meanprops,
                   medianprops=medianprops)
 plt.tight_layout()
-plt.xticks([1], ['X$_{c}$'])
-colors = ['lightblue']
+plt.xticks([1, 2, 3, 4], ['X$_{c}$', 'RPyC', 'RPrC', 'RLC'])
+colors = ['lightblue', 'lightgreen', 'lightpink', 'lightyellow']
 for patch, color in zip(box['boxes'], colors):
     patch.set_facecolor(color)
 # ax.set_title('Example Boxplot')
 plt.ylabel('-')
 
-plt.subplot(5, 4, 17)
-box = plt.boxplot(columns17, patch_artist=True, showmeans=True, meanline=True, flierprops={'markersize': 1},
+plt.subplot(4, 4, 14)
+box = plt.boxplot(columns14, patch_artist=True, showmeans=True, meanline=True, flierprops={'markersize': 1},
                   boxprops=boxprops, whiskerprops=whiskerprops, capprops=capprops, meanprops=meanprops,
                   medianprops=medianprops)
 plt.tight_layout()
@@ -328,8 +274,8 @@ for patch, color in zip(box['boxes'], colors):
 # ax.set_title('Example Boxplot')
 plt.ylabel('-')
 
-plt.subplot(5, 4, 18)
-box = plt.boxplot(columns18, patch_artist=True, showmeans=True, meanline=True, flierprops={'markersize': 1},
+plt.subplot(4, 4, 15)
+box = plt.boxplot(columns15, patch_artist=True, showmeans=True, meanline=True, flierprops={'markersize': 1},
                   boxprops=boxprops, whiskerprops=whiskerprops, capprops=capprops, meanprops=meanprops,
                   medianprops=medianprops)
 plt.tight_layout()
@@ -340,8 +286,8 @@ for patch, color in zip(box['boxes'], colors):
 # ax.set_title('Example Boxplot')
 plt.ylabel('-')
 
-plt.subplot(5, 4, 19)
-box = plt.boxplot(columns19, patch_artist=True, showmeans=True, meanline=True, flierprops={'markersize': 1},
+plt.subplot(4, 4, 16)
+box = plt.boxplot(columns16, patch_artist=True, showmeans=True, meanline=True, flierprops={'markersize': 1},
                   boxprops=boxprops, whiskerprops=whiskerprops, capprops=capprops, meanprops=meanprops,
                   medianprops=medianprops)
 plt.tight_layout()
