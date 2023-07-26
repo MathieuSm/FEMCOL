@@ -2,22 +2,15 @@
 
 # load various packages
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import glob
 import os
-from scipy.signal import butter,filtfilt
-from scipy.signal import find_peaks
-from scipy import stats
-from pathlib import Path
 
 # specify file path
-Cwd = Path.cwd()
-DataPath = Cwd / '02_Data/03_Scale/'
-FileName = 'Gravimetric_analysis.xlsx'
+Cwd = os.getcwd()
+data_path = str(os.path.dirname(Cwd) + '/02_Data/03_Scale/Gravimetric_analysis.xlsx')
+save_path = str(os.path.dirname(Cwd) + '/04_Results/02_Gravimetry/')
 
 # import xlsx file using pandas
-df = pd.read_excel(str(DataPath / FileName))
+df = pd.read_excel(data_path)
 
 # density of distilled water at 23°C
 H20_density = 0.99754
@@ -49,7 +42,6 @@ result_dir['weight fraction of water phase / -'] = wf_water
 # save dataframe to csv
 result_dir.sort_values(by=['Sample ID'], inplace=True, ascending=True)
 result_dir = result_dir.reset_index(drop=True)
-result_dir.to_csv(os.path.join('/home/stefan/Documents/FEMCOL/04_Results/02_Gravimetry/',
-                               'ResultsGravimetry.csv'), index=False)
+result_dir.to_csv(os.path.join(save_path, 'ResultsGravimetry.csv'), index=False)
 
 print(result_dir)
