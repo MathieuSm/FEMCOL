@@ -1,7 +1,6 @@
-# 00 Initialization
+
 import numpy as np
 import pandas as pd
-from pathlib import Path
 import matplotlib.pyplot as plt
 import os
 from scipy.stats.distributions import norm
@@ -15,9 +14,10 @@ pd.set_option('display.width', desired_width)
 np.set_printoptions(linewidth=desired_width, suppress=True, formatter={'float_kind': '{:3}'.format})
 plt.rc('font', size=12)
 
-Cwd = Path.cwd()
-DataPath = Cwd / '04_Results/ResultsOverview.csv'
-savepath = Cwd / '04_Results/04_Plots'
+Cwd = os.getcwd()
+SavePath = str(os.path.dirname(Cwd) + '/04_Results/04_Plots')
+DataPath = str(os.path.dirname(Cwd) + '/04_Results/ResultsOverview.csv')
+
 df = pd.read_csv(str(DataPath), skiprows=0)
 df = df[df['Age / y'].notna()].reset_index(drop=True)
 
@@ -50,10 +50,10 @@ plt.xlabel('Donor Age')
 plt.ylabel('Density (-)')
 # plt.legend(loc='upper center', ncol=3, bbox_to_anchor=(0.5, 1.15), prop={'size': 10})
 plt.legend(loc='upper left')
-plt.savefig(os.path.join(savepath, 'AgeDistribution.eps'), dpi=300, bbox_inches='tight', format='eps')
+plt.savefig(os.path.join(SavePath, 'AgeDistribution.eps'), dpi=300, bbox_inches='tight', format='eps')
 plt.show()
 
 Figure, Axes = plt.subplots(1, 1, figsize=(5.5, 4.5), dpi=300)
 sm.qqplot(X, line='s')
-plt.savefig(os.path.join(savepath, 'AgeDistribution_qqplot.png'), dpi=300, bbox_inches='tight', format='png')
+plt.savefig(os.path.join(SavePath, 'AgeDistribution_qqplot.png'), dpi=300, bbox_inches='tight', format='png')
 pylab.show()
