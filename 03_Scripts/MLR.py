@@ -1,24 +1,17 @@
+
 import statsmodels.api as sm
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 from pathlib import Path                            # Used to manage path variables in windows or linux
-import numpy as np                                  # Used to do arrays (matrices) computations namely
 import pandas as pd                                 # Used to manage data frames
-import matplotlib.pyplot as plt                     # Used to perform plots
 import statsmodels.formula.api as smf               # Used for statistical analysis (ols here)
-import os                                           # Used to manage path variables
-from scipy.stats.distributions import t             # Used to compute confidence intervals
-import seaborn as sns                               # Used to create regression lines with confidence bands
-import statistics                                   # Used to calculate statistical measures
-from statsmodels.tools.eval_measures import rmse    # Used to evaluate rmse
-from tqdm import tqdm
+import os
 
 
 # Set directory & load data
-Cwd = Path.cwd()
-DataPath = Cwd / '04_Results/ResultsOverview.csv'
-# DataPath = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/ResultsOverviewMod.csv'
-df = pd.read_csv(str(DataPath), skiprows=0)
-df = df.drop(columns={'Min Equivalent Diameter / mm', 'Mean Apparent Diameter / mm'})
+Cwd = os.getcwd()
+Results_path = str(os.path.dirname(Cwd) + '/04_Results')
+results_overview = str(os.path.dirname(Cwd) + '/04_Results/ResultsOverview.csv')
+df = pd.read_csv(str(results_overview), skiprows=0)
 df = df.dropna()
 df = df.reset_index(drop=True)
 
@@ -55,7 +48,10 @@ predictions = model.predict(x)
 print_model = model.summary()
 print(print_model)
 
-mls_results = open('/home/stefan/PycharmProjects/FEMCOL/04_Results/04_Plots/mls_results.csv', 'w')
+empty_csv = pd.DataFrame(list())
+empty_csv.to_csv(os.path.join(Results_path + '/04_Plots', 'mls_results.csv'), index=False)
+mls_results = open(os.path.join(Results_path + '/04_Plots', 'mls_results.csv'), 'w')
+# mls_results = open('/home/stefan/PycharmProjects/FEMCOL/04_Results/04_Plots/mls_results.csv', 'w')
 n = mls_results.write(print_model.as_csv())
 mls_results.close()
 
@@ -63,7 +59,9 @@ model_interaction = smf.ols(formula='Em ~ Age + mwf + Age:mwf', data=data).fit()
 summary_interaction = model_interaction.summary()
 print(summary_interaction)
 
-mls_results_interaction = open('/home/stefan/PycharmProjects/FEMCOL/04_Results/04_Plots/mls_results_interaction.csv', 'w')
+empty_csv = pd.DataFrame(list())
+empty_csv.to_csv(os.path.join(Results_path + '/04_Plots', 'mls_results_interaction.csv'), index=False)
+mls_results_interaction = open(os.path.join(Results_path + '/04_Plots', 'mls_results_interaction.csv'), 'w')
 n = mls_results_interaction.write(summary_interaction.as_csv())
 mls_results_interaction.close()
 
