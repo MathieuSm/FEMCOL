@@ -10,7 +10,6 @@ import os
 from scipy.signal import butter, filtfilt
 from scipy.signal import find_peaks
 from scipy import stats
-from pathlib import Path
 from matplotlib import rcParams
 from tqdm import tqdm
 
@@ -24,15 +23,18 @@ def butter_lowpass_filter(data, cutoff, order=9):
 
 
 # definition of path
-Cwd = Path.cwd()
-DataPath = Cwd / '02_Data/02_MTS/Elastic_testing_mineralized/'
+Cwd = os.getcwd()
+DataPath = str(os.path.dirname(Cwd)) + '/02_Data/02_MTS/Elastic_testing_mineralized/'
+savepath_fd = str(os.path.dirname(Cwd)) + '/04_Results/00_Mineralized/00_force_disp/'
+savepath_ss = str(os.path.dirname(Cwd)) + '/04_Results/00_Mineralized/01_stress_strain/'
+savepath_dft = str(os.path.dirname(Cwd)) + '/04_Results/00_Mineralized/02_disp_force_time'
+
 filename_list = [File for File in os.listdir(DataPath) if File.endswith('.csv')]
 filename_list.sort()
 
 # load uCT results & remove naN entries; areas needed for stress calculations
-results_uCT = pd.read_csv(str(Cwd / '04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
-# results_uCT = pd.read_csv(str('C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
-# results_uCT = results_uCT.drop(index=[8, 14, 20, 24, 37], axis=0)
+results_uCT = pd.read_csv(str(os.path.dirname(Cwd) + '/04_Results/03_uCT/ResultsUCT.csv'), skiprows=0)
+
 test = results_uCT.drop(results_uCT.loc[results_uCT['Sample ID'] == '390_R'].index)
 test1 = test.drop(results_uCT.loc[results_uCT['Sample ID'] == '395_R'].index)
 test2 = test1.drop(results_uCT.loc[results_uCT['Sample ID'] == '400_R'].index)
@@ -70,7 +72,7 @@ counter = 0
 for filename in tqdm(filename_list):
     sample_ID = filename.split('/')[-1].split('_')[0]
     # load csv:
-    df = pd.read_csv(str(DataPath / filename_list[i]), skiprows=2)
+    df = pd.read_csv(str(DataPath + filename_list[i]), skiprows=2)
     df.rename(columns={'sec': 'time', 'N': 'force_MTS', 'N.1': 'force_lc', 'mm': 'disp_MTS', 'mm.1': 'disp_ext'},
               inplace=True)
     i = i + 1
@@ -158,7 +160,6 @@ for filename in tqdm(filename_list):
     plt.autoscale()
     plt.rcParams.update({'font.size': 14})
     # plt.legend(prop={'size': 14})
-    savepath_fd = Cwd / '04_Results/00_Mineralized/00_force_disp/'
     plt.savefig(os.path.join(savepath_fd, 'force_disp_el_' + sample_ID + '.png'), dpi=300, bbox_inches='tight', format='png')
     # plt.show()
     plt.close()
@@ -166,7 +167,7 @@ for filename in tqdm(filename_list):
     # calculate stress/strain, filter and put into dataframe
     l_initial = 6.5
     mean_area_wop = results_uCT['Mean Apparent Area / mm^2'][counter]
-    mean_bone_area_wp = results_uCT['Mean Bone Area / mm^2'][counter]
+    mean_bone_area_wp = results_uCT['Mean ECM Area / mm^2'][counter]
     stress_wop = df['force_lc'] / mean_area_wop
     stress_bone_wp = df['force_lc'] / mean_bone_area_wp
     strain = df['disp_ext'] / l_initial
@@ -296,8 +297,7 @@ for filename in tqdm(filename_list):
     plt.autoscale()
     plt.rcParams.update({'font.size': 14})
     # plt.legend(prop={'size': 14})
-    savepath = Cwd / '04_Results/00_Mineralized/01_stress_strain/'
-    plt.savefig(os.path.join(savepath, 'stress_strain_el_' + sample_ID + '.png'), dpi=300, bbox_inches='tight', format='png')
+    plt.savefig(os.path.join(savepath_ss, 'stress_strain_el_' + sample_ID + '.png'), dpi=300, bbox_inches='tight', format='png')
     # plt.show()
     plt.close()
 
@@ -307,6 +307,7 @@ for filename in tqdm(filename_list):
     result.append(values)
     result_dir = pd.DataFrame(result, columns=['Sample ID', 'Stiffness N/mm', 'Apparent modulus MPa', 'Modulus Mineralized MPa'])
 
+    # Create displacement-force-time plots
     rcParams.update({'figure.autolayout': True})
     time = pd.DataFrame()
     time = df['time'] - df['time'].loc[0]
@@ -323,19 +324,15 @@ for filename in tqdm(filename_list):
     ax1.autoscale()
     ax2.autoscale()
     plt.rcParams.update({'font.size': 14})
-    # savepath_new = 'C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/00_Mineralized/02_disp_force_time'
-    savepath_new = Cwd / '04_Results/00_Mineralized/02_disp_force_time'
-    plt.savefig(os.path.join(savepath_new, 'disp_time_el_' + sample_ID + '.png'), dpi=300, bbox_inches='tight',
+    plt.savefig(os.path.join(savepath_dft, 'disp_time_el_' + sample_ID + '.png'), dpi=300, bbox_inches='tight',
                 format='png')
     # plt.show()
     plt.close()
 
-# add missing samples to list & safe
+# add missing samples to list & save
 missing_sample_IDs = pd.DataFrame({'Sample ID': ['390R', '395R', '400R', '402L', '410L', '433L']})
 result_dir = pd.concat([result_dir, missing_sample_IDs])
 result_dir_sorted = result_dir.sort_values(by=['Sample ID'], ascending=True)
 
-result_dir_sorted.to_csv(os.path.join('/home/stefan/PycharmProjects/FEMCOL/04_Results/00_Mineralized/',
+result_dir_sorted.to_csv(os.path.join(str(os.path.dirname(Cwd)) + '/04_Results/00_Mineralized/',
                                       'ResultsElasticTesting.csv'), index=False)
-# result_dir_sorted.to_csv(os.path.join('C:/Users/Stefan/PycharmProjects/FEMCOL/04_Results/00_Mineralized',
-#                                       'ResultsElasticTesting.csv'), index=False)
