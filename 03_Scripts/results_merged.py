@@ -19,8 +19,8 @@ results_merged['Site'] = results_gravimetry['site']
 
 results_merged['Stiffness Mineralized / N/mm'] = results_mineralized['Stiffness N/mm']
 results_merged['Stiffness Demineralized / N/mm'] = results_demineralized['Stiffness / N/mm']
-results_merged['Apparent Modulus Mineralized / MPa'] = results_mineralized['Apparent modulus MPa']
-results_merged['Modulus Mineralized / MPa'] = results_mineralized['Modulus Mineralized MPa']
+results_merged['Apparent Modulus Mineralized / GPa'] = results_mineralized['Apparent modulus MPa']/1000
+results_merged['Modulus Mineralized / GPa'] = results_mineralized['Modulus Mineralized MPa']/1000
 
 results_merged['Ultimate Force / N'] = results_demineralized['Ultimate Force / N']
 results_merged['Ultimate Apparent Stress / MPa'] = results_demineralized['Ultimate stress / MPa']

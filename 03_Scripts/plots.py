@@ -11,6 +11,7 @@ import seaborn as sns  # Used to create regression lines with confidence bands
 import statistics  # Used to calculate statistical measures
 from statsmodels.tools.eval_measures import rmse  # Used to evaluate rmse
 from tqdm import tqdm  # Used to track script progression while running
+import matplotlib.ticker as ticker
 
 # Set directory & load data
 Cwd = os.getcwd()
@@ -24,8 +25,8 @@ ColumnNames = pd.DataFrame()
 ColumnNames['Column Names'] = df.columns
 
 AxisLabels = ColumnNames.replace(
-    {'Apparent Modulus Mineralized / MPa': 'Apparent Modulus Mineralized E$_{app, m}$ / MPa',
-     'Modulus Mineralized / MPa': 'Modulus Mineralized E$_{m}$ / MPa',
+    {'Apparent Modulus Mineralized / GPa': 'Apparent Modulus Mineralized E$_{app, m}$ / GPa',
+     'Modulus Mineralized / GPa': 'Modulus Mineralized E$_{m}$ / GPa',
      'Ultimate Apparent Stress / MPa': 'Ultimate Apparent Stress $\sigma_{app}$ / MPa',
      'Ultimate Collagen Stress / MPa': 'Ultimate Collagen Stress $\sigma_{c}$ / MPa',
      'Ultimate Stress / MPa': 'Ultimate Stress $\sigma_{b}$ / MPa',
@@ -72,8 +73,8 @@ AxisLabels['Abbreviations'] = column_names_abbrev
 # Pair has the Format [x-axis, y-axis]; stress, moduli need to be on y-axis for non-age plots
 Pair = pd.DataFrame([
     ['Age / y', 'Apparent Modulus Demineralized / MPa'],
-    ['Age / y', 'Apparent Modulus Mineralized / MPa'],
-    ['Age / y', 'Modulus Mineralized / MPa'],
+    ['Age / y', 'Apparent Modulus Mineralized / GPa'],
+    ['Age / y', 'Modulus Mineralized / GPa'],
     ['Age / y', 'Modulus Demineralized / MPa'],
     ['Age / y', 'Bone Mineral Content / mg HA'],
     ['Age / y', 'Bone Mineral Density / mg HA / cm³'],
@@ -101,49 +102,49 @@ Pair = pd.DataFrame([
     ['Age / y', 'Relative Pyridinoline Content / -'],
     ['Age / y', 'Relative Proteoglycan Content / -'],
     ['Age / y', 'Relative Lipid Content / -'],
-    ['Apparent Modulus Mineralized / MPa', 'Modulus Mineralized / MPa'],
-    ['Apparent Modulus Mineralized / MPa', 'Ultimate Apparent Stress / MPa'],
-    ['Apparent Modulus Mineralized / MPa', 'Ultimate Collagen Stress / MPa'],
-    ['Apparent Modulus Mineralized / MPa', 'Ultimate Stress / MPa'],
-    ['Apparent Modulus Mineralized / MPa', 'Ultimate Strain / -'],
-    ['Apparent Modulus Mineralized / MPa', 'Apparent Modulus Demineralized / MPa'],
-    ['Apparent Modulus Mineralized / MPa', 'Modulus Demineralized / MPa'],
-    ['Apparent Modulus Mineralized / MPa', 'Density / g/cm³'],
-    ['Apparent Modulus Mineralized / MPa', 'Mineral weight fraction / -'],
-    ['Apparent Modulus Mineralized / MPa', 'Organic weight fraction / -'],
-    ['Apparent Modulus Mineralized / MPa', 'Water weight fraction / -'],
-    ['Apparent Modulus Mineralized / MPa', 'Bone Volume Fraction / -'],
-    ['Apparent Modulus Mineralized / MPa', 'Bone Mineral Density / mg HA / cm³'],
-    ['Apparent Modulus Mineralized / MPa', 'Tissue Mineral Density / mg HA / cm³'],
-    ['Apparent Modulus Mineralized / MPa', 'Mineral to Matrix Ratio v2/a3 / -'],
-    ['Apparent Modulus Mineralized / MPa', 'Mineral to Matrix Ratio v1/a1 / -'],
-    ['Apparent Modulus Mineralized / MPa', 'Crystallinity / -'],
-    ['Apparent Modulus Mineralized / MPa', 'Collagen dis/order / -'],
-    ['Apparent Modulus Mineralized / MPa', 'Matrix maturity / -'],
-    ['Apparent Modulus Mineralized / MPa', 'Relative Pyridinoline Content / -'],
-    ['Apparent Modulus Mineralized / MPa', 'Relative Proteoglycan Content / -'],
-    ['Apparent Modulus Mineralized / MPa', 'Relative Lipid Content / -'],
-    ['Ultimate Apparent Stress / MPa', 'Modulus Mineralized / MPa'],
-    ['Ultimate Collagen Stress / MPa', 'Modulus Mineralized / MPa'],
-    ['Ultimate Stress / MPa', 'Modulus Mineralized / MPa'],
-    ['Ultimate Strain / -', 'Modulus Mineralized / MPa'],
-    ['Apparent Modulus Demineralized / MPa', 'Modulus Mineralized / MPa'],
-    ['Modulus Demineralized / MPa', 'Modulus Mineralized / MPa'],
-    ['Density / g/cm³', 'Modulus Mineralized / MPa'],
-    ['Mineral weight fraction / -', 'Modulus Mineralized / MPa'],
-    ['Organic weight fraction / -', 'Modulus Mineralized / MPa'],
-    ['Water weight fraction / -', 'Modulus Mineralized / MPa'],
-    ['Bone Volume Fraction / -', 'Modulus Mineralized / MPa'],
-    ['Bone Mineral Density / mg HA / cm³', 'Modulus Mineralized / MPa'],
-    ['Tissue Mineral Density / mg HA / cm³', 'Modulus Mineralized / MPa'],
-    ['Mineral to Matrix Ratio v2/a3 / -', 'Modulus Mineralized / MPa'],
-    ['Mineral to Matrix Ratio v1/a1 / -', 'Modulus Mineralized / MPa'],
-    ['Crystallinity / -', 'Modulus Mineralized / MPa'],
-    ['Collagen dis/order / -', 'Modulus Mineralized / MPa'],
-    ['Matrix maturity / -', 'Modulus Mineralized / MPa'],
-    ['Relative Pyridinoline Content / -', 'Modulus Mineralized / MPa'],
-    ['Relative Proteoglycan Content / -', 'Modulus Mineralized / MPa'],
-    ['Relative Lipid Content / -', 'Modulus Mineralized / MPa'],
+    ['Apparent Modulus Mineralized / GPa', 'Modulus Mineralized / GPa'],
+    ['Apparent Modulus Mineralized / GPa', 'Ultimate Apparent Stress / MPa'],
+    ['Apparent Modulus Mineralized / GPa', 'Ultimate Collagen Stress / MPa'],
+    ['Apparent Modulus Mineralized / GPa', 'Ultimate Stress / MPa'],
+    ['Apparent Modulus Mineralized / GPa', 'Ultimate Strain / -'],
+    ['Apparent Modulus Mineralized / GPa', 'Apparent Modulus Demineralized / MPa'],
+    ['Apparent Modulus Mineralized / GPa', 'Modulus Demineralized / MPa'],
+    ['Apparent Modulus Mineralized / GPa', 'Density / g/cm³'],
+    ['Apparent Modulus Mineralized / GPa', 'Mineral weight fraction / -'],
+    ['Apparent Modulus Mineralized / GPa', 'Organic weight fraction / -'],
+    ['Apparent Modulus Mineralized / GPa', 'Water weight fraction / -'],
+    ['Apparent Modulus Mineralized / GPa', 'Bone Volume Fraction / -'],
+    ['Apparent Modulus Mineralized / GPa', 'Bone Mineral Density / mg HA / cm³'],
+    ['Apparent Modulus Mineralized / GPa', 'Tissue Mineral Density / mg HA / cm³'],
+    ['Apparent Modulus Mineralized / GPa', 'Mineral to Matrix Ratio v2/a3 / -'],
+    ['Apparent Modulus Mineralized / GPa', 'Mineral to Matrix Ratio v1/a1 / -'],
+    ['Apparent Modulus Mineralized / GPa', 'Crystallinity / -'],
+    ['Apparent Modulus Mineralized / GPa', 'Collagen dis/order / -'],
+    ['Apparent Modulus Mineralized / GPa', 'Matrix maturity / -'],
+    ['Apparent Modulus Mineralized / GPa', 'Relative Pyridinoline Content / -'],
+    ['Apparent Modulus Mineralized / GPa', 'Relative Proteoglycan Content / -'],
+    ['Apparent Modulus Mineralized / GPa', 'Relative Lipid Content / -'],
+    ['Ultimate Apparent Stress / MPa', 'Modulus Mineralized / GPa'],
+    ['Ultimate Collagen Stress / MPa', 'Modulus Mineralized / GPa'],
+    ['Ultimate Stress / MPa', 'Modulus Mineralized / GPa'],
+    ['Ultimate Strain / -', 'Modulus Mineralized / GPa'],
+    ['Apparent Modulus Demineralized / MPa', 'Modulus Mineralized / GPa'],
+    ['Modulus Demineralized / MPa', 'Modulus Mineralized / GPa'],
+    ['Density / g/cm³', 'Modulus Mineralized / GPa'],
+    ['Mineral weight fraction / -', 'Modulus Mineralized / GPa'],
+    ['Organic weight fraction / -', 'Modulus Mineralized / GPa'],
+    ['Water weight fraction / -', 'Modulus Mineralized / GPa'],
+    ['Bone Volume Fraction / -', 'Modulus Mineralized / GPa'],
+    ['Bone Mineral Density / mg HA / cm³', 'Modulus Mineralized / GPa'],
+    ['Tissue Mineral Density / mg HA / cm³', 'Modulus Mineralized / GPa'],
+    ['Mineral to Matrix Ratio v2/a3 / -', 'Modulus Mineralized / GPa'],
+    ['Mineral to Matrix Ratio v1/a1 / -', 'Modulus Mineralized / GPa'],
+    ['Crystallinity / -', 'Modulus Mineralized / GPa'],
+    ['Collagen dis/order / -', 'Modulus Mineralized / GPa'],
+    ['Matrix maturity / -', 'Modulus Mineralized / GPa'],
+    ['Relative Pyridinoline Content / -', 'Modulus Mineralized / GPa'],
+    ['Relative Proteoglycan Content / -', 'Modulus Mineralized / GPa'],
+    ['Relative Lipid Content / -', 'Modulus Mineralized / GPa'],
     ['Ultimate Collagen Stress / MPa', 'Ultimate Apparent Stress / MPa'],
     ['Ultimate Stress / MPa', 'Ultimate Apparent Stress / MPa'],
     ['Ultimate Strain / -', 'Ultimate Apparent Stress / MPa'],
@@ -498,6 +499,10 @@ for i in tqdm(range(len(Pair))):
     YposCV = YposCI + 0.075
     YposN = YposCV + 0.075
 
+    # y-axis limitation values used for plotting
+    ylim_min = Y_Obs.min() - (Y_Obs.max() - Y_Obs.min()) * 0.4
+    ylim_max = Y_Obs.max() * 1.02
+
     # if p-value smaller than 0.05 create fit curve and if variable 'Age' should not be plotted on main axis, no
     # colormap will be used
     if float(p) <= 0.05:
@@ -524,49 +529,17 @@ for i in tqdm(range(len(Pair))):
             Axes.set_ylabel(y_axis_label)
             Axes.set_xlabel(x_axis_label)
 
-            # condition used for autoscaling
-            if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
-                if Y_Obs.min() >= 1000:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.95), ymax=round(Y_Obs.max() * 1.02))
-                if Y_Obs.min() >= 1:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 1), ymax=round(Y_Obs.max() * 1.02, 1))
-                if Y_Obs.min() >= 0.1:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 1), ymax=round(Y_Obs.max() * 1.02, 3))
-                if Y_Obs.min() >= 0.01 and Y_Obs.min() < 0.1:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 3), ymax=round(Y_Obs.max() * 1.02, 4))
-                if Y_Obs.min() >= 0.001 and Y_Obs.min() < 0.01:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.7, 3), ymax=round(Y_Obs.max() * 1.02, 4))
-                else:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 4), ymax=round(Y_Obs.max() * 1.02, 4))
-                plt.subplots_adjust(left=0.15, bottom=0.15)
-                # plt.legend(loc='upper center', ncol=2, bbox_to_anchor=(0.5, 1.15), prop={'size': 10})
-                plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
-                plt.rcParams['figure.figsize'] = (5.5, 4.5)
-                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, format='png')
-                # plt.show()
-                plt.close()
-                j = j + 1
-            else:
-                if Y_Obs.min() >= 1000:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.95), ymax=round(Y_Obs.max() * 1.02, 4))
-                if Y_Obs.min() >= 1:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 1), ymax=round(Y_Obs.max() * 1.02, 4))
-                if Y_Obs.min() >= 0.1:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 1), ymax=round(Y_Obs.max() * 1.02, 4))
-                if Y_Obs.min() >= 0.01 and Y_Obs.min() < 0.1:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 3), ymax=round(Y_Obs.max() * 1.02, 4))
-                if Y_Obs.min() >= 0.001 and Y_Obs.min() < 0.01:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.7, 3), ymax=round(Y_Obs.max() * 1.02, 4))
-                else:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 4), ymax=round(Y_Obs.max() * 1.02, 4))
-                plt.subplots_adjust(left=0.15, bottom=0.15)
-                plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
-                plt.rcParams['figure.figsize'] = (5.5, 4.5)
-                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, format='png')
-                # plt.show()
-                plt.close()
+            # scaling
+            plt.ylim(ymin=ylim_min, ymax=ylim_max)
+            ax.yaxis.set_major_locator(ticker.MaxNLocator(6))
+            # ax.yaxis.set_major_locator(ticker.LinearLocator(6))
+            plt.subplots_adjust(left=0.15, bottom=0.15)
+            plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
+            plt.rcParams['figure.figsize'] = (5.5, 4.5)
+            plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                        dpi=300, format='png')
+            # plt.show()
+            plt.close()
 
         # use colormap if age is not plotted on main axes
         else:
@@ -581,56 +554,23 @@ for i in tqdm(range(len(Pair))):
             Axes.annotate(r'$CV$ = ' + str(cv) + ', 'r'$p$ = ' + str(p), xy=(0.05, YposCV), xycoords='axes fraction')
             Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, YposCI),
                           xycoords='axes fraction')
-            plt.xlim(xmin=55, xmax=95)
 
             Axes.set_ylabel(y_axis_label)
             Axes.set_xlabel(x_axis_label)
 
-            # condition used for autoscaling
-            if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
-                # plt.ylim(ymin=0, ymax=round(Y_Fit.max() * 1.2, 2))
-                if Y_Obs.min() >= 1000:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.95), ymax=round(Y_Obs.max() * 1.02, 4))
-                if Y_Obs.min() >= 1:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 1), ymax=round(Y_Obs.max() * 1.02, 4))
-                if Y_Obs.min() >= 0.1:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 1), ymax=round(Y_Obs.max() * 1.02, 4))
-                if Y_Obs.min() >= 0.01 and Y_Obs.min() < 0.1:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 3), ymax=round(Y_Obs.max() * 1.02, 4))
-                if Y_Obs.min() >= 0.001 and Y_Obs.min() < 0.01:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.7, 3), ymax=round(Y_Obs.max() * 1.02, 4))
-                else:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 4), ymax=round(Y_Obs.max() * 1.02, 4))
-                plt.xlim(xmin=55, xmax=95)
-                plt.subplots_adjust(left=0.15, bottom=0.15)
-                plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
-                plt.rcParams['figure.figsize'] = (5.5, 4.5)
-                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, format='png')
-                # plt.show()
-                plt.close()
-                j = j + 1
-            else:
-                if Y_Obs.min() >= 1000:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.95), ymax=round(Y_Obs.max() * 1.02, 4))
-                if Y_Obs.min() >= 1:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 1), ymax=round(Y_Obs.max() * 1.02, 4))
-                if Y_Obs.min() >= 0.1:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 1), ymax=round(Y_Obs.max() * 1.02, 4))
-                if Y_Obs.min() >= 0.01 and Y_Obs.min() < 0.1:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 3), ymax=round(Y_Obs.max() * 1.02, 4))
-                if Y_Obs.min() >= 0.001 and Y_Obs.min() < 0.01:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.7, 3), ymax=round(Y_Obs.max() * 1.02, 4))
-                else:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 4), ymax=round(Y_Obs.max() * 1.02, 4))
-                plt.xlim(xmin=55, xmax=95)
-                plt.subplots_adjust(left=0.15, bottom=0.15)
-                plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
-                plt.rcParams['figure.figsize'] = (5.5, 4.5)
-                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, format='png')
-                # plt.show()
-                plt.close()
+            # scaling
+            plt.xlim(xmin=55, xmax=95)
+            plt.ylim(ymin=ylim_min, ymax=ylim_max)
+            Axes.yaxis.set_major_locator(ticker.MaxNLocator(6))
+            # Axes.yaxis.set_major_locator(ticker.LinearLocator(6))
+            plt.subplots_adjust(left=0.15, bottom=0.15)
+            plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
+            plt.rcParams['figure.figsize'] = (5.5, 4.5)
+            plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                        dpi=300, format='png')
+            # plt.show()
+            plt.close()
+            j = j + 1
 
     # if p-value greater than 0.05, no fit will be drawn & if age is contained on main axes, no colormap will be used
     else:
@@ -654,48 +594,18 @@ for i in tqdm(range(len(Pair))):
             Axes.set_ylabel(y_axis_label)
             Axes.set_xlabel(x_axis_label)
 
-            # condition used for autoscaling
-            if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
-                if Y_Obs.min() >= 1000:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.95), ymax=round(Y_Obs.max() * 1.02, 4))
-                if Y_Obs.min() >= 1:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 1), ymax=round(Y_Obs.max() * 1.02, 4))
-                if Y_Obs.min() >= 0.1:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 1), ymax=round(Y_Obs.max() * 1.02, 4))
-                if Y_Obs.min() >= 0.01 and Y_Obs.min() < 0.1:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 3), ymax=round(Y_Obs.max() * 1.02, 4))
-                if Y_Obs.min() >= 0.001 and Y_Obs.min() < 0.01:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.7, 3), ymax=round(Y_Obs.max() * 1.02, 4))
-                else:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 4), ymax=round(Y_Obs.max() * 1.02, 4))
-                plt.subplots_adjust(left=0.15, bottom=0.15)
-                plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
-                plt.rcParams['figure.figsize'] = (5.5, 4.5)
-                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, format='png')
-                # plt.show()
-                plt.close()
-                j = j + 1
-            else:
-                if Y_Obs.min() >= 1000:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.95), ymax=round(Y_Obs.max() * 1.02, 4))
-                if Y_Obs.min() >= 1:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 1), ymax=round(Y_Obs.max() * 1.02, 4))
-                if Y_Obs.min() >= 0.1:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 1), ymax=round(Y_Obs.max() * 1.02, 4))
-                if Y_Obs.min() >= 0.01 and Y_Obs.min() < 0.1:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 3), ymax=round(Y_Obs.max() * 1.02, 4))
-                if Y_Obs.min() >= 0.001 and Y_Obs.min() < 0.01:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.7, 3), ymax=round(Y_Obs.max() * 1.02, 4))
-                else:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 4), ymax=round(Y_Obs.max() * 1.02, 4))
-                plt.subplots_adjust(left=0.15, bottom=0.15)
-                plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
-                plt.rcParams['figure.figsize'] = (5.5, 4.5)
-                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, format='png')
-                # plt.show()
-                plt.close()
+            # scaling
+            plt.ylim(ymin=ylim_min, ymax=ylim_max)
+            ax.yaxis.set_major_locator(ticker.MaxNLocator(6))
+            # ax.yaxis.set_major_locator(ticker.LinearLocator(6))
+            plt.subplots_adjust(left=0.15, bottom=0.15)
+            plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
+            plt.rcParams['figure.figsize'] = (5.5, 4.5)
+            plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                        dpi=300, format='png')
+            # plt.show()
+            plt.close()
+            j = j + 1
 
         # don't use colormap if age is plotted on main axes
         else:
@@ -707,54 +617,23 @@ for i in tqdm(range(len(Pair))):
             Axes.annotate(r'$CV$ = ' + str(cv) + ', 'r'$p$ = ' + str(p), xy=(0.05, YposCV), xycoords='axes fraction')
             Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, YposCI),
                           xycoords='axes fraction')
-            plt.xlim(xmin=55, xmax=95)
 
             Axes.set_ylabel(y_axis_label)
             Axes.set_xlabel(x_axis_label)
 
-            # condition for autoscaling
-            if x_axis_abbrev == autoscale_list.loc[j][0] and y_axis_abbrev == autoscale_list.loc[j][1]:
-                plt.xlim(xmin=55, xmax=95)
-                if Y_Obs.min() >= 1000:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.95), ymax=round(Y_Obs.max() * 1.02, 4))
-                if Y_Obs.min() >= 1:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 1), ymax=round(Y_Obs.max() * 1.02, 4))
-                if Y_Obs.min() >= 0.1:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 1), ymax=round(Y_Obs.max() * 1.02, 4))
-                if Y_Obs.min() >= 0.01 and Y_Obs.min() < 0.1:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 3), ymax=round(Y_Obs.max() * 1.02, 4))
-                if Y_Obs.min() >= 0.001 and Y_Obs.min() < 0.01:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.7, 3), ymax=round(Y_Obs.max() * 1.02, 4))
-                else:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 4), ymax=round(Y_Obs.max() * 1.02, 4))
-                plt.subplots_adjust(left=0.15, bottom=0.15)
-                plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
-                plt.rcParams['figure.figsize'] = (5.5, 4.5)
-                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, format='png')
-                # plt.show()
-                plt.close()
-                j = j + 1
-            else:
-                if Y_Obs.min() >= 1000:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.95), ymax=round(Y_Obs.max() * 1.02, 4))
-                if Y_Obs.min() >= 1:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 1), ymax=round(Y_Obs.max() * 1.02, 2))
-                if Y_Obs.min() >= 0.1:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 1), ymax=round(Y_Obs.max() * 1.02, 4))
-                if Y_Obs.min() >= 0.01 and Y_Obs.min() < 0.1:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 3), ymax=round(Y_Obs.max() * 1.02, 4))
-                if Y_Obs.min() >= 0.001 and Y_Obs.min() < 0.01:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.7, 3), ymax=round(Y_Obs.max() * 1.02, 4))
-                else:
-                    plt.ylim(ymin=round(Y_Obs.min() * 0.9, 4), ymax=round(Y_Obs.max() * 1.02, 4))
-                plt.subplots_adjust(left=0.15, bottom=0.15)
-                plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
-                plt.rcParams['figure.figsize'] = (5.5, 4.5)
-                plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                            dpi=300, format='png')
-                # plt.show()
-                plt.close()
+            # scaling
+            plt.xlim(xmin=55, xmax=95)
+            plt.ylim(ymin=ylim_min, ymax=ylim_max)
+            Axes.yaxis.set_major_locator(ticker.MaxNLocator(6))
+            # Axes.yaxis.set_major_locator(ticker.LinearLocator(6))
+            plt.subplots_adjust(left=0.15, bottom=0.15)
+            plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
+            plt.rcParams['figure.figsize'] = (5.5, 4.5)
+            plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
+                        dpi=300, format='png')
+            # plt.show()
+            plt.close()
+            j = j + 1
 
     # Put everything into growing list and convert to DataFrame that is saved as .csv file
     values = [x_axis, y_axis, p, SE, R2, N, CI_l, CI_r, SE, RMSE]
@@ -782,7 +661,7 @@ plt.savefig(os.path.join(Results_path + '/04_Plots/WF_boxplt.png'), dpi=300, bbo
 plt.close()
 
 # boxplot of AMM/AMD
-AMM = df['Apparent Modulus Mineralized / MPa'].dropna().reset_index(drop=True)
+AMM = df['Apparent Modulus Mineralized / GPa'].dropna().reset_index(drop=True)
 AMD = df['Apparent Modulus Demineralized / MPa'].dropna().reset_index(drop=True)
 AMM = AMM.values.tolist()
 AMD = AMD.values.tolist()
