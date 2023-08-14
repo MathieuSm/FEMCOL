@@ -537,7 +537,7 @@ for i in tqdm(range(len(Pair))):
             plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
             plt.rcParams['figure.figsize'] = (5.5, 4.5)
             plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                        dpi=300, format='png')
+                        dpi=1200, format='png')
             # plt.show()
             plt.close()
 
@@ -567,7 +567,7 @@ for i in tqdm(range(len(Pair))):
             plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
             plt.rcParams['figure.figsize'] = (5.5, 4.5)
             plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                        dpi=300, format='png')
+                        dpi=1200, format='png')
             # plt.show()
             plt.close()
             j = j + 1
@@ -602,7 +602,7 @@ for i in tqdm(range(len(Pair))):
             plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
             plt.rcParams['figure.figsize'] = (5.5, 4.5)
             plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                        dpi=300, format='png')
+                        dpi=1200, format='png')
             # plt.show()
             plt.close()
             j = j + 1
@@ -630,7 +630,7 @@ for i in tqdm(range(len(Pair))):
             plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
             plt.rcParams['figure.figsize'] = (5.5, 4.5)
             plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                        dpi=300, format='png')
+                        dpi=1200, format='png')
             # plt.show()
             plt.close()
             j = j + 1
