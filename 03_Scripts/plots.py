@@ -41,7 +41,7 @@ AxisLabels = ColumnNames.replace(
      'Mineral weight fraction / -': 'Mineral Weight Fraction WF$_{m}$ / -',
      'Organic weight fraction / -': 'Organic Weight Fraction WF$_{o}$ / -',
      'Water weight fraction / -': 'Water Weight Fraction WF$_{w}$ / -',
-     'Bone Volume Fraction / -': 'Bone Volume Fraction BVTV / -',
+     'Bone Volume Fraction / -': 'Bone Volume Fraction ' + r'$\rho$ / -',
      'Bone Mineral Density / mg HA / cm³': 'Bone Mineral Density BMD / mg HA / cm³',
      'Tissue Mineral Density / mg HA / cm³': 'Tissue Mineral Density TMD / mg HA / cm³',
      'Bone Mineral Content / mg HA': 'Bone Mineral Content BMC / mg HA',
@@ -541,7 +541,7 @@ for i in tqdm(range(len(Pair))):
             plt.ylim(ymin=ylim_min, ymax=ylim_max)
             ax.yaxis.set_major_locator(ticker.MaxNLocator(6))
             # ax.yaxis.set_major_locator(ticker.LinearLocator(6))
-            plt.subplots_adjust(left=0.17, bottom=0.15, right=0.95)
+            plt.subplots_adjust(left=0.17, bottom=0.15, right=0.95, top=0.95)
             plt.legend(loc='lower center',
                        bbox_to_anchor=(0.5, 0.),
                        ncol=2,
@@ -549,7 +549,7 @@ for i in tqdm(range(len(Pair))):
                        handletextpad=0.1,
                        handlelength=1,
                        labelspacing=0.3)
-            plt.rcParams['figure.figsize'] = (5.5, 4.5)
+            plt.rcParams['figure.figsize'] = (5.5, 4.0)
             plt.rcParams.update({'font.size': 12})
             plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                         dpi=1200, format='png')
@@ -577,7 +577,7 @@ for i in tqdm(range(len(Pair))):
             plt.ylim(ymin=ylim_min, ymax=ylim_max)
             Axes.yaxis.set_major_locator(ticker.MaxNLocator(6))
             # Axes.yaxis.set_major_locator(ticker.LinearLocator(6))
-            plt.subplots_adjust(left=0.17, bottom=0.15, right=0.95)
+            plt.subplots_adjust(left=0.17, bottom=0.15, right=0.95, top=0.95)
             plt.legend(loc='lower center',
                        bbox_to_anchor=(0.5, 0.),
                        ncol=2,
@@ -585,10 +585,10 @@ for i in tqdm(range(len(Pair))):
                        handletextpad=0.1,
                        handlelength=1,
                        labelspacing=0.3)
-            plt.rcParams['figure.figsize'] = (5.5, 4.5)
+            plt.rcParams['figure.figsize'] = (5.5, 4.0)
             plt.rcParams.update({'font.size': 12})
             plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                        dpi=1200, format='png')
+                        dpi=1200, format='png', pad_inches=0)
             # plt.show()
             plt.close()
             j = j + 1
@@ -618,7 +618,7 @@ for i in tqdm(range(len(Pair))):
             plt.ylim(ymin=ylim_min, ymax=ylim_max)
             ax.yaxis.set_major_locator(ticker.MaxNLocator(6))
             # ax.yaxis.set_major_locator(ticker.LinearLocator(6))
-            plt.subplots_adjust(left=0.17, bottom=0.15, right=0.95)
+            plt.subplots_adjust(left=0.17, bottom=0.15, right=0.95, top=0.95)
             plt.legend(loc='lower center',
                        bbox_to_anchor=(0.5, 0.),
                        ncol=2,
@@ -626,10 +626,10 @@ for i in tqdm(range(len(Pair))):
                        handletextpad=0.1,
                        handlelength=1,
                        labelspacing=0.3)
-            plt.rcParams['figure.figsize'] = (5.5, 4.5)
+            plt.rcParams['figure.figsize'] = (5.5, 4.0)
             plt.rcParams.update({'font.size': 12})
             plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                        dpi=1200, format='png')
+                        dpi=1200, format='png', pad_inches=0)
             # plt.show()
             plt.close()
             j = j + 1
@@ -653,7 +653,7 @@ for i in tqdm(range(len(Pair))):
             plt.ylim(ymin=Y_Obs.min() - (Y_Obs.max() - Y_Obs.min()) * 0.6, ymax=ylim_max)
             Axes.yaxis.set_major_locator(ticker.MaxNLocator(6))
             # Axes.yaxis.set_major_locator(ticker.LinearLocator(6))
-            plt.subplots_adjust(left=0.2, bottom=0.15, right=0.97)
+            plt.subplots_adjust(left=0.17, bottom=0.15, right=0.95, top=0.95)
             plt.legend(loc='lower center',
                        bbox_to_anchor=(0.5, 0.),
                        ncol=2,
@@ -661,10 +661,10 @@ for i in tqdm(range(len(Pair))):
                        handletextpad=0.1,
                        handlelength=1,
                        labelspacing=0.3)
-            plt.rcParams['figure.figsize'] = (5.5, 4.5)
+            plt.rcParams['figure.figsize'] = (5.5, 4.0)
             plt.rcParams.update({'font.size': 12})
             plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                        dpi=1200, format='png')
+                        dpi=1200, format='png', pad_inches=0)
             # plt.show()
             plt.close()
             j = j + 1
