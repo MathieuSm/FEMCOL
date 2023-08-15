@@ -478,6 +478,21 @@ for i in tqdm(range(len(Pair))):
         SE = '{:.1e}'.format(SE)
 
     if p < 0.001:
+        p_plot = '$p < 0.001$'
+    elif p == 0.001:
+        p_plot = '$p = 0.001$'
+    elif p < 0.01:
+        p_plot = '$p < 0.01$'
+    elif p == 0.01:
+        p_plot = '$p = 0.01$'
+    elif p < 0.05:
+        p_plot = '$p < 0.05$'
+    elif p == 0.05:
+        p_plot = '$p = 0.05$'
+    else:
+        p_plot = '$p > 0.05$'
+
+    if p < 0.001:
         p = '{:.1e}'.format(p)
     else:
         p = round(p, 3)
@@ -489,42 +504,35 @@ for i in tqdm(range(len(Pair))):
         R2 = float(R2)
         R2 = round(R2, 2)
 
-    # list of plots which need autoscaling, has to be ordered manually
-    autoscale_list = pd.DataFrame({'x_axis_abbrev': ['Age', 'Age', 'Age', 'Age', 'Age', 'Age', 'Age', 'Age',
-                                                     'Age', 'Age', 'Age', 'BMC', 'MWF', ''],
-                                   'y_axis_abbrev': ['BMD', 'BVTV', 'D', 'MWF', 'OWF', 'TMD', 'MEANAA', 'MINECMA',
-                                                     'MEANECMAF', 'MINECMAF', 'MMR', 'MW', 'MMR', '']})
     # Positions of annotations
     YposCI = 0.025
     YposCV = YposCI + 0.075
     YposN = YposCV + 0.075
 
     # y-axis limitation values used for plotting
-    ylim_min = Y_Obs.min() - (Y_Obs.max() - Y_Obs.min()) * 0.4
-    ylim_max = Y_Obs.max() * 1.02
+    ylim_min = Y_Obs.min() - (Y_Obs.max() - Y_Obs.min()) * 0.5
+    ylim_max = Y_Obs.max() + (Y_Obs.max() - Y_Obs.min()) * 0.1
 
     # if p-value smaller than 0.05 create fit curve and if variable 'Age' should not be plotted on main axis, no
     # colormap will be used
     if float(p) <= 0.05:
         if x_axis != 'Age / y':
             Axes.plot(X[:, 1], Y_Fit, color=(1, 0, 0), linewidth=1)
-            Axes.scatter(X_np[:, 1][Data['Gender'] == 'M'], Y_Obs_np[Data['Gender'] == 'M'],
-                         c=list(tuple(male_age.tolist())), cmap='plasma_r', vmin=Data['Age / y'].min(),
-                         vmax=Data['Age / y'].max(), label='male', marker='s')
             Axes.scatter(X_np[:, 1][Data['Gender'] == 'F'], Y_Obs_np[Data['Gender'] == 'F'],
                          c=list(tuple(female_age.tolist())), cmap='plasma_r', vmin=Data['Age / y'].min(),
-                         vmax=Data['Age / y'].max(), label='female', marker='o')
+                         vmax=Data['Age / y'].max(), label='F', marker='o', s=50)
+            Axes.scatter(X_np[:, 1][Data['Gender'] == 'M'], Y_Obs_np[Data['Gender'] == 'M'],
+                         c=list(tuple(male_age.tolist())), cmap='plasma_r', vmin=Data['Age / y'].min(),
+                         vmax=Data['Age / y'].max(), label='M', marker='s', s=50)
             Axes.scatter(X_np[:, 1][Data['Gender'].isnull()], Y_Obs_np[Data['Gender'].isnull()], color=(0, 0, 0),
-                         label='N/A', marker='^')
+                         label='N/A', marker='^', s=50)
+            Axes.plot([], ' ', label=r'$N$ = ' + str(N) + ', 'r'$R^2$ = ' + str(R2))
+            Axes.plot([], ' ', label=r'$CV$ = ' + str(cv) + ', ' + p_plot)
+            Axes.plot([], ' ', label='95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']')
             Regression_line = FitResults.params[1] * X_np[:, 1] + FitResults.params[0]
             ax = plt.gca()
             PCM = ax.get_children()[2]
             plt.colorbar(PCM, ax=ax, label='Age / y')
-
-            Axes.annotate(r'$N$ = ' + str(N) + ', 'r'$R^2$ = ' + str(R2), xy=(0.05, YposN), xycoords='axes fraction')
-            Axes.annotate(r'$CV$ = ' + str(cv) + ', 'r'$p$ = ' + str(p), xy=(0.05, YposCV), xycoords='axes fraction')
-            Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, YposCI),
-                          xycoords='axes fraction')
 
             Axes.set_ylabel(y_axis_label)
             Axes.set_xlabel(x_axis_label)
@@ -533,27 +541,33 @@ for i in tqdm(range(len(Pair))):
             plt.ylim(ymin=ylim_min, ymax=ylim_max)
             ax.yaxis.set_major_locator(ticker.MaxNLocator(6))
             # ax.yaxis.set_major_locator(ticker.LinearLocator(6))
-            plt.subplots_adjust(left=0.15, bottom=0.15)
-            plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
+            plt.subplots_adjust(left=0.17, bottom=0.15, right=0.95)
+            plt.legend(loc='lower center',
+                       bbox_to_anchor=(0.5, 0.),
+                       ncol=2,
+                       columnspacing=0.1,
+                       handletextpad=0.1,
+                       handlelength=1,
+                       labelspacing=0.3)
             plt.rcParams['figure.figsize'] = (5.5, 4.5)
+            plt.rcParams.update({'font.size': 12})
             plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                         dpi=1200, format='png')
             # plt.show()
             plt.close()
 
-        # use colormap if age is not plotted on main axes
+        # don't use colormap if age is plotted on x-axis
         else:
             sns.regplot(x=FitResults.model.exog[:, 1], y=Y_Obs, ax=Axes, scatter=False, color=(0, 1, 0),
                         line_kws={'color': 'red', 'linewidth': 1}, )  # set background color of confidence interval here
-            # Axes.plot(X[:, 1], Y_Fit, color=(0, 0, 0), linewidth=1)  # set color of regression line here
-            Axes.plot(X[:, 1][Data['Gender'] == 'M'], Y_Obs[Data['Gender'] == 'M'], linestyle='none', marker='x',
-                      color=(0, 0, 0), fillstyle='none', label='male')
             Axes.plot(X[:, 1][Data['Gender'] == 'F'], Y_Obs[Data['Gender'] == 'F'], linestyle='none', marker='o',
-                      color=(0, 0, 0), fillstyle='none', label='female')
-            Axes.annotate(r'$N$ = ' + str(N) + ', 'r'$R^2$ = ' + str(R2), xy=(0.05, YposN), xycoords='axes fraction')
-            Axes.annotate(r'$CV$ = ' + str(cv) + ', 'r'$p$ = ' + str(p), xy=(0.05, YposCV), xycoords='axes fraction')
-            Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, YposCI),
-                          xycoords='axes fraction')
+                      color=(0, 0, 0), fillstyle='none', label='F', markersize=9)
+            Axes.plot(X[:, 1][Data['Gender'] == 'M'], Y_Obs[Data['Gender'] == 'M'], linestyle='none', marker='x',
+                      color=(0, 0, 0), fillstyle='none', label='M', markersize=9)
+            Axes.plot([], ' ', label=' ')
+            Axes.plot([], ' ', label=r'$N$ = ' + str(N) + ', 'r'$R^2$ = ' + str(R2))
+            Axes.plot([], ' ', label=r'$CV$ = ' + str(cv) + ', ' + p_plot)
+            Axes.plot([], ' ', label='95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']')
 
             Axes.set_ylabel(y_axis_label)
             Axes.set_xlabel(x_axis_label)
@@ -563,9 +577,16 @@ for i in tqdm(range(len(Pair))):
             plt.ylim(ymin=ylim_min, ymax=ylim_max)
             Axes.yaxis.set_major_locator(ticker.MaxNLocator(6))
             # Axes.yaxis.set_major_locator(ticker.LinearLocator(6))
-            plt.subplots_adjust(left=0.15, bottom=0.15)
-            plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=4)
+            plt.subplots_adjust(left=0.17, bottom=0.15, right=0.95)
+            plt.legend(loc='lower center',
+                       bbox_to_anchor=(0.5, 0.),
+                       ncol=2,
+                       columnspacing=0.1,
+                       handletextpad=0.1,
+                       handlelength=1,
+                       labelspacing=0.3)
             plt.rcParams['figure.figsize'] = (5.5, 4.5)
+            plt.rcParams.update({'font.size': 12})
             plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                         dpi=1200, format='png')
             # plt.show()
@@ -575,21 +596,20 @@ for i in tqdm(range(len(Pair))):
     # if p-value greater than 0.05, no fit will be drawn & if age is contained on main axes, no colormap will be used
     else:
         if x_axis != 'Age / y':
-            Axes.scatter(X_np[:, 1][Data['Gender'] == 'M'], Y_Obs_np[Data['Gender'] == 'M'],
-                         c=list(tuple(male_age.tolist())), cmap='plasma_r', vmin=Data['Age / y'].min(),
-                         vmax=Data['Age / y'].max(), label='male', marker='s')
             Axes.scatter(X_np[:, 1][Data['Gender'] == 'F'], Y_Obs_np[Data['Gender'] == 'F'],
                          c=list(tuple(female_age.tolist())), cmap='plasma_r', vmin=Data['Age / y'].min(),
-                         vmax=Data['Age / y'].max(), label='female', marker='o')
+                         vmax=Data['Age / y'].max(), label='F', marker='o', s=50)
+            Axes.scatter(X_np[:, 1][Data['Gender'] == 'M'], Y_Obs_np[Data['Gender'] == 'M'],
+                         c=list(tuple(male_age.tolist())), cmap='plasma_r', vmin=Data['Age / y'].min(),
+                         vmax=Data['Age / y'].max(), label='M', marker='s', s=50)
             Axes.scatter(X_np[:, 1][Data['Gender'].isnull()], Y_Obs_np[Data['Gender'].isnull()], color=(0, 0, 0),
-                         label='N/A', marker='^')
+                         label='N/A', marker='^', s=50)
+            Axes.plot([], ' ', label=r'$N$ = ' + str(N) + ', 'r'$R^2$ = ' + str(R2))
+            Axes.plot([], ' ', label=r'$CV$ = ' + str(cv) + ', ' + p_plot)
+            Axes.plot([], ' ', label='95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']')
             ax = plt.gca()
             PCM = ax.get_children()[0]
             plt.colorbar(PCM, ax=ax, label='Age / y')
-            Axes.annotate(r'$N$ = ' + str(N) + ', 'r'$R^2$ = ' + str(R2), xy=(0.05, YposN), xycoords='axes fraction')
-            Axes.annotate(r'$CV$ = ' + str(cv) + ', 'r'$p$ = ' + str(p), xy=(0.05, YposCV), xycoords='axes fraction')
-            Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, YposCI),
-                          xycoords='axes fraction')
 
             Axes.set_ylabel(y_axis_label)
             Axes.set_xlabel(x_axis_label)
@@ -598,37 +618,51 @@ for i in tqdm(range(len(Pair))):
             plt.ylim(ymin=ylim_min, ymax=ylim_max)
             ax.yaxis.set_major_locator(ticker.MaxNLocator(6))
             # ax.yaxis.set_major_locator(ticker.LinearLocator(6))
-            plt.subplots_adjust(left=0.15, bottom=0.15)
-            plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
+            plt.subplots_adjust(left=0.17, bottom=0.15, right=0.95)
+            plt.legend(loc='lower center',
+                       bbox_to_anchor=(0.5, 0.),
+                       ncol=2,
+                       columnspacing=0.1,
+                       handletextpad=0.1,
+                       handlelength=1,
+                       labelspacing=0.3)
             plt.rcParams['figure.figsize'] = (5.5, 4.5)
+            plt.rcParams.update({'font.size': 12})
             plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                         dpi=1200, format='png')
             # plt.show()
             plt.close()
             j = j + 1
 
-        # don't use colormap if age is plotted on main axes
+        # don't use colormap if age is plotted on x-axes
         else:
-            Axes.plot(X[:, 1][Data['Gender'] == 'M'], Y_Obs[Data['Gender'] == 'M'], linestyle='none', marker='x',
-                      color=(0, 0, 0), fillstyle='none', label='male')
             Axes.plot(X[:, 1][Data['Gender'] == 'F'], Y_Obs[Data['Gender'] == 'F'], linestyle='none', marker='o',
-                      color=(0, 0, 0), fillstyle='none', label='female')
-            Axes.annotate(r'$N$ = ' + str(N) + ', 'r'$R^2$ = ' + str(R2), xy=(0.05, YposN), xycoords='axes fraction')
-            Axes.annotate(r'$CV$ = ' + str(cv) + ', 'r'$p$ = ' + str(p), xy=(0.05, YposCV), xycoords='axes fraction')
-            Axes.annotate('95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']', xy=(0.05, YposCI),
-                          xycoords='axes fraction')
+                      color=(0, 0, 0), fillstyle='none', label='F', markersize=10)
+            Axes.plot(X[:, 1][Data['Gender'] == 'M'], Y_Obs[Data['Gender'] == 'M'], linestyle='none', marker='x',
+                      color=(0, 0, 0), fillstyle='none', label='M', markersize=10)
+            Axes.plot([], ' ', label=' ')
+            Axes.plot([], ' ', label=r'$N$ = ' + str(N) + ', 'r'$R^2$ = ' + str(R2))
+            Axes.plot([], ' ', label=r'$CV$ = ' + str(cv) + ', ' + p_plot)
+            Axes.plot([], ' ', label='95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']')
 
             Axes.set_ylabel(y_axis_label)
             Axes.set_xlabel(x_axis_label)
 
             # scaling
             plt.xlim(xmin=55, xmax=95)
-            plt.ylim(ymin=ylim_min, ymax=ylim_max)
+            plt.ylim(ymin=Y_Obs.min() - (Y_Obs.max() - Y_Obs.min()) * 0.6, ymax=ylim_max)
             Axes.yaxis.set_major_locator(ticker.MaxNLocator(6))
             # Axes.yaxis.set_major_locator(ticker.LinearLocator(6))
-            plt.subplots_adjust(left=0.15, bottom=0.15)
-            plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=3)
+            plt.subplots_adjust(left=0.2, bottom=0.15, right=0.97)
+            plt.legend(loc='lower center',
+                       bbox_to_anchor=(0.5, 0.),
+                       ncol=2,
+                       columnspacing=0.1,
+                       handletextpad=0.1,
+                       handlelength=1,
+                       labelspacing=0.3)
             plt.rcParams['figure.figsize'] = (5.5, 4.5)
+            plt.rcParams.update({'font.size': 12})
             plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                         dpi=1200, format='png')
             # plt.show()
