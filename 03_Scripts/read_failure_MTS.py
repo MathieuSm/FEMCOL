@@ -15,6 +15,7 @@ from scipy import stats
 from pathlib import Path
 from matplotlib import rcParams
 from tqdm import tqdm
+import matplotlib.ticker as ticker
 
 # definition of lowpass filter
 def butter_lowpass_filter(data, cutoff, order=9):
@@ -368,3 +369,44 @@ else:
     #
     result_dir_sorted.to_csv(os.path.join(str(os.path.dirname(Cwd)) + '/04_Results/01_Demineralized/',
                                           'ResultsFailureTesting.csv'), index=False)
+
+# generate force-disp plot for paper
+df_393L_path = str(DataPath + '393L_fail.csv')
+df_406L_path = str(DataPath + '406L_fail.csv')
+df_426R_path = str(DataPath + '426R_fail.csv')
+
+df_393L = pd.read_csv(str(df_393L_path), skiprows=2)
+df_406L = pd.read_csv(str(df_406L_path), skiprows=2)
+df_426R = pd.read_csv(str(df_426R_path), skiprows=2)
+df_393L.rename(columns={'sec': 'time', 'N': 'force_MTS', 'N.1': 'force_lc', 'mm': 'disp_MTS', 'mm.1': 'disp_ext'},
+                  inplace=True)
+df_406L.rename(columns={'sec': 'time', 'N': 'force_MTS', 'N.1': 'force_lc', 'mm': 'disp_MTS', 'mm.1': 'disp_ext'},
+                  inplace=True)
+df_426R.rename(columns={'sec': 'time', 'N': 'force_MTS', 'N.1': 'force_lc', 'mm': 'disp_MTS', 'mm.1': 'disp_ext'},
+                  inplace=True)
+
+df_393L['force_lc_filt'] = butter_lowpass_filter(df_393L['force_lc'], cutoff)
+df_406L['force_lc_filt'] = butter_lowpass_filter(df_406L['force_lc'], cutoff)
+df_426R['force_lc_filt'] = butter_lowpass_filter(df_426R['force_lc'], cutoff)
+
+# generate plot
+# plt.figure(figsize=(6, 4))
+# plt.title(sample_ID)
+plt.plot(df_393L['disp_ext'][:30413], df_393L['force_lc'][:30413], label='393L')
+plt.plot(df_406L['disp_ext'][:26765], df_406L['force_lc'][:26765], label='406L')
+plt.plot(df_426R['disp_ext'][:41256], df_426R['force_lc'][:41256], label='426R')
+# plt.plot([], ' ', label=f'Stiffness =  N/mm')
+# plt.plot([], ' ', label='Sample ID: ' )
+plt.ylabel('Force $F$ / N')
+plt.xlabel('Displacement $u$ / mm')
+plt.legend()
+plt.autoscale()
+plt.rcParams.update({'font.size': 12})
+ax = plt.gca()
+ax.yaxis.set_major_locator(ticker.MaxNLocator(6))
+plt.rcParams['figure.figsize'] = (5.5, 4.5)
+plt.savefig(os.path.join(savepath_fd, 'force_disp_paper.png'), dpi=1200, format='png')
+plt.show()
+# plt.close()
+
+
