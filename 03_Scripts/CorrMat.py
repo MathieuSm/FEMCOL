@@ -31,23 +31,33 @@ df = df.drop(columns=['Sample ID', 'Gender', 'Site', 'Stiffness Mineralized / N/
 #              'Modulus Demineralized / MPa', 'Ultimate Apparent Stress / MPa', 'Ultimate Collagen Stress / MPa',
 #              'Ultimate Stress / MPa', 'Ultimate Strain / -', 'Apparent Modulus Mineralized uFE / MPa',
 #              'Yield Stress uFE / MPa', 'Ultimate Stress uFE / MPa']]
-df_new = df[['Age / y', 'Mineral weight fraction / -', 'Organic weight fraction / -', 'Water weight fraction / -',
-             'Bone Volume Fraction / -', 'Tissue Mineral Density / mg HA / cm³',
-             'Mineral to Matrix Ratio v2/a3 / -', 'Crystallinity / -', 'Collagen dis/order / -', 'Matrix maturity / -',
-             'Relative Pyridinoline Content / -', 'Relative Proteoglycan Content / -', 'Relative Lipid Content / -',
-             'Modulus Mineralized / MPa', 'Apparent Modulus Mineralized / MPa',
-             'Modulus Demineralized / MPa', 'Apparent Modulus Demineralized / MPa', 'Ultimate Apparent Stress / MPa',
-             'Ultimate Strain / -']]
+# df_new = df[['Age / y', 'Mineral weight fraction / -', 'Organic weight fraction / -', 'Water weight fraction / -',
+#              'Bone Volume Fraction / -', 'Tissue Mineral Density / mg HA / cm³',
+#              'Mineral to Matrix Ratio v2/a3 / -', 'Crystallinity / -', 'Collagen dis/order / -', 'Matrix maturity / -',
+#              'Relative Pyridinoline Content / -', 'Relative Proteoglycan Content / -', 'Relative Lipid Content / -',
+#              'Modulus Mineralized / MPa', 'Apparent Modulus Mineralized / MPa',
+#              'Modulus Demineralized / MPa', 'Apparent Modulus Demineralized / MPa', 'Ultimate Apparent Stress / MPa',
+#              'Ultimate Strain / -']]
+df_new = df[['Age / y', 'Bone Volume Fraction / -', 'Tissue Mineral Density / mg HA / cm³',
+             'Apparent Modulus Mineralized / GPa', 'Modulus Mineralized / GPa', 'Apparent Modulus Demineralized / MPa',
+             'Modulus Demineralized / MPa', 'Ultimate Apparent Stress / MPa', 'Ultimate Strain / -',
+             'Mineral weight fraction / -', 'Organic weight fraction / -', 'Water weight fraction / -',
+             'Mineral to Matrix Ratio v2/a3 / -', 'Crystallinity / -', 'Collagen dis/order / -', 'Matrix maturity / -']]
 # Abbreviations of complete Matrix including all variables (has to be in similar order as df_new)
 # df_new.columns = ['Age', 'BVTV', 'BMD', 'TMD', 'MMRv2a3', 'MMRv1a1', 'XC', 'CDO', 'MMAT', 'WFM', 'WFO', 'WFW', 'D',
 #                   'AMM', 'MM', 'AMD', 'MD', 'UAPPSTRE', 'UCSTRE', 'USTRE', 'USTRA', 'AMMuFE', 'YSTREuFE', 'USTREuFE',
 #                   'MEANECMAF', 'MINECMAF', 'COFVAR']
-df_new.columns = ['Age', 'WFM', 'WFO', 'WFW',
-                  'BVTV', 'TMD',
-                  'MMRv2a3', 'XC', 'CDO', 'MMAT',
-                  'RPyC', 'RPrC', 'RLC',
-                  'MM', 'AMM',
-                  'MD', 'AMD', 'UAPPSTRE', 'USTRA']
+# df_new.columns = ['Age', 'WFM', 'WFO', 'WFW',
+#                   'BVTV', 'TMD',
+#                   'MMRv2a3', 'XC', 'CDO', 'MMAT',
+#                   'RPyC', 'RPrC', 'RLC',
+#                   'MM', 'AMM',
+#                   'MD', 'AMD', 'UAPPSTRE', 'USTRA']
+
+df_new.columns = ['Age', 'BV/TV', 'TMD',
+                  'AMM', 'MM', 'AMD', 'MD', 'UAPPSTRE', 'USTRA',
+                  'WFM', 'WFO', 'WFW',
+                  'MMRv2a3', 'XC', 'CDO', 'MMAT']
 
 # Create empty dataframe for p-values and correlation matrix containing r values
 corr_matrix_p = pd.DataFrame()
@@ -109,12 +119,10 @@ newcmp_r = ListedColormap(newcolors_r)
 #                  '$\sigma_{app}$', '$\sigma_c$', '$\sigma_b$', '$\epsilon_c$', 'E$_{m, \mu FE}$', '$\sigma_{y, \mu FE}$',
 #                  '$\sigma_{u, \mu FE}$', '$ECM_{AF_{mean}}$', '$ECM_{AF_{min}}$', '$ECM_{A_{CV}}$']
 
-abbreviations = ['Age', 'WF$_m$', 'WF$_o$', 'WF$_w$',
-                 'BVTV', 'TMD',
-                 r'MMR$\nu_{2}a_{3}$', 'X$_c$', 'CDO', 'MMAT',
-                 'RPyC', 'RPrC', 'RLC',
-                 'E$_m$', 'E$_{app, m}$',
-                 'E$_c$', 'E$_{app, c}$', '$\sigma_{app}$', '$\epsilon_c$']
+abbreviations = ['Age', r'$\rho$', 'TMD',
+                 'E$_{m}^{app}$', 'E$_m$', 'E$_{c}^{app}$', 'E$_c$', '$\sigma_{u}^{app}$', '$\epsilon_c$',
+                 'WF$_m$', 'WF$_o$', 'WF$_w$',
+                 r'MMR$\nu_{2}a_{3}$', 'X$_c$', 'CDO', 'MMAT']
 
 # Font style and size
 plt.rcParams["text.usetex"] = True
