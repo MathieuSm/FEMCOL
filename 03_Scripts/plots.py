@@ -50,16 +50,15 @@ AxisLabels = ColumnNames.replace(
      'Mean ECM Area / mm²': 'Mean ECM Area A$_{F}^{mean}$ / mm²',
      'Mean ECM Area Fraction / -': 'Mean ECM Area Fraction BA/TA$_{mean}$ / -',
      'Min ECM Area Fraction / -': 'Min ECM Area Fraction BA/TA$_{min}$ / -',
-     'Mineral to Matrix Ratio v2/a3 / -': r'Mineral to Matrix Ratio MMR $\nu_{2}/a_{3}$ / -',
-     'Mineral to Matrix Ratio v1/a1 / -': r'Mineral to Matrix Ratio MMR $\nu_{1}/a_{1}$ / -',
+     'Mineral to Matrix Ratio v2/a3 / -': r'Mineral to Matrix Ratio ' r'$\rho_{MM}$ ' + r'$\nu_{2}/a_{3}$ / -',
+     'Mineral to Matrix Ratio v1/a1 / -': r'Mineral to Matrix Ratio ' r'$\rho_{MM}$ ' + r'$\nu_{1}/a_{1}$ / -',
      'Crystallinity / -': 'Crystallinity X$_{c}$ / -',
      'Collagen dis/order / -': 'Collagen dis/order / -',
      'Matrix maturity / -': 'Matrix maturity / -',
      'Relative Pyridinoline Content / -': 'Relative Pyridinoline Content / -',
      'Relative Proteoglycan Content / -': 'Relative Proteoglycan Content / -',
      'Relative Lipid Content / -': 'Relative Lipid Content / -',
-     'Apparent Modulus Mineralized uFE / MPa':
-         'Apparent Modulus Mineralized $\mu$FE E$^{\mu FE}_{app, m}$ / MPa',
+     'Apparent Modulus Mineralized uFE / MPa': 'Apparent Modulus Mineralized $\mu$FE E$^{\mu FE}_{app, m}$ / MPa',
      'Yield Stress uFE / MPa': 'Yield Stress $\mu$FE $\sigma^{\mu FE}_{y}$ / MPa',
      'Ultimate Stress uFE / MPa': 'Ultimate Stress $\mu$FE $\sigma^{\mu FE}_{app}$ / MPa'})
 
@@ -70,7 +69,7 @@ column_names_abbrev = ['SID', 'Age', 'G', 'Site', 'SM', 'SD', 'EAPPM', 'EM', 'UF
 ColumnNames['Abbreviations'] = column_names_abbrev
 AxisLabels['Abbreviations'] = column_names_abbrev
 
-# Pair has the Format [x-axis, y-axis]; stress, moduli need to be on y-axis for non-age plots
+# Pair has the Format [x-axis, y-axis]; stress & moduli need to be on y-axis for non-age plots
 Pair = pd.DataFrame([
     ['Age / y', 'Apparent Modulus Demineralized / MPa'],
     ['Age / y', 'Apparent Modulus Mineralized / GPa'],
@@ -549,7 +548,7 @@ for i in tqdm(range(len(Pair))):
                        handletextpad=0.1,
                        handlelength=1,
                        labelspacing=0.3)
-            plt.rcParams['figure.figsize'] = (5.5, 4.0)
+            plt.rcParams['figure.figsize'] = (3.0, 2.5)
             plt.rcParams.update({'font.size': 12})
             plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                         dpi=1200, format='png')
@@ -585,7 +584,7 @@ for i in tqdm(range(len(Pair))):
                        handletextpad=0.1,
                        handlelength=1,
                        labelspacing=0.3)
-            plt.rcParams['figure.figsize'] = (5.5, 4.0)
+            plt.rcParams['figure.figsize'] = (3.0, 2.5)
             plt.rcParams.update({'font.size': 12})
             plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                         dpi=1200, format='png', pad_inches=0)
@@ -626,7 +625,7 @@ for i in tqdm(range(len(Pair))):
                        handletextpad=0.1,
                        handlelength=1,
                        labelspacing=0.3)
-            plt.rcParams['figure.figsize'] = (5.5, 4.0)
+            plt.rcParams['figure.figsize'] = (3.0, 2.5)
             plt.rcParams.update({'font.size': 12})
             plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                         dpi=1200, format='png', pad_inches=0)
@@ -661,7 +660,7 @@ for i in tqdm(range(len(Pair))):
                        handletextpad=0.1,
                        handlelength=1,
                        labelspacing=0.3)
-            plt.rcParams['figure.figsize'] = (5.5, 4.0)
+            plt.rcParams['figure.figsize'] = (3.0, 2.5)
             plt.rcParams.update({'font.size': 12})
             plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
                         dpi=1200, format='png', pad_inches=0)
