@@ -436,7 +436,7 @@ for i in tqdm(range(len(Pair))):
     cv = round(100 * (RMSE / statistics.mean(Y_Obs))[0], 2)
 
     savepath = Results_path + '/04_Plots/Individual'
-    Figure, Axes = plt.subplots(1, 1, figsize=(5.5, 4.5), dpi=300, sharey=True, sharex=True)
+    Figure, Axes = plt.subplots(1, 1, figsize=(3.0, 2.5), dpi=1200, sharey=True, sharex=True)
     male_age = Data[Data['Gender'] == 'M']['Age / y']
     female_age = Data[Data['Gender'] == 'F']['Age / y']
     X_np = np.array(X)
