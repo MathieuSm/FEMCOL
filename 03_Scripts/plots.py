@@ -436,7 +436,7 @@ for i in tqdm(range(len(Pair))):
     cv = round(100 * (RMSE / statistics.mean(Y_Obs))[0], 2)
 
     savepath = Results_path + '/04_Plots/Individual'
-    Figure, Axes = plt.subplots(1, 1, figsize=(3.0, 2.5), dpi=1200, sharey=True, sharex=True)
+    Figure, Axes = plt.subplots(1, 1, figsize=(5.5, 4.5), dpi=300, sharey=True, sharex=True)
     male_age = Data[Data['Gender'] == 'M']['Age / y']
     female_age = Data[Data['Gender'] == 'F']['Age / y']
     X_np = np.array(X)
@@ -548,10 +548,10 @@ for i in tqdm(range(len(Pair))):
                        handletextpad=0.1,
                        handlelength=1,
                        labelspacing=0.3)
-            plt.rcParams['figure.figsize'] = (3.0, 2.5)
+            plt.rcParams['figure.figsize'] = (5.5, 4.0)
             plt.rcParams.update({'font.size': 12})
-            plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                        dpi=1200, format='png')
+            plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.jpg'),
+                        dpi=1200, format='jpg')
             # plt.show()
             plt.close()
 
@@ -584,10 +584,10 @@ for i in tqdm(range(len(Pair))):
                        handletextpad=0.1,
                        handlelength=1,
                        labelspacing=0.3)
-            plt.rcParams['figure.figsize'] = (3.0, 2.5)
+            plt.rcParams['figure.figsize'] = (5.5, 4.0)
             plt.rcParams.update({'font.size': 12})
-            plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                        dpi=1200, format='png', pad_inches=0)
+            plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.jpg'),
+                        dpi=1200, format='jpg', pad_inches=0)
             # plt.show()
             plt.close()
             j = j + 1
@@ -625,10 +625,10 @@ for i in tqdm(range(len(Pair))):
                        handletextpad=0.1,
                        handlelength=1,
                        labelspacing=0.3)
-            plt.rcParams['figure.figsize'] = (3.0, 2.5)
+            plt.rcParams['figure.figsize'] = (5.5, 4.0)
             plt.rcParams.update({'font.size': 12})
-            plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                        dpi=1200, format='png', pad_inches=0)
+            plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.jpg'),
+                        dpi=1200, format='jpg', pad_inches=0)
             # plt.show()
             plt.close()
             j = j + 1
@@ -660,10 +660,10 @@ for i in tqdm(range(len(Pair))):
                        handletextpad=0.1,
                        handlelength=1,
                        labelspacing=0.3)
-            plt.rcParams['figure.figsize'] = (3.0, 2.5)
+            plt.rcParams['figure.figsize'] = (5.5, 4.0)
             plt.rcParams.update({'font.size': 12})
-            plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.png'),
-                        dpi=1200, format='png', pad_inches=0)
+            plt.savefig(os.path.join(savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.jpg'),
+                        dpi=1200, format='jpg', pad_inches=0)
             # plt.show()
             plt.close()
             j = j + 1
