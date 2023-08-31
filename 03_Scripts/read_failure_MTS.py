@@ -398,7 +398,7 @@ plt.plot(df_426R['disp_ext'][:41256], df_426R['force_lc'][:41256], label='426R',
 # plt.plot([], ' ', label=f'Stiffness =  N/mm')
 # plt.plot([], ' ', label='Sample ID: ' )
 plt.ylabel('Force $F$ / N')
-plt.xlabel('Displacement $u$ / mm')
+plt.xlabel('Displacement $\Delta l$ / mm')
 plt.subplots_adjust(left=0.17, bottom=0.15, right=0.95, top=0.95)
 plt.legend()
 plt.rcParams['figure.figsize'] = (5.5, 4)
