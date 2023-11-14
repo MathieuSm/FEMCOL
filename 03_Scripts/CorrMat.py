@@ -12,9 +12,9 @@ from matplotlib.colors import ListedColormap
 
 
 # Set directory & load data. Remove unwanted columns and rename the remaining ones
-Cwd = os.getcwd()
-results_path = str(os.path.dirname(Cwd) + '/04_Results')
-results_overview = str(os.path.dirname(Cwd) + '/04_Results/ResultsOverview.csv')
+__location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+results_path = str(__location__ + '/04_Results')
+results_overview = str(results_path + '/ResultsOverview.csv')
 savepath_full = results_path + '/04_Plots/CorrelationMatrix_Full/'
 savepath_compact = results_path + '/04_Plots/CorrelationMatrix_Compact/'
 
@@ -39,10 +39,12 @@ df = df.drop(columns=['Sample ID', 'Gender', 'Site', 'Stiffness Mineralized / N/
 #              'Modulus Demineralized / MPa', 'Apparent Modulus Demineralized / MPa', 'Ultimate Apparent Stress / MPa',
 #              'Ultimate Strain / -']]
 df_new = df[['Age / y', 'Bone Volume Fraction / -', 'Tissue Mineral Density / mg HA / cm³',
+             'Mean Bone Area Fraction / -', 'Min Bone Area Fraction / -',
              'Apparent Modulus Mineralized / GPa', 'Modulus Mineralized / GPa', 'Apparent Modulus Demineralized / MPa',
              'Modulus Demineralized / MPa', 'Ultimate Apparent Stress / MPa', 'Ultimate Strain / -',
              'Mineral weight fraction / -', 'Organic weight fraction / -', 'Water weight fraction / -',
-             'Mineral to Matrix Ratio v2/a3 / -', 'Crystallinity / -', 'Collagen dis/order / -', 'Matrix maturity / -']]
+             'Mineral to Matrix Ratio v2/a3 / -', 'Crystallinity / -', 'Collagen dis/order / -', 'Matrix maturity / -',
+             'Haversian Canals Mean / %', 'Osteocytes Mean / %', 'Cement Lines Mean / %']]
 # Abbreviations of complete Matrix including all variables (has to be in similar order as df_new)
 # df_new.columns = ['Age', 'BVTV', 'BMD', 'TMD', 'MMRv2a3', 'MMRv1a1', 'XC', 'CDO', 'MMAT', 'WFM', 'WFO', 'WFW', 'D',
 #                   'AMM', 'MM', 'AMD', 'MD', 'UAPPSTRE', 'UCSTRE', 'USTRE', 'USTRA', 'AMMuFE', 'YSTREuFE', 'USTREuFE',
@@ -54,10 +56,11 @@ df_new = df[['Age / y', 'Bone Volume Fraction / -', 'Tissue Mineral Density / mg
 #                   'MM', 'AMM',
 #                   'MD', 'AMD', 'UAPPSTRE', 'USTRA']
 
-df_new.columns = ['Age', 'BV/TV', 'TMD',
+df_new.columns = ['Age', 'BV/TV', 'TMD', 'BA/TA_mean', 'BA/TA_min',
                   'AMM', 'MM', 'AMD', 'MD', 'UAPPSTRE', 'USTRA',
                   'WFM', 'WFO', 'WFW',
-                  'MMRv2a3', 'XC', 'CDO', 'MMAT']
+                  'MMRv2a3', 'XC', 'CDO', 'MMAT',
+                  'HC', 'OC', 'CL']
 
 # Create empty dataframe for p-values and correlation matrix containing r values
 corr_matrix_p = pd.DataFrame()
@@ -119,10 +122,11 @@ newcmp_r = ListedColormap(newcolors_r)
 #                  '$\sigma_{app}$', '$\sigma_c$', '$\sigma_b$', '$\epsilon_c$', 'E$_{m, \mu FE}$', '$\sigma_{y, \mu FE}$',
 #                  '$\sigma_{u, \mu FE}$', '$ECM_{AF_{mean}}$', '$ECM_{AF_{min}}$', '$ECM_{A_{CV}}$']
 
-abbreviations = ['Age', r'$\rho$', 'TMD',
+abbreviations = ['Age', r'$\rho$', 'TMD', 'BA/TA$_{mean}$', 'BA/TA$_{min}$',
                  'E$_{m}^{app}$', 'E$_m$', 'E$_{c}^{app}$', 'E$_c$', '$\sigma_{u}^{app}$', '$\epsilon_c$',
                  'WF$_m$', 'WF$_o$', 'WF$_w$',
-                 r'MMR$\nu_{2}a_{3}$', 'X$_c$', 'CDO', 'MMAT']
+                 r'MMR$\nu_{2}a_{3}$', 'X$_c$', 'CDO', 'MMAT',
+                 'HC', 'OC', 'CL']
 
 # Font style and size
 plt.rcParams["text.usetex"] = True
