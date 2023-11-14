@@ -1,15 +1,16 @@
 import pandas as pd
 import os
 
-
-Cwd = os.getcwd()
-results_path = str(os.path.dirname(Cwd) + '/04_Results')
+__location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+results_path = str(__location__ + '/04_Results')
+data_path = str(__location__ + '/02_Data')
 results_mineralized = pd.read_csv(str(results_path + '/00_Mineralized/ResultsElasticTesting.csv'), skiprows=0)
 results_demineralized = pd.read_csv(str(results_path + '/01_Demineralized/ResultsFailureTesting.csv'), skiprows=0)
 results_gravimetry = pd.read_csv(str(results_path + '/02_Gravimetry/ResultsGravimetry.csv'), skiprows=0)
 results_uCT = pd.read_csv(str(results_path + '/03_uCT/ResultsUCT.csv'), skiprows=0)
 results_raman = pd.read_csv(str(results_path + '/05_Raman/RamanResults.csv'), skiprows=0)
 results_uFE = pd.read_csv(str(results_path + '/06_microFE/uFE_Data_Benjamin.csv'), skiprows=0)
+results_segmentation = pd.read_csv(str(data_path + '/04_Segmentation/SegmentationDataMeanStd.csv'), skiprows=0, sep=';')
 
 results_merged = pd.DataFrame()
 results_merged['Sample ID'] = results_mineralized['Sample ID']
@@ -42,6 +43,8 @@ results_merged['Bone Volume Fraction / -'] = results_uCT['Bone Volume Fraction /
 results_merged['Bone Mineral Density / mg HA / ' + 'cm\u00B3'] = results_uCT['Bone Mineral Density mg HA / cm3']
 results_merged['Tissue Mineral Density / mg HA / ' + 'cm\u00B3'] = results_uCT['Tissue Mineral Density mg HA / cm^3']
 results_merged['Bone Mineral Content / mg HA'] = results_uCT['Bone Mineral Content / mg HA']
+results_merged['Mean Bone Area Fraction / -'] = results_uCT['Mean Area Fraction / -']
+results_merged['Min Bone Area Fraction / -'] = results_uCT['Min Area Fraction / -']
 
 results_merged['Mineral to Matrix Ratio v2/a3 / -'] = results_raman['M2M_ratio_v2/a3_mean']
 results_merged['Mineral to Matrix Ratio v1/a1 / -'] = results_raman['M2M_ratio_v1/a1_mean']
@@ -55,4 +58,12 @@ results_merged['Relative Lipid Content / -'] = results_raman['lipid_amideIII_mea
 results_merged['Apparent Modulus Mineralized uFE / MPa'] = round(results_uFE['E_uFE_L'], 3)*1000
 results_merged['Yield Stress uFE / MPa'] = round(results_uFE['yield_strength_uFE_with_non_broken'], 2)
 results_merged['Ultimate Stress uFE / MPa'] = round(results_uFE['strength_uFE_with_non_broken'], 2)
+
+results_merged['Haversian Canals Mean / %'] = round(results_segmentation['Haversian canals mean / %'], 3)
+results_merged['Haversian Canals Std / %'] = round(results_segmentation['Haversian canals std / %'], 3)
+results_merged['Osteocytes Mean / %'] = round(results_segmentation['Osteocytes mean / %'], 3)
+results_merged['Osteocytes Std / %'] = round(results_segmentation['Osteocytes std / %'], 3)
+results_merged['Cement Lines Mean / %'] = round(results_segmentation['Cement lines mean / %'], 3)
+results_merged['Cement Lines Std / %'] = round(results_segmentation['Cement lines std / %'], 3)
+
 results_merged.to_csv(results_path + '/ResultsOverview.csv', index=False)
