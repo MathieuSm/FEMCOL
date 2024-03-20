@@ -379,7 +379,6 @@ Pair_abbrev_df['Abbrev_y'] = Pair_abbrev2_df
 
 # loop to iterate through lists of names & create plots
 results = list()
-j = 0
 
 for i in tqdm(range(len(Pair))):
     x_axis = Pair[0][i]
@@ -399,7 +398,10 @@ for i in tqdm(range(len(Pair))):
     Data2Fit = Data.copy()
     Data2Fit.rename(columns={'Sample ID': 'SID', x_axis: x_axis_abbrev, y_axis: y_axis_abbrev}, inplace=True)
     Data2Fit = Data2Fit.set_index('SID')
+    FitResults_f = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit[Data2Fit['Gender'] == 'F']).fit()
+    FitResults_m = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit[Data2Fit['Gender'] == 'M']).fit()
     FitResults = smf.ols(y_axis_abbrev + ' ~ 1 + ' + x_axis_abbrev, data=Data2Fit).fit()
+
 
     # # Manually check correlations
     # x_axis = 'Mineral weight fraction / -'
@@ -414,99 +416,193 @@ for i in tqdm(range(len(Pair))):
     # testlin = linregress(Data2Fit['USTRE'], Data2Fit['USTRA'])
     # print(testlin)
 
-    # Calculate R^2, p-value, 95% CI, SE, N
-    Y_Obs = FitResults.model.endog
-    Y_Fit = FitResults.fittedvalues
+    # Calculate R^2, p-value, 95% CI, SE, N for female dataset
+    Y_Obs_f = FitResults_f.model.endog
+    Y_Fit_f = FitResults_f.fittedvalues
 
-    E = Y_Obs - Y_Fit
-    RSS = np.sum(E ** 2)
-    SE = np.sqrt(RSS / FitResults.df_resid)
-    CI_l = FitResults.conf_int()[0][1]
-    CI_r = FitResults.conf_int()[1][1]
-    N = int(FitResults.nobs)
-    R2 = FitResults.rsquared
-    p = FitResults.pvalues[1]
-    X = np.matrix(FitResults.model.exog)
-    X_Obs = np.sort(np.array(X[:, 1]).reshape(len(X)))
-    C = np.matrix(FitResults.cov_params())
-    B_0 = np.sqrt(np.diag(np.abs(X * C * X.T)))
+    E_f = Y_Obs_f - Y_Fit_f
+    RSS_f = np.sum(E_f ** 2)
+    SE_f = np.sqrt(RSS_f / FitResults_f.df_resid)
+    CI_l_f = FitResults_f.conf_int()[0][1]
+    CI_r_f = FitResults_f.conf_int()[1][1]
+    N_f = int(FitResults_f.nobs)
+    R2_f = FitResults_f.rsquared
+    p_f = FitResults_f.pvalues[1]
+    X_f = np.matrix(FitResults_f.model.exog)
+    X_Obs_f = np.sort(np.array(X_f[:, 1]).reshape(len(X_f)))
+    C_f = np.matrix(FitResults_f.cov_params())
+    B_0_f = np.sqrt(np.diag(np.abs(X_f * C_f * X_f.T)))
     Alpha = 0.95
-    t_Alpha = t.interval(Alpha, N - X.shape[1] - 1)
-    CI_Line_u = Y_Fit + t_Alpha[0] * SE * B_0
-    CI_Line_o = Y_Fit + t_Alpha[1] * SE * B_0
-    Sorted_CI_u = CI_Line_u[np.argsort(FitResults.model.exog[:, 1])]
-    Sorted_CI_o = CI_Line_o[np.argsort(FitResults.model.exog[:, 1])]
-    Y_Fit_df = pd.DataFrame(Y_Fit)
-    Y_Obs_df = pd.DataFrame(Y_Obs)
-    RMSE = rmse(Y_Obs_df, Y_Fit_df)
-    cv = round(100 * (RMSE / statistics.mean(Y_Obs))[0], 2)
+    t_Alpha_f = t.interval(Alpha, N_f - X_f.shape[1] - 1)
+    CI_Line_u_f = Y_Fit_f + t_Alpha_f[0] * SE_f * B_0_f
+    CI_Line_o_f = Y_Fit_f + t_Alpha_f[1] * SE_f * B_0_f
+    Sorted_CI_u_f = CI_Line_u_f[np.argsort(FitResults_f.model.exog[:, 1])]
+    Sorted_CI_o_f = CI_Line_o_f[np.argsort(FitResults_f.model.exog[:, 1])]
+    Y_Fit_df_f = pd.DataFrame(Y_Fit_f)
+    Y_Obs_df_f = pd.DataFrame(Y_Obs_f)
+    RMSE_f = rmse(Y_Obs_df_f, Y_Fit_df_f)
+    cv_f = round(100 * (RMSE_f / statistics.mean(Y_Obs_f))[0], 2)
+    X_np_f = np.array(X_f)
+    Y_Obs_np_f = np.array(Y_Obs_f)
+
+    # Calculate R^2, p-value, 95% CI, SE, N for male dataset
+    Y_Obs_m = FitResults_m.model.endog
+    Y_Fit_m = FitResults_m.fittedvalues
+
+    E_m = Y_Obs_m - Y_Fit_m
+    RSS_m = np.sum(E_m ** 2)
+    SE_m = np.sqrt(RSS_m / FitResults_m.df_resid)
+    CI_l_m = FitResults_m.conf_int()[0][1]
+    CI_r_m = FitResults_m.conf_int()[1][1]
+    N_m = int(FitResults_m.nobs)
+    R2_m = FitResults_m.rsquared
+    p_m = FitResults_m.pvalues[1]
+    X_m = np.matrix(FitResults_m.model.exog)
+    X_Obs_m = np.sort(np.array(X_m[:, 1]).reshape(len(X_m)))
+    C_m = np.matrix(FitResults_m.cov_params())
+    B_0_m = np.sqrt(np.diag(np.abs(X_m * C_m * X_m.T)))
+    t_Alpha_m = t.interval(Alpha, N_m - X_m.shape[1] - 1)
+    CI_Line_u_m = Y_Fit_m + t_Alpha_m[0] * SE_m * B_0_m
+    CI_Line_o_m = Y_Fit_m + t_Alpha_m[1] * SE_m * B_0_m
+    Sorted_CI_u_m = CI_Line_u_m[np.argsort(FitResults_m.model.exog[:, 1])]
+    Sorted_CI_o_m = CI_Line_o_m[np.argsort(FitResults_m.model.exog[:, 1])]
+    Y_Fit_df_m = pd.DataFrame(Y_Fit_m)
+    Y_Obs_df_m = pd.DataFrame(Y_Obs_m)
+    RMSE_m = rmse(Y_Obs_df_m, Y_Fit_df_m)
+    cv_m = round(100 * (RMSE_m / statistics.mean(Y_Obs_m))[0], 2)
+    X_np_m = np.array(X_m)
+    Y_Obs_np_m = np.array(Y_Obs_m)
+
+    X = np.matrix(FitResults.model.exog)
+    X_np = np.array(X)
+    Y_Obs = FitResults.model.endog
+    Y_Obs_np = np.array(Y_Obs)
 
     Figure, Axes = plt.subplots(1, 1, figsize=(5.5, 4.5), dpi=300, sharey=True, sharex=True)
     male_age = Data[Data['Gender'] == 'M']['Age / y']
     female_age = Data[Data['Gender'] == 'F']['Age / y']
-    X_np = np.array(X)
-    Y_Obs_np = np.array(Y_Obs)
 
-    # Requirements for rounding: depending on value
-    if abs(CI_l) >= 100:
-        CI_l = round(CI_l)
-    elif abs(CI_l) >= 1:
-        CI_l = round(CI_l, 1)
-    elif abs(CI_l) == 0:
-        CI_l = int(CI_l)
-    elif abs(CI_l) >= 0.001:
-        CI_l = round(CI_l, 3)
-    elif abs(CI_l) < 0.001:
-        CI_l = '{:.2e}'.format(CI_l)
+    # Requirements for rounding of female dataset: depending on value
+    if abs(CI_l_f) >= 100:
+        CI_l_f = round(CI_l_f)
+    elif abs(CI_l_f) >= 1:
+        CI_l_f = round(CI_l_f, 1)
+    elif abs(CI_l_f) == 0:
+        CI_l_f = int(CI_l_f)
+    elif abs(CI_l_f) >= 0.001:
+        CI_l_f = round(CI_l_f, 3)
+    elif abs(CI_l_f) < 0.001:
+        CI_l_f = '{:.2e}'.format(CI_l_f)
 
-    if abs(CI_r) >= 100:
-        CI_r = round(CI_r)
-    elif abs(CI_r) >= 1:
-        CI_r = round(CI_r, 1)
-    elif abs(CI_r) == 0:
-        CI_r = int(CI_r)
-    elif abs(CI_r) >= 0.001:
-        CI_r = round(CI_r, 3)
-    elif abs(CI_r) < 0.001:
-        CI_r = '{:.2e}'.format(CI_r)
+    if abs(CI_r_f) >= 100:
+        CI_r_f = round(CI_r_f)
+    elif abs(CI_r_f) >= 1:
+        CI_r_f = round(CI_r_f, 1)
+    elif abs(CI_r_f) == 0:
+        CI_r_f = int(CI_r_f)
+    elif abs(CI_r_f) >= 0.001:
+        CI_r_f = round(CI_r_f, 3)
+    elif abs(CI_r_f) < 0.001:
+        CI_r_f = '{:.2e}'.format(CI_r_f)
 
-    if abs(SE) >= 100:
-        SE = round(SE)
-    elif abs(SE) >= 1:
-        SE = round(SE, 1)
-    elif abs(SE) == 0:
-        SE = int(SE)
-    elif abs(SE) >= 0.001:
-        SE = round(SE, 3)
-    elif abs(SE) < 0.001:
-        SE = '{:.1e}'.format(SE)
+    if abs(SE_f) >= 100:
+        SE_f = round(SE_f)
+    elif abs(SE_f) >= 1:
+        SE_f = round(SE_f, 1)
+    elif abs(SE_f) == 0:
+        SE_f = int(SE_f)
+    elif abs(SE_f) >= 0.001:
+        SE_f = round(SE_f, 3)
+    elif abs(SE_f) < 0.001:
+        SE_f = '{:.1e}'.format(SE_f)
 
-    if p < 0.001:
-        p_plot = '$p < 0.001$'
-    elif p == 0.001:
-        p_plot = '$p = 0.001$'
-    elif p < 0.01:
-        p_plot = '$p < 0.01$'
-    elif p == 0.01:
-        p_plot = '$p = 0.01$'
-    elif p < 0.05:
-        p_plot = '$p < 0.05$'
-    elif p == 0.05:
-        p_plot = '$p = 0.05$'
+    if p_f < 0.001:
+        p_plot_f = '$p < 0.001$'
+    elif p_f == 0.001:
+        p_plot_f = '$p = 0.001$'
+    elif p_f < 0.01:
+        p_plot_f = '$p < 0.01$'
+    elif p_f == 0.01:
+        p_plot_f = '$p = 0.01$'
+    elif p_f < 0.05:
+        p_plot_f = '$p < 0.05$'
+    elif p_f == 0.05:
+        p_plot_f = '$p = 0.05$'
     else:
-        p_plot = '$p > 0.05$'
+        p_plot_f = '$p > 0.05$'
 
-    if p < 0.001:
-        p = '{:.1e}'.format(p)
+    if p_f < 0.001:
+        p_f = '{:.1e}'.format(p_f)
     else:
-        p = round(p, 3)
+        p_f = round(p_f, 3)
 
-    if float(R2) < 0.01:
-        R2 = float(R2)
-        R2 = '{:.1e}'.format(R2)
+    if float(R2_f) < 0.01:
+        R2_f = float(R2_f)
+        R2_f = '{:.1e}'.format(R2_f)
     else:
-        R2 = float(R2)
-        R2 = round(R2, 2)
+        R2_f = float(R2_f)
+        R2_f = round(R2_f, 2)
+
+    # Requirements for rounding of male dataset: depending on value
+    if abs(CI_l_m) >= 100:
+        CI_l_m = round(CI_l_m)
+    elif abs(CI_l_m) >= 1:
+        CI_l_m = round(CI_l_m, 1)
+    elif abs(CI_l_m) == 0:
+        CI_l_m = int(CI_l_m)
+    elif abs(CI_l_m) >= 0.001:
+        CI_l_m = round(CI_l_m, 3)
+    elif abs(CI_l_m) < 0.001:
+        CI_l_m = '{:.2e}'.format(CI_l_m)
+
+    if abs(CI_r_m) >= 100:
+        CI_r_m = round(CI_r_m)
+    elif abs(CI_r_m) >= 1:
+        CI_r_m = round(CI_r_m, 1)
+    elif abs(CI_r_m) == 0:
+        CI_r_m = int(CI_r_m)
+    elif abs(CI_r_m) >= 0.001:
+        CI_r_m = round(CI_r_m, 3)
+    elif abs(CI_r_m) < 0.001:
+        CI_r_m = '{:.2e}'.format(CI_r_m)
+
+    if abs(SE_m) >= 100:
+        SE_m = round(SE_m)
+    elif abs(SE_m) >= 1:
+        SE_m = round(SE_m, 1)
+    elif abs(SE_m) == 0:
+        SE_m = int(SE_m)
+    elif abs(SE_m) >= 0.001:
+        SE_m = round(SE_m, 3)
+    elif abs(SE_m) < 0.001:
+        SE_m = '{:.1e}'.format(SE_m)
+
+    if p_m < 0.001:
+        p_plot_m = '$p < 0.001$'
+    elif p_m == 0.001:
+        p_plot_m = '$p = 0.001$'
+    elif p_m < 0.01:
+        p_plot_m = '$p < 0.01$'
+    elif p_m == 0.01:
+        p_plot_m = '$p = 0.01$'
+    elif p_m < 0.05:
+        p_plot_m = '$p < 0.05$'
+    elif p_m == 0.05:
+        p_plot_m = '$p = 0.05$'
+    else:
+        p_plot_m = '$p > 0.05$'
+
+    if p_m < 0.001:
+        p_m = '{:.1e}'.format(p_m)
+    else:
+        p_m = round(p_m, 3)
+
+    if float(R2_m) < 0.01:
+        R2_m = float(R2_m)
+        R2_m = '{:.1e}'.format(R2_m)
+    else:
+        R2_m = float(R2_m)
+        R2_m = round(R2_m, 2)
 
     # Positions of annotations
     YposCI = 0.025
@@ -514,28 +610,115 @@ for i in tqdm(range(len(Pair))):
     YposN = YposCV + 0.075
 
     # y-axis limitation values used for plotting
-    ylim_min = Y_Obs.min() - (Y_Obs.max() - Y_Obs.min()) * 0.5
-    ylim_max = Y_Obs.max() + (Y_Obs.max() - Y_Obs.min()) * 0.1
+    if Y_Obs_f.min() < Y_Obs_m.min():
+        Y_Obs_min = Y_Obs_f.min()
+    else:
+        Y_Obs_min = Y_Obs_m.min()
+    if Y_Obs_f.max() > Y_Obs_m.max():
+        Y_Obs_max = Y_Obs_f.max()
+    else:
+        Y_Obs_max = Y_Obs_m.max()
 
-    # if p-value smaller than 0.05 create fit curve and if variable 'Age' should not be plotted on main axis, no
-    # colormap will be used
-    if float(p) <= 0.05:
+    ylim_min = Y_Obs_min - (Y_Obs_max - Y_Obs_min) * 0.5
+    ylim_max = Y_Obs_max + (Y_Obs_max - Y_Obs_min) * 0.1
+
+    # if p-value smaller than 0.05 for both male and female dataset, create fit curve; if variable 'Age' should not
+    # be plotted on main axis, no colormap will be used
+    if ((float(p_f) <= 0.05) & (float(p_m) <= 0.05)):
         if x_axis != 'Age / y':
-            Axes.plot(X[:, 1], Y_Fit, color=(1, 0, 0), linewidth=1)
-            Axes.scatter(X_np[:, 1][Data['Gender'] == 'F'], Y_Obs_np[Data['Gender'] == 'F'],
-                         c=list(tuple(female_age.tolist())), cmap='plasma_r', vmin=Data['Age / y'].min(),
-                         vmax=Data['Age / y'].max(), label='F', marker='o', s=50)
-            Axes.scatter(X_np[:, 1][Data['Gender'] == 'M'], Y_Obs_np[Data['Gender'] == 'M'],
-                         c=list(tuple(male_age.tolist())), cmap='plasma_r', vmin=Data['Age / y'].min(),
-                         vmax=Data['Age / y'].max(), label='M', marker='s', s=50)
+            Axes.plot(X_f[:, 1], Y_Fit_f, color=(1, 0, 0), linewidth=1, linestyle='solid')
+            Axes.plot(X_m[:, 1], Y_Fit_m, color=(0, 0, 1), linewidth=1, linestyle='solid')
+            Axes.scatter(X_np_f[:, 1], Y_Obs_np_f, c=list(tuple(female_age.tolist())), cmap='plasma_r',
+                         vmin=Data['Age / y'].min(), vmax=Data['Age / y'].max(), marker='o', s=50)
+            Axes.scatter(X_np_m[:, 1], Y_Obs_np_m, c=list(tuple(male_age.tolist())), cmap='plasma_r',
+                         vmin=Data['Age / y'].min(), vmax=Data['Age / y'].max(), marker='s', s=50)
+            Axes.plot([], linestyle='solid', markerfacecolor='none', mec='black', color='red', marker='o', label='F')
+            Axes.plot([], linestyle='solid', markerfacecolor='none', mec='black', color='blue', marker='s', label='M')
             Axes.scatter(X_np[:, 1][Data['Gender'].isnull()], Y_Obs_np[Data['Gender'].isnull()], color=(0, 0, 0),
                          label='N/A', marker='^', s=50)
-            Axes.plot([], ' ', label=r'$N$ = ' + str(N) + ', 'r'$R^2$ = ' + str(R2))
-            Axes.plot([], ' ', label=r'$CV$ = ' + str(cv) + ', ' + p_plot)
-            Axes.plot([], ' ', label='95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']')
-            Regression_line = FitResults.params[1] * X_np[:, 1] + FitResults.params[0]
+            Axes.plot([], ' ', label=r'$R^2$ = ' + str(R2_f) + ', ' + p_plot_f)
+            Axes.plot([], ' ', label=r'$R^2$ = ' + str(R2_m) + ', ' + p_plot_m)
+
             ax = plt.gca()
-            PCM = ax.get_children()[2]
+            PCM = ax.get_children()[2]  # [x]: number of rows until first usage of colormap --> Axes.scatter(.. cmap=)
+            plt.colorbar(PCM, ax=ax, label='Age / y')
+
+            Axes.set_ylabel(y_axis_label)
+            Axes.set_xlabel(x_axis_label)
+
+            # scaling
+            plt.ylim(ymin=ylim_min, ymax=ylim_max)
+            ax.yaxis.set_major_locator(ticker.MaxNLocator(6))
+            plt.subplots_adjust(left=0.17, bottom=0.15, right=0.95, top=0.95)
+            plt.legend(loc='lower center',
+                       bbox_to_anchor=(0.5, 0.),
+                       ncol=2,
+                       columnspacing=0.1,
+                       handletextpad=0.1,
+                       handlelength=1,
+                       labelspacing=0.3)
+            plt.rcParams['figure.figsize'] = (5.5, 4.0)
+            plt.rcParams.update({'font.size': 12})
+            plt.savefig(os.path.join(Savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.jpg'),
+                        dpi=1200, format='jpg')
+            # plt.show()
+            plt.close()
+
+        # don't use colormap if age is plotted on x-axis
+        else:
+            sns.regplot(x=FitResults_f.model.exog[:, 1], y=Y_Obs_f, ax=Axes, scatter=False, color=(0, 1, 0),
+                        line_kws={'color': 'red', 'linewidth': 1, 'linestyle': 'solid'})  # set background color of confidence interval here
+            sns.regplot(x=FitResults_m.model.exog[:, 1], y=Y_Obs_m, ax=Axes, scatter=False, color=(0, 0, 1),
+                        line_kws={'color': 'blue', 'linewidth': 1, 'linestyle': 'solid'})
+            Axes.plot(X_f[:, 1], Y_Obs_f, linestyle='none', marker='o', color=(1, 0, 0), fillstyle='none',
+                      markersize=9)
+            Axes.plot(X_m[:, 1], Y_Obs_m, linestyle='none', marker='x', color=(0, 0, 1), fillstyle='none',
+                      markersize=9)
+            Axes.plot([], linestyle='solid', markerfacecolor='none', color='red', marker='o', label='F')
+            Axes.plot([], linestyle='solid', markerfacecolor='none', color='blue', marker='x', label='M')
+            Axes.plot([], ' ', label=r'$R^2$ = ' + str(R2_f) + ', ' + p_plot_f)
+            Axes.plot([], ' ', label=r'$R^2$ = ' + str(R2_m) + ', ' + p_plot_m)
+
+            Axes.set_ylabel(y_axis_label)
+            Axes.set_xlabel(x_axis_label)
+
+            # scaling
+            plt.xlim(xmin=55, xmax=95)
+            plt.ylim(ymin=ylim_min, ymax=ylim_max)
+            Axes.yaxis.set_major_locator(ticker.MaxNLocator(6))
+            plt.subplots_adjust(left=0.17, bottom=0.15, right=0.95, top=0.95)
+            plt.legend(loc='lower center',
+                       bbox_to_anchor=(0.5, 0.),
+                       ncol=2,
+                       columnspacing=0.1,
+                       handletextpad=0.1,
+                       handlelength=1,
+                       labelspacing=0.3)
+            plt.rcParams['figure.figsize'] = (5.5, 4.0)
+            plt.rcParams.update({'font.size': 12})
+            plt.savefig(os.path.join(Savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.jpg'),
+                        dpi=1200, format='jpg', pad_inches=0)
+            # plt.show()
+            plt.close()
+            j = j + 1
+
+    # if p-value smaller than 0.05 for female and larger than 0.05 for male dataset, create fit curve only for female;
+    # if variable 'Age' should not be plotted on main axis, no colormap will be used
+    if ((float(p_f) <= 0.05) & (float(p_m) > 0.05)):
+        if x_axis != 'Age / y':
+            Axes.plot(X_f[:, 1], Y_Fit_f, color=(1, 0, 0), linewidth=1, linestyle='solid')
+            Axes.scatter(X_np_f[:, 1], Y_Obs_np_f, c=list(tuple(female_age.tolist())), cmap='plasma_r',
+                         vmin=Data['Age / y'].min(), vmax=Data['Age / y'].max(), marker='o', s=50)
+            Axes.plot([], linestyle='solid', markerfacecolor='none', mec='black', color='red', marker='o', label='F')
+            Axes.scatter(X_np_m[:, 1], Y_Obs_np_m, c=list(tuple(male_age.tolist())), cmap='plasma_r',
+                         vmin=Data['Age / y'].min(), vmax=Data['Age / y'].max(), marker='s', s=50)
+            Axes.plot([], linestyle='none', markerfacecolor='none', mec='black', marker='s', label='M')
+            Axes.scatter(X_np[:, 1][Data['Gender'].isnull()], Y_Obs_np[Data['Gender'].isnull()], color=(0, 0, 0),
+                         label='N/A', marker='^', s=50)
+            Axes.plot([], ' ', label=r'$R^2$ = ' + str(R2_f) + ', ' + p_plot_f)
+            Axes.plot([], ' ', label=r'$R^2$ = ' + str(R2_m) + ', ' + p_plot_m)
+            ax = plt.gca()
+            PCM = ax.get_children()[1]
             plt.colorbar(PCM, ax=ax, label='Age / y')
 
             Axes.set_ylabel(y_axis_label)
@@ -562,16 +745,92 @@ for i in tqdm(range(len(Pair))):
 
         # don't use colormap if age is plotted on x-axis
         else:
-            sns.regplot(x=FitResults.model.exog[:, 1], y=Y_Obs, ax=Axes, scatter=False, color=(0, 1, 0),
-                        line_kws={'color': 'red', 'linewidth': 1}, )  # set background color of confidence interval here
-            Axes.plot(X[:, 1][Data['Gender'] == 'F'], Y_Obs[Data['Gender'] == 'F'], linestyle='none', marker='o',
-                      color=(0, 0, 0), fillstyle='none', label='F', markersize=9)
-            Axes.plot(X[:, 1][Data['Gender'] == 'M'], Y_Obs[Data['Gender'] == 'M'], linestyle='none', marker='x',
-                      color=(0, 0, 0), fillstyle='none', label='M', markersize=9)
+            sns.regplot(x=FitResults_f.model.exog[:, 1], y=Y_Obs_f, ax=Axes, scatter=False, color=(0, 1, 0),
+                        line_kws={'color': 'red', 'linewidth': 1,
+                                  'linestyle': 'solid'})  # set background color of confidence interval here
+            Axes.plot(X_f[:, 1], Y_Obs_f, linestyle='none', marker='o', color=(1, 0, 0), fillstyle='none',
+                      markersize=9)
+            Axes.plot([], linestyle='solid', markerfacecolor='none', color='red', marker='o', label='F')
+            Axes.plot(X_m[:, 1], Y_Obs_m, linestyle='none', marker='x', color=(0, 0, 1), fillstyle='none', label='M',
+                      markersize=9)
             Axes.plot([], ' ', label=' ')
-            Axes.plot([], ' ', label=r'$N$ = ' + str(N) + ', 'r'$R^2$ = ' + str(R2))
-            Axes.plot([], ' ', label=r'$CV$ = ' + str(cv) + ', ' + p_plot)
-            Axes.plot([], ' ', label='95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']')
+            Axes.plot([], ' ', label=r'$R^2$ = ' + str(R2_f) + ', ' + p_plot_f)
+            Axes.plot([], ' ', label=r'$R^2$ = ' + str(R2_m) + ', ' + p_plot_m)
+
+            Axes.set_ylabel(y_axis_label)
+            Axes.set_xlabel(x_axis_label)
+
+            # scaling
+            plt.xlim(xmin=55, xmax=95)
+            plt.ylim(ymin=ylim_min, ymax=ylim_max)
+            Axes.yaxis.set_major_locator(ticker.MaxNLocator(6))
+            plt.subplots_adjust(left=0.17, bottom=0.15, right=0.95, top=0.95)
+            plt.legend(loc='lower center',
+                       bbox_to_anchor=(0.5, 0.),
+                       ncol=2,
+                       columnspacing=0.1,
+                       handletextpad=0.1,
+                       handlelength=1,
+                       labelspacing=0.3)
+            plt.rcParams['figure.figsize'] = (5.5, 4.0)
+            plt.rcParams.update({'font.size': 12})
+            plt.savefig(os.path.join(Savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.jpg'),
+                        dpi=1200, format='jpg', pad_inches=0)
+            # plt.show()
+            plt.close()
+
+    # if p-value smaller than 0.05 for male and larger than 0.05 for female dataset, create fit curve only for male;
+    # if variable 'Age' should not be plotted on main axis, no colormap will be used
+    if ((float(p_f) > 0.05) & (float(p_m) <= 0.05)):
+        if x_axis != 'Age / y':
+            Axes.plot(X_m[:, 1], Y_Fit_m, color=(0, 0, 1), linewidth=1, linestyle='solid')
+            Axes.scatter(X_np_f[:, 1], Y_Obs_np_f, c=list(tuple(female_age.tolist())), cmap='plasma_r',
+                         vmin=Data['Age / y'].min(), vmax=Data['Age / y'].max(), marker='o', s=50)
+            Axes.plot([], linestyle='none', markerfacecolor='none', mec='black', marker='o', label='F')
+            Axes.scatter(X_np_m[:, 1], Y_Obs_np_m, c=list(tuple(male_age.tolist())), cmap='plasma_r',
+                         vmin=Data['Age / y'].min(), vmax=Data['Age / y'].max(), marker='s', s=50)
+            Axes.plot([], linestyle='solid', markerfacecolor='none', mec='black', color='blue', marker='s', label='M')
+            Axes.scatter(X_np[:, 1][Data['Gender'].isnull()], Y_Obs_np[Data['Gender'].isnull()], color=(0, 0, 0),
+                         label='N/A', marker='^', s=50)
+            Axes.plot([], ' ', label=r'$R^2$ = ' + str(R2_f) + ', ' + p_plot_f)
+            Axes.plot([], ' ', label=r'$R^2$ = ' + str(R2_m) + ', ' + p_plot_m)
+            ax = plt.gca()
+            PCM = ax.get_children()[1]
+            plt.colorbar(PCM, ax=ax, label='Age / y')
+
+            Axes.set_ylabel(y_axis_label)
+            Axes.set_xlabel(x_axis_label)
+
+            # scaling
+            plt.ylim(ymin=ylim_min, ymax=ylim_max)
+            ax.yaxis.set_major_locator(ticker.MaxNLocator(6))
+            plt.subplots_adjust(left=0.17, bottom=0.15, right=0.95, top=0.95)
+            plt.legend(loc='lower center',
+                       bbox_to_anchor=(0.5, 0.),
+                       ncol=2,
+                       columnspacing=0.1,
+                       handletextpad=0.1,
+                       handlelength=1,
+                       labelspacing=0.3)
+            plt.rcParams['figure.figsize'] = (5.5, 4.0)
+            plt.rcParams.update({'font.size': 12})
+            plt.savefig(os.path.join(Savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.jpg'),
+                        dpi=1200, format='jpg')
+            # plt.show()
+            plt.close()
+
+        # don't use colormap if age is plotted on x-axis
+        else:
+            sns.regplot(x=FitResults_m.model.exog[:, 1], y=Y_Obs_m, ax=Axes, scatter=False, color=(0, 1, 0),
+                        line_kws={'color': 'blue', 'linewidth': 1, 'linestyle': 'solid'})
+            Axes.plot(X_f[:, 1], Y_Obs_f, linestyle='none', marker='o', color=(1, 0, 0), fillstyle='none', label='F',
+                      markersize=9)
+            Axes.plot(X_m[:, 1], Y_Obs_m, linestyle='none', marker='x', color=(0, 0, 1), fillstyle='none',
+                      markersize=9)
+            Axes.plot([], linestyle='solid', markerfacecolor='none', color='blue', marker='o', label='M')
+            Axes.plot([], ' ', label=' ')
+            Axes.plot([], ' ', label=r'$R^2$ = ' + str(R2_f) + ', ' + p_plot_f)
+            Axes.plot([], ' ', label=r'$R^2$ = ' + str(R2_m) + ', ' + p_plot_m)
 
             Axes.set_ylabel(y_axis_label)
             Axes.set_xlabel(x_axis_label)
@@ -595,22 +854,21 @@ for i in tqdm(range(len(Pair))):
                         dpi=1200, format='jpg', pad_inches=0)
             # plt.show()
             plt.close()
-            j = j + 1
 
-    # if p-value greater than 0.05, no fit will be drawn & if age is contained on main axes, no colormap will be used
-    else:
+    # if p-value greater than 0.05 for both male and female datasets, don't create fit curve; if variable 'Age' should
+    # not be plotted on main axis, no colormap will be used
+    if ((float(p_f) > 0.05) & (float(p_m) > 0.05)):
         if x_axis != 'Age / y':
-            Axes.scatter(X_np[:, 1][Data['Gender'] == 'F'], Y_Obs_np[Data['Gender'] == 'F'],
-                         c=list(tuple(female_age.tolist())), cmap='plasma_r', vmin=Data['Age / y'].min(),
-                         vmax=Data['Age / y'].max(), label='F', marker='o', s=50)
-            Axes.scatter(X_np[:, 1][Data['Gender'] == 'M'], Y_Obs_np[Data['Gender'] == 'M'],
-                         c=list(tuple(male_age.tolist())), cmap='plasma_r', vmin=Data['Age / y'].min(),
-                         vmax=Data['Age / y'].max(), label='M', marker='s', s=50)
+            Axes.scatter(X_np_f[:, 1], Y_Obs_np_f, c=list(tuple(female_age.tolist())), cmap='plasma_r',
+                         vmin=Data['Age / y'].min(), vmax=Data['Age / y'].max(), marker='o', s=50)
+            Axes.plot([], linestyle='none', markerfacecolor='none', mec='black', marker='o', label='F')
+            Axes.scatter(X_np_m[:, 1], Y_Obs_np_m, c=list(tuple(male_age.tolist())), cmap='plasma_r',
+                         vmin=Data['Age / y'].min(), vmax=Data['Age / y'].max(), marker='s', s=50)
+            Axes.plot([], linestyle='none', markerfacecolor='none', mec='black', marker='s', label='M')
             Axes.scatter(X_np[:, 1][Data['Gender'].isnull()], Y_Obs_np[Data['Gender'].isnull()], color=(0, 0, 0),
                          label='N/A', marker='^', s=50)
-            Axes.plot([], ' ', label=r'$N$ = ' + str(N) + ', 'r'$R^2$ = ' + str(R2))
-            Axes.plot([], ' ', label=r'$CV$ = ' + str(cv) + ', ' + p_plot)
-            Axes.plot([], ' ', label='95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']')
+            Axes.plot([], ' ', label=r'$R^2$ = ' + str(R2_f) + ', ' + p_plot_f)
+            Axes.plot([], ' ', label=r'$R^2$ = ' + str(R2_m) + ', ' + p_plot_m)
             ax = plt.gca()
             PCM = ax.get_children()[0]
             plt.colorbar(PCM, ax=ax, label='Age / y')
@@ -633,28 +891,26 @@ for i in tqdm(range(len(Pair))):
             plt.rcParams['figure.figsize'] = (5.5, 4.0)
             plt.rcParams.update({'font.size': 12})
             plt.savefig(os.path.join(Savepath, Data2Fit.columns[0] + '_' + Data2Fit.columns[1] + '.jpg'),
-                        dpi=1200, format='jpg', pad_inches=0)
+                        dpi=1200, format='jpg')
             # plt.show()
             plt.close()
-            j = j + 1
 
-        # don't use colormap if age is plotted on x-axes
+        # don't use colormap if age is plotted on x-axis
         else:
-            Axes.plot(X[:, 1][Data['Gender'] == 'F'], Y_Obs[Data['Gender'] == 'F'], linestyle='none', marker='o',
-                      color=(0, 0, 0), fillstyle='none', label='F', markersize=10)
-            Axes.plot(X[:, 1][Data['Gender'] == 'M'], Y_Obs[Data['Gender'] == 'M'], linestyle='none', marker='x',
-                      color=(0, 0, 0), fillstyle='none', label='M', markersize=10)
+            Axes.plot(X_f[:, 1], Y_Obs_f, linestyle='none', marker='o', color=(1, 0, 0), fillstyle='none', label='F',
+                      markersize=9)
+            Axes.plot(X_m[:, 1], Y_Obs_m, linestyle='none', marker='x', color=(0, 0, 1), fillstyle='none', label='M',
+                      markersize=9)
             Axes.plot([], ' ', label=' ')
-            Axes.plot([], ' ', label=r'$N$ = ' + str(N) + ', 'r'$R^2$ = ' + str(R2))
-            Axes.plot([], ' ', label=r'$CV$ = ' + str(cv) + ', ' + p_plot)
-            Axes.plot([], ' ', label='95% CI [' + str(CI_l) + r'$,$ ' + str(CI_r) + ']')
+            Axes.plot([], ' ', label=r'$R^2$ = ' + str(R2_f) + ', ' + p_plot_f)
+            Axes.plot([], ' ', label=r'$R^2$ = ' + str(R2_m) + ', ' + p_plot_m)
 
             Axes.set_ylabel(y_axis_label)
             Axes.set_xlabel(x_axis_label)
 
             # scaling
             plt.xlim(xmin=55, xmax=95)
-            plt.ylim(ymin=Y_Obs.min() - (Y_Obs.max() - Y_Obs.min()) * 0.6, ymax=ylim_max)
+            plt.ylim(ymin=ylim_min, ymax=ylim_max)
             Axes.yaxis.set_major_locator(ticker.MaxNLocator(6))
             # Axes.yaxis.set_major_locator(ticker.LinearLocator(6))
             plt.subplots_adjust(left=0.17, bottom=0.15, right=0.95, top=0.95)
@@ -671,15 +927,16 @@ for i in tqdm(range(len(Pair))):
                         dpi=1200, format='jpg', pad_inches=0)
             # plt.show()
             plt.close()
-            j = j + 1
 
     # Put everything into growing list and convert to DataFrame that is saved as .csv file
-    values = [x_axis, y_axis, p, SE, R2, N, CI_l, CI_r, SE, RMSE]
+    values = [x_axis, y_axis, p_f, R2_f, N_f, CI_l_f, CI_r_f, SE_f, RMSE_f, p_m, R2_m, N_m, CI_l_m, CI_r_m, SE_m,
+              RMSE_m]
     results.append(values)
 
-result_dir = pd.DataFrame(results, columns=['X-axis', 'Y-axis', 'p-value', '\u03C3\u2091\u209B\u209C', 'R\u00B2', 'N',
-                                            'lower bound 95% CI', 'upper bound 95% CI', 'Standard error',
-                                            'Root mean square error'])
+result_dir = pd.DataFrame(results, columns=['X-axis', 'Y-axis', 'p_f', 'R2_f', 'N_f', 'lower bound 95% CI female',
+                                            'upper bound 95% CI female', 'Standard error female', 'RMSE_female', 'p_m',
+                                            'R2_m', 'N_m', 'lower bound 95% CI male', 'upper bound 95% CI male',
+                                            'Standard error male', 'RMSE_male'])
 result_dir.to_csv(Results_path + '/04_Plots/ResultsPlots.csv', index=False)
 
 # # boxplots of specific component weights
