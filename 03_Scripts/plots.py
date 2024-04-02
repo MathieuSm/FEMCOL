@@ -17,7 +17,7 @@ import matplotlib.ticker as ticker
 Cwd = os.getcwd()
 Results_path = str(os.path.dirname(Cwd) + '/04_Results')
 results_overview = str(os.path.dirname(Cwd) + '/04_Results/ResultsOverview.csv')
-Savepath = Results_path + '/04_Plots/Individual'
+Savepath = Results_path + '/04_Plots/Individual_old'
 
 isExist = os.path.exists(Savepath)
 if not isExist:
