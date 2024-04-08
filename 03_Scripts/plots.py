@@ -38,8 +38,8 @@ AxisLabels = ColumnNames.replace(
      'Ultimate Stress / MPa': 'Ultimate Stress $\sigma_{u}^{b}$ / MPa',
      'Coefficient of Variation / -': 'Coefficient of Variation CV / -',
      'Ultimate Strain / -': 'Ultimate Strain $\u03f5_{u}$',
-     'Apparent Modulus Demineralized / MPa': 'Apparent Modulus Demineralized E$_{c}^{app}$ / MPa',
-     'Modulus Demineralized / MPa': 'Modulus Demineralized E$_{c}$ / MPa',
+     'Apparent Modulus Demineralized / MPa': 'Apparent Modulus Demineralized E$_{o}^{app}$ / MPa',
+     'Modulus Demineralized / MPa': 'Modulus Demineralized E$_{o}$ / MPa',
      'Density / g/cm³': 'Density ' + r'$\rho_{b}$ / g / cm³',
      'Organic Weight / g': 'Organic Weight m$_{o}$ / g',
      'Mineral Weight / g': 'Mineral Weight m$_{m}$ / g',
@@ -69,7 +69,7 @@ AxisLabels = ColumnNames.replace(
      'Ultimate Stress uFE / MPa': 'Ultimate Stress $\mu$FE $\sigma^{\mu FE}_{app}$ / MPa'})
 
 column_names_abbrev = ['SID', 'Age', 'G', 'Site', 'SM', 'SD', 'EAPPM', 'EM', 'UF', 'UAPPSTRE', 'UCSTRE', 'USTRE',
-                       'USTRA', 'EAPPC', 'EC', 'D', 'OW', 'MW', 'WW', 'WFM', 'WFO', 'WFW', 'BVTV', 'BMD', 'TMD', 'BMC',
+                       'USTRA', 'EAPPO', 'EO', 'D', 'OW', 'MW', 'WW', 'WFM', 'WFO', 'WFW', 'BVTV', 'BMD', 'TMD', 'BMC',
                        'ABMean', 'ABMin', 'MMRv2a3', 'MMRv1a1', 'CRY', 'COLDIS', 'MATMAT', 'RPyC', 'RProC', 'RLC',
                        'EAPPFE', 'YSTREFE', 'USTREFE', 'HCMean', 'HCStd', 'OCMean', 'OCStd', 'CLMean', 'CLStd']
 ColumnNames['Abbreviations'] = column_names_abbrev
