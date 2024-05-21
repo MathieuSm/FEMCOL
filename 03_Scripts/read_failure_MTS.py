@@ -1,7 +1,8 @@
 # This script loads data obtained during experimental tensile testing on the MTS. Force/displacement data is filtered
 # and used to calculate the corresponding stress/strain values. Ultimate values and stiffness/apparent modulus were
 # extracted from the respective slopes. The measures were calculated as follows:
-# Ultimate stress: filtered force/mean apparent area (mean total area over sample gage length, extracted from uCT image)
+# Ultimate stress: filtered force/mean apparent area (mean apparent area over sample gauge length, extracted from uCT
+# image)
 # Apparent modulus: stress/strain; stress = filtered force/mean apparent area (same as for US but mean instead of min)
 # Stiffness: filtered force/displacement
 

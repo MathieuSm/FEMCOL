@@ -117,8 +117,8 @@ for x in tqdm(range(0, len(Data), 1)):
     Floor = np.floor((np.array(Scan.shape[1:]) - np.array(Disk.shape)) / 2).astype('int')
     Shift = np.array(Scan.shape[1:])/2 - np.array([Y0, X0])
 
-    Padded = np.pad(Disk, ((Floor[1]-int(Shift[1]), Ceil[1]+int(Shift[1])), (Floor[0]-int(Shift[0]),
-                                                                             Ceil[0]+int(Shift[0]))))
+    Padded = np.pad(Disk,((Floor[1]-int(Shift[1]), Ceil[1]+int(Shift[1])), (Floor[0]-int(Shift[0]),
+                                                                            Ceil[0]+int(Shift[0]))))
     Cylinder = np.repeat(Padded, Scan.shape[0]).reshape(Scan.shape, order='F')
 
     Figure, Axis = plt.subplots(1, 1, figsize=(Size[1], Size[0]))
@@ -161,17 +161,13 @@ for x in tqdm(range(0, len(Data), 1)):
     # and area fraction (bone area/total area)
     Area = Voxel_Dimensions[0] * Voxel_Dimensions[1]
     BoneAreas = np.zeros(Scan.shape[0])
-    BoneAreas_new = np.zeros(Scan.shape[0])
     TotalAreas = np.zeros(Scan.shape[0])
     Areas_fraction = np.zeros(Scan.shape[0])
-    BoneVolumes = np.zeros(Scan.shape[0])
 
     for i in range(Scan.shape[0]):
-        BoneAreas[i] = BinaryScan[i].sum() * Area * 1e06
-        BoneAreas_new[i] = Sample[i].sum() * Area * 1e03
-        TotalAreas[i] = Cylinder[i].sum() * Area * 1e06
+        BoneAreas[i] = BinaryScan[i].sum() * Area * 1e06  # bone area considering porosity
+        TotalAreas[i] = Cylinder[i].sum() * Area * 1e06  # apparent area
         Areas_fraction[i] = BoneAreas[i] / TotalAreas[i]
-        # BoneVolumes[i] = BoneAreas[i] * Voxel_Dimensions[2] * 1e03
     min_BoneArea_wp = round(BoneAreas.min(), 3)
 
     stderr_BoneArea_wp = round(statistics.stdev(BoneAreas), 8)
@@ -179,7 +175,7 @@ for x in tqdm(range(0, len(Data), 1)):
     stderr_Areas_fraction_wp = round(statistics.stdev(Areas_fraction), 8)
     coeff_var_BoneArea_wp = round(stderr_BoneArea_wp/mean_BoneArea_wp, 8)
 
-    mean_Area_wop = round(statistics.mean(TotalAreas), 3)
+    mean_app_Area = round(statistics.mean(TotalAreas), 3)
     min_areas_fraction = round(Areas_fraction.min(), 3)
     mean_areas_fraction = round(statistics.mean(Areas_fraction), 3)
     coeff_var_Areas_fraction_wp = round(stderr_Areas_fraction_wp/mean_areas_fraction, 10)
@@ -189,7 +185,7 @@ for x in tqdm(range(0, len(Data), 1)):
     # BVTV_new = round(BoneVolumes.sum() / TotalVolume_mean, 3)
 
     # Collect data into filling list
-    values = [SampleID, BVTV, BMD, TMD, BMC, min_BoneArea_wp, mean_Area_wop, mean_areas_fraction, min_areas_fraction,
+    values = [SampleID, BVTV, BMD, TMD, BMC, min_BoneArea_wp, mean_app_Area, mean_areas_fraction, min_areas_fraction,
               coeff_var_BoneArea_wp, mean_BoneArea_wp]
     results.append(values)
 

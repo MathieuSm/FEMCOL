@@ -1,8 +1,10 @@
+# This script is used to calculate a segmentation threshold using Otsu's method
+
 # Import standard packages
-import pandas as pd                     # Used to manage data frames
-import SimpleITK as sitk                # Used to read images
-from skimage import filters             # Used to perform filtering image operations (e.g. Otsu)
-import statistics                       # Used to perform statistics
+import pandas as pd
+import SimpleITK as sitk
+from skimage import filters
+import statistics
 import os
 from tqdm import tqdm
 

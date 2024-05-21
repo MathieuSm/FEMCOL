@@ -1,3 +1,4 @@
+# This script is used to perform multiple linear regression between Em, age, and mwf
 
 import statsmodels.api as sm
 from statsmodels.stats.outliers_influence import variance_inflation_factor
@@ -40,7 +41,7 @@ eappm = eappm.rename(columns={'Apparent Modulus Mineralized / MPa': 'eappm', 'Ag
                                    'Mineral weight fraction / -': 'mwf'})
 
 # with statsmodels
-x = sm.add_constant(x) # adding a constant
+x = sm.add_constant(x)  # adding a constant
 
 model = sm.OLS(y, x).fit()
 predictions = model.predict(x)

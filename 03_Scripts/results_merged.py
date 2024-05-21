@@ -1,3 +1,5 @@
+# This script combines the results of several tests into one file called ResultsOverview.csv
+
 import pandas as pd
 import os
 

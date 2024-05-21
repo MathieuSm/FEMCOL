@@ -4,15 +4,13 @@
 import pandas as pd
 import os
 
+
 # specify file path
 Cwd = os.getcwd()
 data_path = str(os.path.dirname(Cwd) + '/02_Data/03_Scale/Gravimetric_analysis.xlsx')
 save_path = str(os.path.dirname(Cwd) + '/04_Results/02_Gravimetry/')
 
-# import xlsx file using pandas
 df = pd.read_excel(data_path)
-
-# density of distilled water at 23°C
 H20_density = 0.99754
 
 # calculate density with density=wet weight * density of H2O / (wet weight - H2O weight)

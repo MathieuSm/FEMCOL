@@ -1,4 +1,5 @@
-# This script plots various variables against each other, Data is retrieved from ResultsOverview.csv file
+# This script plots various variables against each other in a correlation matrix, Data is retrieved from
+# ResultsOverview.csv file
 
 # Import standard packages
 import numpy as np
@@ -22,7 +23,7 @@ df = pd.read_csv(str(results_overview), skiprows=0)
 df = df.drop(columns=['Sample ID', 'Gender', 'Site', 'Stiffness Mineralized / N/mm',
                       'Stiffness Demineralized / N/mm', 'Ultimate Force / N', 'Organic Weight / g', 'Mineral Weight / g',
                       'Water Weight / g', 'Bone Mineral Content / mg HA'])
-# Complete Matrix including all variables
+# # Complete Matrix including all variables
 # df_new = df[['Bone Volume Fraction / -', 'Bone Mineral Density / mg HA / cm³', 'Tissue Mineral Density / mg HA / cm³',
 #              'Mineral to Matrix Ratio v2/a3 / -', 'Mineral to Matrix Ratio v1/a1 / -', 'Crystallinity / -',
 #              'Collagen dis/order / -', 'Matrix maturity / -', 'Mineral weight fraction / -',
@@ -38,6 +39,8 @@ df = df.drop(columns=['Sample ID', 'Gender', 'Site', 'Stiffness Mineralized / N/
 #              'Modulus Mineralized / MPa', 'Apparent Modulus Mineralized / MPa',
 #              'Modulus Demineralized / MPa', 'Apparent Modulus Demineralized / MPa', 'Ultimate Apparent Stress / MPa',
 #              'Ultimate Strain / -']]
+
+# Create new, compact dataframe that combines the properties of interest
 df_new = df[['Age / y', 'Bone Volume Fraction / -', 'Tissue Mineral Density / mg HA / cm³',
              'Mean Bone Area Fraction / -', 'Min Bone Area Fraction / -',
              'Apparent Modulus Mineralized / GPa', 'Modulus Mineralized / GPa', 'Apparent Modulus Demineralized / MPa',
@@ -45,7 +48,8 @@ df_new = df[['Age / y', 'Bone Volume Fraction / -', 'Tissue Mineral Density / mg
              'Mineral weight fraction / -', 'Organic weight fraction / -', 'Water weight fraction / -',
              'Mineral to Matrix Ratio v2/a3 / -', 'Crystallinity / -', 'Collagen dis/order / -', 'Matrix maturity / -',
              'Haversian Canals Mean / %', 'Osteocytes Mean / %', 'Cement Lines Mean / %']]
-# Abbreviations of complete Matrix including all variables (has to be in similar order as df_new)
+
+# # Abbreviations of complete Matrix including all variables (has to be in similar order as df_new)
 # df_new.columns = ['Age', 'BVTV', 'BMD', 'TMD', 'MMRv2a3', 'MMRv1a1', 'XC', 'CDO', 'MMAT', 'WFM', 'WFO', 'WFW', 'D',
 #                   'AMM', 'MM', 'AMD', 'MD', 'UAPPSTRE', 'UCSTRE', 'USTRE', 'USTRA', 'AMMuFE', 'YSTREuFE', 'USTREuFE',
 #                   'MEANECMAF', 'MINECMAF', 'COFVAR']
@@ -56,6 +60,7 @@ df_new = df[['Age / y', 'Bone Volume Fraction / -', 'Tissue Mineral Density / mg
 #                   'MM', 'AMM',
 #                   'MD', 'AMD', 'UAPPSTRE', 'USTRA']
 
+# Replace column names of compact matrix with abbreviations, order should be the same as in df_new
 df_new.columns = ['Age', 'BV/TV', 'TMD', 'BA/TA_mean', 'BA/TA_min',
                   'AMM', 'MM', 'AMD', 'MD', 'UAPPSTRE', 'USTRA',
                   'WFM', 'WFO', 'WFW',
@@ -71,15 +76,14 @@ test_matrix_r = pd.DataFrame()
 for i in df_new.columns:
     for j in df_new.columns:
 
-        # mask to select only values that are not NaN (linregress does not work otherwise)
+        # mask to select only values that are not NaN (linregress does not work otherwise) and perform regression
         mask = ~df_new[i].isna() & ~df_new[j].isna()
         slope, intercept, r, pvalue, std_err = linregress(df_new[j][mask], df_new[i][mask])
 
-        # create matrix containing p-values using mask criterion
-        # corr_matrix_p.loc[i, j] = round(linregress(df_new[j][mask], df_new[i][mask])[3], 3)
+        # create matrix containing p-values
         corr_matrix_p.loc[i, j] = pvalue
 
-        # pvalue = round(linregress(df_new[j][mask], df_new[i][mask])[3], 10)
+        # define asterisk criterion for p-values
         if pvalue <= 0.001:
             p = r'\textsuperscript{***}'
             test_matrix_r.loc[i, j] = str(corr_matrix_r.loc[i, j]) + str(p)
@@ -101,16 +105,10 @@ mask_r_red = np.zeros_like(corr_matrix_r, dtype=np.bool_)
 mask_r_red[np.tril_indices_from(mask_r_red)] = True
 corr_matrix_r_red = (test_matrix_r.mask(mask_r_red)).fillna('')
 
-
 # Colormap trick for p-matrix
 viridis_p = cm.get_cmap('plasma', 4)
 newcolors_p = viridis_p(np.linspace(0, 1, 4))
 newcmp_p = ListedColormap(newcolors_p)
-
-# # Colormap trick for r-matrix
-# viridis_r = cm.get_cmap('plasma', 8)
-# newcolors_r = viridis_r(np.linspace(0, 1, 8))
-# newcmp_r = ListedColormap(newcolors_r)
 
 twilight = cm.get_cmap('twilight', 8)
 newcolors_r = twilight(np.linspace(0, 1, 8))
@@ -122,6 +120,7 @@ newcmp_r = ListedColormap(newcolors_r)
 #                  '$\sigma_{app}$', '$\sigma_c$', '$\sigma_b$', '$\epsilon_c$', 'E$_{m, \mu FE}$', '$\sigma_{y, \mu FE}$',
 #                  '$\sigma_{u, \mu FE}$', '$ECM_{AF_{mean}}$', '$ECM_{AF_{min}}$', '$ECM_{A_{CV}}$']
 
+# Axis annotations of compact correlation matrix (need to be in the same order as in df_new)
 abbreviations = ['Age', r'$\rho$', 'TMD', 'BA/TA$_{mean}$', 'BA/TA$_{min}$',
                  'E$_{m}^{app}$', 'E$_m$', 'E$_{c}^{app}$', 'E$_c$', '$\sigma_{u}^{app}$', '$\epsilon_c$',
                  'WF$_m$', 'WF$_o$', 'WF$_w$',
@@ -131,9 +130,9 @@ abbreviations = ['Age', r'$\rho$', 'TMD', 'BA/TA$_{mean}$', 'BA/TA$_{min}$',
 # Font style and size
 plt.rcParams["text.usetex"] = True
 plt.rcParams["font.family"] = "serif"
-plt.rcParams["font.size"] = "13"  # font size 10 for full corr. matrix, font size 13 for compact corr. matrix
+plt.rcParams["font.size"] = "13"  # 10 for full, 13 for compact corr. matrix
 
-## Added to "trick" the plot
+# Coloring trick to show limited number of different colors
 Trick = corr_matrix_p.copy()
 Steps = [0, 0.001, 0.01, 0.05, 1]
 for i, Step in enumerate(Steps):

@@ -1,3 +1,4 @@
+# This script visualizes the age/sex distribution of the samples
 
 import numpy as np
 import pandas as pd

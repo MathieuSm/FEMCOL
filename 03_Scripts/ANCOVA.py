@@ -1,13 +1,12 @@
-import numpy as np
-import pandas as pd                                 # Used to manage data frames
-import matplotlib.pyplot as plt                     # Used to perform plots
-import os                                           # Used to manage path variables
+# This script is used to perform an analysis of covariance on the variables that are used in the publication
+
+import pandas as pd
+import os
 from scipy import stats
 import statsmodels.api as sm
 from statsmodels.formula.api import ols
 import pylab
 from pathlib import Path
-import itertools as it
 
 
 # Set directory & load data
@@ -28,24 +27,25 @@ df_new = df.rename(columns={'Modulus Mineralized / GPa': 'E_m',
                             'Bone Volume Fraction / -': 'BVTV',
                             'Age / y': 'Age',
                             'Gender': 'Sex'})
-pvalues = list()
-statistic_age, pvalue_age = stats.ttest_ind(df[df['Gender'] == 'F']['Age / y'],
-                                    df[df['Gender'] == 'M']['Age / y'], nan_policy='omit')
-# for i, x in it.zip_longest(range(1, 2), range(4, 44)):
-for x in range(4, 44):
-    statistic, pvalue = stats.ttest_ind(df[df['Gender'] == 'F'][df.columns[x]],
-                                        df[df['Gender'] == 'M'][df.columns[x]], nan_policy='omit')
-    pvalues.append(pvalue)
-    plot_data_male = df.loc[(df['Gender'] == 'M'), [df.columns[x]]].dropna()
-    plot_data_female = df.loc[(df['Gender'] == 'F'), [df.columns[x]]].dropna()
-    male_qq = sm.qqplot(plot_data_male, line='s')
-    female_qq = sm.qqplot(plot_data_female, line='s')
-    pylab.close()
-    # pylab.show()
 
-result = pd.DataFrame(data=pvalues, index=df.columns[4:44])
+# # Calculate sex specific p values for each variable
+# statistic_age, pvalue_age = stats.ttest_ind(df[df['Gender'] == 'F']['Age / y'], df[df['Gender'] == 'M']['Age / y'],
+#                                             nan_policy='omit')
+# pvalues = list()
+# for x in range(4, 44):
+#     statistic, pvalue = stats.ttest_ind(df[df['Gender'] == 'F'][df.columns[x]],
+#                                         df[df['Gender'] == 'M'][df.columns[x]], nan_policy='omit')
+#     pvalues.append(pvalue)
+#     plot_data_male = df.loc[(df['Gender'] == 'M'), [df.columns[x]]].dropna()
+#     plot_data_female = df.loc[(df['Gender'] == 'F'), [df.columns[x]]].dropna()
+#     male_qq = sm.qqplot(plot_data_male, line='s')
+#     female_qq = sm.qqplot(plot_data_female, line='s')
+#     pylab.close()
+#     # pylab.show()
 
-# Perform the ANCOVA
+# result = pd.DataFrame(data=pvalues, index=df.columns[4:44])
+
+# Perform the ANCOVA several times with and without combination terms
 Em_Ec_age1 = ols('E_m ~ E_c + Sex', data=df_new).fit()
 Em_Ec_age2 = ols('E_m ~ E_c + Age', data=df_new).fit()
 Em_Ec_age3 = ols('E_m ~ E_c + Sex + Age', data=df_new).fit()

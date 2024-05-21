@@ -1,16 +1,17 @@
-# This script plots various variables against each other, Data is retrieved from ResultsOverview.csv file
+# This script plots various variables against each other and performs simple linear regression, Data is retrieved from
+# ResultsOverview.csv file
 
 # Import standard packages
-import numpy as np  # Used to do arrays (matrices) computations namely
-import pandas as pd  # Used to manage data frames
-import matplotlib.pyplot as plt  # Used to perform plots
-import statsmodels.formula.api as smf  # Used for statistical analysis (ols here)
-import os  # Used to manage path variables
-from scipy.stats.distributions import t  # Used to compute confidence intervals
-import seaborn as sns  # Used to create regression lines with confidence bands
-import statistics  # Used to calculate statistical measures
-from statsmodels.tools.eval_measures import rmse  # Used to evaluate rmse
-from tqdm import tqdm  # Used to track script progression while running
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import statsmodels.formula.api as smf
+import os
+from scipy.stats.distributions import t
+import seaborn as sns
+import statistics
+from statsmodels.tools.eval_measures import rmse
+from tqdm import tqdm
 import matplotlib.ticker as ticker
 
 # Set directory & load data
@@ -75,7 +76,8 @@ column_names_abbrev = ['SID', 'Age', 'G', 'Site', 'SM', 'SD', 'EAPPM', 'EM', 'UF
 ColumnNames['Abbreviations'] = column_names_abbrev
 AxisLabels['Abbreviations'] = column_names_abbrev
 
-# Pair has the Format [x-axis, y-axis]; stress & moduli need to be on y-axis for non-age plots
+# Pairs of properties that are regressed against each other; has the Format [x-axis, y-axis] (stress & moduli should
+# be on y-axis for non-age plots)
 Pair = pd.DataFrame([
     ['Age / y', 'Apparent Modulus Demineralized / MPa'],
     ['Age / y', 'Apparent Modulus Mineralized / GPa'],
@@ -517,8 +519,7 @@ for i in tqdm(range(len(Pair))):
     ylim_min = Y_Obs.min() - (Y_Obs.max() - Y_Obs.min()) * 0.5
     ylim_max = Y_Obs.max() + (Y_Obs.max() - Y_Obs.min()) * 0.1
 
-    # if p-value smaller than 0.05 create fit curve and if variable 'Age' should not be plotted on main axis, no
-    # colormap will be used
+    # if p-value < 0.05 create fit curve; use colormap if age is not on x-axis
     if float(p) <= 0.05:
         if x_axis != 'Age / y':
             Axes.plot(X[:, 1], Y_Fit, color=(1, 0, 0), linewidth=1)
@@ -560,7 +561,7 @@ for i in tqdm(range(len(Pair))):
             # plt.show()
             plt.close()
 
-        # don't use colormap if age is plotted on x-axis
+        # if p < 0.05 and age is shown on x-axis, don't use colormap
         else:
             sns.regplot(x=FitResults.model.exog[:, 1], y=Y_Obs, ax=Axes, scatter=False, color=(0, 1, 0),
                         line_kws={'color': 'red', 'linewidth': 1}, )  # set background color of confidence interval here
@@ -576,11 +577,10 @@ for i in tqdm(range(len(Pair))):
             Axes.set_ylabel(y_axis_label)
             Axes.set_xlabel(x_axis_label)
 
-            # scaling
             plt.xlim(xmin=55, xmax=95)
             plt.ylim(ymin=ylim_min, ymax=ylim_max)
             Axes.yaxis.set_major_locator(ticker.MaxNLocator(6))
-            # Axes.yaxis.set_major_locator(ticker.LinearLocator(6))
+
             plt.subplots_adjust(left=0.17, bottom=0.15, right=0.95, top=0.95)
             plt.legend(loc='lower center',
                        bbox_to_anchor=(0.5, 0.),
@@ -597,7 +597,7 @@ for i in tqdm(range(len(Pair))):
             plt.close()
             j = j + 1
 
-    # if p-value greater than 0.05, no fit will be drawn & if age is contained on main axes, no colormap will be used
+    # if p-value > 0.05, no fit will be drawn; if age is not shown on x-axis colormap will be used
     else:
         if x_axis != 'Age / y':
             Axes.scatter(X_np[:, 1][Data['Gender'] == 'F'], Y_Obs_np[Data['Gender'] == 'F'],
@@ -618,10 +618,8 @@ for i in tqdm(range(len(Pair))):
             Axes.set_ylabel(y_axis_label)
             Axes.set_xlabel(x_axis_label)
 
-            # scaling
             plt.ylim(ymin=ylim_min, ymax=ylim_max)
             ax.yaxis.set_major_locator(ticker.MaxNLocator(6))
-            # ax.yaxis.set_major_locator(ticker.LinearLocator(6))
             plt.subplots_adjust(left=0.17, bottom=0.15, right=0.95, top=0.95)
             plt.legend(loc='lower center',
                        bbox_to_anchor=(0.5, 0.),
@@ -638,7 +636,7 @@ for i in tqdm(range(len(Pair))):
             plt.close()
             j = j + 1
 
-        # don't use colormap if age is plotted on x-axes
+        # if p > 0.05 and age is shown on x-axis, don't use colormap
         else:
             Axes.plot(X[:, 1][Data['Gender'] == 'F'], Y_Obs[Data['Gender'] == 'F'], linestyle='none', marker='o',
                       color=(0, 0, 0), fillstyle='none', label='F', markersize=10)
@@ -652,11 +650,9 @@ for i in tqdm(range(len(Pair))):
             Axes.set_ylabel(y_axis_label)
             Axes.set_xlabel(x_axis_label)
 
-            # scaling
             plt.xlim(xmin=55, xmax=95)
             plt.ylim(ymin=Y_Obs.min() - (Y_Obs.max() - Y_Obs.min()) * 0.6, ymax=ylim_max)
             Axes.yaxis.set_major_locator(ticker.MaxNLocator(6))
-            # Axes.yaxis.set_major_locator(ticker.LinearLocator(6))
             plt.subplots_adjust(left=0.17, bottom=0.15, right=0.95, top=0.95)
             plt.legend(loc='lower center',
                        bbox_to_anchor=(0.5, 0.),
@@ -681,76 +677,3 @@ result_dir = pd.DataFrame(results, columns=['X-axis', 'Y-axis', 'p-value', '\u03
                                             'lower bound 95% CI', 'upper bound 95% CI', 'Standard error',
                                             'Root mean square error'])
 result_dir.to_csv(Results_path + '/04_Plots/ResultsPlots.csv', index=False)
-
-# # boxplots of specific component weights
-# MWF = df['Mineral weight fraction / -']
-# OWF = df['Organic weight fraction / -']
-# WWF = df['Water weight fraction / -']
-# WF = [MWF, OWF, WWF]
-#
-# fig = plt.figure(figsize=(5.5, 4.5))
-# ax1 = fig.add_subplot(111)
-# bp = ax1.boxplot(WF)
-# ax1.set_ylabel('Weight Fraction / -')
-# ax1.set_xticklabels(['Mineral', 'Organic', 'Water'])
-# plt.ylim(ymin=0)
-# plt.savefig(os.path.join(Results_path + '/04_Plots/WF_boxplt.png'), dpi=300, bbox_inches='tight', format='png')
-# # plt.show()
-# plt.close()
-#
-# # boxplot of AMM/AMD
-# AMM = df['Apparent Modulus Mineralized / GPa'].dropna().reset_index(drop=True)
-# AMD = df['Apparent Modulus Demineralized / MPa'].dropna().reset_index(drop=True)
-# AMM = AMM.values.tolist()
-# AMD = AMD.values.tolist()
-#
-# # If we were to simply plot pts, we'd lose most of the interesting
-# # details due to the outliers. So let's 'break' or 'cut-out' the y-axis
-# # into two portions - use the top (ax) for the outliers, and the bottom
-# # (ax2) for the details of the majority of our data
-# f, (ax, ax2) = plt.subplots(2, 1, sharex=True)
-#
-# # plot the same data on both axes
-# ax.boxplot(AMM, positions=[1])
-# ax2.boxplot(AMD, positions=[2])
-#
-# # zoom-in / limit the view to different portions of the data
-# ax.set_ylim(10000, 20000)  # outliers only
-# ax2.set_ylim(0, 300)  # most of the data
-#
-# # hide the spines between ax and ax2
-# ax.spines['bottom'].set_visible(False)
-# ax2.spines['top'].set_visible(False)
-# ax.tick_params(labeltop=False, labelbottom=False)  # don't put tick labels at the top
-# ax2.tick_params(labeltop=False)
-# ax2.xaxis.tick_bottom()
-# ax2.set_xticklabels(['Mineralized', 'Demineralized'])
-#
-# ax.set_ylabel('Apparent Modulus / MPa')
-# ax.yaxis.set_label_coords(-0.12, 0)
-#
-# # This looks pretty good, and was fairly painless, but you can get that
-# # cut-out diagonal lines look with just a bit more work. The important
-# # thing to know here is that in axes coordinates, which are always
-# # between 0-1, spine endpoints are at these locations (0,0), (0,1),
-# # (1,0), and (1,1).  Thus, we just need to put the diagonals in the
-# # appropriate corners of each of our axes, and so long as we use the
-# # right transform and disable clipping.
-#
-# d = .015  # how big to make the diagonal lines in axes coordinates
-# # arguments to pass to plot, just so we don't keep repeating them
-# kwargs = dict(transform=ax.transAxes, color='k', clip_on=False)
-# ax.plot((-d, +d), (-d, +d), **kwargs)  # top-left diagonal
-# ax.plot((1 - d, 1 + d), (-d, +d), **kwargs)  # top-right diagonal
-#
-# kwargs.update(transform=ax2.transAxes)  # switch to the bottom axes
-# ax2.plot((-d, +d), (1 - d, 1 + d), **kwargs)  # bottom-left diagonal
-# ax2.plot((1 - d, 1 + d), (1 - d, 1 + d), **kwargs)  # bottom-right diagonal
-#
-# # What's cool about this is that now if we vary the distance between
-# # ax and ax2 via f.subplots_adjust(hspace=...) or plt.subplot_tool(),
-# # the diagonal lines will move accordingly, and stay right at the tips
-# # of the spines they are 'breaking'
-# plt.savefig(os.path.join(Results_path + '/04_Plots/AM_boxplt.png'), dpi=300, bbox_inches='tight', format='png')
-# # plt.show()
-# plt.close()

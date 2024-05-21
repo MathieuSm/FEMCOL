@@ -1,0 +1,24 @@
+                      OLS Regression Results                     ;;;;;;;;;;                          OLS Regression Results                          
+Dep. Variable:   ,Em              ,  R-squared:         ,   0.165;;;;;;;;;;Dep. Variable:   ,Modulus Mineralized / MPa,  R-squared:         ,   0.163
+Model:           ,OLS             ,  Adj. R-squared:    ,   0.125;;;;;;;;;;Model:           ,OLS                      ,  Adj. R-squared:    ,   0.137
+Method:          ,Least Squares   ,  F-statistic:       ,   4.141;;;;;;;;;;Method:          ,Least Squares            ,  F-statistic:       ,   6.228
+Date:            ,Thu, 27 Jul 2023,  Prob (F-statistic):,0.00962 ;;;;;;;;;;Date:            ,Thu, 27 Jul 2023         ,  Prob (F-statistic):,0.00338 
+Time:            ,11:49:31        ,  Log-Likelihood:    , -587.99;;;;;;;;;;Time:            ,11:49:31                 ,  Log-Likelihood:    , -588.06
+No. Observations:,    67          ,  AIC:               ,   1184.;;;;;;;;;;No. Observations:,    67                   ,  AIC:               ,   1182.
+Df Residuals:    ,    63          ,  BIC:               ,   1193.;;;;;;;;;;Df Residuals:    ,    64                   ,  BIC:               ,   1189.
+Df Model:        ,     3          ,                     ,        ;;;;;;;;;;Df Model:        ,     2                   ,                     ,        
+Covariance Type: ,nonrobust       ,                     ,        ;;;;;;;;;;Covariance Type: ,nonrobust                ,                     ,        
+         ,   coef   , std err ,    t    ,P>|t| ,  [0.025 ,  0.975] ;;;;;;;;;;                           ,   coef   , std err ,    t    ,P>|t| ,  [0.025 ,  0.975] 
+Intercept, 3.331e+04, 9.57e+04,    0.348, 0.729,-1.58e+05, 2.25e+05;;;;;;;;;;const                      ,-1941.4928, 9506.426,   -0.204, 0.839,-2.09e+04,  1.7e+04
+Age      , -493.3499, 1215.661,   -0.406, 0.686,-2922.655, 1935.956;;;;;;;;;;Age / y                    ,  -43.5646,   21.719,   -2.006, 0.049,  -86.953,   -0.176
+mwf      ,-2.184e+04, 1.62e+05,   -0.135, 0.893,-3.46e+05, 3.02e+05;;;;;;;;;;Mineral weight fraction / -, 3.792e+04, 1.53e+04,    2.472, 0.016, 7273.322, 6.86e+04
+Age:mwf  ,  762.9850, 2061.831,    0.370, 0.713,-3357.256, 4883.226;;;;;;;;;;Omnibus:      , 5.260,  Durbin-Watson:     ,   1.449
+Omnibus:      , 5.159,  Durbin-Watson:     ,   1.434;;;;;;;;;;Prob(Omnibus):, 0.072,  Jarque-Bera (JB):  ,   4.388
+Prob(Omnibus):, 0.076,  Jarque-Bera (JB):  ,   4.262;;;;;;;;;;Skew:         , 0.515,  Prob(JB):          ,   0.111
+Skew:         , 0.519,  Prob(JB):          ,   0.119;;;;;;;;;;Kurtosis:     , 3.715,  Cond. No.          ,7.45e+03
+Kurtosis:     , 3.669,  Cond. No.          ,8.98e+04;;;;;;;;;;
+;;;;;;;;;;Notes:
+Notes:;;;;;;;;;;[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.;;;;;;;;;;[2] The condition number is large, 7.45e+03. This might indicate that there are
+[2] The condition number is large, 8.98e+04. This might indicate that there are;;;;;;;;;;strong multicollinearity or other numerical problems.
+strong multicollinearity or other numerical problems.;;;;;;;;;;

@@ -1,4 +1,4 @@
-# This script plots various variables against each other, Data is retrieved from ResultsOverview.csv file
+# This script visualizes various variables as boxplots, Data is retrieved from ResultsOverview.csv file
 
 # Import standard packages
 import pandas as pd                                 # Used to manage data frames
