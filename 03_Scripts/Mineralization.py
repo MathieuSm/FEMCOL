@@ -12,9 +12,9 @@ from skimage import morphology, measure  # Used to fill pores and circle fitting
 from tqdm import tqdm
 
 # Set directories
-__location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
-DataDirectory = str(__location__ + '/02_Data/01_uCT/')
-ResultsDirectory = str(__location__ + '/04_Results/03_uCT/')
+Cwd = os.getcwd()
+DataDirectory = str(os.path.dirname(Cwd) + '/02_Data/01_uCT')
+ResultsDirectory = str(os.path.dirname(Cwd) + '/04_Results/03_uCT/')
 
 # Read data list and print it into console
 Data = pd.read_csv(str(DataDirectory + '/SampleList.csv'))
@@ -34,7 +34,7 @@ for x in tqdm(range(0, len(Data), 1)):
     File = Data.loc[SampleNumber, 'uCT File']
 
     # Read mhd file
-    Image = sitk.ReadImage(str(DataDirectory / File) + '.mhd')
+    Image = sitk.ReadImage(DataDirectory + '/' + File + '.mhd')
     Scan = sitk.GetArrayFromImage(Image)
 
     # Compute scan mid-planes positions
